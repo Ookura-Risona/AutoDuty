@@ -37,7 +37,7 @@ public class MainWindow : Window, IDisposable
         };
         
         TitleBarButtons.Add(new() { Icon = FontAwesomeIcon.Cog, IconOffset = new(1, 1), Click = _ => OpenTab("Config") });
-        TitleBarButtons.Add(new() { ShowTooltip = () => ImGui.SetTooltip("Support Herculezz on Ko-fi"), Icon = FontAwesomeIcon.Heart, IconOffset = new(1, 1), Click = _ => GenericHelpers.ShellStart("https://ko-fi.com/Herculezz") });
+        TitleBarButtons.Add(new() { ShowTooltip = () => ImGui.SetTooltip("在Ko-fi上支持Herculezz"), Icon = FontAwesomeIcon.Heart, IconOffset = new(1, 1), Click = _ => GenericHelpers.ShellStart("https://ko-fi.com/Herculezz") });
     }
 
     internal static void SetCurrentTabName(string tabName)
@@ -66,7 +66,7 @@ public class MainWindow : Window, IDisposable
 
     internal static void LoopsConfig()
     {
-        if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("Times", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("Times", ref Plugin.Configuration.LoopTimes)))
+        if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("次", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("次", ref Plugin.Configuration.LoopTimes)))
             Plugin.Configuration.Save();
     }
 
@@ -74,7 +74,7 @@ public class MainWindow : Window, IDisposable
     {
         using (ImRaii.Disabled(!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running))
         {
-            if (ImGui.Button("Stop"))
+            if (ImGui.Button("停止"))
             {
                 Plugin.Stage = Stage.Stopped;
                 return;
@@ -86,7 +86,7 @@ public class MainWindow : Window, IDisposable
         {
             if (Plugin.Stage == Stage.Paused)
             {
-                if (ImGui.Button("Resume"))
+                if (ImGui.Button("继续"))
                 {
                     Plugin.TaskManager.SetStepMode(false);
                     Plugin.Stage = Plugin.PreviousStage;
@@ -95,7 +95,7 @@ public class MainWindow : Window, IDisposable
             }
             else
             {
-                if (ImGui.Button("Pause"))
+                if (ImGui.Button("暂停"))
                 {
                     Plugin.Stage = Stage.Paused;
                 }
@@ -107,7 +107,7 @@ public class MainWindow : Window, IDisposable
     {
         if(Plugin.States.HasFlag(PluginState.Other))
         {
-            if(ImGui.Button("Stop"))
+            if(ImGui.Button("停止"))
                 Plugin.Stage = Stage.Stopped;
             ImGui.SameLine(0,5);
         }
@@ -120,12 +120,12 @@ public class MainWindow : Window, IDisposable
                 {
                     if ((GotoHelper.State == ActionState.Running && GCTurninHelper.State != ActionState.Running && RepairHelper.State != ActionState.Running) || MapHelper.State == ActionState.Running || GotoHousingHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Goto"))
+                        if (ImGui.Button("前往"))
                         {
                             ImGui.OpenPopup("GotoPopup");
                         }
@@ -135,35 +135,35 @@ public class MainWindow : Window, IDisposable
 
             if (ImGui.BeginPopup("GotoPopup"))
             {
-                if (ImGui.Selectable("Barracks"))
+                if (ImGui.Selectable("军营"))
                 {
                     GotoBarracksHelper.Invoke();
                 }
-                if (ImGui.Selectable("Inn"))
+                if (ImGui.Selectable("旅馆"))
                 {
                     GotoInnHelper.Invoke();
                 }
-                if (ImGui.Selectable("GCSupply"))
+                if (ImGui.Selectable("军票提交"))
                 {
                     GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), [GCTurninHelper.GCSupplyLocation], 0.25f, 3f);
                 }
-                if (ImGui.Selectable("Flag Marker"))
+                if (ImGui.Selectable("旗帜"))
                 {
                     MapHelper.MoveToMapMarker();
                 }
-                if (ImGui.Selectable("Summoning Bell"))
+                if (ImGui.Selectable("传唤铃"))
                 {
                     SummoningBellHelper.Invoke(Plugin.Configuration.PreferredSummoningBellEnum);
                 }
-                if (ImGui.Selectable("Apartment"))
+                if (ImGui.Selectable("公寓"))
                 {
                     GotoHousingHelper.Invoke(Housing.Apartment);
                 }
-                if (ImGui.Selectable("Personal Home"))
+                if (ImGui.Selectable("个人房屋"))
                 {
                     GotoHousingHelper.Invoke(Housing.Personal_Home);
                 }
-                if (ImGui.Selectable("FC Estate"))
+                if (ImGui.Selectable("部队房屋"))
                 {
                     GotoHousingHelper.Invoke(Housing.FC_Estate);
                 }
@@ -184,22 +184,22 @@ public class MainWindow : Window, IDisposable
                 {
                     if (GCTurninHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("TurnIn"))
+                        if (ImGui.Button("军票"))
                         {
                             if (Deliveroo_IPCSubscriber.IsEnabled)
                                 GCTurninHelper.Invoke();
                             else
-                                ShowPopup("Missing Plugin", "GC Turnin Requires Deliveroo plugin. Get @ https://git.carvel.li/liza/plugin-repo");
+                                ShowPopup("缺少插件", "军队筹备需要 Deliveroo 插件。获取 @ https://raw.githubusercontent.com/RedAsteroid/DalamudPlugins/main/pluginmaster.json");
                         }
                         if (Deliveroo_IPCSubscriber.IsEnabled)
-                            ToolTip("Click to Goto GC Turnin and Invoke Deliveroo");
+                            ToolTip("点击前往调用Deliveroo进行军队筹备");
                         else
-                            ToolTip("GC Turnin Requires Deliveroo plugin. Get @ https://git.carvel.li/liza/plugin-repo");
+                            ToolTip("军队筹备需要 Deliveroo 插件。获取 @ https://raw.githubusercontent.com/RedAsteroid/DalamudPlugins/main/pluginmaster.json");
                     }
                 }
             }
@@ -210,12 +210,12 @@ public class MainWindow : Window, IDisposable
                 {
                     if (DesynthHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Desynth"))
+                        if (ImGui.Button("分解"))
                             DesynthHelper.Invoke();
                         ToolTip("Click to Desynth all Items in Inventory");
                     }
@@ -228,22 +228,22 @@ public class MainWindow : Window, IDisposable
                 {
                     if (ExtractHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Extract"))
+                        if (ImGui.Button("精炼"))
                         {
                             if (QuestManager.IsQuestComplete(66174))
                                 ExtractHelper.Invoke();
                             else
-                                ShowPopup("Missing Quest Completion", "Materia Extraction requires having completed quest: Forging the Spirit");
+                                ShowPopup("缺少前置任务", "精炼需要完成任务: 情感培育之力");
                         }
                         if (QuestManager.IsQuestComplete(66174))
-                            ToolTip("Click to Extract Materia");
+                            ToolTip("点击进行精炼");
                         else
-                            ToolTip("Materia Extraction requires having completed quest: Forging the Spirit");
+                            ToolTip("精炼需要完成任务: 情感培育之力");
                     }
                 }
             }
@@ -255,12 +255,12 @@ public class MainWindow : Window, IDisposable
                 {
                     if (RepairHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Repair"))
+                        if (ImGui.Button("修理"))
                         {
                             if (InventoryHelper.CanRepair(100))
                                 RepairHelper.Invoke();
@@ -268,7 +268,7 @@ public class MainWindow : Window, IDisposable
                                 //ShowPopup("", "");
                         }
                         //if ()
-                            ToolTip("Click to Repair");
+                            ToolTip("点击修理装备");
                         //else
                             //ToolTip("");
                     }
@@ -281,12 +281,12 @@ public class MainWindow : Window, IDisposable
                 {
                     if (AutoEquipHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Equip"))
+                        if (ImGui.Button("装备"))
                         {
                             AutoEquipHelper.Invoke();
                             //else
@@ -294,7 +294,7 @@ public class MainWindow : Window, IDisposable
                         }
 
                         //if ()
-                        ToolTip("Click to Equip Gear");
+                        ToolTip("点击装备装备");
                         //else
                         //ToolTip("");
                     }
@@ -308,14 +308,14 @@ public class MainWindow : Window, IDisposable
                 {
                     if (CofferHelper.State == ActionState.Running)
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Coffers")) 
+                        if (ImGui.Button("装备箱")) 
                             CofferHelper.Invoke();
-                        ToolTip("Click to open coffers");
+                        ToolTip("点击开启装备箱");
                     }
                 }
             }
@@ -327,12 +327,12 @@ public class MainWindow : Window, IDisposable
                 {
                     if ((GotoHelper.State == ActionState.Running && TripleTriadCardUseHelper.State != ActionState.Running && TripleTriadCardSellHelper.State != ActionState.Running))
                     {
-                        if (ImGui.Button("Stop"))
+                        if (ImGui.Button("停止"))
                             Plugin.Stage = Stage.Stopped;
                     }
                     else
                     {
-                        if (ImGui.Button("Triple Triad"))
+                        if (ImGui.Button("幻卡"))
                             ImGui.OpenPopup("TTPopup");
                     }
                 }
@@ -340,9 +340,9 @@ public class MainWindow : Window, IDisposable
 
             if (ImGui.BeginPopup("TTPopup"))
             {
-                if (ImGui.Selectable("Register TT Cards"))
+                if (ImGui.Selectable("使用幻卡"))
                     TripleTriadCardUseHelper.Invoke();
-                if (ImGui.Selectable("Sell TT Cards")) 
+                if (ImGui.Selectable("出售幻卡")) 
                     TripleTriadCardSellHelper.Invoke();
                 ImGui.EndPopup();
             }
@@ -456,7 +456,7 @@ public class MainWindow : Window, IDisposable
     }
 
     private static readonly List<(string, Action, Vector4?, bool)> tabList =
-        [("Main", MainTab.Draw, null, false), ("Build", BuildTab.Draw, null, false), ("Paths", PathsTab.Draw, null, false), ("Config", ConfigTab.Draw, null, false), ("Info", InfoTab.Draw, null, false), ("Logs", LogTab.Draw, null, false),("Support AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)
+        [("主界面", MainTab.Draw, null, false), ("创建", BuildTab.Draw, null, false), ("配置", PathsTab.Draw, null, false), ("设置", ConfigTab.Draw, null, false), ("信息", InfoTab.Draw, null, false), ("日志", LogTab.Draw, null, false),("支持AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)
         ];
 
     public override void Draw()
@@ -466,7 +466,7 @@ public class MainWindow : Window, IDisposable
         if(DalamudInfoHelper.IsOnStaging())
         {
             ImGui.TextColored(GradientColor.Get(ImGuiHelper.ExperimentalColor, ImGuiHelper.ExperimentalColor2, 500), "NOT SUPPORTED ON STAGING.");
-            ImGui.Text("Please type in \"/xlbranch\" and pick Release, then restart the game.");
+            ImGui.Text("请输入“/xlbranch”并选择“Release”，然后重新启动游戏。");
 
             if (!ImGui.CollapsingHeader("Use despite staging. Support will not be given##stagingHeader"))
                 return;

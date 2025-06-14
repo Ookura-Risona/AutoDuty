@@ -508,7 +508,7 @@ namespace AutoDuty.Windows
                     }
                 }
                 else
-                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "You must enter a dungeon to Build a Path");
+                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "想要创建路线,您必须进入一个副本。");
             }
             catch (Exception ex) { Svc.Log.Error(ex.ToString()); }
             if (_scrollBottom)

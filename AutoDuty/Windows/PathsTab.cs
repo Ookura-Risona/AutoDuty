@@ -48,31 +48,31 @@ namespace AutoDuty.Windows
 
         internal static void Draw()
         {
-            if (MainWindow.CurrentTabName != "Paths")
-                MainWindow.CurrentTabName = "Paths";
-            ImGui.Text($"Path Files");
+            if (MainWindow.CurrentTabName != "配置")
+                MainWindow.CurrentTabName = "配置";
+            ImGui.Text($"副本配置文件");
             ImGui.Spacing();
             ImGui.Separator();
             ImGui.Spacing();
-            if (ImGui.Button("Open Folder"))
+            if (ImGui.Button("打开文件夹"))
                 Process.Start("explorer.exe", Plugin.PathsDirectory.FullName);
 
             ImGui.SameLine();
             using (var d = ImRaii.Disabled(_selectedDutyPath == null))
             {
-                if (ImGuiEx.ButtonWrapped("Open File"))
+                if (ImGuiEx.ButtonWrapped("打开文件"))
                     Process.Start("explorer", _selectedDutyPath?.FilePath ?? string.Empty);
             }
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0, 1, 1, 1));
-            if (ImGuiEx.CheckboxWrapped($"Do not overwrite on update", ref _checked))
+            if (ImGuiEx.CheckboxWrapped($"禁用更新时覆盖", ref _checked))
                 CheckBoxOnChange();
 
             ImGui.PopStyleColor();
             ImGui.SameLine();
             using (ImRaii.Disabled(!Plugin.Configuration.PathSelectionsByPath.Any(kvp => kvp.Value.Any())))
             {
-                if (ImGuiEx.ButtonWrapped("Clear all cached jobs"))
+                if (ImGuiEx.ButtonWrapped("清除所有缓存的类"))
                 {
                     _selectedDutyPath = null;
                     Plugin.Configuration.PathSelectionsByPath.Clear();
@@ -81,7 +81,7 @@ namespace AutoDuty.Windows
             }
 
             bool anyHeaderOpen = headers.Values.Any(b => b);
-            if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "Collapse All" : "Reveal All"))
+            if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "折叠所有" : "展开所有"))
             {
                 foreach (uint key in headers.Keys) 
                     headers[key] = !anyHeaderOpen;
@@ -89,7 +89,7 @@ namespace AutoDuty.Windows
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
-                if (ImGuiEx.ButtonWrapped("Download Paths")) 
+                if (ImGuiEx.ButtonWrapped("下载配置")) 
                     Patcher.Patch(ImGui.IsMouseClicked(ImGuiMouseButton.Right));
             }
             bool showJobSelection = _selectedDutyPath is { container.Paths.Count: > 1 };

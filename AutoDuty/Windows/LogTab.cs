@@ -34,8 +34,8 @@ namespace AutoDuty.Windows
         private static bool _clearedDataAfterPopupClose = true;
         public static async void Draw()
         {
-            if (MainWindow.CurrentTabName != "Log")
-                MainWindow.CurrentTabName = "Log";
+            if (MainWindow.CurrentTabName != "日志")
+                MainWindow.CurrentTabName = "日志";
             if (!_popupOpen && !_clearedDataAfterPopupClose)
             {
                 _clearedDataAfterPopupClose = false;
@@ -50,22 +50,22 @@ namespace AutoDuty.Windows
                 _whatHappenedInput = string.Empty;
             }
             ImGuiEx.Spacing();
-            if (ImGui.Checkbox("Auto Scroll", ref Plugin.Configuration.AutoScroll))
+            if (ImGui.Checkbox("自动滚动", ref Plugin.Configuration.AutoScroll))
                 Plugin.Configuration.Save();
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Trash))
                 Plugin.DalamudLogEntries.Clear();
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Clear log");
+                ImGui.SetTooltip("清除日志");
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Copy))
                 ImGui.SetClipboardText(Plugin.DalamudLogEntries.SelectMulti(x => x.Message).ToList().ToCustomString("\n"));
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Copy entire log to clipboard");
+                ImGui.SetTooltip("复制完整日志");
             ImGui.SameLine();
             using (ImRaii.Disabled(!_taskUserCode?.IsCompletedSuccessfully ?? false))
             {
-                if (ImGui.Button("Create Issue"))
+                if (ImGui.Button("创建问题"))
                 {
                     if (_pollResponse == null || _pollResponse.Access_Token.IsNullOrEmpty())
                     {
@@ -80,7 +80,7 @@ namespace AutoDuty.Windows
                     }
                     _popupOpen = true;
                     ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.None, new(0.5f, 0.5f));
-                    ImGui.OpenPopup($"Create Issue");
+                    ImGui.OpenPopup($"创建问题");
                 }
             }
             if (_pollResponse != null && !_pollResponse.Access_Token.IsNullOrEmpty())
@@ -89,7 +89,7 @@ namespace AutoDuty.Windows
                 ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.None, new(0.5f, 0.5f));
                 _imGuiWindowFlags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove;
             }    
-            if (ImGui.BeginPopupModal($"Create Issue", ref _popupOpen, _imGuiWindowFlags))
+            if (ImGui.BeginPopupModal($"创建问题", ref _popupOpen, _imGuiWindowFlags))
             {
                 _clearedDataAfterPopupClose = false;
                 if (_pollResponse == null || _pollResponse.Access_Token.IsNullOrEmpty())
@@ -99,7 +99,7 @@ namespace AutoDuty.Windows
                 ImGui.EndPopup();
             }
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Click to open the Create Issue popup (after authenticating with github) to fill in the form and submit and issue to the Repo");
+                ImGui.SetTooltip("点击以打开创建问题的弹出窗口（在 GitHub 认证后），填写表单并提交问题至仓库");
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             if (ImGuiEx.EnumCombo("##LogEventLevel", ref Plugin.Configuration.LogEventLevel))
@@ -110,7 +110,7 @@ namespace AutoDuty.Windows
             }
 
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Filter log event level");
+                ImGui.SetTooltip("筛选日志事件级别");
             ImGuiEx.Spacing();
 
             if (Plugin.Configuration.LogEventLevel < LogEventLevel.Information)

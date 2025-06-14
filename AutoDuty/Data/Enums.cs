@@ -8,6 +8,7 @@ namespace AutoDuty.Data
     using Dalamud.Interface.Utility.Raii;
     using ECommons.ExcelServices;
     using ImGuiNET;
+    using System.ComponentModel;
 
     public static class Enums
     {
@@ -217,20 +218,31 @@ namespace AutoDuty.Data
         [Flags]
         public enum DutyMode : int
         {
+            [Description("无")]
             None = 0,
+            [Description("剧情辅助器")]
             Support = 1,
+            [Description("亲信战友")]
             Trust = 2,
+            [Description("冒险者小队")]
             Squadron = 4,
+            [Description("迷宫挑战（排本）")]
             Regular = 8,
+            [Description("讨伐歼灭战（排本）")]
             Trial = 16,
+            [Description("大型任务（排本）")]
             Raid = 32,
+            [Description("多变迷宫")]
             Variant = 64
         }
 
         public enum LevelingMode : int
         {
+            [Description("无")]
             None = 0,
+            [Description("剧情辅助器")]
             Support = 1,
+            [Description("亲信战友")]
             Trust = 2
         }
 

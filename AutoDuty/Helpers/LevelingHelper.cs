@@ -21,20 +21,13 @@ namespace AutoDuty.Helpers
                 {
                     uint[] ids =
                     [
-                        1036u, // Sastasha
-                        1037u, // TamTara Deepcroft
-                        1039u, // The Thousand Maws of Toto-Rak
-                        1041u, // Brayflox's Longstop
-                        1042u, // Stone Vigil
-                        1043u, // Castrum Meridianum
-                        1064u, // Sohm Al
-                        1065u, // The Aery
-                        1066u, // The Vault
-                        1109u, // The Great Gubal Library
-                        1142u, // Sirensong Sea
-                        1144u, // Doma Castle
-                        1145u, // Castrum Abania
-                        837u,  // Holminster
+                        1036u, // 溶洞
+                        1037u, // 墓园
+                        1039u, // 千狱
+                        1041u, // 野营地
+                        1042u, // 石卫塔
+                        1048u, // 神兵
+                        837u,  // 水潭村
                         823u,  // Qitana
                         822u,  // Mt. Gulg
                         952u,  // Tower of Zot

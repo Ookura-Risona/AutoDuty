@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace AutoDuty.Data
 {
@@ -57,6 +59,26 @@ namespace AutoDuty.Data
         }
 
         public static string ToCustomString(this Enum T) => T.ToString().Replace("_", " ") ?? "";
+        public static string GetDescription(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    DescriptionAttribute attr = 
+                        Attribute.GetCustomAttribute(field, 
+                            typeof(DescriptionAttribute)) as DescriptionAttribute;
+                    if (attr != null)
+                    {
+                        return attr.Description;
+                    }
+                }
+            }
+            return value.ToString().Replace("_", " ");
+        }
 
         public static bool StartsWithIgnoreCase(this string str, string strsw) => str.StartsWith(strsw, StringComparison.OrdinalIgnoreCase);
 

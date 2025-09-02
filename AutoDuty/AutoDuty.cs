@@ -204,6 +204,12 @@ public sealed class AutoDuty : IDalamudPlugin
 
     public AutoDuty()
     {
+/*
+#if !DEBUG
+        if (PluginInterface.IsDev || (!PluginInterface.SourceRepository.Contains("gh.risona.top/pluginmaster.json") && !PluginInterface.SourceRepository.Contains("Ookura-Risona/DalamudPlugins")))
+            return;
+#endif
+*/
         try
         {
             Plugin = this;

@@ -52,7 +52,7 @@ namespace AutoDuty.Updater
 
                 foreach (var file in downloadList)
                 {
-                    var result = await GitHubHelper.DownloadFileAsync($"https://raw.githubusercontent.com/ffxivcode/AutoDuty/refs/heads/master/AutoDuty/Paths/{file.Key}",$"{Plugin.PathsDirectory.FullName}/{file.Key}");
+                    var result = await GitHubHelper.DownloadFileAsync($"https://raw.githubusercontent.com/Ookura-Risona/AutoDuty/refs/heads/master/AutoDuty/Paths/{file.Key}",$"{Plugin.PathsDirectory.FullName}/{file.Key}");
                     var logger = result ? $"Succesfully downloaded: {file.Key}" : $"Failed to download: {file.Key}";
                     Svc.Log.Info(logger);
                 }

@@ -51,7 +51,7 @@ namespace AutoDuty.Updater
                 using HttpClient client = new(handler);
                 client.Timeout = TimeSpan.FromSeconds(20);
 
-                var md5List = await client.GetFromJsonAsync<Dictionary<string, string>>("https://raw.githubusercontent.com/ffxivcode/AutoDuty/refs/heads/master/AutoDuty/Resources/md5s.json");
+                var md5List = await client.GetFromJsonAsync<Dictionary<string, string>>("https://raw.githubusercontent.com/Ookura-Risona/AutoDuty/refs/heads/master/AutoDuty/Resources/md5s.json");
                 return md5List ?? [];
             }
             catch (Exception ex)

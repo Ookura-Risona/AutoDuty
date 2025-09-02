@@ -458,7 +458,7 @@ namespace AutoDuty.Windows
                             }
                         }
                         else
-                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "Busy...");
+                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "忙碌中...");
                     }
                     else
                     {

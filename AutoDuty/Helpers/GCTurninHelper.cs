@@ -16,6 +16,9 @@ namespace AutoDuty.Helpers
         protected override string Name        { get; } = nameof(GCTurninHelper);
         protected override string DisplayName { get; } = "GC Turnin";
 
+        public override string[]? Commands { get; init; } = ["turnin", "gcturnin"];
+        public override string? CommandDescription { get; init; } = "Automatically turns in items into the Grand Company Supply";
+
         protected override string[] AddonsToClose { get; } = ["GrandCompanySupplyReward", "SelectYesno", "SelectString", "GrandCompanySupplyList"];
 
         protected override int TimeOut { get; set; } = 600_000;
@@ -24,6 +27,8 @@ namespace AutoDuty.Helpers
         {
             if (!AutoRetainer_IPCSubscriber.IsEnabled)
                 Svc.Log.Info("GC Turnin Requires AutoRetainer plugin. Get @ https://love.puni.sh/ment.json");
+            else if (PlayerHelper.GetGrandCompanyRank() <= 5)
+                Svc.Log.Info("GC Turnin requires GC Rank 6 or Higher");
             else
                 base.Start();
         }

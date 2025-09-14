@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace AutoDuty.Helpers
 {
+    using System;
     using Data;
     using static Data.Classes;
 
@@ -44,12 +45,14 @@ namespace AutoDuty.Helpers
             }
         }
 
-        internal static Content? SelectHighestLevelingRelevantDuty(bool trust = false)
+        internal static Content? SelectHighestLevelingRelevantDuty(LevelingMode mode)
         {
             Content? curContent = null;
-            var lvl = PlayerHelper.GetCurrentLevelFromSheet();
+            short lvl = PlayerHelper.GetCurrentLevelFromSheet();
             Svc.Log.Debug($"Leveling Mode: Searching for highest relevant leveling duty, Player Level: {lvl}");
             CombatRole combatRole = Player.Object.GetRole();
+
+            bool trust = mode.IsTrustLeveling();
             if (trust)
             {
                 if (TrustHelper.Members.All(tm => !tm.Value.LevelIsSet))
@@ -60,12 +63,48 @@ namespace AutoDuty.Helpers
 
                 TrustMember?[] memberTest = new TrustMember?[3];
 
-                foreach ((TrustMemberName _, TrustMember member) in TrustHelper.Members)
+                switch (mode)
                 {
-                    
-                    if (member.Level < lvl && member.Level < member.LevelCap && member.LevelIsSet && memberTest.CanSelectMember(member, combatRole))
-                        lvl = (short)member.Level;
-                    Svc.Log.Debug($"Leveling Mode: Checking {member.Name} level which is {member.Level}, lowest level is now {lvl}");
+                    case LevelingMode.Trust_Group:
+                    {
+                        foreach ((TrustMemberName _, TrustMember member) in TrustHelper.Members)
+                        {
+                            if (member.Level < lvl && member.Level < member.LevelCap && member.LevelIsSet && memberTest.CanSelectMember(member, combatRole))
+                                lvl = (short)member.Level;
+                            Svc.Log.Debug($"Leveling Mode: Checking {member.Name} level which is {member.Level}, lowest level is now {lvl}");
+                        }
+
+                        break;
+                    }
+                    case LevelingMode.Trust_Solo:
+                    {
+                        int memberIndex = 0;
+                        foreach ((TrustMemberName _, TrustMember member) in TrustHelper.Members.OrderByDescending(tm => tm.Value.Level))
+                        {
+                            if (member.LevelIsSet && memberTest.CanSelectMember(member, combatRole)) 
+                                memberTest[memberIndex++] = member;
+                            Svc.Log.Debug($"Leveling Mode: Checking {member.Name} level which is {member.Level}");
+
+                            if (memberIndex >= 3)
+                            {
+                                short newLvl = (short)(memberTest[2]?.Level ?? 0);
+
+                                if (newLvl < lvl)
+                                    lvl = newLvl;
+                                break;
+                            }
+                        }
+
+                        if (memberIndex < 3)
+                        {
+                            Svc.Log.Debug($"Leveling Mode: Not enough trust members available for solo leveling, returning");
+                            return null;
+                        }
+
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
                 }
             }
 
@@ -74,6 +113,7 @@ namespace AutoDuty.Helpers
                 Svc.Log.Debug($"Leveling Mode: Lowest level is out of range (support<15 and trust<71) at {lvl} or we are not on a combat role {combatRole} or we (support) or we and all trust members are capped, returning");
                 return null;
             }
+
             LevelingDuties.Each(x => Svc.Log.Debug($"Leveling Mode: Duties: {x.Name} CanRun: {x.CanRun(lvl, false)}{(trust ? $"CanTrustRun : {x.CanTrustRun()}" : "")}"));
             curContent = LevelingDuties.LastOrDefault(x => x.CanRun(lvl, trust));
 
@@ -81,7 +121,7 @@ namespace AutoDuty.Helpers
 
             if (trust && curContent != null)
             {
-                if (!TrustHelper.SetLevelingTrustMembers(curContent))
+                if (!TrustHelper.SetLevelingTrustMembers(curContent, mode))
                 {
                     Svc.Log.Debug($"Leveling Mode: We were unable to set our LevelingTrustMembers");
                     curContent = null;

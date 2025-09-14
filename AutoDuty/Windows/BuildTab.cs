@@ -1,8 +1,7 @@
 ﻿using Dalamud.Interface.Utility.Raii;
 using ECommons.DalamudServices;
 using ECommons;
-using ImGuiNET;
-using System.Text.Json;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Numerics;
 using System.Linq;
@@ -23,6 +22,7 @@ namespace AutoDuty.Windows
 {
     using System.Globalization;
     using Dalamud.Utility.Numerics;
+    using Newtonsoft.Json;
 
     internal static class BuildTab
     {
@@ -52,7 +52,6 @@ namespace AutoDuty.Windows
         private static          int                      _duplicateItemIndex = -1;
         private static          ActionTag                _actionTag;
         private static readonly ActionTag[]              _actionTags           = [ActionTag.None, ActionTag.Synced, ActionTag.Unsynced, ActionTag.W2W, ActionTag.Treasure];
-        public static readonly  JsonSerializerOptions    jsonSerializerOptions = new() { WriteIndented = true, IgnoreReadOnlyProperties = true, IncludeFields = true };
 
         internal static unsafe void Draw()
         {
@@ -160,7 +159,11 @@ namespace AutoDuty.Windows
                                 IGameObject? targetObject = Player.Object.TargetObject;
                                 IGameObject? gameObject = (targetObject ?? null) ?? ClosestObject;
                                 _arguments = [gameObject != null ? $"{gameObject.DataId}" : string.Empty];
-                                _note = gameObject != null ? gameObject.Name.ExtractText() : string.Empty;
+                                _note = gameObject != null ? gameObject.Name.GetText() : string.Empty;
+                                break;
+                            case "Boss":
+                                IGameObject? gameObject2   = Player.Object.TargetObject;
+                                _note = gameObject2 != null ? gameObject2.Name.GetText() : string.Empty;
                                 break;
                             default:
                                 break;
@@ -225,7 +228,7 @@ namespace AutoDuty.Windows
                     pathFile ??= new();
 
                     pathFile.Actions = [.. Plugin.Actions];
-                    string json = JsonSerializer.Serialize(pathFile, jsonSerializerOptions);
+                    string json = JsonConvert.SerializeObject(pathFile, ConfigurationMain.JsonSerializerSettings);
                     File.WriteAllText(Plugin.PathFile, json);
                     Plugin.CurrentPath = 0;
                 }
@@ -401,7 +404,7 @@ namespace AutoDuty.Windows
             }
         }
 
-        private static bool guide = false;
+        private static         bool                  guide                 = false;
 
         private static void DrawBuildList()
         {
@@ -464,7 +467,7 @@ namespace AutoDuty.Windows
 
                         if (_buildListSelected == item.Index && ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_showAddActionUI)
                         {
-                            float mouseYDelta = ImGui.GetMouseDragDelta(0).Y;
+                            float mouseYDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Y;
 
                             if (MathF.Abs(mouseYDelta) > ImGui.GetTextLineHeight())
                             {

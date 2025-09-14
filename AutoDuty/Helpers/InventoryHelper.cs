@@ -14,7 +14,7 @@ namespace AutoDuty.Helpers
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
     using Lumina.Excel.Sheets;
 
-    internal unsafe static class InventoryHelper
+    internal static unsafe class InventoryHelper
     {
         internal static InventoryType[] Bag       => [InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4];
         internal static uint            SlotsFree => InventoryManager.Instance()->GetEmptySlotsInBag();
@@ -89,7 +89,8 @@ namespace AutoDuty.Helpers
             return targetSlot;
         }
 
-        internal static void EquipGear(Item item, InventoryType type, int slotIndex, RaptureGearsetModule.GearsetItemIndex targetSlot) => InventoryManager.Instance()->MoveItemSlot(type, (ushort)slotIndex, InventoryType.EquippedItems, (ushort)targetSlot, 1);
+        internal static void EquipGear(Item item, InventoryType type, int slotIndex, RaptureGearsetModule.GearsetItemIndex targetSlot) => 
+            InventoryManager.Instance()->MoveItemSlot(type, (ushort)slotIndex, InventoryType.EquippedItems, (ushort)targetSlot, true);
 
         internal static (InventoryType, ushort) GetFirstAvailableSlot(params InventoryType[] types)
         {

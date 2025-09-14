@@ -7,7 +7,7 @@ using ECommons.DalamudServices;
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
 using ECommons.ImGuiMethods;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace AutoDuty.Windows
             static void DrawSearchBar()
             {
                 // Set the maximum search to 10 characters
-                uint inputMaxLength = 10;
+                int inputMaxLength = 10;
                 
                 // Calculate the X width of the maximum amount of search characters
                 Vector2 _characterWidth = ImGui.CalcTextSize("W");
@@ -184,7 +184,9 @@ namespace AutoDuty.Windows
 
                         if (!ImGui.BeginListBox("##MainList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) return;
 
-                        if ((VNavmesh_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeMovementPlugin) && (BossMod_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeBossPlugin) && (ReflectionHelper.RotationSolver_Reflection.RotationSolverEnabled || BossMod_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeRotationPlugin))
+                        if ((VNavmesh_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeMovementPlugin) &&
+                            (BossMod_IPCSubscriber.IsEnabled  || Plugin.Configuration.UsingAlternativeBossPlugin)     &&
+                            (RSR_IPCSubscriber.IsEnabled      || BossMod_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeRotationPlugin))
                         {
                             foreach (var item in Plugin.Actions.Select((Value, Index) => (Value, Index)))
                             {
@@ -192,6 +194,7 @@ namespace AutoDuty.Windows
                                 //var text = item.Value.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? item.Value.Note : $"{item.Value.ToCustomString()}";
                                 ////////////////////////////////////////////////////////////////
                             }
+
                             if (_currentStepIndex != Plugin.Indexer && _currentStepIndex > -1 && Plugin.Stage > 0)
                             {
                                 var lineHeight = ImGui.GetTextLineHeightWithSpacing();
@@ -204,8 +207,10 @@ namespace AutoDuty.Windows
                                 _currentStepIndex = 0;
                                 ImGui.SetScrollY(_currentStepIndex);
                             }
+
                             if (Plugin.InDungeon && Plugin.Actions.Count < 1 && !ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType))
-                                ImGui.TextColored(new Vector4(0, 255, 0, 1), $"未找到副本配置文件:\n{TerritoryName.GetTerritoryName(Plugin.CurrentTerritoryContent.TerritoryType).Split('|')[1].Trim()}\n({Plugin.CurrentTerritoryContent.TerritoryType}.json)\n于路径文件夹:\n{Plugin.PathsDirectory.FullName.Replace('\\', '/')}\n请从以下链接下载:\n{_pathsURL}\n或在自行创建配置文件");
+                                ImGui.TextColored(new Vector4(0, 255, 0, 1),
+                                                  $"未找到副本配置文件:\n{TerritoryName.GetTerritoryName(Plugin.CurrentTerritoryContent.TerritoryType).Split('|')[1].Trim()}\n({Plugin.CurrentTerritoryContent.TerritoryType}.json)\n于路径文件夹:\n{Plugin.PathsDirectory.FullName.Replace('\\', '/')}\n请从以下链接下载:\n{_pathsURL}\n或在自行创建配置文件");
                         }
                         else
                         {
@@ -213,7 +218,7 @@ namespace AutoDuty.Windows
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 VNavmesh 插件\n请添加第三方仓库：\nhttps://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json");
                             if (!BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeBossPlugin)
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 BossMod 插件以正确处理机制。请添加第三方仓库：\nhttps://raw.githubusercontent.com/44451516/ffxiv_bossmod/CN/pluginmaster.json");
-                            if (!Wrath_IPCSubscriber.IsEnabled && !ReflectionHelper.RotationSolver_Reflection.RotationSolverEnabled && !BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeRotationPlugin)
+                            if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeRotationPlugin)
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载一个循环插件（Wrath Combo 、 Rotation Solver Reborn 或 BossMod AutoRotation 均可)");
                         }
                         ImGui.EndListBox();
@@ -264,7 +269,7 @@ namespace AutoDuty.Windows
                     {
                         foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
                         {
-                            if (ImGui.Selectable(mode.GetDescription()))
+                            if (ImGui.Selectable(mode.GetDescription(), Plugin.Configuration.DutyModeEnum == mode))
                             {
                                 Plugin.Configuration.DutyModeEnum = mode;
                                 Plugin.Configuration.Save();
@@ -280,20 +285,37 @@ namespace AutoDuty.Windows
                             ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? new Vector4(1, 0, 0, 1) : new Vector4(0, 1, 0, 1), "选择练级模式: ");
                             ImGui.SameLine(0);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                            if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum == LevelingMode.None ? "关闭" : "自动"))
+                            if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
+                                {
+                                    LevelingMode.None => "关闭",
+                                    _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
+                                }))
                             {
-                                if (ImGui.Selectable("关闭"))
+                                if (ImGui.Selectable("关闭", Plugin.LevelingModeEnum == LevelingMode.None))
                                 {
                                     Plugin.LevelingModeEnum = LevelingMode.None;
                                     Plugin.Configuration.Save();
                                 }
-                                if (ImGui.Selectable("自动"))
+
+                                LevelingMode autoLevelMode = (Plugin.Configuration.DutyModeEnum == DutyMode.Support ? LevelingMode.Support : LevelingMode.Trust_Group);
+                                if (ImGui.Selectable($"{autoLevelMode.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == autoLevelMode))
                                 {
-                                    Plugin.LevelingModeEnum = Plugin.Configuration.DutyModeEnum == DutyMode.Support ? LevelingMode.Support : LevelingMode.Trust;
+                                    Plugin.LevelingModeEnum = autoLevelMode;
                                     Plugin.Configuration.Save();
                                     if (Plugin.Configuration.AutoEquipRecommendedGear)
                                         AutoEquipHelper.Invoke();
                                 }
+
+                                if(Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
+                                    if (ImGui.Selectable($"{LevelingMode.Trust_Solo.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
+                                    {
+                                        Plugin.LevelingModeEnum = LevelingMode.Trust_Solo;
+                                        Plugin.Configuration.Save();
+                                        if (Plugin.Configuration.AutoEquipRecommendedGear)
+                                            AutoEquipHelper.Invoke();
+                                    }
+
+
                                 ImGui.EndCombo();
                             }
                             ImGui.PopItemWidth();
@@ -352,7 +374,7 @@ namespace AutoDuty.Windows
                                     SchedulerHelper.ScheduleAction("Refresh Levels - DT", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[1167u]), () => TrustHelper.State == ActionState.None);
                                 }
                                 ImGui.NextColumn();
-                                ImGui.Columns(1, null, true);
+                                ImGui.Columns(1);
                             }
                             else if (ImGui.Button("刷新亲信战友等级"))
                             {
@@ -373,13 +395,13 @@ namespace AutoDuty.Windows
                         ImGui.SameLine();
                         if (ImGui.Checkbox("隐藏不可用副本", ref Plugin.Configuration.HideUnavailableDuties))
                             Plugin.Configuration.Save();
-                        if (Plugin.Configuration.DutyModeEnum == DutyMode.Regular || Plugin.Configuration.DutyModeEnum == DutyMode.Trial || Plugin.Configuration.DutyModeEnum == DutyMode.Raid)
+                        if (Plugin.Configuration.DutyModeEnum is DutyMode.Regular or DutyMode.Trial or DutyMode.Raid)
                         {
                             if (ImGuiEx.CheckboxWrapped("解除限制", ref Plugin.Configuration.Unsynced))
                                 Plugin.Configuration.Save();
                         }
                     }
-                    var ilvl = InventoryHelper.CurrentItemLevel;
+                    ushort ilvl = InventoryHelper.CurrentItemLevel;
                     if (!ImGui.BeginListBox("##DutyList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) return;
 
                     if (VNavmesh_IPCSubscriber.IsEnabled && BossMod_IPCSubscriber.IsEnabled)
@@ -388,7 +410,9 @@ namespace AutoDuty.Windows
                         {
                             if (Plugin.LevelingModeEnum != LevelingMode.None)
                             {
-                                if (Player.Job.GetCombatRole() == CombatRole.NonCombat || (Plugin.LevelingModeEnum == LevelingMode.Trust && ilvl < 370) || (Plugin.LevelingModeEnum == LevelingMode.Trust && Plugin.CurrentPlayerItemLevelandClassJob.Value != null && Plugin.CurrentPlayerItemLevelandClassJob.Value != Player.Job))
+                                if (Player.Job.GetCombatRole() == CombatRole.NonCombat || 
+                                    (Plugin.LevelingModeEnum.IsTrustLeveling() && 
+                                        (ilvl < 370 || Plugin.CurrentPlayerItemLevelandClassJob.Value != null && Plugin.CurrentPlayerItemLevelandClassJob.Value != Player.Job)))
                                 {
                                     Svc.Log.Debug($"您正处于一个不兼容的职业: {Player.Job.GetCombatRole()}, 或者您正处于亲信模式但装等({ilvl}) 小于 370, 或您的装等已变更, 正在禁用升级模式");
                                     Plugin.LevelingModeEnum = LevelingMode.None;
@@ -396,7 +420,7 @@ namespace AutoDuty.Windows
                                 else if (ilvl > 0 && ilvl != Plugin.CurrentPlayerItemLevelandClassJob.Key)
                                 {
                                     Svc.Log.Debug($"您的装等已更改，正在选择新任务。");
-                                    Plugin.CurrentTerritoryContent = LevelingHelper.SelectHighestLevelingRelevantDuty(Plugin.LevelingModeEnum == LevelingMode.Trust);
+                                    Plugin.CurrentTerritoryContent = LevelingHelper.SelectHighestLevelingRelevantDuty(Plugin.LevelingModeEnum);
                                 }
                                 else
                                 {

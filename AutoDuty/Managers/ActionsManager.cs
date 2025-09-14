@@ -23,14 +23,14 @@ namespace AutoDuty.Managers
 {
     using System.Xml;
 
-    internal class ActionsManager(AutoDuty _plugin, Chat _chat, TaskManager _taskManager)
+    internal class ActionsManager(AutoDuty _plugin, TaskManager _taskManager)
     {
         public readonly List<(string, string, string)> ActionsList =
         [
             ("<-- Comment -->","comment?","Adds a Comment to the path; AutoDuty will do nothing but display them.\nExample: <-- Trash Pack #1 -->"),
             ("Wait","how long?", "Adds a Wait (for x milliseconds) step to the path; after moving to the position, AutoDuty will wait x milliseconds.\nExample: Wait|0.02, 23.85, -394.89|8000"),
             ("WaitFor","for?","Adds a WaitFor (Condition) step to the path; after moving to the position, AutoDuty will wait for a condition from the following list:\nCombat - waits until in combat\nIsReady - waits until the player is ready\nIsValid - waits until the player is valid\nIsOccupied - waits until the player is occupied\nBNpcInRadius - waits until a battle npc either spawns or path's into the radius specified\nExample: WaitFor|-12.12, 18.76, -148.05|Combat"),
-            ("Boss","false", "Adds a Boss step to the path; after (and while) moving to the position, AutoDuty will attempt to find the boss object. If not found, AD will wait 10s at the position for the boss to spawn and will then Invoke the Boss Action.\nExample: Boss|-2.91, 2.90, -204.68|"),
+            ("Boss","Loot Loc, Loot Range", "Adds a Boss step to the path; after (and while) moving to the position, AutoDuty will attempt to find the boss object. If not found, AD will wait 10s at the position for the boss to spawn and will then Invoke the Boss Action.\nExample: Boss|-2.91, 2.90, -204.68|"),
             ("Interactable","interact with?", "Adds an Interactable step to the path; after moving to within 2y of the position, AutoDuty will interact with the object specified (recommended to input DataId) until either the object is no longer targetable, you meet certain conditions, or a YesNo/Talk addon appears.\nExample: Interactable|21.82, 7.10, 27.40|1004346 (Goblin Pathfinder)"),
             ("TreasureCoffer","false", "Adds a TreasureCoffer flag to the path; AutoDuty will loot any treasure coffers automatically if it gets within interact range of one (while Config Loop Option is on), this is just a flag to mark the positions of Treasure Coffers.\nNote: AutoDuty will ignore this Path entry when Looting is disabled entirely or Boss Loot Only is enabled.\nExample: TreasureCoffer|3.21, 6.06, -97.63|"),
             ("SelectYesno","yes or no?", "Adds a SelectYesNo step to the path; after moving to the position, AutoDuty will click Yes or No on this addon.\nExample: SelectYesno|9.41, 1.94, -311.25|Yes"),
@@ -242,7 +242,7 @@ namespace AutoDuty.Managers
 
             if (int.TryParse(action.Arguments[0], out int wait) && wait > 0)
             {
-                _taskManager.Enqueue(() => _chat.ExecuteCommand("/automove on"), "Jump");
+                _taskManager.Enqueue(() => Chat.ExecuteCommand("/automove on"), "Jump");
                 _taskManager.Enqueue(() => EzThrottler.Throttle("AutoMove", Convert.ToInt32(wait)), "Jump");
                 _taskManager.Enqueue(() => EzThrottler.Check("AutoMove"), Convert.ToInt32(wait), "Jump");
             }
@@ -253,7 +253,7 @@ namespace AutoDuty.Managers
             {
                 _taskManager.Enqueue(() => EzThrottler.Throttle("AutoMove", Convert.ToInt32(100)), "Jump");
                 _taskManager.Enqueue(() => EzThrottler.Check("AutoMove"), Convert.ToInt32(100), "AutoMove");
-                _taskManager.Enqueue(() => _chat.ExecuteCommand("/automove off"), "Jump");
+                _taskManager.Enqueue(() => Chat.ExecuteCommand("/automove off"), "Jump");
             }
         }
 
@@ -262,7 +262,7 @@ namespace AutoDuty.Managers
             if (!Player.Available)
                 return;
             Plugin.Action = $"ChatCommand: {action.Arguments[0]}";
-            _taskManager.Enqueue(() => _chat.ExecuteCommand(action.Arguments[0]), "ChatCommand");
+            _taskManager.Enqueue(() => Chat.ExecuteCommand(action.Arguments[0]), "ChatCommand");
             _taskManager.Enqueue(() => Plugin.Action = "");
         }
 
@@ -273,12 +273,12 @@ namespace AutoDuty.Managers
             Plugin.Action = $"AutoMove For {action.Arguments[0]}";
             var movementMode = Svc.GameConfig.UiControl.TryGetUInt("MoveMode", out var mode) ? mode : 0;
             _taskManager.Enqueue(() => { if (movementMode == 1) Svc.GameConfig.UiControl.Set("MoveMode", 0); }, "AutoMove-MoveMode");
-            _taskManager.Enqueue(() => _chat.ExecuteCommand("/automove on"), "AutoMove-On");
+            _taskManager.Enqueue(() => Chat.ExecuteCommand("/automove on"), "AutoMove-On");
             _taskManager.Enqueue(() => EzThrottler.Throttle("AutoMove", Convert.ToInt32(action.Arguments[0])), "AutoMove-Throttle");
             _taskManager.Enqueue(() => EzThrottler.Check("AutoMove") || !IsReady, Convert.ToInt32(action.Arguments[0]), "AutoMove-CheckThrottleOrNotReady");
             _taskManager.Enqueue(() => { if (movementMode == 1) Svc.GameConfig.UiControl.Set("MoveMode", 1); }, "AutoMove-MoveMode2");
             _taskManager.Enqueue(() => IsReady, int.MaxValue, "AutoMove-WaitIsReady");
-            _taskManager.Enqueue(() => _chat.ExecuteCommand("/automove off"), "AutoMove-Off");
+            _taskManager.Enqueue(() => Chat.ExecuteCommand("/automove off"), "AutoMove-Off");
         }
 
         public unsafe void Wait(PathAction action)
@@ -447,10 +447,12 @@ namespace AutoDuty.Managers
 
             if (EzThrottler.Throttle("Interactable", 1000))
             {
-                if (!TryGetObjectByDataId(gameObject?.DataId ?? 0, out gameObject)) return true;
-
+                if (!TryGetObjectByDataId(gameObject?.DataId ?? 0, igo => igo.IsTargetable, out gameObject)) return true;
+                
                 if (GetBattleDistanceToPlayer(gameObject!) > 2f)
+                {
                     MovementHelper.Move(gameObject, 0.25f, 2f, false);
+                }
                 else
                 {
                     Svc.Log.Debug($"InteractableCheck: Interacting with {gameObject!.Name} at {gameObject.Position} which is {GetDistanceToPlayer(gameObject)} away, because game object is not null: {gameObject != null} and IsTargetable: {gameObject!.IsTargetable} and IsValid: {gameObject.IsValid()}");
@@ -517,25 +519,27 @@ namespace AutoDuty.Managers
             else
                 dataIds.Add(TryGetObjectIdRegex(action.Arguments[0], out objectDataId) ? (uint.TryParse(objectDataId, out var dataId) ? dataId : 0) : 0);
 
-            if (dataIds.All(x => x.Equals("0"))) return;
+            if (dataIds.All(x => x.Equals(0u))) return;
 
             IGameObject? gameObject = null;
             Plugin.Action = $"Interactable";
-            _taskManager.Enqueue(() => Player.Character->InCombat || (gameObject = Svc.Objects.Where(x => x.DataId.EqualsAny(dataIds) && x.IsTargetable).OrderBy(GetDistanceToPlayer).FirstOrDefault()) != null, "Interactable-GetGameObjectUnlessInCombat");
+            _taskManager.Enqueue(() => (Player.Character->InCombat && Plugin.StopForCombat) || (gameObject = Svc.Objects.Where(x => x.DataId.EqualsAny(dataIds) && x.IsTargetable).OrderBy(GetDistanceToPlayer).FirstOrDefault()) != null, "Interactable-GetGameObjectUnlessInCombat");
             _taskManager.Enqueue(() => { Plugin.Action = $"Interactable: {gameObject?.DataId}"; }, "Interactable-SetActionVar");
             _taskManager.Enqueue(() =>
             {
-                if (Player.Character->InCombat)
+                if (Player.Character->InCombat && Plugin.StopForCombat)
                 {
                     _taskManager.Abort();
                     _taskManager.Enqueue(() => !Player.Character->InCombat, int.MaxValue, "Interactable-InCombatWait");
-                    Interactable(action);
+                    this.Interactable(action);
                 }
                 else if (gameObject == null)
+                {
                     _taskManager.Abort();
-                }, "Interactable-InCombatCheck");
+                }
+            }, "Interactable-InCombatCheck");
             _taskManager.Enqueue(() => gameObject?.IsTargetable ?? true, "Interactable-WaitGameObjectTargetable");
-            _taskManager.Enqueue(() => Interactable(gameObject), "Interactable-InteractableLoop");
+            _taskManager.Enqueue(() => this.Interactable(gameObject),       "Interactable-InteractableLoop");
         }
 
         private bool TryGetObjectIdRegex(string input, out string output) => (RegexHelper.ObjectIdRegex().Match(input).Success ? output = RegexHelper.ObjectIdRegex().Match(input).Captures.First().Value : output = string.Empty) != string.Empty;
@@ -601,8 +605,20 @@ namespace AutoDuty.Managers
 
             if (Plugin.Configuration.LootTreasure)
             {
+                
                 _taskManager.DelayNext("Boss-TreasureDelay", 1000);
-                _taskManager.Enqueue(() => treasureCofferObjects = GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Treasure)?.Where(x => BelowDistanceToPlayer(x.Position, 50, 10)).ToList(), "Boss-GetTreasureChests");
+
+                float lootRange = 50f;
+
+                if (action.Arguments.Count > 0 && action.Arguments[0].TryGetVector3(out Vector3 lootPos))
+                    lootRange = 5;
+                else
+                    lootPos = action.Position.LengthSquared() > 0.1f ? action.Position : Player.Position;
+
+                if (action.Arguments.Count > 1)
+                    float.TryParse(action.Arguments[1], out lootRange);
+
+                _taskManager.Enqueue(() => treasureCofferObjects = GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Treasure)?.Where(x => BelowDistanceToPoint(x.Position, lootPos, lootRange, 10)).ToList(), "Boss-GetTreasureChestsBounded");
                 _taskManager.Enqueue(() => BossLoot(treasureCofferObjects, index), "Boss-LootCheck");
             }
         }
@@ -770,31 +786,31 @@ namespace AutoDuty.Managers
                             }
                             break;
                         case "12":
-                            _taskManager.Enqueue(() => _chat.ExecuteCommand("/rotation Settings AoEType Off"), "DutySpecificCode");
+                            _taskManager.Enqueue(() => Chat.ExecuteCommand("/rotation Settings AoEType Off"), "DutySpecificCode");
                             _taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 16), "DutySpecificCode");
                             _taskManager.Enqueue(() => EzThrottler.Throttle("DutySpecificCode", Convert.ToInt32(500)));
                             _taskManager.Enqueue(() => EzThrottler.Check("DutySpecificCode"), Convert.ToInt32(500), "DutySpecificCode");
-                            _taskManager.Enqueue(() => _chat.ExecuteCommand("/mk ignore1"), "DutySpecificCode");
+                            _taskManager.Enqueue(() => Chat.ExecuteCommand("/mk ignore1"), "DutySpecificCode");
                             _taskManager.Enqueue(() => EzThrottler.Throttle("DutySpecificCode", Convert.ToInt32(100)));
                             _taskManager.Enqueue(() => EzThrottler.Check("DutySpecificCode"), Convert.ToInt32(100), "DutySpecificCode");
 
                             _taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 16), "DutySpecificCode");
                             _taskManager.Enqueue(() => EzThrottler.Throttle("DutySpecificCode", Convert.ToInt32(500)));
                             _taskManager.Enqueue(() => EzThrottler.Check("DutySpecificCode"), Convert.ToInt32(500), "DutySpecificCode");
-                            _taskManager.Enqueue(() => _chat.ExecuteCommand("/mk ignore2"), "DutySpecificCode");
+                            _taskManager.Enqueue(() => Chat.ExecuteCommand("/mk ignore2"), "DutySpecificCode");
                             _taskManager.Enqueue(() => EzThrottler.Throttle("DutySpecificCode", Convert.ToInt32(100)));
                             _taskManager.Enqueue(() => EzThrottler.Check("DutySpecificCode"), Convert.ToInt32(100), "DutySpecificCode");
 
                             _taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 16), "DutySpecificCode");
                             _taskManager.Enqueue(() => EzThrottler.Throttle("DutySpecificCode", Convert.ToInt32(500)));
                             _taskManager.Enqueue(() => EzThrottler.Check("DutySpecificCode"), Convert.ToInt32(500), "DutySpecificCode");
-                            _taskManager.Enqueue(() => _chat.ExecuteCommand("/mk attack1"), "DutySpecificCode");
+                            _taskManager.Enqueue(() => Chat.ExecuteCommand("/mk attack1"), "DutySpecificCode");
                             break;
                         case "13":
                             _taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 16), "DutySpecificCode");
                             _taskManager.Enqueue(() => EzThrottler.Throttle("DutySpecificCode", Convert.ToInt32(500)));
                             _taskManager.Enqueue(() => EzThrottler.Check("DutySpecificCode"), Convert.ToInt32(500), "DutySpecificCode");
-                            _taskManager.Enqueue(() => _chat.ExecuteCommand("/mk attack1"), "DutySpecificCode");
+                            _taskManager.Enqueue(() => Chat.ExecuteCommand("/mk attack1"), "DutySpecificCode");
                             break;
 
                         default: break;

@@ -15,9 +15,9 @@ namespace AutoDuty.Helpers
 
     internal static class MapHelper
     {
-        internal static unsafe bool IsFlagMarkerSet => AgentMap.Instance()->IsFlagMarkerSet;
+        internal static unsafe bool IsFlagMarkerSet => AgentMap.Instance()->FlagMarkerCount > 0;
         
-        internal static unsafe FlagMapMarker GetFlagMarker => AgentMap.Instance()->FlagMapMarker;
+        internal static unsafe FlagMapMarker GetFlagMarker => IsFlagMarkerSet ? AgentMap.Instance()->FlagMapMarkers[0] : default;
 
         internal static Vector2 ConvertWorldXZToMap(Vector2 coords, Map map) => Dalamud.Utility.MapUtil.WorldToMap(coords, map.OffsetX, map.OffsetY, map.SizeFactor);
 
@@ -103,7 +103,7 @@ namespace AutoDuty.Helpers
         private static Vector3? flagMapMarkerVector3 = Vector3.Zero;
         private static FlagMapMarker? flagMapMarker = null;
 
-        internal unsafe static void StopMoveToMapMarker()
+        internal static unsafe void StopMoveToMapMarker()
         {
             Svc.Framework.Update -= MoveToMapMarkerUpdate;
             VNavmesh_IPCSubscriber.Path_Stop();
@@ -114,7 +114,7 @@ namespace AutoDuty.Helpers
             flagMapMarker = null;
         }
 
-        internal unsafe static void MoveToMapMarkerUpdate(IFramework _)
+        internal static unsafe void MoveToMapMarkerUpdate(IFramework _)
         {
             if (!EzThrottler.Throttle("MoveToMapMarker"))
                 return;

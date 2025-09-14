@@ -24,7 +24,6 @@ using System.Linq;
 using ECommons.GameFunctions;
 using ECommons.Automation;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using ImGuiNET;
 using ECommons.ExcelServices;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Dalamud.IoC;
@@ -39,6 +38,7 @@ using AutoDuty.Updater;
 namespace AutoDuty;
 
 using System.Text.RegularExpressions;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Utility.Numerics;
 using Data;
 using ECommons.Configuration;
@@ -46,6 +46,7 @@ using ECommons.SimpleGui;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using Lumina.Excel.Sheets;
 using Pictomancy;
+using Serilog;
 using static Data.Classes;
 using TaskManager = ECommons.Automation.LegacyTaskManager.TaskManager;
 
@@ -79,7 +80,7 @@ public sealed class AutoDuty : IDalamudPlugin
     internal int CurrentPath = -1;
 
     internal bool SupportLevelingEnabled => LevelingModeEnum == LevelingMode.Support;
-    internal bool TrustLevelingEnabled => LevelingModeEnum == LevelingMode.Trust;
+    internal bool TrustLevelingEnabled => LevelingModeEnum.IsTrustLeveling();
     internal bool LevelingEnabled => LevelingModeEnum != LevelingMode.None;
 
     internal static string Name => "AutoDuty";
@@ -124,6 +125,9 @@ public sealed class AutoDuty : IDalamudPlugin
                 case Stage.Waiting_For_Combat:
                     BossMod_IPCSubscriber.SetRange(Plugin.Configuration.MaxDistanceToTargetFloat);
                     break;
+                case Stage.Reading_Path:
+                    ConfigurationMain.MultiboxUtility.MultiboxBlockingNextStep = true;
+                    break;
             }
             _stage = value;
             Svc.Log.Debug($"Stage={_stage.ToCustomString()}");
@@ -137,7 +141,7 @@ public sealed class AutoDuty : IDalamudPlugin
             if (value != LevelingMode.None)
             {
                 Svc.Log.Debug($"Setting Leveling mode to {value}");
-                Content? duty = LevelingHelper.SelectHighestLevelingRelevantDuty(value == LevelingMode.Trust);
+                Content? duty = LevelingHelper.SelectHighestLevelingRelevantDuty(value);
 
                 if (duty != null)
                 {
@@ -180,7 +184,6 @@ public sealed class AutoDuty : IDalamudPlugin
     internal TaskManager TaskManager;
     internal Job JobLastKnown;
     internal DutyState DutyState = DutyState.None;
-    internal Chat Chat;
     internal PathAction PathAction = new();
     internal List<Data.Classes.LogMessage> DalamudLogEntries = [];
     private LevelingMode levelingModeEnum = LevelingMode.None;
@@ -201,6 +204,8 @@ public sealed class AutoDuty : IDalamudPlugin
     private         SettingsActive _bareModeSettingsActive = SettingsActive.None;
     private         DateTime       _lastRotationSetTime    = DateTime.MinValue;
     public readonly bool           isDev;
+
+    private readonly (string[], string, Action<string[]>)[] commands;
 
     public AutoDuty()
     {
@@ -227,15 +232,15 @@ public sealed class AutoDuty : IDalamudPlugin
             //Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             
             ConfigTab.BuildManuals();
-            _configDirectory = PluginInterface.ConfigDirectory;
-            ConfigFile = PluginInterface.ConfigFile;
-            DalamudDirectory = ConfigFile.Directory?.Parent;
-            PathsDirectory = new(_configDirectory.FullName + "/paths");
-            AssemblyFileInfo = PluginInterface.AssemblyLocation;
+            _configDirectory      = PluginInterface.ConfigDirectory;
+            ConfigFile            = PluginInterface.ConfigFile;
+            DalamudDirectory      = ConfigFile.Directory?.Parent;
+            PathsDirectory        = new(_configDirectory.FullName + "/paths");
+            AssemblyFileInfo      = PluginInterface.AssemblyLocation;
             AssemblyDirectoryInfo = AssemblyFileInfo.Directory;
             
             Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 227) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 239) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!_configDirectory.Exists)
@@ -245,77 +250,194 @@ public sealed class AutoDuty : IDalamudPlugin
 
             TaskManager = new()
             {
-                AbortOnTimeout = false,
+                AbortOnTimeout  = false,
                 TimeoutSilently = true
             };
 
             TrustHelper.PopulateTrustMembers();
-            Svc.Data.GameData.Options.PanicOnSheetChecksumMismatch = false; // TODO: remove - temporary workaround until lumina is updated
             ContentHelper.PopulateDuties();
-            Svc.Data.GameData.Options.PanicOnSheetChecksumMismatch = true; // TODO: remove - temporary workaround until lumina is updated
             RepairNPCHelper.PopulateRepairNPCs();
             FileHelper.Init();
             Patcher.Patch(startup: true);
 
-            Chat = new();
-            _overrideAFK = new();
-            _ipcProvider = new();
-            _squadronManager = new(TaskManager);
-            _variantManager = new(TaskManager);
-            _actions = new(Plugin, Chat, TaskManager);
+            _overrideAFK         = new();
+            _ipcProvider         = new();
+            _squadronManager     = new(TaskManager);
+            _variantManager      = new(TaskManager);
+            _actions             = new(Plugin, TaskManager);
             BuildTab.ActionsList = _actions.ActionsList;
-            OverrideCamera = new();
-            Overlay = new();
-            MainWindow = new();
+            OverrideCamera       = new();
+            Overlay              = new();
+            MainWindow           = new();
             WindowSystem.AddWindow(MainWindow);
             WindowSystem.AddWindow(Overlay);
 
             if (Svc.ClientState.IsLoggedIn) 
                 this.ClientStateOnLogin();
-             
-            Svc.Commands.AddHandler("/ad", new CommandInfo(OnCommand) { });
-            Svc.Commands.AddHandler(CommandName, new CommandInfo(OnCommand)
-            {
-                HelpMessage = "\n/autoduty or /ad -> 打开主窗口\n" +
-                "/autoduty or /ad config or cfg -> 打开配置窗口/修改配置\n" +
-                "/autoduty or /ad start -> 在副本中启动AutoDuty\n" +
-                "/autoduty or /ad stop -> 停止所有操作\n" +
-                "/autoduty or /ad pause -> 暂停路线\n" +
-                "/autoduty or /ad resume -> 恢复路线\n" +
-                "/autoduty or /ad turnin -> 军队筹备\n" +
-                "/autoduty or /ad desynth -> 分解背包物品\n" +
-                "/autoduty or /ad repair -> 修理装备\n" +
-                "/autoduty or /ad equiprec-> 装备推荐物品\n" +
-                "/autoduty or /ad extract -> 从装备中精制魔晶石\n" +
-                "/autoduty or /ad turnin -> 军队筹备\n" +
-                "/autoduty or /ad goto -> 前往指定位置\n" +
-                "/autoduty or /ad dataid -> 记录并复制目标的数据ID到剪贴板\n" +
-                "/autoduty or /ad exitduty -> 退出副本\n" +
-                "/autoduty or /ad queue -> 排队进入副本\n" +
-                "/autoduty or /ad moveto -> 传送到指定区域和坐标\n" +
-                "/autoduty or /ad overlay -> opens overlay\n" +
-                "/autoduty or /ad overlay lock-> toggles locking the overlay\n" +
-                "/autoduty or /ad overlay nobg-> toggles the overlay's background\n" +
-                "/autoduty or /ad movetoflag -> 移动到地图标记旗标\n" +
-                "/autoduty or /ad run -> 在指定区域启动AutoDuty\n" +
-                "/autoduty or /ad tt -> 记录并复制指定副本的区域类型编号到剪贴板\n"
-            });
+            
+            ActiveHelper.InvokeAllHelpers();
 
-            PluginInterface.UiBuilder.Draw += DrawUI;
+            this.commands = [
+                (["config", "cfg"], "opens config window / modifies config", argsArray =>
+                                                                             {
+                                                                                 if (argsArray.Length < 2)
+                                                                                     this.OpenConfigUI();
+                                                                                 else if (argsArray[1].Equals("list"))
+                                                                                     ConfigHelper.ListConfig();
+                                                                                 else
+                                                                                     ConfigHelper.ModifyConfig(argsArray[1], argsArray[2..]);
+                                                                             }),
+                (["start"], "starts autoduty when in a Duty", _ => this.StartNavigation()),
+                (["stop"], "stops everything", _ => Plugin.Stage = Stage.Stopped),
+                (["pause"], "pause route", _ => Plugin.Stage     = Stage.Paused),
+                (["resume"], "resume route", _ =>
+                                             {
+                                                 if (Plugin.Stage == Stage.Paused)
+                                                 {
+                                                     Plugin.TaskManager.SetStepMode(false);
+                                                     Plugin.Stage  =  Plugin.PreviousStage;
+                                                     Plugin.States &= ~PluginState.Paused;
+                                                 }
+                                             }),
+                (["dataid"], "Logs and copies your target's dataid to clipboard", argsArray =>
+                                                                                  {
+                                                                                      IGameObject? obj = null;
+                                                                                      if (argsArray.Length == 2)
+                                                                                          obj = Svc.Objects[int.TryParse(argsArray[1], out int index) ? index : -1] ?? null;
+                                                                                      else
+                                                                                          obj = ObjectHelper.GetObjectByName(Svc.Targets.Target?.Name.TextValue ?? "");
+
+                                                                                      Svc.Log.Info($"{obj?.DataId}");
+                                                                                      ImGui.SetClipboardText($"{obj?.DataId}");
+                                                                                  }),
+                (["queue"], "queues duty", argsArray =>
+                                           {
+                                               QueueHelper.Invoke(ContentHelper.DictionaryContent.FirstOrDefault(x => x.Value.Name!.Equals(string.Join(" ", argsArray).Replace("queue ", string.Empty), StringComparison.InvariantCultureIgnoreCase)).Value ?? null,
+                                                                  this.Configuration.DutyModeEnum);
+                                           }),
+                (["overlay"], "opens overlay", argsArray =>
+                                               {
+                                                   if (argsArray.Length == 1)
+                                                   {
+                                                       this.Configuration.ShowOverlay = true;
+                                                       this.Overlay.IsOpen            = true;
+
+                                                       if (!Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
+                                                           this.Configuration.HideOverlayWhenStopped = false;
+                                                   }
+                                                   else
+                                                   {
+                                                       switch (argsArray[1].ToLower())
+                                                       {
+                                                           case "lock":
+                                                               if (this.Overlay.Flags.HasFlag(ImGuiWindowFlags.NoMove))
+                                                                   this.Overlay.Flags -= ImGuiWindowFlags.NoMove;
+                                                               else
+                                                                   this.Overlay.Flags |= ImGuiWindowFlags.NoMove;
+                                                               break;
+                                                           case "nobg":
+                                                               if (this.Overlay.Flags.HasFlag(ImGuiWindowFlags.NoBackground))
+                                                                   this.Overlay.Flags -= ImGuiWindowFlags.NoBackground;
+                                                               else
+                                                                   this.Overlay.Flags |= ImGuiWindowFlags.NoBackground;
+                                                               break;
+                                                       }
+                                                   }
+                                               }),
+                (["skipstep"], "skips the current step", _ =>
+                                                         {
+                                                             if (this.States.HasFlag(PluginState.Navigating))
+                                                             {
+                                                                 this.Indexer++;
+                                                                 this.Stage = Stage.Reading_Path;
+                                                             }
+                                                         }),
+                (["movetoflag"], "moves to the flag map marker", _ => MapHelper.MoveToMapMarker()),
+                (["run"], "starts auto duty in territory type specified", argsArray =>
+                                                                          {
+                                                                              const string failPreMessage  = "Run Error: Incorrect usage: ";
+                                                                              const string failPostMessage = "\nCorrect usage: /autoduty run DutyMode TerritoryTypeInteger LoopTimesInteger (optional)BareModeBool\nexample: /autoduty run Support 1036 10 true\nYou can get the TerritoryTypeInteger from /autoduty tt name of territory (will be logged and copied to clipboard)";
+                                                                              if (argsArray.Length < 4)
+                                                                              {
+                                                                                  Svc.Log.Info($"{failPreMessage}Argument count must be at least 3, you inputted {argsArray.Length - 1}{failPostMessage}");
+                                                                                  return;
+                                                                              }
+
+                                                                              if (!Enum.TryParse(argsArray[1], true, out DutyMode dutyMode))
+                                                                              {
+                                                                                  Svc.Log.Info($"{failPreMessage}Argument 1 must be a DutyMode enum Type, you inputted {argsArray[1]}{failPostMessage}");
+                                                                                  return;
+                                                                              }
+
+                                                                              if (!uint.TryParse(argsArray[2], out uint territoryType))
+                                                                              {
+                                                                                  Svc.Log.Info($"{failPreMessage}Argument 2 must be an unsigned integer, you inputted {argsArray[2]}{failPostMessage}");
+                                                                                  return;
+                                                                              }
+
+                                                                              if (!int.TryParse(argsArray[3], out int loopTimes))
+                                                                              {
+                                                                                  Svc.Log.Info($"{failPreMessage}Argument 3 must be an integer, you inputted {argsArray[3]}{failPostMessage}");
+                                                                                  return;
+                                                                              }
+
+                                                                              if (!ContentHelper.DictionaryContent.TryGetValue(territoryType, out Content? content))
+                                                                              {
+                                                                                  Svc.Log.Info($"{failPreMessage}Argument 2 value was not in our ContentList or has no Path, you inputted {argsArray[2]}{failPostMessage}");
+                                                                                  return;
+                                                                              }
+
+                                                                              if (!content.DutyModes.HasFlag(dutyMode))
+                                                                              {
+                                                                                  Svc.Log.Info($"{failPreMessage}Argument 2 value was not of type {dutyMode}, which you inputted in Argument 1, Argument 2 value was {argsArray[2]}{failPostMessage}");
+                                                                                  return;
+                                                                              }
+
+                                                                              if (!content.CanRun(trust: dutyMode == DutyMode.Trust))
+                                                                              {
+                                                                                  string failReason = !UIState.IsInstanceContentCompleted(content.Id) ?
+                                                                                                          "You dont have it unlocked" :
+                                                                                                          (!ContentPathsManager.DictionaryPaths.ContainsKey(content.TerritoryType) ?
+                                                                                                               "There is no path file" :
+                                                                                                               (PlayerHelper.GetCurrentLevelFromSheet() < content.ClassJobLevelRequired ?
+                                                                                                                    $"Your Lvl({PlayerHelper.GetCurrentLevelFromSheet()}) is less than {content.ClassJobLevelRequired}" :
+                                                                                                                    (InventoryHelper.CurrentItemLevel < content.ItemLevelRequired ?
+                                                                                                                         $"Your iLvl({InventoryHelper.CurrentItemLevel}) is less than {content.ItemLevelRequired}" :
+                                                                                                                         "Your trust party is not of correct levels")));
+                                                                                  Svc.Log.Info($"Unable to run {content.Name}, {failReason} {content.CanTrustRun()}");
+                                                                                  return;
+                                                                              }
+
+                                                                              this.Configuration.DutyModeEnum = dutyMode;
+
+                                                                              this.Run(territoryType, loopTimes, bareMode: argsArray.Length > 4 && bool.TryParse(argsArray[4], out bool parsedBool) && parsedBool);
+                                                                          }),
+            ];
+            this.commands = this.commands.Concat(ActiveHelper.activeHelpers.Where(iah => iah.Commands != null).
+                                                              Select<IActiveHelper, (string[], string, Action<string[]>)>(iah => (iah.Commands!, iah.CommandDescription!, iah.OnCommand))).ToArray();
+
+            Svc.Commands.AddHandler("/ad", new CommandInfo(this.OnCommand));
+            Svc.Commands.AddHandler(CommandName, new CommandInfo(this.OnCommand)
+                                                 {
+                                                     HelpMessage = string.Join("\n", this.commands.Select(tuple => $"/autoduty or /ad {string.Join(" / ", tuple.Item1)} -> {tuple.Item2}"))
+                                                 });
+
+
+            PluginInterface.UiBuilder.Draw         += DrawUI;
             PluginInterface.UiBuilder.OpenConfigUi += OpenConfigUI;
-            PluginInterface.UiBuilder.OpenMainUi += OpenMainUI;
+            PluginInterface.UiBuilder.OpenMainUi   += OpenMainUI;
 
-            Svc.Framework.Update += Framework_Update;
-            Svc.Framework.Update += SchedulerHelper.ScheduleInvoker;
+            Svc.Framework.Update             += Framework_Update;
+            Svc.Framework.Update             += SchedulerHelper.ScheduleInvoker;
             Svc.ClientState.TerritoryChanged += ClientState_TerritoryChanged;
-            Svc.ClientState.Login += ClientStateOnLogin;
-            Svc.Condition.ConditionChange += Condition_ConditionChange;
-            Svc.DutyState.DutyStarted += DutyState_DutyStarted;
-            Svc.DutyState.DutyWiped += DutyState_DutyWiped;
-            Svc.DutyState.DutyRecommenced += DutyState_DutyRecommenced;
-            Svc.DutyState.DutyCompleted += DutyState_DutyCompleted;
-            Svc.Log.MinimumLogLevel = LogEventLevel.Debug;
-            PluginInterface.UiBuilder.Draw += UiBuilderOnDraw;
+            Svc.ClientState.Login            += ClientStateOnLogin;
+            Svc.Condition.ConditionChange    += Condition_ConditionChange;
+            Svc.DutyState.DutyStarted        += DutyState_DutyStarted;
+            Svc.DutyState.DutyWiped          += DutyState_DutyWiped;
+            Svc.DutyState.DutyRecommenced    += DutyState_DutyRecommenced;
+            Svc.DutyState.DutyCompleted      += DutyState_DutyCompleted;
+            Svc.Log.MinimumLogLevel          =  LogEventLevel.Debug;
+            PluginInterface.UiBuilder.Draw   += UiBuilderOnDraw;
         }
         catch (Exception e)
         {
@@ -323,18 +445,116 @@ public sealed class AutoDuty : IDalamudPlugin
         }
     }
 
+    private unsafe void OnCommand(string command, string args)
+    {
+        Match        match   = RegexHelper.ArgumentParserRegex().Match(args.ToLower());
+        List<string> matches = [];
+
+        while (match.Success)
+        {
+            matches.Add(match.Groups[match.Groups[1].Length > 0 ? 1 : 0].Value);
+            match = match.NextMatch();
+        }
+
+        string[] argsArray = matches.Count > 0 ? matches.ToArray() : [string.Empty];
+        string check = argsArray[0];
+
+        Svc.Log.Debug("command with: " + args);
+
+        foreach ((string[] keywords, _, Action<string[]> action) in commands)
+            if (keywords.Any(key => check.StartsWith(key)))
+            {
+                Svc.Log.Debug("Activating command: " + string.Join(" / ", keywords));
+                action(argsArray);
+                return;
+            }
+
+        switch (argsArray[0])
+        {
+            case "moveto":
+                var argss = args.Replace("moveto ", "").Split("|");
+                var vs    = argss[1].Split(", ");
+                var v3    = new Vector3(float.Parse(vs[0]), float.Parse(vs[1]), float.Parse(vs[2]));
+
+                GotoHelper.Invoke(Convert.ToUInt32(argss[0]), [v3], argss.Length > 2 ? float.Parse(argss[2]) : 0.25f, argss.Length > 3 ? float.Parse(argss[3]) : 0.25f);
+                break;
+            case "spew":
+                IGameObject? spewObj = null;
+                spewObj = argsArray.Length == 2 ? 
+                              ObjectHelper.GetObjectByDataId(uint.TryParse(argsArray[1], out uint dataId) ? dataId : 0) : 
+                              ObjectHelper.GetObjectByName(Svc.Targets.Target?.Name.TextValue ?? "");
+
+                if (spewObj == null) 
+                    return;
+
+                GameObject gObj = *spewObj.Struct();
+                try { Svc.Log.Info($"Spewing Object Information for: {gObj.NameString}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Spewing Object Information for: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                //DrawObject: {gObj.DrawObject}\n
+                //LayoutInstance: { gObj.LayoutInstance}\n
+                //EventHandler: { gObj.EventHandler}\n
+                //LuaActor: {gObj.LuaActor}\n
+                try { Svc.Log.Info($"DefaultPosition: {gObj.DefaultPosition}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"DefaultRotation: {gObj.DefaultRotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"EventState: {gObj.EventState}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"EntityId {gObj.EntityId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"LayoutId: {gObj.LayoutId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"BaseId {gObj.BaseId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"OwnerId: {gObj.OwnerId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"ObjectIndex: {gObj.ObjectIndex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"ObjectKind {gObj.ObjectKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"SubKind: {gObj.SubKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Sex: {gObj.Sex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"YalmDistanceFromPlayerX: {gObj.YalmDistanceFromPlayerX}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"TargetStatus: {gObj.TargetStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"YalmDistanceFromPlayerZ: {gObj.YalmDistanceFromPlayerZ}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"TargetableStatus: {gObj.TargetableStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Position: {gObj.Position}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Rotation: {gObj.Rotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Scale: {gObj.Scale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Height: {gObj.Height}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"VfxScale: {gObj.VfxScale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"HitboxRadius: {gObj.HitboxRadius}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"DrawOffset: {gObj.DrawOffset}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"EventId: {gObj.EventId.Id}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"FateId: {gObj.FateId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"NamePlateIconId: {gObj.NamePlateIconId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"RenderFlags: {gObj.RenderFlags}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetGameObjectId().ObjectId: {gObj.GetGameObjectId().ObjectId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetGameObjectId().Type: {gObj.GetGameObjectId().Type}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetObjectKind: {gObj.GetObjectKind()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetIsTargetable: {gObj.GetIsTargetable()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetName: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetRadius: {gObj.GetRadius()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetHeight: {gObj.GetHeight()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetDrawObject: {*gObj.GetDrawObject()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"GetNameId: {gObj.GetNameId()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"IsDead: {gObj.IsDead()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"IsNotMounted: {gObj.IsNotMounted()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"IsCharacter: {gObj.IsCharacter()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"IsReadyToDraw: {gObj.IsReadyToDraw()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                break;
+            default:
+                this.OpenMainUI();
+                break;
+        }
+    }
+
     private void ClientStateOnLogin()
     {
         ConfigurationMain.Instance.SetProfileToDefault();
 
-        Svc.Framework.RunOnTick(() =>
-                                {
-                                    if (Configuration.ShowOverlay && (!Configuration.HideOverlayWhenStopped || States.HasFlag(PluginState.Looping) || States.HasFlag(PluginState.Navigating)))
-                                        SchedulerHelper.ScheduleAction("ShowOverlay", () => Overlay.IsOpen = true, () => PlayerHelper.IsReady);
+        SchedulerHelper.ScheduleAction("LoginConfig", () =>
+                                                      {
+                                                          if (this.Configuration.ShowOverlay &&
+                                                              (!this.Configuration.HideOverlayWhenStopped || this.States.HasFlag(PluginState.Looping) ||
+                                                               this.States.HasFlag(PluginState.Navigating)))
+                                                              SchedulerHelper.ScheduleAction("ShowOverlay", () => this.Overlay.IsOpen = true, () => PlayerHelper.IsReady);
 
-                                    if (Configuration.ShowMainWindowOnStartup)
-                                        SchedulerHelper.ScheduleAction("ShowMainWindowOnStartup", () => OpenMainUI(), () => PlayerHelper.IsReady);
-                                });
+                                                          if (this.Configuration.ShowMainWindowOnStartup)
+                                                              SchedulerHelper.ScheduleAction("ShowMainWindowOnStartup", this.OpenMainUI, () => PlayerHelper.IsReady);
+                                                      }, () => ConfigurationMain.Instance.Initialized);
+                                
     }
 
     private void UiBuilderOnDraw()
@@ -386,21 +606,6 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         DutyState = DutyState.DutyComplete;
         this.CheckFinishing();
-    }
-
-    private void MessageReceived(string messageJson)
-    {
-        if (!Player.Available || messageJson.IsNullOrEmpty())
-            return;
-
-        var message = System.Text.Json.JsonSerializer.Deserialize<Message>(messageJson, BuildTab.jsonSerializerOptions);
-
-        if (message == null) return;
-
-        if (message.Sender == Player.Name || message.Action.Count == 0 || Svc.Party.All(x => x.Name.ExtractText() != message.Sender))
-            return;
-
-        message.Action.Each(_actions.InvokeAction);
     }
 
     internal void ExitDuty() => _actions.ExitDuty(new());
@@ -771,20 +976,20 @@ public sealed class AutoDuty : IDalamudPlugin
         if (LevelingEnabled)
         {
             Svc.Log.Info("Leveling Enabled");
-            Content? duty = LevelingHelper.SelectHighestLevelingRelevantDuty(LevelingModeEnum == LevelingMode.Trust);
+            Content? duty = LevelingHelper.SelectHighestLevelingRelevantDuty(this.LevelingModeEnum);
             if (duty != null)
             {
-                if (this.LevelingModeEnum == LevelingMode.Support && Configuration.PreferTrustOverSupportLeveling && duty.ClassJobLevelRequired > 70)
+                if (this.LevelingModeEnum == LevelingMode.Support && this.Configuration.PreferTrustOverSupportLeveling && duty.ClassJobLevelRequired > 70)
                 {
-                    levelingModeEnum           = LevelingMode.Trust;
+                    levelingModeEnum           = LevelingMode.Trust_Solo;
                     Configuration.dutyModeEnum = DutyMode.Trust;
 
-                    Content? dutyTrust = LevelingHelper.SelectHighestLevelingRelevantDuty(true);
+                    Content? dutyTrust = LevelingHelper.SelectHighestLevelingRelevantDuty(this.LevelingModeEnum);
 
                     if (duty != dutyTrust)
                     {
-                        levelingModeEnum           = LevelingMode.Support;
-                        Configuration.dutyModeEnum = DutyMode.Support;
+                        this.levelingModeEnum        = LevelingMode.Support;
+                        this.Configuration.dutyModeEnum = DutyMode.Support;
                     }
                 }
 
@@ -962,7 +1167,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
     private void StageReadingPath()
     {
-        if (!PlayerHelper.IsValid || !EzThrottler.Check("PathFindFailure") || Indexer == -1 || Indexer >= Actions.Count)
+        if (!PlayerHelper.IsValid || !EzThrottler.Check("PathFindFailure") || Indexer == -1 || Indexer >= Actions.Count || ConfigurationMain.MultiboxUtility.MultiboxBlockingNextStep)
             return;
 
         Action = $"{(Actions.Count >= Indexer ? Plugin.Actions[Indexer].ToCustomString() : "")}";
@@ -1012,6 +1217,8 @@ public sealed class AutoDuty : IDalamudPlugin
             return;
         }
 
+        ConfigurationMain.MultiboxUtility.MultiboxBlockingNextStep = false;
+
         if (PathAction.Position == Vector3.Zero)
         {
             Stage = Stage.Action;
@@ -1020,7 +1227,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
         if (!VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() && !VNavmesh_IPCSubscriber.Path_IsRunning())
         {
-            Chat.Instance.ExecuteCommand("/automove off");
+            Chat.ExecuteCommand("/automove off");
             VNavmesh_IPCSubscriber.Path_SetTolerance(0.25f);
             if (PathAction.Name == "MoveTo" && PathAction.Arguments.Count > 0 && bool.TryParse(PathAction.Arguments[0], out bool useMesh) && !useMesh)
             {
@@ -1028,6 +1235,7 @@ public sealed class AutoDuty : IDalamudPlugin
             }
             else
                 VNavmesh_IPCSubscriber.SimpleMove_PathfindAndMoveTo(PathAction.Position, false);
+
             Stage = Stage.Moving;
         }
     }
@@ -1037,26 +1245,10 @@ public sealed class AutoDuty : IDalamudPlugin
         if (!PlayerHelper.IsReady || Indexer == -1 || Indexer >= Actions.Count)
             return;
 
-        if (Configuration.DutyModeEnum == DutyMode.Regular && Svc.Party.PartyId > 0)
-        {
-            Message message = new()
-            {
-                Sender = Player.Name,
-                Action =
-                [
-                    new PathAction(){ Name = "Follow", Arguments = [$"{Player.Name}"] }
-                ]
-            };
-
-            var messageJson = System.Text.Json.JsonSerializer.Serialize(message, BuildTab.jsonSerializerOptions);
-
-            //_messageBusSend.PublishAsync(Encoding.UTF8.GetBytes(messageJson));
-        }
-
         Action = $"{Plugin.Actions[Indexer].ToCustomString()}";
-        if (PlayerHelper.InCombat && Plugin.StopForCombat)
+        if (PartyHelper.PartyInCombat() && Plugin.StopForCombat)
         {
-            if (Configuration.AutoManageRotationPluginState && !Configuration.UsingAlternativeRotationPlugin)
+            if (this.Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false })
                 SetRotationPluginSettings(true);
             VNavmesh_IPCSubscriber.Path_Stop();
             Stage = Stage.Waiting_For_Combat;
@@ -1124,7 +1316,7 @@ public sealed class AutoDuty : IDalamudPlugin
         Action = $"Waiting For Combat";
 
         
-        if (ReflectionHelper.Avarice_Reflection.PositionalChanged(out Positional positional) && !Plugin.Configuration.UsingAlternativeBossPlugin && IPCSubscriber_Common.IsReady("BossModReborn"))
+        if (ReflectionHelper.Avarice_Reflection.PositionalChanged(out Positional positional))
             BossMod_IPCSubscriber.SetPositional(positional);
 
         if (PathAction.Name.Equals("Boss") && PathAction.Position != Vector3.Zero && ObjectHelper.GetDistanceToPlayer(PathAction.Position) < 50)
@@ -1138,7 +1330,7 @@ public sealed class AutoDuty : IDalamudPlugin
             }
         }
 
-        if (PlayerHelper.InCombat)
+        if (PartyHelper.PartyInCombat())
         {
             if (Svc.Targets.Target == null)
             {
@@ -1172,7 +1364,7 @@ public sealed class AutoDuty : IDalamudPlugin
             else if (!VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() && VNavmesh_IPCSubscriber.Path_IsRunning())
                 VNavmesh_IPCSubscriber.Path_Stop();
         }
-        else if (!PlayerHelper.InCombat && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress())
+        else if (!PartyHelper.PartyInCombat() && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress())
         {
             BossMod_IPCSubscriber.SetRange(Configuration.MaxDistanceToTargetFloat);
 
@@ -1304,68 +1496,88 @@ public sealed class AutoDuty : IDalamudPlugin
     internal void SetRotationPluginSettings(bool on, bool ignoreConfig = false, bool ignoreTimer = false)
     {
         // Only try to set the rotation state every few seconds
-        if (on && (DateTime.Now - _lastRotationSetTime).TotalSeconds < 5 && !ignoreTimer)
+        if (on && (DateTime.Now - this._lastRotationSetTime).TotalSeconds < 5 && !ignoreTimer)
             return;
         
-        if(on)
-            _lastRotationSetTime = DateTime.Now;
+        if(on) 
+            this._lastRotationSetTime = DateTime.Now;
 
         if (!ignoreConfig && !this.Configuration.AutoManageRotationPluginState)
             return;
-        bool bmEnabled     = BossMod_IPCSubscriber.IsEnabled;
-        bool foundRotation = false;
 
-        if (Wrath_IPCSubscriber.IsEnabled)
+        bool? EnableWrath(bool active)
         {
-            bool wrathRotationReady = true;
-            if (on)
-                wrathRotationReady = Wrath_IPCSubscriber.IsCurrentJobAutoRotationReady() ||
-                                     this.Configuration.Wrath_AutoSetupJobs && Wrath_IPCSubscriber.SetJobAutoReady();
-
-            if (!on || wrathRotationReady)
+            if (Wrath_IPCSubscriber.IsEnabled)
             {
-                Svc.Log.Debug("Wrath rotation enabled");
-                Wrath_IPCSubscriber.SetAutoMode(on);
-                foundRotation = true;
-            }
-        }
+                bool wrathRotationReady = true;
+                if (active)
+                    wrathRotationReady = Wrath_IPCSubscriber.IsCurrentJobAutoRotationReady() ||
+                                         ConfigurationMain.Instance.GetCurrentConfig.Wrath_AutoSetupJobs && Wrath_IPCSubscriber.SetJobAutoReady();
 
-        if (ReflectionHelper.RotationSolver_Reflection.RotationSolverEnabled)
-        {
-            if (on && !foundRotation)
-            {
-                Svc.Log.Debug("RSR enabled");
-                if (ReflectionHelper.RotationSolver_Reflection.GetStateType != ReflectionHelper.RotationSolver_Reflection.StateTypeEnum.Auto)
-                    ReflectionHelper.RotationSolver_Reflection.RotationAuto();
-                foundRotation = true;
-            }
-            else
-            {
-                if (ReflectionHelper.RotationSolver_Reflection.GetStateType != ReflectionHelper.RotationSolver_Reflection.StateTypeEnum.Off)
-                    ReflectionHelper.RotationSolver_Reflection.RotationStop();
-            }
-        }
-
-
-        if (bmEnabled)
-        {
-            if (on)
-            {
-                BossMod_IPCSubscriber.SetRange(Plugin.Configuration.MaxDistanceToTargetFloat);
-                if (!foundRotation)
+                if (!active || wrathRotationReady)
                 {
-                    BossMod_IPCSubscriber.SetPreset("AutoDuty", Resources.AutoDutyPreset);
+                    Svc.Log.Debug("Wrath rotation:" + active);
+                    Wrath_IPCSubscriber.SetAutoMode(active);
+
+                    return true;
                 }
-                else if(this.Configuration.AutoManageBossModAISettings)
-                {
-                    BossMod_IPCSubscriber.SetPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
-                }
-            } 
-            else if(!foundRotation || this.Configuration.AutoManageBossModAISettings)
-            {
-                BossMod_IPCSubscriber.DisablePresets();
+                return false;
             }
+            return null;
         }
+
+        bool? EnableRSR(bool active)
+        {
+            if (RSR_IPCSubscriber.IsEnabled)
+            {
+                Svc.Log.Debug("RSR: " + active);
+                if (active)
+                    RSR_IPCSubscriber.RotationAuto();
+                else
+                    RSR_IPCSubscriber.RotationStop();
+                return true;
+            }
+            return null;
+        }
+
+        bool? EnableBM(bool active, bool rotation)
+        {
+            if (BossMod_IPCSubscriber.IsEnabled)
+            {
+                if (active)
+                {
+                    BossMod_IPCSubscriber.SetRange(Plugin.Configuration.MaxDistanceToTargetFloat);
+                    if (rotation)
+                        BossMod_IPCSubscriber.SetPreset("AutoDuty", Resources.AutoDutyPreset);
+                    else if (ConfigurationMain.Instance.GetCurrentConfig.AutoManageBossModAISettings)
+                        BossMod_IPCSubscriber.SetPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
+                    return true;
+                }
+                else if (!rotation || ConfigurationMain.Instance.GetCurrentConfig.AutoManageBossModAISettings)
+                {
+                    BossMod_IPCSubscriber.DisablePresets();
+                    return true;
+                }
+                return false;
+            }
+            return null;
+        }
+
+        bool act = on;
+
+        
+
+        bool wrathEnabled = this.Configuration.rotationPlugin is RotationPlugin.WrathCombo or RotationPlugin.All;
+        bool? wrath        = EnableWrath(on && wrathEnabled);
+        if (on && wrathEnabled && wrath.HasValue)
+            act = !wrath.Value;
+        
+        bool rsrEnabled = this.Configuration.rotationPlugin is RotationPlugin.RotationSolverReborn or RotationPlugin.All;
+        bool? rsr        = EnableRSR(act && on && rsrEnabled);
+        if (on && rsrEnabled && rsr.HasValue) 
+            act = !rsr.Value;
+
+        EnableBM(on, act && this.Configuration.rotationPlugin is RotationPlugin.BossMod or RotationPlugin.All);
     }
 
     internal void SetBMSettings(bool defaults = false)
@@ -1416,26 +1628,6 @@ public sealed class AutoDuty : IDalamudPlugin
 
         if (!TaskManager.IsBusy && !PathAction.Name.IsNullOrEmpty())
         {
-            if (PathAction.Name.Equals("Boss"))
-            {
-
-                if (Configuration.DutyModeEnum == DutyMode.Regular && Svc.Party.PartyId > 0)
-                {
-                    Message message = new()
-                    {
-                        Sender = Player.Name,
-                        Action =
-                        [
-                            new PathAction(){ Name = "Follow", Arguments = [$"null"] },
-                            new PathAction(){ Name = "SetBMSettings", Arguments = [$"true"] }
-                        ]
-                    };
-
-                    var messageJson = System.Text.Json.JsonSerializer.Serialize(message, BuildTab.jsonSerializerOptions);
-
-                    //_messageBusSend.PublishAsync(Encoding.UTF8.GetBytes(messageJson));
-                }
-            }
             _actions.InvokeAction(PathAction);
             PathAction = new();
         }
@@ -1449,7 +1641,7 @@ public sealed class AutoDuty : IDalamudPlugin
             if (LevelingEnabled)
             {
                 Svc.Log.Info($"{(Configuration.DutyModeEnum == DutyMode.Support || Configuration.DutyModeEnum == DutyMode.Trust) && (Configuration.DutyModeEnum == DutyMode.Support || SupportLevelingEnabled) && (Configuration.DutyModeEnum != DutyMode.Trust || TrustLevelingEnabled)} ({Configuration.DutyModeEnum == DutyMode.Support} || {Configuration.DutyModeEnum == DutyMode.Trust}) && ({Configuration.DutyModeEnum == DutyMode.Support} || {SupportLevelingEnabled}) && ({Configuration.DutyModeEnum != DutyMode.Trust} || {TrustLevelingEnabled})");
-                Content? duty = LevelingHelper.SelectHighestLevelingRelevantDuty(LevelingModeEnum == LevelingMode.Trust);
+                Content? duty = LevelingHelper.SelectHighestLevelingRelevantDuty(this.LevelingModeEnum);
                 if (duty != null)
                 {
                     Plugin.CurrentTerritoryContent = duty;
@@ -1505,14 +1697,17 @@ public sealed class AutoDuty : IDalamudPlugin
         if (EzThrottler.Throttle("OverrideAFK") && States.HasFlag(PluginState.Navigating) && PlayerHelper.IsValid)
             _overrideAFK.ResetTimers();
 
-        if (!Player.Available) return;
+        if (!Player.Available) 
+            return;
 
         if (!InDungeon && CurrentTerritoryContent != null)
             GetJobAndLevelingCheck();
 
-        if (!PlayerHelper.IsValid || !BossMod_IPCSubscriber.IsEnabled || !VNavmesh_IPCSubscriber.IsEnabled) return;
+        if (!PlayerHelper.IsValid || !BossMod_IPCSubscriber.IsEnabled || !VNavmesh_IPCSubscriber.IsEnabled) 
+            return;
 
-        if (!ReflectionHelper.RotationSolver_Reflection.RotationSolverEnabled && !BossMod_IPCSubscriber.IsEnabled && !Configuration.UsingAlternativeRotationPlugin) return;
+        if (!RSR_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !Configuration.UsingAlternativeRotationPlugin) 
+            return;
 
         if (CurrentTerritoryType == 0 && Svc.ClientState.TerritoryType != 0 && InDungeon)
             ClientState_TerritoryChanged(Svc.ClientState.TerritoryType);
@@ -1601,7 +1796,6 @@ public sealed class AutoDuty : IDalamudPlugin
         foreach (IActiveHelper helper in ActiveHelper.activeHelpers) 
             helper.StopIfRunning();
 
-
         Wrath_IPCSubscriber.Release();
         Action = "";
     }
@@ -1610,8 +1804,9 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         GitHubHelper.Dispose();
         StopAndResetALL();
-        Svc.Framework.Update -= Framework_Update;
-        Svc.Framework.Update -= SchedulerHelper.ScheduleInvoker;
+        ConfigurationMain.Instance.MultiBox =  false;
+        Svc.Framework.Update                -= Framework_Update;
+        Svc.Framework.Update                -= SchedulerHelper.ScheduleInvoker;
         FileHelper.FileSystemWatcher.Dispose();
         FileHelper.FileWatcher.Dispose();
         WindowSystem.RemoveAllWindows();
@@ -1623,278 +1818,6 @@ public sealed class AutoDuty : IDalamudPlugin
         PictoService.Dispose();
         PluginInterface.UiBuilder.Draw   -= UiBuilderOnDraw;
         Svc.Commands.RemoveHandler(CommandName);
-    }
-
-    private unsafe void OnCommand(string command, string args)
-    {
-        // in response to the slash command
-        Match        match   = RegexHelper.ArgumentParserRegex().Match(args.ToLower());
-        List<string> matches = [];
-
-        while (match.Success)
-        {
-            matches.Add(match.Groups[match.Groups[1].Length > 0 ? 1 : 0].Value);
-            match = match.NextMatch();
-        }
-
-        string[] argsArray = matches.Count > 0 ? matches.ToArray() : [string.Empty];
-
-        switch (argsArray[0])
-        {
-            case "config" or "cfg":
-                if (argsArray.Length < 2)
-                    OpenConfigUI();
-                else if (argsArray[1].Equals("list"))
-                    ConfigHelper.ListConfig();
-                else
-                    ConfigHelper.ModifyConfig(argsArray[1], argsArray[2..]);
-                break;
-            case "start":
-                StartNavigation();
-                break;
-            case "stop":
-                Plugin.Stage = Stage.Stopped;
-                break;
-            case "pause":
-                Plugin.Stage = Stage.Paused;
-                break;
-            case "resume":
-                if (Plugin.Stage == Stage.Paused)
-                {
-                    Plugin.TaskManager.SetStepMode(false);
-                    Plugin.Stage  =  Plugin.PreviousStage;
-                    Plugin.States &= ~PluginState.Paused;
-                }
-                break;
-            case "goto":
-                switch (argsArray[1])
-                {
-                    case "inn":
-                        GotoInnHelper.Invoke(argsArray.Length > 2 ? Convert.ToUInt32(argsArray[2]) : PlayerHelper.GetGrandCompany());
-                        break;
-                    case "barracks":
-                        GotoBarracksHelper.Invoke();
-                        break;
-                    case "gcsupply":
-                        GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), [GCTurninHelper.GCSupplyLocation], 0.25f, 2f, false);
-                        break;
-                    case "summoningbell":
-                        SummoningBellHelper.Invoke(Configuration.PreferredSummoningBellEnum);
-                        break;
-                    case "apartment":
-                        GotoHousingHelper.Invoke(Housing.Apartment);
-                        break;
-                    case "personalhome":
-                        GotoHousingHelper.Invoke(Housing.Personal_Home);
-                        break;
-                    case "fcestate":
-                        GotoHousingHelper.Invoke(Housing.FC_Estate);
-                        break;
-                    default:
-                        break;
-                }
-                //GotoAction(args.Replace("goto ", ""));
-                break;
-            case "turnin":
-                if (PlayerHelper.GetGrandCompanyRank() > 5)
-                    GCTurninHelper.Invoke();
-                else
-                    Svc.Log.Info("GC Turnin requires GC Rank 6 or Higher");
-                break;
-            case "desynth":
-                DesynthHelper.Invoke();
-                break;
-            case "repair":
-                if (InventoryHelper.CanRepair(100))
-                    RepairHelper.Invoke();
-                break;
-            case "autoretainer":
-            case "ar":
-                AutoRetainerHelper.Invoke();
-                break;
-            case "equiprec":
-                AutoEquipHelper.Invoke();
-                break;
-            case "extract":
-                if (QuestManager.IsQuestComplete(66174))
-                    ExtractHelper.Invoke();
-                else
-                    Svc.Log.Info("Materia Extraction requires having completed quest: Forging the Spirit");
-                break;
-            case "dataid":
-                IGameObject? obj = null;
-                if (argsArray.Length == 2)
-                    obj = Svc.Objects[int.TryParse(argsArray[1], out int index) ? index : -1] ?? null;
-                else
-                    obj = ObjectHelper.GetObjectByName(Svc.Targets.Target?.Name.TextValue ?? "");
-
-                Svc.Log.Info($"{obj?.DataId}");
-                ImGui.SetClipboardText($"{obj?.DataId}");
-                break;
-            case "moveto":
-                var argss = args.Replace("moveto ", "").Split("|");
-                var vs = argss[1].Split(", ");
-                var v3 = new Vector3(float.Parse(vs[0]), float.Parse(vs[1]), float.Parse(vs[2]));
-
-                GotoHelper.Invoke(Convert.ToUInt32(argss[0]), [v3], argss.Length > 2 ? float.Parse(argss[2]) : 0.25f, argss.Length > 3 ? float.Parse(argss[3]) : 0.25f);
-                break;
-            case "exitduty":
-                _actions.ExitDuty(new());
-                break;
-            case "queue":
-                QueueHelper.Invoke(ContentHelper.DictionaryContent.FirstOrDefault(x => x.Value.Name!.Equals(args.ToLower().Replace("queue ", ""), StringComparison.InvariantCultureIgnoreCase)).Value ?? null, Configuration.DutyModeEnum);
-                break;
-            case "overlay":
-                if (argsArray.Length == 1)
-                {
-                    this.Configuration.ShowOverlay = true;
-                    this.Overlay.IsOpen            = true;
-
-                    if (!Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
-                        this.Configuration.HideOverlayWhenStopped = false;
-                }
-                else
-                {
-                    switch (argsArray[1].ToLower())
-                    {
-                        case "lock":
-                            if (Overlay.Flags.HasFlag(ImGuiWindowFlags.NoMove))
-                                Overlay.Flags -= ImGuiWindowFlags.NoMove;
-                            else
-                                Overlay.Flags |= ImGuiWindowFlags.NoMove;
-                            break;
-                        case "nobg":
-                            if (Overlay.Flags.HasFlag(ImGuiWindowFlags.NoBackground))
-                                Overlay.Flags -= ImGuiWindowFlags.NoBackground;
-                            else
-                                Overlay.Flags |= ImGuiWindowFlags.NoBackground;
-                            break;
-                    }
-                }
-                break;
-            case "skipstep":
-                if (States.HasFlag(PluginState.Navigating))
-                {
-                    Indexer++;
-                    Stage = Stage.Reading_Path;
-                }
-                break;
-            case "movetoflag":
-                MapHelper.MoveToMapMarker();
-                break;
-            case "run":
-                var failPreMessage = "Run Error: Incorrect usage: ";
-                var failPostMessage = "\nCorrect usage: /autoduty run DutyMode TerritoryTypeInteger LoopTimesInteger (optional)BareModeBool\nexample: /autoduty run Support 1036 10 true\nYou can get the TerritoryTypeInteger from /autoduty tt name of territory (will be logged and copied to clipboard)";
-                if (argsArray.Length < 4)
-                {
-                    Svc.Log.Info($"{failPreMessage}Argument count must be at least 3, you inputed {argsArray.Length - 1}{failPostMessage}");
-                    return;
-                }
-                if (!Enum.TryParse(argsArray[1], true, out DutyMode dutyMode))
-                {
-                    Svc.Log.Info($"{failPreMessage}Argument 1 must be a DutyMode enum Type, you inputed {argsArray[1]}{failPostMessage}");
-                    return;
-                }
-                if (!uint.TryParse(argsArray[2], out uint territoryType))
-                {
-                    Svc.Log.Info($"{failPreMessage}Argument 2 must be an unsigned integer, you inputed {argsArray[2]}{failPostMessage}");
-                    return;
-                }
-                if (!int.TryParse(argsArray[3], out int loopTimes))
-                {
-                    Svc.Log.Info($"{failPreMessage}Argument 3 must be an integer, you inputed {argsArray[3]}{failPostMessage}");
-                    return;
-                }
-                if (!ContentHelper.DictionaryContent.TryGetValue(territoryType, out var content))
-                {
-                    Svc.Log.Info($"{failPreMessage}Argument 2 value was not in our ContentList or has no Path, you inputed {argsArray[2]}{failPostMessage}");
-                    return;
-                }
-                if (!content.DutyModes.HasFlag(dutyMode))
-                {
-                    Svc.Log.Info($"{failPreMessage}Argument 2 value was not of type {dutyMode}, which you inputed in Argument 1, Argument 2 value was {argsArray[2]}{failPostMessage}");
-                    return;
-                }
-                if (!content.CanRun(trust: dutyMode == DutyMode.Trust))
-                {
-                    var failReason = !UIState.IsInstanceContentCompleted(content.Id) ? "You dont have it unlocked" : (!ContentPathsManager.DictionaryPaths.ContainsKey(content.TerritoryType) ? "There is no path file" : (PlayerHelper.GetCurrentLevelFromSheet() < content.ClassJobLevelRequired ? $"Your Lvl({PlayerHelper.GetCurrentLevelFromSheet()}) is less than {content.ClassJobLevelRequired}" : (InventoryHelper.CurrentItemLevel < content.ItemLevelRequired ? $"Your iLvl({InventoryHelper.CurrentItemLevel}) is less than {content.ItemLevelRequired}" : "Your trust party is not of correct levels")));
-                    Svc.Log.Info($"Unable to run {content.Name}, {failReason} {content.CanTrustRun()}");
-                    return;
-                }
-
-                Configuration.DutyModeEnum = dutyMode;
-
-                Run(territoryType, loopTimes, bareMode: argsArray.Length > 4 && bool.TryParse(argsArray[4], out bool parsedBool) && parsedBool);
-                break;
-            case "tt":
-                var tt = Svc.Data.Excel.GetSheet<TerritoryType>()?.FirstOrDefault(x => x.ContentFinderCondition.ValueNullable != null && x.ContentFinderCondition.Value.Name.ToString().Equals(args.Replace("tt ", ""), StringComparison.InvariantCultureIgnoreCase)) ?? Svc.Data.Excel.GetSheet<TerritoryType>()?.GetRow(1);
-                Svc.Log.Info($"{tt?.RowId}");
-                ImGui.SetClipboardText($"{tt?.RowId}");
-                break;
-            case "range":
-                if (float.TryParse(argsArray[1], out float newRange))
-                    BossMod_IPCSubscriber.SetRange(Math.Clamp(newRange, 1, 30));
-                break;
-            case "spew":
-                IGameObject? spewObj = null;
-                if (argsArray.Length == 2)
-                    spewObj = ObjectHelper.GetObjectByDataId(uint.TryParse(argsArray[1], out uint dataId) ? dataId : 0);
-                else
-                    spewObj = ObjectHelper.GetObjectByName(Svc.Targets.Target?.Name.TextValue ?? "");
-
-                if (spewObj == null) return;
-
-                GameObject gObj = *spewObj.Struct();
-                try { Svc.Log.Info($"Spewing Object Information for: {gObj.NameString}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Spewing Object Information for: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                //DrawObject: {gObj.DrawObject}\n
-                //LayoutInstance: { gObj.LayoutInstance}\n
-                //EventHandler: { gObj.EventHandler}\n
-                //LuaActor: {gObj.LuaActor}\n
-                try { Svc.Log.Info($"DefaultPosition: {gObj.DefaultPosition}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"DefaultRotation: {gObj.DefaultRotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"EventState: {gObj.EventState}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"EntityId {gObj.EntityId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"LayoutId: {gObj.LayoutId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"BaseId {gObj.BaseId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"OwnerId: {gObj.OwnerId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"ObjectIndex: {gObj.ObjectIndex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"ObjectKind {gObj.ObjectKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"SubKind: {gObj.SubKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Sex: {gObj.Sex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"YalmDistanceFromPlayerX: {gObj.YalmDistanceFromPlayerX}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"TargetStatus: {gObj.TargetStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"YalmDistanceFromPlayerZ: {gObj.YalmDistanceFromPlayerZ}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"TargetableStatus: {gObj.TargetableStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Position: {gObj.Position}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Rotation: {gObj.Rotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Scale: {gObj.Scale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Height: {gObj.Height}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"VfxScale: {gObj.VfxScale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"HitboxRadius: {gObj.HitboxRadius}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"DrawOffset: {gObj.DrawOffset}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"EventId: {gObj.EventId.Id}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"FateId: {gObj.FateId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"NamePlateIconId: {gObj.NamePlateIconId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"RenderFlags: {gObj.RenderFlags}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetGameObjectId().ObjectId: {gObj.GetGameObjectId().ObjectId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetGameObjectId().Type: {gObj.GetGameObjectId().Type}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetObjectKind: {gObj.GetObjectKind()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetIsTargetable: {gObj.GetIsTargetable()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetName: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetRadius: {gObj.GetRadius()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetHeight: {gObj.GetHeight()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetDrawObject: {*gObj.GetDrawObject()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetNameId: {gObj.GetNameId()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsDead: {gObj.IsDead()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsNotMounted: {gObj.IsNotMounted()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsCharacter: {gObj.IsCharacter()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsReadyToDraw: {gObj.IsReadyToDraw()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                break;
-            default:
-                OpenMainUI();
-                break;
-        }
     }
 
     private void DrawUI() => WindowSystem.Draw();

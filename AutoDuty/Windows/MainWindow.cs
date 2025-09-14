@@ -13,7 +13,7 @@ using ECommons.ImGuiMethods;
 using ECommons.Schedulers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace AutoDuty.Windows;
 
@@ -66,7 +66,7 @@ public class MainWindow : Window, IDisposable
 
     internal static void LoopsConfig()
     {
-        if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("次", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("次", ref Plugin.Configuration.LoopTimes)))
+        if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("次", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("Times", ref Plugin.Configuration.LoopTimes, 1)))
             Plugin.Configuration.Save();
     }
 
@@ -432,7 +432,7 @@ public class MainWindow : Window, IDisposable
             {
                 ImGui.PushStyleColor(ImGuiCol.Tab, x.color.Value);
             }
-            if (ImGuiEx.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
+            if (ImGui.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
                 if (x.color != null) 
                     ImGui.PopStyleColor();

@@ -1,14 +1,15 @@
-﻿using Dalamud.Utility;
-using ImGuiNET;
+﻿using Dalamud.Bindings.ImGui;
+using Dalamud.Utility;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace AutoDuty.Helpers
 {
+    using System;
     using Dalamud.Interface;
     using Dalamud.Interface.Utility.Raii;
+    using IPC;
     using System.Numerics;
-    using static Dalamud.Interface.Utility.Raii.ImRaii;
 
     internal static class ImGuiHelper
     {
@@ -17,7 +18,7 @@ namespace AutoDuty.Helpers
         public static readonly Vector4 VersionColor       = new(0, 1, 1, 1);
         public static readonly Vector4 LinkColor          = new(0, 200, 238, 1);
 
-        public static readonly Vector4 White = new(1, 1, 1, 1);
+        public static readonly Vector4 White         = new(1, 1, 1, 1);
         public static readonly Vector4 MaxLevelColor = new(0.5f, 1, 0.5f, 1);
 
         public static readonly Vector4 RoleTankColor       = new(0, 0.8f, 1, 1);
@@ -63,7 +64,7 @@ namespace AutoDuty.Helpers
                         //Svc.Log.Debug("non colored: " + nonColored);
                     }
 
-                    string colorText = regex.Groups[2].Value;
+                    string colorText   = regex.Groups[2].Value;
                     string coloredText = regex.Groups[3].Value;
                     if (!colorText.IsNullOrEmpty() && !coloredText.IsNullOrEmpty())
                     {
@@ -93,6 +94,7 @@ namespace AutoDuty.Helpers
                                     }
                         }
                     }
+
                     regex = regex.NextMatch();
                 } while (regex.Success);
             }
@@ -119,12 +121,75 @@ namespace AutoDuty.Helpers
             ImGui.SetCursorPosX(xIndent + (ImGui.GetContentRegionAvail().X - buttonWidth) / 2f);
             return ImGui.Button(label, new(buttonWidth, 35f));
         }
+
         internal static void DrawIcon(FontAwesomeIcon icon)
         {
             using ImRaii.Font font = ImRaii.PushFont(UiBuilder.IconFont);
             ImGui.SetItemAllowOverlap();
             ImGui.Text(icon.ToIconString());
             ImGui.SameLine();
+        }
+
+        internal static ImRaii.IEndObject RequiresPlugin(ExternalPlugin plugin, string id, string? message = null, bool inline = false, bool write = true)
+        {
+            if (IPCSubscriber_Common.IsReady(plugin.GetExternalPluginData().name))
+            {
+                return new EndUnconditionally(() =>
+                                              {
+                                                  if (!write)
+                                                      return;
+
+                                                  if(inline)
+                                                      ImGui.SameLine();
+                                                  ImGui.Text($"{(inline ? "| " : "\t")}powered by ");
+                                                  ImGui.SameLine(0, 1);
+                                                  ImGui.TextColored(LinkColor, plugin.GetExternalPluginName());
+                                              }, true);
+            }
+            else
+            {
+                ImRaii.IEndObject disabled = ImRaii.Disabled();
+
+                ImGui.AlignTextToFramePadding();
+                return new EndUnconditionally(() =>
+                                              {
+                                                  disabled.Dispose();
+
+                                                  if (!write)
+                                                      return;
+
+                                                  ImGui.AlignTextToFramePadding();
+                                                  if (inline)
+                                                      ImGui.SameLine();
+                                                  ImGui.Text(message ?? $"{(inline ? "| " : "\t")} requires ");
+                                                  ImGui.SameLine(0,1);
+                                                  ImGui.TextColored(LinkColor, plugin.GetExternalPluginName());
+
+                                                  ImGui.SameLine(0, 5);
+                                                  if (ImGui.Button($"Install##InstallExternalPlugin_{plugin}_{id}"))
+                                                      PluginInstaller.InstallPlugin(plugin);
+                                              }, true);
+            }
+        }
+
+
+        //Straight from Dalamud
+        private struct EndUnconditionally(Action endAction, bool success) : ImRaii.IEndObject
+        {
+            private Action EndAction { get; } = endAction;
+
+            public bool Success { get; } = success;
+
+            private bool Disposed { get; set; } = false;
+
+            public void Dispose()
+            {
+                if (this.Disposed)
+                    return;
+
+                this.EndAction();
+                this.Disposed = true;
+            }
         }
     }
 }

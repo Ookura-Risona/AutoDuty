@@ -9,13 +9,15 @@ using System.Globalization;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+#pragma warning disable CS0169 // Field is never used
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 #nullable disable
 
 namespace AutoDuty.IPC
 {
-    using System.ComponentModel;
     using ECommons.GameFunctions;
     using Helpers;
+    using System.ComponentModel;
 
     internal static class AutoRetainer_IPCSubscriber
     {
@@ -45,30 +47,6 @@ namespace AutoDuty.IPC
         [EzIPC] internal static readonly Action Start;
         [EzIPC] internal static readonly Action Stop;
         [EzIPC] internal static readonly Func<bool> IsRunning;
-
-        internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
-    }
-
-    internal static class Marketbuddy_IPCSubscriber
-    {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Marketbuddy_IPCSubscriber), "Marketbuddy", SafeWrapper.IPCException);
-
-        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("Marketbuddy");
-
-        [EzIPC] internal static readonly Func<string, bool> IsLocked;
-        [EzIPC] internal static readonly Func<string, bool> Lock;
-        [EzIPC] internal static readonly Func<string, bool> Unlock;
-
-        internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
-    }
-
-    internal static class DiscardHelper_IPCSubscriber
-    {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(DiscardHelper_IPCSubscriber), "ARDiscard", SafeWrapper.AnyException);
-
-        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("ARDiscard");
-
-        [EzIPC("IsRunning", true)] internal static readonly Func<bool> IsRunning;
 
         internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
     }
@@ -207,6 +185,15 @@ namespace AutoDuty.IPC
 
         internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
     }
+
+    internal static class Stylist_IPCSubscriber
+    {
+        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Stylist_IPCSubscriber), "Stylist", SafeWrapper.IPCException);
+        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("Stylist");
+        [EzIPC] internal static readonly Action<bool?> UpdateCurrentGearset;
+        internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
+    }
+
 
     internal static class VNavmesh_IPCSubscriber
     {
@@ -629,6 +616,212 @@ namespace AutoDuty.IPC
         }
     }
 
+    public static class RSR_IPCSubscriber
+    {
+        /// <summary>
+        /// The state of the plugin.
+        /// </summary>
+        public enum StateCommandType : byte
+        {
+            /// <summary>
+            /// Stop the addon. Always remember to turn it off when it is not in use!
+            /// </summary>
+            [Description("Stop the addon. Always remember to turn it off when it is not in use!")]
+            Off,
+
+            /// <summary>
+            /// Start the addon in Auto mode. When out of combat or when combat starts, switches the target according to the set condition.
+            /// </summary>
+            [Description("Start the addon in Auto mode. When out of combat or when combat starts, switches the target according to the set condition. " +
+                         "\r\n Optionally: You can add the target type to the end of the command you want RSR to do. For example: /rotation Auto Big")]
+            Auto,
+
+            /// <summary>
+            /// Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.
+            /// </summary>
+            [Description("Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.")]
+            Manual,
+
+            /// <summary>
+            /// 
+            /// </summary>
+            [Description("This mode is managed by the Autoduty plugin")]
+            AutoDuty,
+        }
+
+        /// <summary>
+        /// Some Other Commands.
+        /// </summary>
+        public enum OtherCommandType : byte
+        {
+            /// <summary>
+            /// Open the settings.
+            /// </summary>
+            [Description("Open the settings.")]
+            Settings,
+
+            /// <summary>
+            /// Open the rotations.
+            /// </summary>
+            [Description("Open the rotations.")]
+            Rotations,
+
+            /// <summary>
+            /// Open the rotations.
+            /// </summary>
+            [Description("Open the duty rotations.")]
+            DutyRotations,
+
+            /// <summary>
+            /// Perform the actions.
+            /// </summary>
+            [Description("Perform the actions.")]
+            DoActions,
+
+            /// <summary>
+            /// Toggle the actions.
+            /// </summary>
+            [Description("Toggle the actions.")]
+            ToggleActions,
+
+            /// <summary>
+            /// Do the next action.
+            /// </summary>
+            [Description("Do the next action.")]
+            NextAction,
+        }
+
+        /// <summary>
+        /// Hostile target.
+        /// </summary>
+        public enum TargetHostileType : byte
+        {
+            /// <summary>
+            /// All targets that are in range for any abilities (Tanks/Autoduty).
+            /// </summary>
+            [Description("All targets that are in range for any abilities (Tanks/Autoduty)")]
+            AllTargetsCanAttack,
+
+            /// <summary>
+            /// Previously engaged targets (Non-Tanks).
+            /// </summary>
+            [Description("Previously engaged targets (Non-Tanks)")]
+            TargetsHaveTarget,
+
+            /// <summary>
+            /// All targets when solo in duty, or previously engaged.
+            /// </summary>
+            [Description("All targets when solo in duty (includes Occult Crescent), or previously engaged.")]
+            AllTargetsWhenSoloInDuty,
+
+            /// <summary>
+            /// All targets when solo, or previously engaged.
+            /// </summary>
+            [Description("All targets when solo, or previously engaged.")]
+            AllTargetsWhenSolo
+        }
+
+        public static string GetHostileTypeDescription(TargetHostileType type)
+        {
+            return type switch
+            {
+                TargetHostileType.AllTargetsCanAttack => "All Targets Can Attack aka Tank/Autoduty Mode",
+                TargetHostileType.TargetsHaveTarget => "Targets Have A Target",
+                TargetHostileType.AllTargetsWhenSoloInDuty => "All Targets When Solo In Duty",
+                TargetHostileType.AllTargetsWhenSolo => "All Targets When Solo",
+                _ => "Unknown Target Type"
+            };
+        }
+
+        /// <summary>
+        /// The type of targeting.
+        /// </summary>
+        public enum TargetingType
+        {
+            /// <summary>
+            /// Find the target whose hit box is biggest.
+            /// </summary>
+            [Description("Big")]
+            Big,
+
+            /// <summary>
+            /// Find the target whose hit box is smallest.
+            /// </summary>
+            [Description("Small")]
+            Small,
+
+            /// <summary>
+            /// Find the target whose HP is highest.
+            /// </summary>
+            [Description("High HP")]
+            HighHP,
+
+            /// <summary>
+            /// Find the target whose HP is lowest.
+            /// </summary>
+            [Description("Low HP")]
+            LowHP,
+
+            /// <summary>
+            /// Find the target whose HP percentage is highest.
+            /// </summary>
+            [Description("High HP%")]
+            HighHPPercent,
+
+            /// <summary>
+            /// Find the target whose HP percentage is lowest.
+            /// </summary>
+            [Description("Low HP%")]
+            LowHPPercent,
+
+            /// <summary>
+            /// Find the target whose max HP is highest.
+            /// </summary>
+            [Description("High Max HP")]
+            HighMaxHP,
+
+            /// <summary>
+            /// Find the target whose max HP is lowest.
+            /// </summary>
+            [Description("Low Max HP")]
+            LowMaxHP,
+
+            /// <summary>
+            /// Find the target that is nearest.
+            /// </summary>
+            [Description("Nearest")]
+            Nearest,
+
+            /// <summary>
+            /// Find the target that is farthest.
+            /// </summary>
+            [Description("Farthest")]
+            Farthest,
+        }
+
+        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(RSR_IPCSubscriber), "RotationSolverReborn", SafeWrapper.IPCException);
+        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("RotationSolver");
+
+        [EzIPC] private static readonly Action<StateCommandType, TargetingType> AutodutyChangeOperatingMode;
+        [EzIPC] private static readonly Action<StateCommandType>                ChangeOperatingMode;
+        [EzIPC] private static readonly Action<OtherCommandType, string>        OtherCommand;
+
+        public static void RotationAuto()
+        {
+            OtherCommand(OtherCommandType.Settings, $"HostileType {Plugin.Configuration.RSR_TargetHostileType}");
+            OtherCommand(OtherCommandType.Settings, "FriendlyPartyNpcHealRaise3 true");
+            OtherCommand(OtherCommandType.Settings, "AutoOffBetweenArea false");
+            OtherCommand(OtherCommandType.Settings, "AutoOffCutScene false");
+            OtherCommand(OtherCommandType.Settings, "AutoOffAfterCombat false");
+            AutodutyChangeOperatingMode(StateCommandType.AutoDuty, Plugin.CurrentPlayerItemLevelandClassJob.Value.GetCombatRole() == CombatRole.Tank ?
+                                                                       Plugin.Configuration.RSR_TargetingTypeTank :
+                                                                       Plugin.Configuration.RSR_TargetingTypeNonTank);
+        }
+
+        public static void RotationStop() => ChangeOperatingMode(StateCommandType.Off);
+
+        internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
+    }
 
     internal class IPCSubscriber_Common
     {

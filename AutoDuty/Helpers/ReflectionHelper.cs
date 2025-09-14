@@ -3,6 +3,7 @@ using ECommons.Reflection;
 using System;
 using System.Reflection;
 using System.Reflection.Emit;
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 
 #nullable disable
 
@@ -17,7 +18,7 @@ namespace AutoDuty.Helpers
     internal class ReflectionHelper
     {
         // What do you mean just (BindingFlags) 60 isn't great ?
-        private const BindingFlags All = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+        public const BindingFlags All = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
         private static class YesAlready_Reflection
         {
@@ -35,51 +36,6 @@ namespace AutoDuty.Helpers
                     return (bool)pl.GetFoP("Config").GetFoP("Enabled");
                 else return false;
             }
-        }
-
-        internal static class RotationSolver_Reflection
-        { 
-            internal static bool RotationSolverEnabled => DalamudReflector.TryGetDalamudPlugin("RotationSolver", out _, false, true);
-
-            internal static bool GetState => DalamudReflector.TryGetDalamudPlugin("RotationSolver", out var pl, false, true) && (bool)Assembly.GetAssembly(pl.GetType()).GetType("RotationSolver.Commands.RSCommands").GetField("_lastState", All).GetValue(null);
-
-            internal static StateTypeEnum GetStateType => DalamudReflector.TryGetDalamudPlugin("RotationSolver", out var pl, false, true) && ((string)Assembly.GetAssembly(pl.GetType()).GetType("RotationSolver.Commands.RSCommands").GetField("_stateString", All).GetValue(null)).Equals("Manual Target") ? StateTypeEnum.Manual : ((string)Assembly.GetAssembly(pl.GetType()).GetType("RotationSolver.Commands.RSCommands").GetField("_stateString", All).GetValue(null)).Equals("Off") ? StateTypeEnum.Off : StateTypeEnum.Auto;
-
-            internal static void SetConfigValue(string configName, string value)
-            {
-                //not yet implemented
-            }
-
-            internal static void SetState(StateTypeEnum stateType)
-            {
-                switch (stateType)
-                {
-                    case StateTypeEnum.Manual:
-                        new Chat().ExecuteCommand("/rotation manual");
-                        break;
-                    case StateTypeEnum.Auto:
-                        new Chat().ExecuteCommand("/rotation auto");
-                        break;
-                    default:
-                        new Chat().ExecuteCommand("/rotation cancel");
-                        break;
-                }
-            }
-
-            internal enum StateTypeEnum : byte
-            {
-                Off,
-                Auto,
-                Manual,
-            }
-
-            internal static void RotationAuto()
-            {
-                if (!GetState || GetStateType == StateTypeEnum.Manual || GetStateType == StateTypeEnum.Off)
-                    SetState(StateTypeEnum.Auto);
-            }
-
-            internal static void RotationStop() => SetState(StateTypeEnum.Off);
         }
 
         internal static class BossModReborn_Reflection
@@ -170,12 +126,13 @@ namespace AutoDuty.Helpers
                 if (DalamudReflector.TryGetDalamudPlugin("Avarice", out var pl, false, true))
                 {
                     avariceReady = true;
-                    return;
-
+                    
+                    /*
                     Assembly assembly = Assembly.GetAssembly(pl.GetType());
-                    /* not used anymore, but might as well keep it here as an example
+                    
+                    not used anymore, but might as well keep it here as an example
                     Positionals = StaticFieldRefAccess<SortedList<uint, byte>>(assembly.GetType("Avarice.StaticData.Data").GetField("ActionPositional", BindingFlags.Static | BindingFlags.Public));
-                    */
+                    
                     Type utilType = assembly?.GetType("Avarice.Util");
 
                     if (utilType != null)
@@ -191,7 +148,7 @@ namespace AutoDuty.Helpers
                         isViperFlank   = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedFlank"));
 
                         avariceReady = true;
-                    }
+                    }*/
                 }
 
             }

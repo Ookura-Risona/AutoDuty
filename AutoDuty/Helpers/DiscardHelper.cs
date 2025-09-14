@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace AutoDuty.Helpers
 {
     using Dalamud.Plugin.Services;
+    using ECommons.Automation;
     using ECommons.DalamudServices;
     using IPC;
 
@@ -29,11 +30,11 @@ namespace AutoDuty.Helpers
                 return;
             if (!this.started)
             {
-                Plugin.Chat.ExecuteCommand("/discardall");
+                Chat.ExecuteCommand("/ays discard");
                 this.started = true;
                 return;
             }
-            if(!DiscardHelper_IPCSubscriber.IsRunning())
+            if(!AutoRetainer_IPCSubscriber.IsBusy())
                 this.Stop();
         }
     }

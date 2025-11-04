@@ -1,16 +1,15 @@
-name: Auto Sync Upstream with DeepSeek AI
+name: Auto Sync Upstream with AI
 
 on:
   schedule:
-    # 每天检查两次上游更新（UTC时间 0:00 和 12:00）
     - cron: '0 0,12 * * *'
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch:
 
 env:
-  UPSTREAM_REPO: 'ffxivcode/AutoDuty' # ⚠️ 请修改为实际的上游仓库 owner/repo
+  UPSTREAM_REPO: 'ffxivcode/AutoDuty'
   UPSTREAM_BRANCH: 'master'
-  TARGET_BRANCH: 'master'
-  AI_MODEL: 'deepseek-chat' # 可选: deepseek-chat 或 deepseek-coder
+  TARGET_BRANCH: 'madter'
+  AI_MODEL: 'deepseek-chat'
 
 jobs:
   check-and-sync:
@@ -26,10 +25,11 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT_TOKEN }}
       
-      - name: Configure Git
+      - name: Configure Git with PAT
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config url."https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/".insteadOf "https://github.com/"
       
       - name: Add upstream remote
         run: |
@@ -95,13 +95,11 @@ jobs:
           import json
           from openai import OpenAI
 
-          # 初始化 DeepSeek 客户端
           client = OpenAI(
               api_key=os.environ['DEEPSEEK_API_KEY'],
               base_url="https://api.deepseek.com"
           )
 
-          # 读取文件
           with open('new_commits.txt', 'r', encoding='utf-8') as f:
               commits = f.read()
           with open('diff_summary.txt', 'r', encoding='utf-8') as f:
@@ -109,7 +107,6 @@ jobs:
           with open('changed_files.txt', 'r', encoding='utf-8') as f:
               files = f.read()
 
-          # 构建分析提示
           prompt = f"""你是一个专业的代码分析助手。这是一个Final Fantasy XIV (FF14) Dalamud插件AutoDuty的汉化仓库。
 
           上游仓库有新的提交，请分析以下内容：
@@ -162,23 +159,19 @@ jobs:
               
               content = response.choices[0].message.content
               
-              # 清理可能的 markdown 代码块标记
               if "```json" in content:
                   content = content.split("```json")[1].split("```")[0].strip()
               elif "```" in content:
                   content = content.split("```")[1].split("```")[0].strip()
               
-              # 验证 JSON
               data = json.loads(content)
               
               print("✅ DeepSeek AI Analysis Result:")
               print(json.dumps(data, ensure_ascii=False, indent=2))
               
-              # 保存结果
               with open('ai_analysis.json', 'w', encoding='utf-8') as f:
                   json.dump(data, f, ensure_ascii=False, indent=2)
               
-              # 设置 GitHub 输出
               with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                   f.write(f"needs_translation={str(data.get('needs_translation', False)).lower()}\n")
                   
@@ -206,13 +199,11 @@ jobs:
           import subprocess
           from openai import OpenAI
 
-          # 初始化客户端
           client = OpenAI(
               api_key=os.environ['DEEPSEEK_API_KEY'],
               base_url="https://api.deepseek.com"
           )
 
-          # 尝试合并
           print("🔄 Attempting to merge upstream changes...")
           result = subprocess.run(
               ['git', 'merge', f"upstream/{os.environ['UPSTREAM_BRANCH']}"],
@@ -223,7 +214,6 @@ jobs:
           if result.returncode != 0:
               print("⚠️ Merge conflicts detected, asking DeepSeek AI for resolution...")
               
-              # 获取冲突文件
               conflicts_result = subprocess.run(
                   ['git', 'diff', '--name-only', '--diff-filter=U'],
                   capture_output=True,
@@ -248,7 +238,6 @@ jobs:
                       print(f"❌ Failed to read {conflict_file}: {e}")
                       continue
                   
-                  # AI 解决冲突
                   prompt = f"""这是一个汉化仓库的Git合并冲突。请智能解决这个冲突。
 
           文件: {conflict_file}
@@ -279,7 +268,6 @@ jobs:
                       
                       resolved_content = response.choices[0].message.content.strip()
                       
-                      # 移除可能的 markdown 代码块
                       if resolved_content.startswith("```"):
                           lines = resolved_content.split('\n')
                           if lines[0].startswith("```"):
@@ -288,7 +276,6 @@ jobs:
                               lines = lines[:-1]
                           resolved_content = '\n'.join(lines)
                       
-                      # 写入解决后的内容
                       with open(conflict_file, 'w', encoding='utf-8') as f:
                           f.write(resolved_content)
                       
@@ -300,12 +287,32 @@ jobs:
                       subprocess.run(['git', 'merge', '--abort'])
                       exit(1)
               
-              # 完成合并
               subprocess.run(['git', 'commit', '--no-edit'], check=True)
               print("✅ All conflicts resolved with AI assistance")
           else:
               print("✅ Merge successful without conflicts")
           PYTHON_SCRIPT
+      
+      - name: Check if branch has new commits
+        if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true'
+        id: check_branch_diff
+        run: |
+          # 检查当前分支与目标分支的差异
+          DIFF_COUNT=$(git rev-list --count origin/${{ env.TARGET_BRANCH }}..${{ steps.create_branch.outputs.branch_name }})
+          echo "diff_count=$DIFF_COUNT" >> $GITHUB_OUTPUT
+          
+          if [ "$DIFF_COUNT" -eq "0" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No new commits in branch, will skip PR creation"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ Branch has $DIFF_COUNT new commit(s)"
+          fi
+      
+      - name: Push branch
+        if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true' && steps.check_branch_diff.outputs.has_changes == 'true'
+        run: |
+          git push origin ${{ steps.create_branch.outputs.branch_name }}
       
       - name: Direct merge if no translation needed
         if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'false'
@@ -315,22 +322,19 @@ jobs:
           git push origin ${{ env.TARGET_BRANCH }}
       
       - name: Create Pull Request
-        if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true'
+        if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true' && steps.check_branch_diff.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git push origin ${{ steps.create_branch.outputs.branch_name }}
-          
-          # 生成 PR 描述
           ANALYSIS=$(cat ai_analysis.json | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('summary', 'AI分析完成'))")
           TRANSLATION_COUNT=$(cat ai_analysis.json | python3 -c "import sys, json; data=json.load(sys.stdin); print(len(data.get('translations', [])))")
           
           cat << EOF > pr_body.md
-          ## 🤖 自动同步上游更新 (Powered by DeepSeek AI)
+          ## 🤖 自动同步上游更新
           
-          此PR由GitHub Actions自动创建，包含来自上游仓库的新提交。
+          此PR由 GitHub Actions 自动创建，包含来自上游仓库的新提交。
           
-          ### 📊 DeepSeek AI分析结果
+          ### 📊 AI分析结果
           
           $ANALYSIS
           
@@ -341,9 +345,9 @@ jobs:
           
           ### ✅ 已自动处理
           
-          - ✓ DeepSeek AI已分析变更内容
-          - ✓ DeepSeek AI已提供中文翻译建议
-          - ✓ 合并冲突已由DeepSeek AI辅助解决（如有）
+          - ✓ AI 已分析变更内容
+          - ✓ AI 已提供中文翻译建议
+          - ✓ 合并冲突已由 AI 辅助解决（如有）
           
           ### 👀 需要人工审查
           
@@ -365,16 +369,24 @@ jobs:
           ---
           
           **上游提交**: \`${{ steps.check_commits.outputs.upstream_commit }}\`  
-          **生成时间**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          
-          *Powered by [DeepSeek AI](https://www.deepseek.com/)*
+          **生成时间**: $(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S UTC+8")
           EOF
           
           gh pr create \
-            --title "🌐 同步上游更新 - $(date +%Y-%m-%d)" \
+            --title "🌐 同步上游更新 - $(TZ='Asia/Shanghai' date +%Y-%m-%d)" \
             --body-file pr_body.md \
             --base ${{ env.TARGET_BRANCH }} \
-            --head ${{ steps.create_branch.outputs.branch_name }}
+            --head ${{ steps.create_branch.outputs.branch_name }} \
+            --label "upstream-sync,translation,automated"
+      
+      - name: Skip PR creation (no changes)
+        if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true' && steps.check_branch_diff.outputs.has_changes == 'false'
+        run: |
+          echo "⚠️ Branch has no new commits compared to target branch"
+          echo "This might happen if the merge resulted in no actual changes"
+          echo "Cleaning up branch..."
+          git checkout ${{ env.TARGET_BRANCH }}
+          git branch -D ${{ steps.create_branch.outputs.branch_name }} || true
       
       - name: Create summary
         if: always()
@@ -391,6 +403,11 @@ jobs:
             if [ -f "ai_analysis.json" ]; then
               TRANSLATION_COUNT=$(cat ai_analysis.json | python3 -c "import sys, json; data=json.load(sys.stdin); print(len(data.get('translations', [])))" 2>/dev/null || echo "0")
               echo "- 检测到翻译项: **${TRANSLATION_COUNT}** 个" >> $GITHUB_STEP_SUMMARY
+              
+              if [ "${{ steps.check_branch_diff.outputs.has_changes }}" = "false" ]; then
+                echo "- ⚠️ 合并后无实际变更，已跳过PR创建" >> $GITHUB_STEP_SUMMARY
+              fi
+              
               echo "" >> $GITHUB_STEP_SUMMARY
               echo "### 📊 DeepSeek AI分析结果" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY

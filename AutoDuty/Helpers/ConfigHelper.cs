@@ -76,8 +76,8 @@ namespace AutoDuty.Helpers
 
                 if (configType.IsAssignableTo(typeof(IList)))
                 {
-                    IList valueList          = (IList) field.GetValue(Plugin.Configuration)!;
-                    Type        enumerableType = configType.GetElementType() ?? configType.GenericTypeArguments.First();
+                    IList valueList      = (IList)field.GetValue(Plugin.Configuration)!;
+                    Type  enumerableType = configType.GetElementType() ?? configType.GenericTypeArguments.First();
 
                     switch (configValues[0])
                     {
@@ -95,7 +95,7 @@ namespace AutoDuty.Helpers
                                     if (!valueList.IsFixedSize)
                                         valueList.Add(val);
                                     else
-                                        valueList[i] = val;
+                                        valueList[i-1] = val;
                             }
                             break;
                         case "add":

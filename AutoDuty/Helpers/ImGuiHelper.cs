@@ -26,6 +26,9 @@ namespace AutoDuty.Helpers
         public static readonly Vector4 RoleDPSColor        = new(1, 0, 0, 1);
         public static readonly Vector4 RoleAllRounderColor = new(1, 1, 0.5f, 1);
 
+        public static readonly Vector4 StateGoodColor = new(0, 1, 0, 1);
+        public static readonly Vector4 StateBadColor  = new(1, 0, 0, 1);
+
 
         public const string idColor               = "<0.5,0.5,1>";
         public const string dutyColor             = "<0,1,0>";
@@ -132,6 +135,9 @@ namespace AutoDuty.Helpers
 
         internal static ImRaii.IEndObject RequiresPlugin(ExternalPlugin plugin, string id, string? message = null, bool inline = false, bool write = true)
         {
+            if (plugin == ExternalPlugin.None)
+                return new EndUnconditionally();
+
             if (IPCSubscriber_Common.IsReady(plugin.GetExternalPluginData().name))
             {
                 return new EndUnconditionally(() =>
@@ -187,7 +193,7 @@ namespace AutoDuty.Helpers
                 if (this.Disposed)
                     return;
 
-                this.EndAction();
+                this.EndAction?.Invoke();
                 this.Disposed = true;
             }
         }

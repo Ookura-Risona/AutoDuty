@@ -15,8 +15,8 @@ namespace AutoDuty.Helpers
     internal static class ContentHelper
     {
         internal static Dictionary<uint, Content> DictionaryContent { get; set; } = [];
-
-        private static List<uint> ListGCArmyContent { get; set; } = [162, 1039, 1041, 1042, 171, 172, 159, 160, 349, 362, 188, 1064, 1066, 430, 510];
+        
+        private static List<uint> ListGCArmyContent { get; set; } = [1245, 1039, 1041, 1042, 0/*171*/, 172, 0/*159*/, 160, 349, 362, 188, 1064, 1066, 430, 510]; //Keeping Dzemael and Wanderer's Palace out for now.
         
         private static List<uint> ListVVDContent { get; set; } = [1069, 1137, 1176]; //[1069, 1075, 1076, 1137, 1155, 1156, 1176, 1179, 1180]; *Criterions
 
@@ -108,8 +108,8 @@ namespace AutoDuty.Helpers
                 content.TrustIndex             = TryGetTrustIndex(listDawnContent.Where(dawnContent => dawnContent.Unknown13).IndexOf(x => x.Content.Value.RowId == contentFinderCondition.RowId), contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int trustIndex) ? trustIndex : -1;
                 content.VariantContent         = ListVVDContent.Any(variantContent => variantContent        == contentFinderCondition.TerritoryType.Value.RowId);
                 content.VVDIndex               = ListVVDContent.FindIndex(variantContent => variantContent  == contentFinderCondition.TerritoryType.Value.RowId);
-                content.GCArmyContent          = ListGCArmyContent.Any(gcArmyContent => gcArmyContent       == contentFinderCondition.TerritoryType.Value.RowId);
                 content.GCArmyIndex            = ListGCArmyContent.FindIndex(gcArmyContent => gcArmyContent == contentFinderCondition.TerritoryType.Value.RowId);
+                content.GCArmyContent          = content.GCArmyIndex >= 0;
 
                 if (contentFinderCondition.ContentType.Value.RowId == 2)
                     content.DutyModes |= DutyMode.Regular;
@@ -157,7 +157,7 @@ namespace AutoDuty.Helpers
             DictionaryContent = DictionaryContent.OrderBy(content => content.Value.ExVersion).ThenBy(content => content.Value.ClassJobLevelRequired).ThenBy(content => content.Value.TerritoryType).ToDictionary();
         }
 
-        public static bool CanRun(this Content content, short level = -1, bool? trust = null, bool trustCheckLevels = true, bool? unsync = null)
+        public static bool CanRun(this Content content, short level = -1, DutyMode mode = DutyMode.None, bool trustCheckLevels = true, bool? unsync = null)
         {
             if ((Player.Available ? Player.Object.GetRole() : CombatRole.NonCombat) == CombatRole.NonCombat)
                 return false;
@@ -174,12 +174,14 @@ namespace AutoDuty.Helpers
                 return false;
 
 
-            trust ??= Plugin.Configuration.DutyModeEnum == DutyMode.Trust;
-            if (trust.Value)
+            if (mode == DutyMode.None)
+                mode = Plugin.Configuration.DutyModeEnum;
+
+            if (mode.HasFlag(DutyMode.Trust))
                 if (!content.CanTrustRun(trustCheckLevels))
                     return false;
 
-            unsync ??= Plugin.Configuration.Unsynced && Plugin.Configuration.DutyModeEnum.EqualsAny(DutyMode.Raid, DutyMode.Regular, DutyMode.Trial);
+            unsync ??= Plugin.Configuration.Unsynced && mode.EqualsAny(DutyMode.Raid, DutyMode.Regular, DutyMode.Trial);
 
             if (unsync.Value)
                 if (content.ExVersion == 5)

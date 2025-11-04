@@ -375,7 +375,7 @@ jobs:
             --body-file pr_body.md \
             --base ${{ env.TARGET_BRANCH }} \
             --head ${{ steps.create_branch.outputs.branch_name }} \
-            --label "upstream-sync,translation,automated"
+            --label "upstream-sync"
       
       - name: Create summary
         if: always()

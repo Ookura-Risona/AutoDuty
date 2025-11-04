@@ -374,8 +374,7 @@ jobs:
             --title "🌐 同步上游更新 - $(date +%Y-%m-%d)" \
             --body-file pr_body.md \
             --base ${{ env.TARGET_BRANCH }} \
-            --head ${{ steps.create_branch.outputs.branch_name }} \
-            --label "upstream-sync"
+            --head ${{ steps.create_branch.outputs.branch_name }}
       
       - name: Create summary
         if: always()

@@ -317,7 +317,7 @@ jobs:
       - name: Create Pull Request
         if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git push origin ${{ steps.create_branch.outputs.branch_name }}
           

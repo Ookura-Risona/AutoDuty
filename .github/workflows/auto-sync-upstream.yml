@@ -8,7 +8,7 @@ on:
 env:
   UPSTREAM_REPO: 'ffxivcode/AutoDuty'
   UPSTREAM_BRANCH: 'master'
-  TARGET_BRANCH: 'madter'
+  TARGET_BRANCH: 'master'
   AI_MODEL: 'deepseek-chat'
 
 jobs:

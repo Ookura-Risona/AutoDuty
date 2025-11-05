@@ -184,7 +184,7 @@ jobs:
         if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true'
         id: create_branch
         run: |
-          BRANCH_NAME="sync-upstream-$(date +%Y%m%d-%H%M%S)"
+          BRANCH_NAME="sync-upstream-$(TZ='Asia/Shanghai' date +%Y%m%d-%H%M%S)"
           git checkout -b $BRANCH_NAME
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
       
@@ -376,8 +376,7 @@ jobs:
             --title "🌐 同步上游更新 - $(TZ='Asia/Shanghai' date +%Y-%m-%d)" \
             --body-file pr_body.md \
             --base ${{ env.TARGET_BRANCH }} \
-            --head ${{ steps.create_branch.outputs.branch_name }} \
-            --label "upstream-sync,translation,automated"
+            --head ${{ steps.create_branch.outputs.branch_name }}
       
       - name: Skip PR creation (no changes)
         if: steps.check_commits.outputs.has_updates == 'true' && steps.ai_analysis.outputs.needs_translation == 'true' && steps.check_branch_diff.outputs.has_changes == 'false'

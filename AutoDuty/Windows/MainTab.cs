@@ -11,12 +11,17 @@ using Dalamud.Bindings.ImGui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 
 namespace AutoDuty.Windows
 {
+    using Dalamud.Interface;
+    using Dalamud.Interface.Utility;
     using Data;
+    using SharpDX;
     using static Data.Classes;
+    using Vector2 = System.Numerics.Vector2;
+    using Vector4 = System.Numerics.Vector4;
+
     internal static class MainTab
     {
         internal static ContentPathsManager.ContentPathContainer? DutySelected;
@@ -30,8 +35,8 @@ namespace AutoDuty.Windows
 
         internal static void Draw()
         {
-            if (MainWindow.CurrentTabName != "主界面")
-                MainWindow.CurrentTabName = "主界面";
+            MainWindow.CurrentTabName = "主界面";
+            
             var dutyMode = Plugin.Configuration.DutyModeEnum;
             var levelingMode = Plugin.LevelingModeEnum;
 
@@ -229,8 +234,30 @@ namespace AutoDuty.Windows
             {
                 if (!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.Overlay.IsOpen)
                     MainWindow.GotoAndActions();
+                
 
-                using (ImRaii.Disabled(Plugin.CurrentTerritoryContent == null || (Plugin.Configuration.DutyModeEnum == DutyMode.Trust && Plugin.Configuration.SelectedTrustMembers.Any(x => x is null))))
+                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping)))
+                {
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.TextColored(ImGuiHelper.StateGoodColor, "Select Mode: ");
+                    ImGui.SameLine(0);
+                    ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+                    if (ImGui.BeginCombo("##AutoDutyModeEnum", Plugin.Configuration.AutoDutyModeEnum.ToCustomString()))
+                    {
+                        foreach (AutoDutyMode mode in Enum.GetValues(typeof(AutoDutyMode)))
+                        {
+                            if (ImGui.Selectable(mode.ToCustomString(), Plugin.Configuration.AutoDutyModeEnum == mode))
+                            {
+                                Plugin.Configuration.AutoDutyModeEnum = mode;
+                                Plugin.Configuration.Save();
+                            }
+                        }
+                        ImGui.EndCombo();
+                    }
+                    ImGui.PopItemWidth();
+                }
+
+                using (ImRaii.Disabled(Plugin.CurrentTerritoryContent == null))
                 {
                     if (!Plugin.States.HasFlag(PluginState.Looping))
                     {
@@ -247,238 +274,392 @@ namespace AutoDuty.Windows
                             else if (ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent?.TerritoryType ?? 0))
                                 Plugin.Run();
                             else
-                                MainWindow.ShowPopup("Error", "未找到配置文件");
+                                MainWindow.ShowPopup("Error", $"No path was found for {Plugin.CurrentTerritoryContent?.TerritoryType} {Plugin.CurrentTerritoryContent?.Name}");
                         }
                     }
                     else
                         MainWindow.StopResumePause();
                 }
+
+
+                
                 using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping)))
                 {
-                    using (ImRaii.Disabled(Plugin.CurrentTerritoryContent == null))
+                    switch (Plugin.Configuration.AutoDutyModeEnum)
                     {
-                        ImGui.SameLine(0, 15);
-                        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                        MainWindow.LoopsConfig();
-                        ImGui.PopItemWidth();
-                    }
-                    ImGui.TextColored(Plugin.Configuration.DutyModeEnum == DutyMode.None ? new Vector4(1, 0, 0, 1) : new Vector4(0, 1, 0, 1), "选择运行模式: ");
-                    ImGui.SameLine(0);
-                    ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                    if (ImGui.BeginCombo("##DutyModeEnum", Plugin.Configuration.DutyModeEnum.GetDescription()))
-                    {
-                        foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
+                        case AutoDutyMode.Looping:
                         {
-                            if (ImGui.Selectable(mode.GetDescription(), Plugin.Configuration.DutyModeEnum == mode))
+                            using (ImRaii.Disabled(Plugin.CurrentTerritoryContent == null))
                             {
-                                Plugin.Configuration.DutyModeEnum = mode;
-                                Plugin.Configuration.Save();
+                                ImGui.SameLine(0, 15);
+                                ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+                                MainWindow.LoopsConfig();
+                                ImGui.PopItemWidth();
                             }
-                        }
-                        ImGui.EndCombo();
-                    }
-                    ImGui.PopItemWidth();
-                    if (Plugin.Configuration.DutyModeEnum != DutyMode.None)
-                    {
-                        if (Plugin.Configuration.DutyModeEnum == DutyMode.Support || Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
-                        {
-                            ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? new Vector4(1, 0, 0, 1) : new Vector4(0, 1, 0, 1), "选择练级模式: ");
+
+                            ImGui.AlignTextToFramePadding();
+                            ImGui.TextColored(Plugin.Configuration.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "选择运行模式: ");
                             ImGui.SameLine(0);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                            if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
-                                {
-                                    LevelingMode.None => "关闭",
-                                    _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
-                                }))
+                            if (ImGui.BeginCombo("##DutyModeEnum", Plugin.Configuration.DutyModeEnum.ToCustomString()))
                             {
-                                if (ImGui.Selectable("关闭", Plugin.LevelingModeEnum == LevelingMode.None))
+                                foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
                                 {
-                                    Plugin.LevelingModeEnum = LevelingMode.None;
-                                    Plugin.Configuration.Save();
-                                }
-
-                                LevelingMode autoLevelMode = (Plugin.Configuration.DutyModeEnum == DutyMode.Support ? LevelingMode.Support : LevelingMode.Trust_Group);
-                                if (ImGui.Selectable($"{autoLevelMode.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == autoLevelMode))
-                                {
-                                    Plugin.LevelingModeEnum = autoLevelMode;
-                                    Plugin.Configuration.Save();
-                                    if (Plugin.Configuration.AutoEquipRecommendedGear)
-                                        AutoEquipHelper.Invoke();
-                                }
-
-                                if(Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
-                                    if (ImGui.Selectable($"{LevelingMode.Trust_Solo.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
+                                    if (ImGui.Selectable(mode.ToCustomString(), Plugin.Configuration.DutyModeEnum == mode))
                                     {
-                                        Plugin.LevelingModeEnum = LevelingMode.Trust_Solo;
+                                        Plugin.Configuration.DutyModeEnum = mode;
                                         Plugin.Configuration.Save();
-                                        if (Plugin.Configuration.AutoEquipRecommendedGear)
-                                            AutoEquipHelper.Invoke();
                                     }
-
-
+                                }
                                 ImGui.EndCombo();
                             }
                             ImGui.PopItemWidth();
 
-                            if (Plugin.Configuration.DutyModeEnum != DutyMode.Trust) 
-                                ImGuiComponents.HelpMarker("升级模式将根据您的等级和装备等级（Ilvl）选择最合适的副本。\n将不会总是排入最高等级的副本，而是根据我们的稳定副本列表进行选择。");
-                            else 
-                                ImGuiComponents.HelpMarker("亲信升级模式将根据您的等级和装备等级（Ilvl），以及您最低等级的亲信战友选择最合适的副本，以尽可能让所有亲信战友均衡升级。\n将不会总是排入最高等级的副本，而是根据我们的稳定副本列表进行选择。");
-                        }
-
-                        if (Plugin.Configuration.DutyModeEnum == DutyMode.Support && levelingMode == LevelingMode.Support)
-                        {
-                            if(ImGui.Checkbox("到达等级后切换为亲信战友", ref Plugin.Configuration.PreferTrustOverSupportLeveling))
-                                Plugin.Configuration.Save();
-                        }
-
-                        if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust && Player.Available)
-                        {
-                            ImGui.Separator();
-                            if (DutySelected != null && DutySelected.Content.TrustMembers.Count > 0)
+                            if (Plugin.Configuration.DutyModeEnum != DutyMode.None)
                             {
-                                ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined("选择你的亲信战友"));
-                                
-
-                                TrustHelper.ResetTrustIfInvalid();
-                                for (int i = 0; i < Plugin.Configuration.SelectedTrustMembers.Length; i++)
+                                if (Plugin.Configuration.DutyModeEnum == DutyMode.Support || Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
                                 {
-                                    TrustMemberName? member = Plugin.Configuration.SelectedTrustMembers[i];
+                                    ImGui.AlignTextToFramePadding();
+                                    ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "选择练级模式: ");
+                                    ImGui.SameLine(0);
 
-                                    if (member is null)
-                                        continue;
-
-                                    if (DutySelected.Content.TrustMembers.All(x => x.MemberName != member))
+                                    ImGuiComponents.HelpMarker("练级模式将根据您的等级和装等，为您匹配最适合的副本。\n" +
+                                                               (Plugin.Configuration.DutyModeEnum != DutyMode.Trust ?
+                                                                    string.Empty :
+                                                                    "组队模式会均衡提升您的亲信战友等级。\\n单人模式仅会提升必要的亲信战友等级") +
+                                                               "\n\n该模式不会始终匹配最高等级副本，而是遵循我们设定的稳定副本列表");
+                                    ImGui.SameLine(0);
+                                    ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+                                    if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
+                                        {
+                                            LevelingMode.None => "关闭",
+                                            _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
+                                        }))
                                     {
-                                        Svc.Log.Debug($"Killing {member}");
-                                        Plugin.Configuration.SelectedTrustMembers[i] = null;
+                                        if (ImGui.Selectable("关闭", Plugin.LevelingModeEnum == LevelingMode.None))
+                                        {
+                                            Plugin.LevelingModeEnum = LevelingMode.None;
+                                            Plugin.Configuration.Save();
+                                        }
+
+                                        LevelingMode autoLevelMode = (Plugin.Configuration.DutyModeEnum == DutyMode.Support ? LevelingMode.Support : LevelingMode.Trust_Group);
+                                        if (ImGui.Selectable($"{autoLevelMode.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == autoLevelMode))
+                                        {
+                                            Plugin.LevelingModeEnum = autoLevelMode;
+                                            Plugin.Configuration.Save();
+                                            if (Plugin.Configuration.AutoEquipRecommendedGear)
+                                                AutoEquipHelper.Invoke();
+                                        }
+
+                                        if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
+                                            if (ImGui.Selectable($"{LevelingMode.Trust_Solo.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
+                                            {
+                                                Plugin.LevelingModeEnum = LevelingMode.Trust_Solo;
+                                                Plugin.Configuration.Save();
+                                                if (Plugin.Configuration.AutoEquipRecommendedGear)
+                                                    AutoEquipHelper.Invoke();
+                                            }
+
+
+                                        ImGui.EndCombo();
+                                    }
+
+                                    ImGui.PopItemWidth();
+                                }
+
+                                if (Plugin.Configuration.DutyModeEnum == DutyMode.Support && levelingMode == LevelingMode.Support)
+                                {
+                                    if (ImGui.Checkbox("到达等级后切换为亲信战友", ref Plugin.Configuration.PreferTrustOverSupportLeveling))
+                                        Plugin.Configuration.Save();
+                                }
+
+                                if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust && Player.Available)
+                                {
+                                    ImGui.Separator();
+                                    if (DutySelected != null && DutySelected.Content.TrustMembers.Count > 0)
+                                    {
+                                        ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined("选择你的亲信战友"));
+
+
+                                        TrustHelper.ResetTrustIfInvalid();
+                                        for (int i = 0; i < Plugin.Configuration.SelectedTrustMembers.Length; i++)
+                                        {
+                                            TrustMemberName? member = Plugin.Configuration.SelectedTrustMembers[i];
+
+                                            if (member is null)
+                                                continue;
+
+                                            if (DutySelected.Content.TrustMembers.All(x => x.MemberName != member))
+                                            {
+                                                Svc.Log.Debug($"Killing {member}");
+                                                Plugin.Configuration.SelectedTrustMembers[i] = null;
+                                            }
+                                        }
+
+                                        ImGui.Columns(3);
+                                        using (ImRaii.Disabled(Plugin.TrustLevelingEnabled && TrustHelper.Members.Any(tm => tm.Value.Level < tm.Value.LevelCap)))
+                                        {
+                                            DrawTrustMembers(DutySelected.Content);
+                                        }
+
+                                        //ImGui.Columns(3, null, false);
+                                        if (DutySelected.Content.TrustMembers.Count == 7)
+                                            ImGui.NextColumn();
+
+                                        if (ImGui.Button("刷新", new Vector2(ImGui.GetContentRegionAvail().X, 0)))
+                                        {
+                                            if (InventoryHelper.CurrentItemLevel < 370)
+                                                Plugin.LevelingModeEnum = LevelingMode.None;
+                                            TrustHelper.ClearCachedLevels();
+
+                                            SchedulerHelper.ScheduleAction("Refresh Levels - ShB", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[837u]),  () => TrustHelper.State == ActionState.None);
+                                            SchedulerHelper.ScheduleAction("Refresh Levels - EW",  () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[952u]),  () => TrustHelper.State == ActionState.None);
+                                            SchedulerHelper.ScheduleAction("Refresh Levels - DT",  () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[1167u]), () => TrustHelper.State == ActionState.None);
+                                        }
+
+                                        ImGui.NextColumn();
+                                        ImGui.Columns(1);
+                                    }
+                                    else if (ImGui.Button("刷新亲信战友等级"))
+                                    {
+                                        if (InventoryHelper.CurrentItemLevel < 370)
+                                            Plugin.LevelingModeEnum = LevelingMode.None;
+                                        TrustHelper.ClearCachedLevels();
+
+                                        SchedulerHelper.ScheduleAction("Refresh Levels - ShB", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[837u]),  () => TrustHelper.State == ActionState.None);
+                                        SchedulerHelper.ScheduleAction("Refresh Levels - EW",  () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[952u]),  () => TrustHelper.State == ActionState.None);
+                                        SchedulerHelper.ScheduleAction("Refresh Levels - DT",  () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[1167u]), () => TrustHelper.State == ActionState.None);
                                     }
                                 }
-                                ImGui.Columns(3);
-                                using (ImRaii.Disabled(Plugin.TrustLevelingEnabled && TrustHelper.Members.Any(tm => tm.Value.Level < tm.Value.LevelCap)))
+
+                                DrawPathSelection();
+                                ImGui.Separator();
+
+                                DrawSearchBar();
+                                ImGui.SameLine();
+                                if (ImGui.Checkbox("隐藏不可用副本", ref Plugin.Configuration.HideUnavailableDuties))
+                                    Plugin.Configuration.Save();
+                                if (Plugin.Configuration.DutyModeEnum is DutyMode.Regular or DutyMode.Trial or DutyMode.Raid)
                                 {
-                                    DrawTrustMembers(DutySelected.Content);
+                                    if (ImGuiEx.CheckboxWrapped("解除限制", ref Plugin.Configuration.Unsynced))
+                                        Plugin.Configuration.Save();
                                 }
-                                //ImGui.Columns(3, null, false);
-                                if (DutySelected.Content.TrustMembers.Count == 7)
-                                    ImGui.NextColumn();
-
-                                if (ImGui.Button("刷新", new Vector2(ImGui.GetContentRegionAvail().X, 0)))
-                                {
-                                    if (InventoryHelper.CurrentItemLevel < 370)
-                                        Plugin.LevelingModeEnum = LevelingMode.None;
-                                    TrustHelper.ClearCachedLevels();
-
-                                    SchedulerHelper.ScheduleAction("Refresh Levels - ShB", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[837u]), () => TrustHelper.State == ActionState.None);
-                                    SchedulerHelper.ScheduleAction("Refresh Levels - EW", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[952u]), () => TrustHelper.State == ActionState.None);
-                                    SchedulerHelper.ScheduleAction("Refresh Levels - DT", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[1167u]), () => TrustHelper.State == ActionState.None);
-                                }
-                                ImGui.NextColumn();
-                                ImGui.Columns(1);
                             }
-                            else if (ImGui.Button("刷新亲信战友等级"))
-                            {
-                                if (InventoryHelper.CurrentItemLevel < 370)
-                                    Plugin.LevelingModeEnum = LevelingMode.None;
-                                TrustHelper.ClearCachedLevels();
 
-                                SchedulerHelper.ScheduleAction("Refresh Levels - ShB", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[837u]), () => TrustHelper.State == ActionState.None);
-                                SchedulerHelper.ScheduleAction("Refresh Levels - EW", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[952u]), () => TrustHelper.State == ActionState.None);
-                                SchedulerHelper.ScheduleAction("Refresh Levels - DT", () => TrustHelper.GetLevels(ContentHelper.DictionaryContent[1167u]), () => TrustHelper.State == ActionState.None);
-                            }
+                            break;
                         }
-
-                        DrawPathSelection();
-                        ImGui.Separator();
-
-                        DrawSearchBar();
-                        ImGui.SameLine();
-                        if (ImGui.Checkbox("隐藏不可用副本", ref Plugin.Configuration.HideUnavailableDuties))
-                            Plugin.Configuration.Save();
-                        if (Plugin.Configuration.DutyModeEnum is DutyMode.Regular or DutyMode.Trial or DutyMode.Raid)
-                        {
-                            if (ImGuiEx.CheckboxWrapped("解除限制", ref Plugin.Configuration.Unsynced))
-                                Plugin.Configuration.Save();
-                        }
+                        case AutoDutyMode.Playlist:
+                            ImGui.Separator();
+                            break;
+                        default:
+                            Plugin.Configuration.AutoDutyModeEnum = AutoDutyMode.Looping;
+                            break;
                     }
+                    
                     ushort ilvl = InventoryHelper.CurrentItemLevel;
                     if (!ImGui.BeginListBox("##DutyList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) return;
 
-                    if (VNavmesh_IPCSubscriber.IsEnabled && BossMod_IPCSubscriber.IsEnabled)
+                    if (Player.Job.GetCombatRole() == CombatRole.NonCombat)
+                    {
+                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "Please switch to a combat job to use AutoDuty.");
+                    }
+                    else if (Player.Job == Job.BLU && Plugin.Configuration.DutyModeEnum is not (DutyMode.Regular or DutyMode.Trial or DutyMode.Raid))
+                    {
+                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "Blue Mage cannot run Trust, Duty Support, Squadron or Variant dungeons. Please switch jobs or select a different category.");
+                    }
+                    else if (VNavmesh_IPCSubscriber.IsEnabled && BossMod_IPCSubscriber.IsEnabled)
                     {
                         if (PlayerHelper.IsReady)
                         {
-                            if (Plugin.LevelingModeEnum != LevelingMode.None)
+                            switch (Plugin.Configuration.AutoDutyModeEnum)
                             {
-                                if (Player.Job.GetCombatRole() == CombatRole.NonCombat || 
-                                    (Plugin.LevelingModeEnum.IsTrustLeveling() && 
-                                        (ilvl < 370 || Plugin.CurrentPlayerItemLevelandClassJob.Value != null && Plugin.CurrentPlayerItemLevelandClassJob.Value != Player.Job)))
-                                {
-                                    Svc.Log.Debug($"您正处于一个不兼容的职业: {Player.Job.GetCombatRole()}, 或者您正处于亲信模式但装等({ilvl}) 小于 370, 或您的装等已变更, 正在禁用升级模式");
-                                    Plugin.LevelingModeEnum = LevelingMode.None;
-                                }
-                                else if (ilvl > 0 && ilvl != Plugin.CurrentPlayerItemLevelandClassJob.Key)
-                                {
-                                    Svc.Log.Debug($"您的装等已更改，正在选择新任务。");
-                                    Plugin.CurrentTerritoryContent = LevelingHelper.SelectHighestLevelingRelevantDuty(Plugin.LevelingModeEnum);
-                                }
-                                else
-                                {
-                                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), $"Leveling Mode: 等级{Player.Level} (装等{ilvl})");
-                                    foreach (var item in LevelingHelper.LevelingDuties.Select((Value, Index) => (Value, Index)))
+                                case AutoDutyMode.Looping:
+                                    if (Plugin.LevelingModeEnum != LevelingMode.None)
                                     {
-                                        if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust && !item.Value.DutyModes.HasFlag(DutyMode.Trust))
-                                            continue;
-                                        var disabled = !item.Value.CanRun();
-                                        if (!Plugin.Configuration.HideUnavailableDuties || !disabled)
+                                        if (Player.Job.GetCombatRole() == CombatRole.NonCombat ||
+                                            (Plugin.LevelingModeEnum.IsTrustLeveling() &&
+                                             (ilvl < 370 || Plugin.CurrentPlayerItemLevelandClassJob.Value != null && Plugin.CurrentPlayerItemLevelandClassJob.Value != Player.Job)))
                                         {
-                                            using (ImRaii.Disabled(disabled))
-                                            {
-                                                ImGuiEx.TextWrapped(item.Value == Plugin.CurrentTerritoryContent ? new Vector4(0, 1, 1, 1) : new Vector4(1, 1, 1, 1), $"L{item.Value.ClassJobLevelRequired} (i{item.Value.ItemLevelRequired}): {item.Value.EnglishName}");
-                                            }
+                                            Svc.Log.Debug($"您正处于一个不兼容的职业: {Player.Job.GetCombatRole()}, 或者您正处于亲信模式但装等({ilvl}) 小于 370, 或您的装等已变更, 正在禁用升级模式");
+                                            Plugin.LevelingModeEnum = LevelingMode.None;
                                         }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (Player.Job.GetCombatRole() == CombatRole.NonCombat)
-                                    ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "请切换到战斗职业运行AutoDuty");
-                                else if (Player.Job == Job.BLU && Plugin.Configuration.DutyModeEnum is not (DutyMode.Regular or DutyMode.Trial or DutyMode.Raid))
-                                    ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "青魔法师无法使用亲信战友、剧情辅助器、探险者小队或多变迷宫模式。请更换职业或选择其他模式。");
-                                else
-                                {
-                                    Dictionary<uint, Content> dictionary = ContentHelper.DictionaryContent.Where(x => x.Value.DutyModes.HasFlag(Plugin.Configuration.DutyModeEnum)).ToDictionary();
-
-                                    if (dictionary.Count > 0 && PlayerHelper.IsReady)
-                                    {
-                                        short level = PlayerHelper.GetCurrentLevelFromSheet();
-                                        foreach ((uint _, Content? content) in dictionary)
+                                        else if (ilvl > 0 && ilvl != Plugin.CurrentPlayerItemLevelandClassJob.Key)
                                         {
-                                            // Apply search filter
-                                            if (!string.IsNullOrWhiteSpace(_searchText) && !content.Name.ToLower().Contains(_searchText))
-                                                continue;  // Skip duties that do not match the search text
-
-                                            bool canRun = content.CanRun(level);
-                                            using (ImRaii.Disabled(!canRun))
+                                            Svc.Log.Debug($"您的装等已更改，正在选择新任务。");
+                                            Plugin.CurrentTerritoryContent = LevelingHelper.SelectHighestLevelingRelevantDuty(Plugin.LevelingModeEnum);
+                                        }
+                                        else
+                                        {
+                                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), $"Leveling Mode: 等级{Player.Level} (装等{ilvl})");
+                                            foreach (var item in LevelingHelper.LevelingDuties.Select((Value, Index) => (Value, Index)))
                                             {
-                                                if (Plugin.Configuration.HideUnavailableDuties && !canRun)
+                                                if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust && !item.Value.DutyModes.HasFlag(DutyMode.Trust))
                                                     continue;
-                                                if (ImGui.Selectable($"L{content.ClassJobLevelRequired} ({content.TerritoryType}) {content.Name}", DutySelected?.id == content.TerritoryType))
+                                                var disabled = !item.Value.CanRun();
+                                                if (!Plugin.Configuration.HideUnavailableDuties || !disabled)
                                                 {
-                                                    DutySelected = ContentPathsManager.DictionaryPaths[content.TerritoryType];
-                                                    Plugin.CurrentTerritoryContent = content;
-                                                    DutySelected.SelectPath(out Plugin.CurrentPath);
+                                                    using (ImRaii.Disabled(disabled))
+                                                    {
+                                                        ImGuiEx.TextWrapped(item.Value == Plugin.CurrentTerritoryContent ? new Vector4(0, 1, 1, 1) : new Vector4(1, 1, 1, 1),
+                                                                            $"L{item.Value.ClassJobLevelRequired} (i{item.Value.ItemLevelRequired}): {item.Value.EnglishName}");
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                     else
                                     {
-                                        if (PlayerHelper.IsReady)
-                                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "请选择剧情辅助器、亲信战友、冒险者小队或常规模式中的一项\n以填充任务列表");
+                                        Dictionary<uint, Content> dictionary = ContentHelper.DictionaryContent.Where(x => x.Value.DutyModes.HasFlag(Plugin.Configuration.DutyModeEnum)).ToDictionary();
+
+                                        if (dictionary.Count > 0 && PlayerHelper.IsReady)
+                                        {
+                                            short level = PlayerHelper.GetCurrentLevelFromSheet();
+                                            foreach ((uint _, Content? content) in dictionary)
+                                            {
+                                                // Apply search filter
+                                                if (!string.IsNullOrWhiteSpace(_searchText) && !content.Name.ToLower().Contains(_searchText))
+                                                    continue; // Skip duties that do not match the search text
+
+                                                bool canRun = content.CanRun(level);
+                                                using (ImRaii.Disabled(!canRun))
+                                                {
+                                                    if (Plugin.Configuration.HideUnavailableDuties && !canRun)
+                                                        continue;
+                                                    if (ImGui.Selectable($"L{content.ClassJobLevelRequired} ({content.TerritoryType}) {content.Name}", DutySelected?.id == content.TerritoryType))
+                                                    {
+                                                        DutySelected                   = ContentPathsManager.DictionaryPaths[content.TerritoryType];
+                                                        Plugin.CurrentTerritoryContent = content;
+                                                        DutySelected.SelectPath(out Plugin.CurrentPath);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (PlayerHelper.IsReady)
+                                                ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "请选择剧情辅助器、亲信战友、冒险者小队或常规模式中的一项\n以填充任务列表");
+                                        }
                                     }
-                                }
+
+                                    break;
+                                case AutoDutyMode.Playlist:
+                                    for (int i = 0; i < Plugin.PlaylistCurrent.Count; i++)
+                                    {
+                                        PlaylistEntry entry = Plugin.PlaylistCurrent[i];
+
+                                        ImGui.AlignTextToFramePadding();
+                                        ImGui.SetItemAllowOverlap();
+                                        if (ImGui.Selectable($"{i}:##Playlist{i+1}Entry", Plugin.PlaylistIndex == i, ImGuiSelectableFlags.AllowItemOverlap)) 
+                                            Plugin.PlaylistIndex = i;
+                                        ImGui.SameLine(0, 10);
+
+                                        //ImGui.AlignTextToFramePadding();
+                                        //ImGui.Text($"{i}:"); // {entry.dutyMode} {entry.id}");
+                                        //ImGui.SameLine(0, 0);
+
+                                        ContentPathsManager.ContentPathContainer entryContainer = ContentPathsManager.DictionaryPaths[entry.Id];
+                                        Content                                  entryContent   = ContentHelper.DictionaryContent[entry.Id];
+
+
+
+                                        ImGui.PushItemWidth(80f.Scale());
+                                        if (ImGui.InputInt($"##Playlist{i}Count", ref entry.count, step: 1, stepFast: 2, @"%dx")) 
+                                            entry.count = Math.Max(1, entry.count);
+
+                                        ImGui.PopItemWidth();
+                                        ImGui.SameLine();
+
+                                        ImGui.PushItemWidth(100f.Scale());
+                                        if (ImGui.BeginCombo($"##Playlist{i}DutyModeEnum", entry.DutyMode.ToCustomString()))
+                                        {
+                                            foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
+                                            {
+                                                if (mode == DutyMode.None)
+                                                    continue;
+
+                                                using (ImRaii.PushColor(ImGuiCol.Text, ImGuiHelper.StateGoodColor, entryContent.DutyModes.HasFlag(mode)))
+                                                {
+                                                    if (ImGui.Selectable(mode.ToCustomString(), entry.DutyMode == mode)) 
+                                                        entry.DutyMode = mode;
+                                                }
+                                            }
+
+                                            ImGui.EndCombo();
+                                        }
+                                        
+                                        ImGui.PopItemWidth();
+                                        ImGui.SameLine();
+                                        ImGui.PushItemWidth((entryContainer.Paths.Count > 1 ? (ImGui.GetContentRegionAvail().X - 107f.Scale()) / 2f : ImGui.GetContentRegionAvail().X - 100f.Scale()));
+                                        if (ImGui.BeginCombo($"##Playlist{i}DutySelection", $"({entry.Id}) {entryContent.Name}"))
+                                        {
+                                            short level = PlayerHelper.GetCurrentLevelFromSheet();
+                                            DrawSearchBar();
+
+                                            foreach (uint key in ContentPathsManager.DictionaryPaths.Keys)
+                                            {
+                                                Content content = ContentHelper.DictionaryContent[key];
+
+                                                if (!string.IsNullOrWhiteSpace(_searchText) && !(content.Name?.ToLower().Contains(_searchText) ?? false))
+                                                    continue;
+
+                                                if (content.DutyModes.HasFlag(entry.DutyMode) && content.CanRun(level, entry.DutyMode))
+                                                    if (ImGui.Selectable($"({key}) {content.Name}", entry.Id == key))
+                                                        entry.Id = key;
+                                            }
+
+                                            ImGui.EndCombo();
+                                        }
+
+                                        if(entry.Id != entryContent.TerritoryType)
+                                            continue;
+
+                                        if (entryContainer.Paths.Count > 1)
+                                        {
+                                            ImGui.SameLine();
+                                            if (ImGui.BeginCombo($"##Playlist{i}PathSelection", entryContainer.Paths.First(dp => dp.FileName == entry.path).Name))
+                                            {
+                                                foreach (ContentPathsManager.DutyPath path in entryContainer.Paths)
+                                                    if(ImGui.Selectable(path.Name, path.FileName == entry.path)) 
+                                                        entry.path = path.FileName;
+
+                                                ImGui.EndCombo();
+                                            }
+                                        }
+                                    
+
+                                        ImGui.PopItemWidth();
+                                        ImGui.SameLine();
+
+                                        using (ImRaii.Disabled(i <= 0))
+                                        {
+                                            if (ImGuiComponents.IconButton($"Playlist{i}Up", FontAwesomeIcon.ArrowUp))
+                                            {
+                                                Plugin.PlaylistCurrent.Remove(entry);
+                                                Plugin.PlaylistCurrent.Insert(i - 1, entry);
+                                            }
+                                        }
+
+                                        ImGui.SameLine();
+
+                                        using(ImRaii.Disabled(Plugin.PlaylistCurrent.Count <= i+1))
+                                        {
+                                            if (ImGuiComponents.IconButton($"Playlist{i}Down", FontAwesomeIcon.ArrowDown))
+                                            {
+                                                Plugin.PlaylistCurrent.Remove(entry);
+                                                Plugin.PlaylistCurrent.Insert(i+1, entry);
+                                            }
+                                        }
+
+                                        ImGui.SameLine();
+
+                                        if (ImGuiComponents.IconButton($"Playlist{i}Trash", FontAwesomeIcon.TrashAlt))
+                                            Plugin.PlaylistCurrent.RemoveAt(i);
+                                    }
+
+                                    if (ImGuiComponents.IconButton("PlaylistAdd", FontAwesomeIcon.Plus)) 
+                                        Plugin.PlaylistCurrent.Add(new PlaylistEntry { DutyMode = Plugin.PlaylistCurrent.Any() ? Plugin.PlaylistCurrent.Last().DutyMode : DutyMode.Support });
+
+                                    break;
                             }
                         }
                         else

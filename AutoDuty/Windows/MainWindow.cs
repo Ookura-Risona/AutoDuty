@@ -67,7 +67,13 @@ public class MainWindow : Window, IDisposable
     internal static void LoopsConfig()
     {
         if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("次", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("Times", ref Plugin.Configuration.LoopTimes, 1)))
+        {
+            if (Plugin.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
+                if (Plugin.PlaylistCurrentEntry != null)
+                    Plugin.PlaylistCurrentEntry.count = Plugin.Configuration.LoopTimes;
+
             Plugin.Configuration.Save();
+        }
     }
 
     internal static void StopResumePause()
@@ -321,7 +327,7 @@ public class MainWindow : Window, IDisposable
             }
             ImGui.SameLine(0, 5);
 
-            using (ImRaii.Disabled(!Plugin.Configuration.TripleTriadEnabled && (!Plugin.Configuration.OverrideOverlayButtons || !Plugin.Configuration.TTButton)))
+            using (ImRaii.Disabled(!(Plugin.Configuration.TripleTriadRegister || Plugin.Configuration.TripleTriadSell) && (!Plugin.Configuration.OverrideOverlayButtons || !Plugin.Configuration.TTButton)))
             {
                 using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other)))
                 {
@@ -422,42 +428,67 @@ public class MainWindow : Window, IDisposable
             return data[0];
         }
     }
+
     public static void EzTabBar(string id, string? KoFiTransparent, string openTabName, ImGuiTabBarFlags flags, params (string name, Action function, Vector4? color, bool child)[] tabs)
     {
         ImGui.BeginTabBar(id, flags);
-        foreach (var x in tabs)
+
+
+        bool valid = (BossMod_IPCSubscriber.IsEnabled  || Plugin.Configuration.UsingAlternativeBossPlugin)     &&
+                     (VNavmesh_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeMovementPlugin) &&
+                     (BossMod_IPCSubscriber.IsEnabled  || Plugin.Configuration.UsingAlternativeRotationPlugin);
+
+        if (!valid)
+            openTabName = "Info";
+
+        foreach ((string name, Action function, Vector4? color, bool child) x in tabs)
         {
-            if (x.name == null) continue;
-            if (x.color != null)
-            {
+            if (x.name.IsNullOrEmpty()) 
+                continue;
+            if (x.color != null) 
                 ImGui.PushStyleColor(ImGuiCol.Tab, x.color.Value);
-            }
-            if (ImGui.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
+            
+            if ((valid || x.name == "Info") && ImGui.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
                 if (x.color != null) 
                     ImGui.PopStyleColor();
                 if (x.child) 
                     ImGui.BeginChild(x.name + "child");
+
+                if(!valid)
+                {
+                    ImGui.NewLine();
+                    ImGui.TextColored(EzColor.Red, "You need to do the basic setup below. Enjoy");
+                }
+
                 x.function();
+
                 if (x.child) 
                     ImGui.EndChild();
                 ImGui.EndTabItem();
             }
             else
             {
-                if (x.color != null)
-                {
+                if (x.color != null) 
                     ImGui.PopStyleColor();
-                }
             }
         }
-        if (KoFiTransparent != null) PatreonBanner.RightTransparentTab();
+        if (KoFiTransparent != null) 
+            PatreonBanner.RightTransparentTab();
+        
         ImGui.EndTabBar();
     }
 
     private static readonly List<(string, Action, Vector4?, bool)> tabList =
-        [("主界面", MainTab.Draw, null, false), ("创建", BuildTab.Draw, null, false), ("配置", PathsTab.Draw, null, false), ("设置", ConfigTab.Draw, null, false), ("信息", InfoTab.Draw, null, false), ("日志", LogTab.Draw, null, false),("支持AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)
-        ];
+    [
+        ("主界面", MainTab.Draw, null, false), 
+        ("创建", BuildTab.Draw, null, false), 
+        ("配置", PathsTab.Draw, null, false), 
+        ("设置", ConfigTab.Draw, null, false), 
+        ("信息", InfoTab.Draw, null, false), 
+        ("日志", LogTab.Draw, null, false),
+        ("支持AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)
+    ];
 
     public override void Draw()
     {

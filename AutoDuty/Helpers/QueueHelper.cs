@@ -13,13 +13,22 @@ using System.Linq;
 namespace AutoDuty.Helpers
 {
     using System;
+    using Windows;
     using static Data.Classes;
 
     internal unsafe class QueueHelper : ActiveHelperBase<QueueHelper>
     {
+        internal static void InvokeAcceptOnly()
+        {
+            _dutyMode = DutyMode.None;
+            Svc.Log.Info("Queueing: Accepting only");
+            Instance.Start();
+            Plugin.Action = "Queueing: Waiting to accept";
+        }
+
         internal static void Invoke(Content? content, DutyMode dutyMode)
         {
-            if (State != ActionState.Running && content != null && dutyMode != DutyMode.None)
+            if (State != ActionState.Running && content != null && dutyMode != DutyMode.None && (!_dutyMode.HasAnyFlag(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid) || Plugin.Configuration.Unsynced || Plugin.Configuration.OverridePartyValidation))
             {
                 _dutyMode = dutyMode;
                 _content = content;
@@ -103,20 +112,27 @@ namespace AutoDuty.Helpers
             {
                 if (EzThrottler.Throttle("_turnedOnConfigMembers", 500))
                 {
+                    TrustHelper.ResetTrustIfInvalid();
                     AgentDawnInterface.DawnMemberEntry* curMembers = agentDawn->Data->MemberData.GetMembers(agentDawn->Data->MemberData.CurrentMembersIndex);
-                    var                                 members    = Plugin.Configuration.SelectedTrustMembers;
-                    if (members.Count(x => x is not null) == 3)
-                        members.OrderBy(x => TrustHelper.Members[(TrustMemberName)x!].Role)
-                               .Each(member =>
+                    TrustMemberName?[]                  members    = Plugin.Configuration.SelectedTrustMembers;
+                    if (members.Any(x => x is null || TrustHelper.Members[(TrustMemberName)x!].Level < _content.ClassJobLevelRequired))
+                    {
+                        Svc.Log.Info("Not all trust members selected. Selecting automatically now");
+                        TrustHelper.SetLevelingTrustMembers(_content, LevelingMode.Trust_Solo);
+                    }
+                    
+                    members.OrderBy(x => TrustHelper.Members[(TrustMemberName)x!].Role)
+                           .Each(member =>
+                                 {
+                                     if (member != null)
                                      {
-                                         if (member != null)
-                                         {
-                                             byte                               index       = TrustHelper.Members[(TrustMemberName)member].Index;
-                                             AgentDawnInterface.DawnMemberEntry memberEntry = curMembers[index];
+                                         byte                               index       = TrustHelper.Members[(TrustMemberName)member].Index;
+                                         AgentDawnInterface.DawnMemberEntry memberEntry = curMembers[index];
 
-                                             agentDawn->Data->PartyData.AddMember(index, &memberEntry);
-                                         }
-                                     });
+                                         agentDawn->Data->PartyData.AddMember(index, &memberEntry);
+                                     }
+                                 });
+
                     agentDawn->UpdateAddon();
                     SchedulerHelper.ScheduleAction("_turnedOnConfigMembers", () => _turnedOnConfigMembers = true, 250);
                 }
@@ -217,6 +233,9 @@ namespace AutoDuty.Helpers
                 _allConditionsMetToJoin = true;
                 Svc.Log.Debug("Queue Helper - All Conditions Met, Clicking Join");
                 AddonHelper.FireCallBack((AtkUnitBase*)_addonContentsFinder, true, 12, 0);
+
+                if(ConfigurationMain.Instance.MultiBox && ConfigurationMain.Instance.host)
+                    ConfigurationMain.MultiboxUtility.Server.Queue();
                 return;
             }
             Svc.Log.Debug("end");
@@ -224,8 +243,8 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (_content == null || Plugin.InDungeon || Svc.ClientState.TerritoryType == _content?.TerritoryType)
-                Stop();
+            if (Plugin.InDungeon || _dutyMode != DutyMode.None && (_content == null || Svc.ClientState.TerritoryType == _content?.TerritoryType)) 
+                this.Stop();
 
             if (!EzThrottler.Throttle("QueueHelper", 250)|| !PlayerHelper.IsReadyFull || ContentsFinderConfirm() || Conditions.Instance()->InDutyQueue) return;
 

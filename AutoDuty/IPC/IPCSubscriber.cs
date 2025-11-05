@@ -27,13 +27,27 @@ namespace AutoDuty.IPC
 
         [EzIPC] internal static readonly Func<bool> IsBusy;
         [EzIPC] internal static readonly Func<Dictionary<ulong, HashSet<string>>> GetEnabledRetainers;
-        [EzIPC] internal static readonly Func<bool> AreAnyRetainersAvailableForCurrentChara;
-        [EzIPC] internal static readonly Action AbortAllTasks;
-        [EzIPC] internal static readonly Action DisableAllFunctions;
-        [EzIPC] internal static readonly Action EnableMultiMode;
-        [EzIPC] internal static readonly Func<int> GetInventoryFreeSlotCount;
-        [EzIPC] internal static readonly Action EnqueueHET;
+
+        [EzIPC] internal static readonly Func<bool>         AreAnyRetainersAvailableForCurrentChara;
+        [EzIPC] internal static readonly Func<ulong, long?> GetClosestRetainerVentureSecondsRemaining; //ulong CID
+        [EzIPC] internal static readonly Action             AbortAllTasks;
+        [EzIPC] internal static readonly Action             DisableAllFunctions;
+        [EzIPC] internal static readonly Action             EnableMultiMode;
+        [EzIPC] internal static readonly Func<int>          GetInventoryFreeSlotCount;
+        [EzIPC] internal static readonly Action             EnqueueHET;
+
         [EzIPC("AutoRetainer.GC.EnqueueInitiation", applyPrefix: false)] internal static readonly Action EnqueueGCInitiation;
+
+        public static bool RetainersAvailable()
+        {
+            if (Plugin.Configuration.EnableAutoRetainer && IsEnabled)
+            {
+                long? remaining = GetClosestRetainerVentureSecondsRemaining(Player.CID);
+                return remaining.HasValue && remaining < Plugin.Configuration.AutoRetainer_RemainingTime;
+            }
+
+            return false;
+        }
 
         internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
     }
@@ -157,6 +171,17 @@ namespace AutoDuty.IPC
                 Presets_AddTransientStrategy("AutoDuty Passive", "BossMod.Autorotation.MiscAI.GoToPositional", "Positional", positional.ToString());
             }
         }
+
+        public static void InBoss(bool boss)
+        {
+            if (Plugin.Configuration.AutoManageBossModAISettings)
+            {
+                string role = boss ? "None" : Role.Tank.ToString();
+
+                Presets_AddTransientStrategy("AutoDuty",         "BossMod.Autorotation.MiscAI.StayCloseToPartyRole", "Role", role);
+                Presets_AddTransientStrategy("AutoDuty Passive", "BossMod.Autorotation.MiscAI.StayCloseToPartyRole", "Role", role);
+            }
+        }
     }
 
     
@@ -188,10 +213,11 @@ namespace AutoDuty.IPC
 
     internal static class Stylist_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Stylist_IPCSubscriber), "Stylist", SafeWrapper.IPCException);
-        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("Stylist");
-        [EzIPC] internal static readonly Action<bool?> UpdateCurrentGearset;
-        internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
+        private static                   EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Stylist_IPCSubscriber), "Stylist", SafeWrapper.IPCException);
+        internal static                  bool                 IsEnabled => IPCSubscriber_Common.IsReady("Stylist");
+        [EzIPC] internal static readonly Action<bool?, bool?> UpdateCurrentGearsetEx; //bool? moveItemsFromInventory, bool? shouldEquip
+        [EzIPC] internal static readonly Func<bool>           IsBusy;
+        internal static                  void                 Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
     }
 
 
@@ -637,6 +663,12 @@ namespace AutoDuty.IPC
             Auto,
 
             /// <summary>
+            /// Start the addon in Target-Only mode. RSR will auto-select targets per normal logic but will not perform any actions.
+            /// </summary>
+            [Description("Start in Target-Only mode. RSR will auto-select targets per normal logic but will not perform any actions.")]
+            TargetOnly,
+
+            /// <summary>
             /// Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.
             /// </summary>
             [Description("Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.")]
@@ -810,8 +842,6 @@ namespace AutoDuty.IPC
         {
             OtherCommand(OtherCommandType.Settings, $"HostileType {Plugin.Configuration.RSR_TargetHostileType}");
             OtherCommand(OtherCommandType.Settings, "FriendlyPartyNpcHealRaise3 true");
-            OtherCommand(OtherCommandType.Settings, "AutoOffBetweenArea false");
-            OtherCommand(OtherCommandType.Settings, "AutoOffCutScene false");
             OtherCommand(OtherCommandType.Settings, "AutoOffAfterCombat false");
             AutodutyChangeOperatingMode(StateCommandType.AutoDuty, Plugin.CurrentPlayerItemLevelandClassJob.Value.GetCombatRole() == CombatRole.Tank ?
                                                                        Plugin.Configuration.RSR_TargetingTypeTank :

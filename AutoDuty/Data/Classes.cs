@@ -9,6 +9,8 @@ using System.Text.Json.Serialization;
 
 namespace AutoDuty.Data
 {
+    using ECommons.DalamudServices;
+    using Helpers;
     using Lumina.Excel.Sheets;
     using Newtonsoft.Json;
 
@@ -223,6 +225,51 @@ namespace AutoDuty.Data
                 }
                 return strings;
             }
+        }
+
+        [JsonObject(MemberSerialization.OptOut)]
+        public class PlaylistEntry
+        {
+            private uint id = 0;
+
+            public uint Id
+            {
+                get => this.id;
+                set
+                {
+                    if (value != this.id)
+                    {
+                        this.path    = ContentPathsManager.DictionaryPaths[value].SelectPath(out _)!.FileName;
+                        this.content = null;
+                    }
+
+                    this.id = value;
+                }
+            }
+
+            [JsonIgnore]
+            private Content? content;
+
+            public Content? Content => 
+                this.content ??= this.id == 0 ? null : ContentHelper.DictionaryContent[this.id];
+
+            private DutyMode dutyMode;
+
+            public DutyMode DutyMode
+            {
+                get => this.dutyMode;
+                set
+                {
+                    if (value != this.dutyMode && !(this.Content?.DutyModes.HasFlag(value) ?? false))
+                        this.Id = ContentPathsManager.DictionaryPaths.Keys.FirstOrDefault(key => ContentHelper.DictionaryContent[key].DutyModes.HasFlag(value));
+                    this.dutyMode = value;
+                }
+            }
+
+            public string path = string.Empty;
+
+            public int count    = 1;
+            public int curCount = 0;
         }
     }
 }

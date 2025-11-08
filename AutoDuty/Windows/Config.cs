@@ -2331,7 +2331,7 @@ public static class ConfigTab
                     }
                 }
 
-                ImGuiComponents.HelpMarker("Vanilla - Uses Gear from Armory Chest Only\nGearsetter - Asks gearsetter, can move old items to inventory\nStylist - Uses your stylist settings");
+                ImGuiComponents.HelpMarker("Vanilla - 仅使用兵装库中的物品\nGearsetter - Asks gearsetter, can move old items to inventory\nStylist - Uses your stylist settings");
 
 
                 if (Configuration.AutoEquipRecommendedGear)
@@ -2349,7 +2349,7 @@ public static class ConfigTab
 
                     if (!Gearsetter_IPCSubscriber.IsEnabled && !Stylist_IPCSubscriber.IsEnabled)
                     {
-                        ImGui.Text("* Items outside the armoury chest requires Gearsetter or Stylist plugin");
+                        ImGui.Text("* 兵装库外的物品需要 Gearsetter 或 Stylist 插件");
                     }
 
 

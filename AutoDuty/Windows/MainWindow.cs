@@ -174,7 +174,7 @@ public class MainWindow : Window, IDisposable
                     GotoHousingHelper.Invoke(Housing.FC_Estate);
                 }
 
-                if (ImGui.Selectable("Triple Triad Trader"))
+                if (ImGui.Selectable("幻卡回收"))
                 {
                     GotoHelper.Invoke(TripleTriadCardSellHelper.GoldSaucerTerritoryType, TripleTriadCardSellHelper.TripleTriadCardVendorLocation);
                 }

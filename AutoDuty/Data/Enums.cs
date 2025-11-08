@@ -249,7 +249,9 @@ namespace AutoDuty.Data
 
         public enum AutoDutyMode : byte
         {
+            [Description("循环")]
             Looping = 0,
+            [Description("自定义队列")]
             Playlist = 1
         }
 
@@ -280,7 +282,9 @@ namespace AutoDuty.Data
             None = 0,
             [Description("剧情辅助器")]
             Support = 1,
+            [Description("亲信练级")]
             Trust_Group = 2,
+            [Description("玩家练级")]
             Trust_Solo = 3
         }
 

@@ -239,14 +239,14 @@ namespace AutoDuty.Windows
                 using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping)))
                 {
                     ImGui.AlignTextToFramePadding();
-                    ImGui.TextColored(ImGuiHelper.StateGoodColor, "Select Mode: ");
+                    ImGui.TextColored(ImGuiHelper.StateGoodColor, "选择模式: ");
                     ImGui.SameLine(0);
                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                    if (ImGui.BeginCombo("##AutoDutyModeEnum", Plugin.Configuration.AutoDutyModeEnum.ToCustomString()))
+                    if (ImGui.BeginCombo("##AutoDutyModeEnum", Plugin.Configuration.AutoDutyModeEnum.GetDescription()))
                     {
                         foreach (AutoDutyMode mode in Enum.GetValues(typeof(AutoDutyMode)))
                         {
-                            if (ImGui.Selectable(mode.ToCustomString(), Plugin.Configuration.AutoDutyModeEnum == mode))
+                            if (ImGui.Selectable(mode.GetDescription(), Plugin.Configuration.AutoDutyModeEnum == mode))
                             {
                                 Plugin.Configuration.AutoDutyModeEnum = mode;
                                 Plugin.Configuration.Save();
@@ -301,11 +301,11 @@ namespace AutoDuty.Windows
                             ImGui.TextColored(Plugin.Configuration.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "选择运行模式: ");
                             ImGui.SameLine(0);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                            if (ImGui.BeginCombo("##DutyModeEnum", Plugin.Configuration.DutyModeEnum.ToCustomString()))
+                            if (ImGui.BeginCombo("##DutyModeEnum", Plugin.Configuration.DutyModeEnum.GetDescription()))
                             {
                                 foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
                                 {
-                                    if (ImGui.Selectable(mode.ToCustomString(), Plugin.Configuration.DutyModeEnum == mode))
+                                    if (ImGui.Selectable(mode.GetDescription(), Plugin.Configuration.DutyModeEnum == mode))
                                     {
                                         Plugin.Configuration.DutyModeEnum = mode;
                                         Plugin.Configuration.Save();
@@ -326,14 +326,14 @@ namespace AutoDuty.Windows
                                     ImGuiComponents.HelpMarker("练级模式将根据您的等级和装等，为您匹配最适合的副本。\n" +
                                                                (Plugin.Configuration.DutyModeEnum != DutyMode.Trust ?
                                                                     string.Empty :
-                                                                    "组队模式会均衡提升您的亲信战友等级。\\n单人模式仅会提升必要的亲信战友等级") +
+                                                                    "亲信练级模式会均衡提升您的亲信战友等级\n玩家练级模式仅会提升必要的亲信战友等级") +
                                                                "\n\n该模式不会始终匹配最高等级副本，而是遵循我们设定的稳定副本列表");
                                     ImGui.SameLine(0);
                                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                                     if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
                                         {
                                             LevelingMode.None => "关闭",
-                                            _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
+                                            _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim()
                                         }))
                                     {
                                         if (ImGui.Selectable("关闭", Plugin.LevelingModeEnum == LevelingMode.None))
@@ -352,7 +352,7 @@ namespace AutoDuty.Windows
                                         }
 
                                         if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
-                                            if (ImGui.Selectable($"{LevelingMode.Trust_Solo.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
+                                            if (ImGui.Selectable($"{LevelingMode.Trust_Solo.GetDescription().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)}".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
                                             {
                                                 Plugin.LevelingModeEnum = LevelingMode.Trust_Solo;
                                                 Plugin.Configuration.Save();
@@ -570,7 +570,7 @@ namespace AutoDuty.Windows
                                         ImGui.SameLine();
 
                                         ImGui.PushItemWidth(100f.Scale());
-                                        if (ImGui.BeginCombo($"##Playlist{i}DutyModeEnum", entry.DutyMode.ToCustomString()))
+                                        if (ImGui.BeginCombo($"##Playlist{i}DutyModeEnum", entry.DutyMode.GetDescription()))
                                         {
                                             foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
                                             {
@@ -579,7 +579,7 @@ namespace AutoDuty.Windows
 
                                                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiHelper.StateGoodColor, entryContent.DutyModes.HasFlag(mode)))
                                                 {
-                                                    if (ImGui.Selectable(mode.ToCustomString(), entry.DutyMode == mode)) 
+                                                    if (ImGui.Selectable(mode.GetDescription(), entry.DutyMode == mode)) 
                                                         entry.DutyMode = mode;
                                                 }
                                             }

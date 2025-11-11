@@ -261,7 +261,7 @@ public sealed class AutoDuty : IDalamudPlugin
             AssemblyDirectoryInfo = AssemblyFileInfo.Directory;
             
             Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 252) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 254) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!_configDirectory.Exists)
@@ -1833,7 +1833,7 @@ public sealed class AutoDuty : IDalamudPlugin
             return;
 
         if (Svc.Condition[ConditionFlag.OccupiedSummoningBell])
-            while(!AutoRetainerHelper.Instance.CloseAddons());
+            AutoRetainerHelper.Instance.CloseAddons();
     }
 
     private void InteractablesCheck()

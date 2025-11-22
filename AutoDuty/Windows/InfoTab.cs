@@ -12,6 +12,7 @@ namespace AutoDuty.Windows
         static string infoUrl = "https://docs.google.com/spreadsheets/d/151RlpqRcCpiD_VbQn6Duf-u-S71EP7d0mx3j1PDNoNA";
         static string gitIssueUrl = "https://github.com/erdelf/AutoDuty/issues";
         static string punishDiscordUrl = "https://discord.com/channels/1001823907193552978/1236757595738476725";
+        static string cnGitIssueUrl = "https://github.com/Ookura-Risona/DalamudPlugins/issues";
         
         private static Configuration Configuration = Plugin.Configuration;
 
@@ -37,6 +38,12 @@ namespace AutoDuty.Windows
             ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Punish Discord").X) / 2);
             if (ImGui.Button("Punish Discord"))
                 Process.Start("explorer.exe", punishDiscordUrl);
+            ImGui.NewLine();
+            ImGuiEx.TextWrapped("对于本汉化版特有的问题，请前往汉化者的仓库提交问题：");
+            ImGui.NewLine();
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("提交问题").X) / 2);
+            if (ImGui.Button("提交问题"))
+                Process.Start("explorer.exe", cnGitIssueUrl);
 
             ImGui.NewLine();
 

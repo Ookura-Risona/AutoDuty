@@ -15,7 +15,7 @@ namespace AutoDuty.Helpers
 
         internal static unsafe void FireCallBack(AtkUnitBase* addon, bool boolValue, params object[] args)
         {
-            var addonPtr = addon;
+            AtkUnitBase* addonPtr = addon;
             if (addon == null || addonPtr is null) return;
             try
             {
@@ -29,7 +29,7 @@ namespace AutoDuty.Helpers
 
         internal static bool ClickSelectString(int index)
         {
-            var addonChecker = AddonChecker("SelectString", out AtkUnitBase* addon, out bool seenAddon);
+            bool addonChecker = AddonChecker("SelectString", out AtkUnitBase* addon, out bool seenAddon);
 
             if (!addonChecker && seenAddon)
                 new AddonMaster.SelectString(addon).Entries[index].Select();
@@ -42,7 +42,7 @@ namespace AutoDuty.Helpers
 
         internal static bool ClickSelectIconString(int index)
         {
-            var addonChecker = AddonChecker("SelectIconString", out AtkUnitBase* addon, out bool seenAddon);
+            bool addonChecker = AddonChecker("SelectIconString", out AtkUnitBase* addon, out bool seenAddon);
 
             if (!addonChecker && seenAddon)
                 new AddonMaster.SelectIconString(addon).Entries[index].Select();
@@ -57,7 +57,7 @@ namespace AutoDuty.Helpers
         {
             if (!EzThrottler.Throttle("ClickSelectYesno", 500)) return false;
 
-            var addonChecker = AddonChecker("SelectYesno", out AtkUnitBase* addon, out bool seenAddon);
+            bool addonChecker = AddonChecker("SelectYesno", out AtkUnitBase* addon, out bool seenAddon);
 
             if (!addonChecker && seenAddon)
             {
@@ -76,7 +76,7 @@ namespace AutoDuty.Helpers
 
         internal static bool ClickRepair()
         {
-            var addonChecker = AddonChecker("Repair", out AtkUnitBase* addon, out bool seenAddon);
+            bool addonChecker = AddonChecker("Repair", out AtkUnitBase* addon, out bool seenAddon);
 
             if (!addonChecker && seenAddon)
                 new AddonMaster.Repair(addon).RepairAll();
@@ -91,7 +91,7 @@ namespace AutoDuty.Helpers
         {
             if (!EzThrottler.Throttle("ClickTalk", 500)) return false;
 
-            var addonChecker = AddonChecker("Talk", out AtkUnitBase* addon, out bool seenAddon);
+            bool addonChecker = AddonChecker("Talk", out AtkUnitBase* addon, out bool seenAddon);
 
             if (!addonChecker && seenAddon)
                 new AddonMaster.Talk(addon).Click();
@@ -106,8 +106,8 @@ namespace AutoDuty.Helpers
         {
             outSeenAddon = false;
             
-            var gotAddon = GenericHelpers.TryGetAddonByName(addonName, out outAddon);
-            var addonReady = gotAddon && GenericHelpers.IsAddonReady(outAddon);
+            bool gotAddon = GenericHelpers.TryGetAddonByName(addonName, out outAddon);
+            bool addonReady = gotAddon && GenericHelpers.IsAddonReady(outAddon);
 
             if (gotAddon && addonReady)
             {

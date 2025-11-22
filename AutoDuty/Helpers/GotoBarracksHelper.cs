@@ -3,13 +3,9 @@ using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
-using ECommons;
-using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
-    using FFXIVClientStructs;
-
     internal class GotoBarracksHelper : ActiveHelperBase<GotoBarracksHelper>
     {
         protected override string Name        => nameof(GotoBarracksHelper);
@@ -38,8 +34,7 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating))
-                Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating)) this.Stop();
 
             if (!EzThrottler.Check("GotoBarracks"))
                 return;
@@ -56,18 +51,18 @@ namespace AutoDuty.Helpers
 
             if (Svc.ClientState.TerritoryType == BarracksTerritoryType(PlayerHelper.GetGrandCompany()))
             {
-                Stop();
+                this.Stop();
                 return;
             }
 
-            if (Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()) || _barracksDoorGameObject == null || Vector3.Distance(Svc.ClientState.LocalPlayer.Position, _barracksDoorGameObject.Position) > 2f)
+            if (Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()) || this._barracksDoorGameObject == null || Vector3.Distance(Svc.ClientState.LocalPlayer.Position, this._barracksDoorGameObject.Position) > 2f)
             {
                 GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), _barracksDoorLocation, 0.25f, 2f, false);
                 return;
             }
             else if (PlayerHelper.IsValid)
             {
-                ObjectHelper.InteractWithObject(_barracksDoorGameObject);
+                ObjectHelper.InteractWithObject(this._barracksDoorGameObject);
                 AddonHelper.ClickSelectYesno();
             }
         }

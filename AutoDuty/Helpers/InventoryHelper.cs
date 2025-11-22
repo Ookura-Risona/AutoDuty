@@ -9,9 +9,9 @@ using ECommons.Throttlers;
 namespace AutoDuty.Helpers
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+    using Lumina.Excel;
     using Lumina.Excel.Sheets;
 
     internal static unsafe class InventoryHelper
@@ -168,7 +168,7 @@ namespace AutoDuty.Helpers
 
         internal static InventoryItem LowestEquippedItem()
         {
-            var equipedItems = InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems);
+            InventoryContainer* equipedItems = InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems);
             uint itemLowestCondition = 60000;
             uint itemLowest = 0;
 
@@ -198,10 +198,8 @@ namespace AutoDuty.Helpers
             {
                 InventoryContainer container = *InventoryManager.Instance()->GetInventoryContainer(type);
                 if(container.IsLoaded)
-                {
                     for (uint i = 0; i < container.Size; i++) 
                         items = items.Append(container.Items[i]);
-                }
             }
             
             return items.Where(item => item.ItemId > 0);
@@ -213,15 +211,15 @@ namespace AutoDuty.Helpers
         //artisan
         internal static bool CanRepairItem(uint itemID)
         {
-            var item = Svc.Data.Excel.GetSheet<Item>()?.GetRow(itemID);
+            Item? item = Svc.Data.Excel.GetSheet<Item>()?.GetRow(itemID);
 
             if (item == null)
                 return false;
 
             if (item.Value.ClassJobRepair.RowId > 0)
             {
-                var actualJob = (Job)(item.Value.ClassJobRepair.RowId);
-                var repairItem = item.Value.ItemRepair.ValueNullable?.Item;
+                Job           actualJob  = (Job)(item.Value.ClassJobRepair.RowId);
+                RowRef<Item>? repairItem = item.Value.ItemRepair.ValueNullable?.Item;
 
                 if (repairItem == null)
                     return false;
@@ -229,7 +227,7 @@ namespace AutoDuty.Helpers
                 if (!HasDarkMatterOrBetter(repairItem.Value.RowId))
                     return false;
 
-                var jobLevel = PlayerHelper.GetCurrentLevelFromSheet(actualJob);
+                short jobLevel = PlayerHelper.GetCurrentLevelFromSheet(actualJob);
                 if (Math.Max(item.Value.LevelEquip - 10, 1) <= jobLevel)
                     return true;
             }
@@ -240,8 +238,8 @@ namespace AutoDuty.Helpers
         //artisan
         internal static bool HasDarkMatterOrBetter(uint darkMatterID)
         {
-            var repairResources = Svc.Data.Excel.GetSheet<ItemRepairResource>();
-            foreach (var dm in repairResources!)
+            ExcelSheet<ItemRepairResource>? repairResources = Svc.Data.Excel.GetSheet<ItemRepairResource>();
+            foreach (ItemRepairResource dm in repairResources!)
             {
                 if (dm.Item.RowId < darkMatterID)
                     continue;

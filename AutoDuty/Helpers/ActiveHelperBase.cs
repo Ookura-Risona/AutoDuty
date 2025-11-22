@@ -8,9 +8,7 @@ namespace AutoDuty.Helpers
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
-    using Serilog;
 
     public static class ActiveHelper
     {
@@ -160,10 +158,8 @@ namespace AutoDuty.Helpers
                 return false;
 
             if (GotoHelper.State == ActionState.Running)
-            {
                 //Svc.Log.Debug("Goto Running");
                 return false;
-            }
 
             return true;
         }
@@ -185,10 +181,10 @@ namespace AutoDuty.Helpers
         {
             for (int i = 0; i < this.AddonsToClose.Length; i++)
             {
-                if (GenericHelpers.TryGetAddonByName(this.AddonsToClose[i], out AtkUnitBase* atkUnitBase) && atkUnitBase->IsVisible)
+                if (GenericHelpers.TryGetAddonByName(this.AddonsToClose[i], out AtkUnitBase* atkUnitBase) && atkUnitBase->IsReady())
                 {
                     this.DebugLog("Closing Addon " + this.AddonsToClose[i]);
-                    atkUnitBase->Close(true);
+                    atkUnitBase->FireCallbackInt(-1);
                     return false;
                 }
             }

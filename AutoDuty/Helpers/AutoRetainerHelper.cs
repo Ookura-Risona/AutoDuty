@@ -29,7 +29,7 @@ namespace AutoDuty.Helpers
         {
             if (!AutoRetainer_IPCSubscriber.RetainersAvailable())
                 return;
-            DebugLog("AutoRetainerHelper.Invoke");
+            this.DebugLog("AutoRetainerHelper.Invoke");
             if (!AutoRetainer_IPCSubscriber.IsEnabled)
                 Svc.Log.Info("AutoRetainer requires a plugin, visit https://puni.sh/plugin/AutoRetainer for more info");
             else if (State != ActionState.Running) 

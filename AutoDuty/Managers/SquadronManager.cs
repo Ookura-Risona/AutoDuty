@@ -45,7 +45,7 @@ namespace AutoDuty.Managers
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("GcArmyCapture", out captureAddon), "RegisterSquadron");
             
             // Run logic to open the squadron duty finder
-            _taskManager.Enqueue(() => OpenSquadron(captureAddon), "RegisterSquadron");
+            _taskManager.Enqueue(() => this.OpenSquadron(captureAddon), "RegisterSquadron");
 
             // Check if we're viewing missions to select (dungeons)
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("GcArmyCapture", out captureAddon) && GenericHelpers.IsAddonReady(captureAddon), "RegisterSquadron");
@@ -84,7 +84,6 @@ namespace AutoDuty.Managers
                                      int neededHeal  = role == CombatRole.Healer ? 0 : 1;
 
                                      foreach ((ReaderGCArmyMemberList.MemberInfo? member, int index) in armyMemberList.Entries.WithIndex().OrderBy(tu => tu.Value.Level).Where(tu => tu.Value.Level >= content.ClassJobLevelRequired))
-                                     {
                                          switch (member.ClassType)
                                          {
                                              case ReaderGCArmyMemberList.SquadronClassType.Marauder:
@@ -117,7 +116,6 @@ namespace AutoDuty.Managers
                                              default:
                                                  throw new ArgumentOutOfRangeException();
                                          }
-                                     }
                                  }, "RegisterSquadron-SelectMembers");
             
             // click ok
@@ -139,9 +137,9 @@ namespace AutoDuty.Managers
                 {
                     // Reset states because we queued the correct duty, this is for looping
                     Svc.Log.Info("Resetting states for loop.");
-                    InteractedWithSergeant = false;
-                    OpeningMissions = false;
-                    ViewingMissions = false;
+                    this.InteractedWithSergeant = false;
+                    this.OpeningMissions        = false;
+                    this.ViewingMissions           = false;
                     return true; // Return true to continue the task sequence
                 }
                 return false; // Return false if we are not in correct duty
@@ -152,14 +150,11 @@ namespace AutoDuty.Managers
         // Try to open the squadron menu by finding the squadron manager until specific GUI window checks are passed
         internal unsafe bool OpenSquadron(AtkUnitBase* aub)
         {
-            ViewingMissions = false;
-            OpeningMissions = false;
-            InteractedWithSergeant = false;
+            this.ViewingMissions     = false;
+            this.OpeningMissions     = false;
+            this.InteractedWithSergeant = false;
 
-            if (aub != null)
-            {
-                return true;
-            }
+            if (aub != null) return true;
 
             if (GenericHelpers.TryGetAddonByName("Talk", out AtkUnitBase* addonTalk) && GenericHelpers.IsAddonReady(addonTalk))
             {
@@ -172,17 +167,14 @@ namespace AutoDuty.Managers
             if (GenericHelpers.TryGetAddonByName("GcArmyCapture", out AtkUnitBase* _))
             {
                 // Viewing missions, move on to the next step for registering
-                ViewingMissions = true;
+                this.ViewingMissions = true;
                 Svc.Log.Info("ViewingMissions: TRUE");
                 return true;
             }
 
             // Attempt to get the squadron sergeant once and reuse the result --- This still sets this every call I will change this to one and done later.
             IGameObject? gameObject = ObjectHelper.GetObjectByDataId(1016924u) ?? ObjectHelper.GetObjectByDataId(1016986u) ?? ObjectHelper.GetObjectByDataId(1016987u);
-            if (gameObject == null || !MovementHelper.Move(gameObject, 0.25f, 6f))
-            {
-                return false;
-            }
+            if (gameObject == null || !MovementHelper.Move(gameObject, 0.25f, 6f)) return false;
 
             // Check if the GcArmyExpeditionResult addon is open
             if (GenericHelpers.TryGetAddonByName("GcArmyExpeditionResult", out AtkUnitBase* expeditionResultScreen))
@@ -191,9 +183,9 @@ namespace AutoDuty.Managers
                 // Close the expedition result menu
                 AddonHelper.FireCallBack(expeditionResultScreen, true, 0);
                 // Reset states so we try to open the squadron view again until we hit the squadron duty GUI
-                OpeningMissions = false;
-                InteractedWithSergeant = false;
-                ViewingMissions = false;
+                this.OpeningMissions        = false;
+                this.InteractedWithSergeant = false;
+                this.ViewingMissions           = false;
                 return false; // Exit to retry interaction
             }
 
@@ -201,23 +193,20 @@ namespace AutoDuty.Managers
             if (GenericHelpers.TryGetAddonByName("SelectString", out AtkUnitBase* sergeantListMenu))
             {
                 // Successfully interacted with the Sergeant
-                InteractedWithSergeant = true;
+                this.InteractedWithSergeant = true;
                 AddonHelper.FireCallBack(sergeantListMenu, true, 0);
                 AddonHelper.ClickSelectString(0);
-                OpeningMissions = true; // Set the opened missions state to true
+                this.OpeningMissions = true; // Set the opened missions state to true
                 return false;
             }
 
             // Continuously check if we've interacted with the sergeant until we open up the SelectString list menu
             // Check if we have interacted with the sergeant
-            if (!InteractedWithSergeant)
+            if (!this.InteractedWithSergeant)
             {
                 ObjectHelper.InteractWithObject(gameObject);
-                if (GenericHelpers.TryGetAddonByName("GcArmyCapture", out AtkUnitBase* _))
-                {
-                    InteractedWithSergeant = true;
-                }
-                    
+                if (GenericHelpers.TryGetAddonByName("GcArmyCapture", out AtkUnitBase* _)) this.InteractedWithSergeant = true;
+
                 return false;
             }
 

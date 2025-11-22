@@ -1,5 +1,4 @@
-﻿using AutoDuty.Windows;
-using ECommons.DalamudServices;
+﻿using ECommons.DalamudServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,7 +52,7 @@ namespace AutoDuty.Updater
                 using HttpClient client = new(handler);
                 client.Timeout = TimeSpan.FromSeconds(20);
 
-                var md5List = await client.GetFromJsonAsync<Dictionary<string, string>>("https://raw.githubusercontent.com/Ookura-Risona/AutoDuty/refs/heads/master/AutoDuty/Resources/md5s.json");
+                Dictionary<string, string>? md5List = await client.GetFromJsonAsync<Dictionary<string, string>>("https://raw.githubusercontent.com/erdelf/AutoDuty/refs/heads/master/AutoDuty/Resources/md5s.json");
                 return md5List ?? [];
             }
             catch (Exception ex)
@@ -67,11 +66,11 @@ namespace AutoDuty.Updater
         {
             try
             {
-                var uri = new Uri("https://github.com/login/device/code");
-                var parameters = new FormUrlEncodedContent([new KeyValuePair<string, string>("client_id", CLIENT_ID)]);
+                Uri?                   uri        = new Uri("https://github.com/login/device/code");
+                FormUrlEncodedContent? parameters = new FormUrlEncodedContent([new KeyValuePair<string, string>("client_id", CLIENT_ID)]);
                 _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await _client.PostAsync(uri, parameters);
-                var jsonString = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage? response   = await _client.PostAsync(uri, parameters);
+                string?              jsonString = await response.Content.ReadAsStringAsync();
                 _client.Dispose();
                 return JsonSerializer.Deserialize<UserCode>(jsonString, jsonSerializerOptions);
             }
@@ -86,16 +85,16 @@ namespace AutoDuty.Updater
         {
             try
             {
-                var uri = new Uri("https://github.com/login/oauth/access_token");
-                var parameters = new FormUrlEncodedContent(
+                Uri? uri = new Uri("https://github.com/login/oauth/access_token");
+                FormUrlEncodedContent? parameters = new FormUrlEncodedContent(
                 [
                     new KeyValuePair<string, string>("client_id", CLIENT_ID),
                     new KeyValuePair<string, string>("device_code", userCode.Device_Code),
                     new KeyValuePair<string, string>("grant_type", "urn:ietf:params:oauth:grant-type:device_code")
                 ]);
                 _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await _client.PostAsync(uri, parameters);
-                var jsonString = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage? response   = await _client.PostAsync(uri, parameters);
+                string?              jsonString = await response.Content.ReadAsStringAsync();
                 _client.Dispose();
                 return JsonSerializer.Deserialize<PollResponseClass>(jsonString, jsonSerializerOptions);
             }
@@ -110,27 +109,27 @@ namespace AutoDuty.Updater
         {
             try
             {
-                var body = $"What Happened?\n\n{whatHappened}\n\nVersion Number\n\n{GitHubIssue.Version}\n\nSteps to reproduce the error\n\n{reproSteps}\n\nRelevant log output\n\n{GitHubIssue.LogFile}\n\nOther relevant plugins installed\n\n{GitHubIssue.InstalledPlugins}\n\nConfig file\n\n{GitHubIssue.ConfigFile}";
+                string? body = $"What Happened?\n\n{whatHappened}\n\nVersion Number\n\n{GitHubIssue.Version}\n\nSteps to reproduce the error\n\n{reproSteps}\n\nRelevant log output\n\n{GitHubIssue.LogFile}\n\nOther relevant plugins installed\n\n{GitHubIssue.InstalledPlugins}\n\nConfig file\n\n{GitHubIssue.ConfigFile}";
 
-                var issue = new GitHubIssue()
-                {
-                    Title = title,
-                    Body = body
-                };
+                GitHubIssue? issue = new GitHubIssue()
+                                     {
+                                         Title = title,
+                                         Body = body
+                                     };
 
-                var json = JsonSerializer.Serialize(issue, jsonSerializerOptions);
+                string? json = JsonSerializer.Serialize(issue, jsonSerializerOptions);
                 Svc.Log.Info(json);
                 _client.DefaultRequestHeaders.Add("User-Agent", "AutoDuty");
                 _client.DefaultRequestHeaders.Add("Accept", "application/vnd.github+json");
                 _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
                 _client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
 
-                var content = new StringContent(json, Encoding.UTF8, "application/vnd.github+json");
+                StringContent? content = new StringContent(json, Encoding.UTF8, "application/vnd.github+json");
 
-                var url = $"https://api.github.com/repos/ffxivcode/AutoDuty/issues";
-                var response = await _client.PostAsync(url, content);
+                string?              url      = $"https://api.github.com/repos/erdelf/AutoDuty/issues";
+                HttpResponseMessage? response = await _client.PostAsync(url, content);
 
-                var responseString = await response.Content.ReadAsStringAsync();
+                string? responseString = await response.Content.ReadAsStringAsync();
                 return responseString;
             }
             catch (Exception ex)

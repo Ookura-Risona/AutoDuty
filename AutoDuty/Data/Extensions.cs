@@ -22,7 +22,7 @@ namespace AutoDuty.Data
         {
             List<(Vector4 color, string text)> results = [];
 
-            var v4 = index == Plugin.Indexer ? new Vector4(0, 255, 255, 1) : (pathAction.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? new Vector4(0, 255, 0, 1) : new Vector4(255, 255, 255, 1));
+            Vector4 v4 = index == Plugin.Indexer ? new Vector4(0, 255, 255, 1) : (pathAction.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? new Vector4(0, 255, 0, 1) : new Vector4(255, 255, 255, 1));
 
             if (pathAction.Tag.HasFlag(ActionTag.Comment))
             {
@@ -31,7 +31,7 @@ namespace AutoDuty.Data
             }
             if (!pathAction.Tag.HasAnyFlag(ActionTag.Revival) && pathAction.Tag != ActionTag.None)
             {
-                results.Add((index == Plugin.Indexer ? v4 : new(1, 165 / 255f, 0, 1), $"{pathAction.Tag}"));
+                results.Add((index == Plugin.Indexer ? v4 : new Vector4(1, 165 / 255f, 0, 1), $"{pathAction.Tag}"));
                 results.Add((v4, "|"));
             }
             results.Add((v4, $"{pathAction.Name}"));
@@ -45,7 +45,7 @@ namespace AutoDuty.Data
             if (!pathAction.Note.IsNullOrEmpty())
             {
                 results.Add((v4, "|"));
-                results.Add((index == Plugin.Indexer ? v4 : new(0, 1, 0, 1), $"{pathAction.Note}"));
+                results.Add((index == Plugin.Indexer ? v4 : new Vector4(0, 1, 0, 1), $"{pathAction.Note}"));
             }
             return results;
         }
@@ -86,7 +86,7 @@ namespace AutoDuty.Data
         {
             string outString = string.Empty;
 
-            foreach (var stringIter in strings.Select((Value, Index) => (Value, Index)))
+            foreach ((string Value, int Index) stringIter in strings.Select((Value, Index) => (Value, Index)))
                 outString += (stringIter.Index + 1) < strings.Count ? $"{stringIter.Value}{delimiter}" : $"{stringIter.Value}";
 
             return outString;
@@ -98,13 +98,13 @@ namespace AutoDuty.Data
 
         public static List<string> ToConditional(this string conditionalString)
         {
-            var list = new List<string>();
-            var firstParse = conditionalString.Replace(" ", string.Empty).Split('(');
+            List<string>? list       = new List<string>();
+            string[]?     firstParse = conditionalString.Replace(" ", string.Empty).Split('(');
             if (firstParse.Length < 2) return list;
-            var secondparse = firstParse[1].Split(")");
+            string[]? secondparse = firstParse[1].Split(")");
             if (secondparse.Length < 2) return list;
-            var method = firstParse[0];
-            var argument = secondparse[0];
+            string? method   = firstParse[0];
+            string? argument = secondparse[0];
             string? operatorValue;
             string? rightSideValue;
             if (secondparse[1][1] == '=')
@@ -125,13 +125,13 @@ namespace AutoDuty.Data
         public static bool TryGetVector3(this string vector3String, out Vector3 vector3)
         {
             vector3 = Vector3.Zero;
-            var cul = CultureInfo.InvariantCulture;
-            var strcomp = StringComparison.InvariantCulture;
-            var splitString = vector3String.Replace(" ", string.Empty, strcomp).Replace("<", string.Empty, strcomp).Replace(">", string.Empty, strcomp).Split(",");
+            CultureInfo?     cul         = CultureInfo.InvariantCulture;
+            StringComparison strcomp     = StringComparison.InvariantCulture;
+            string[]?        splitString = vector3String.Replace(" ", string.Empty, strcomp).Replace("<", string.Empty, strcomp).Replace(">", string.Empty, strcomp).Split(",");
 
             if (splitString.Length < 3) return false;
             
-            vector3 = new(float.Parse(splitString[0], cul), float.Parse(splitString[1], cul), float.Parse(splitString[2], cul));
+            vector3 = new Vector3(float.Parse(splitString[0], cul), float.Parse(splitString[1], cul), float.Parse(splitString[2], cul));
 
             return true;
         }

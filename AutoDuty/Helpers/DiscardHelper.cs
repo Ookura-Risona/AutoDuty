@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutoDuty.Helpers
+﻿namespace AutoDuty.Helpers
 {
     using Dalamud.Plugin.Services;
     using ECommons.Automation;
-    using ECommons.DalamudServices;
     using IPC;
 
     internal class DiscardHelper : ActiveHelperBase<DiscardHelper>

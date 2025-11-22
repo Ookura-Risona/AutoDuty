@@ -78,8 +78,8 @@ namespace AutoDuty.Windows
 
         private static void DrawPathElements()
         {
-            using var d = ImRaii.Disabled(!Plugin.InDungeon || Plugin.Stage > 0 || !Player.Available);
-            ImGui.Text($"Build Path: ({Svc.ClientState.TerritoryType}) {(ContentHelper.DictionaryContent.TryGetValue(Svc.ClientState.TerritoryType, out var content) ? content.Name : TerritoryName.GetTerritoryName(Svc.ClientState.TerritoryType))}");
+            using ImRaii.IEndObject? d = ImRaii.Disabled(!Plugin.InDungeon || Plugin.Stage > 0 || !Player.Available);
+            ImGui.Text($"Build Path: ({Svc.ClientState.TerritoryType}) {(ContentHelper.DictionaryContent.TryGetValue(Svc.ClientState.TerritoryType, out Classes.Content? content) ? content.Name : TerritoryName.GetTerritoryName(Svc.ClientState.TerritoryType))}");
 
             string idText = $"({Svc.ClientState.TerritoryType}) ";
             ImGui.Text(idText);
@@ -87,7 +87,7 @@ namespace AutoDuty.Windows
             string path = Path.GetFileName(Plugin.PathFile).Replace(idText, string.Empty).Replace(".json", string.Empty);
             string pathOrg = path;
 
-            var textL = ImGui.CalcTextSize(".json");
+            Vector2 textL = ImGui.CalcTextSize(".json");
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - textL.Length());
             if (ImGui.InputText("##BuildPathFileName", ref path, 100) && !path.Equals(pathOrg))
                 Plugin.PathFile = $"{Plugin.PathsDirectory.FullName}{Path.DirectorySeparatorChar}{idText}{path}.json";
@@ -121,7 +121,7 @@ namespace AutoDuty.Windows
                 if (ActionsList == null)
                     return;
 
-                foreach (var item in ActionsList)
+                foreach ((string, string, string) item in ActionsList)
                 {
                     if (ImGui.Selectable(item.Item1))
                     {
@@ -168,7 +168,7 @@ namespace AutoDuty.Windows
                             default:
                                 break;
                         }
-                        _action = new() { Name = _actionText, Position = _position, Arguments = _arguments, Note = _note, Tag = _actionTag };
+                        _action          = new PathAction { Name = _actionText, Position = _position, Arguments = _arguments, Note = _note, Tag = _actionTag };
                         _showAddActionUI = true;
                     }
                     ImGuiComponents.HelpMarker(item.Item3);
@@ -177,8 +177,8 @@ namespace AutoDuty.Windows
             }
             if (_showAddActionUI && !ImGui.IsPopupOpen($"Add Action: ({_action?.Name})###AddActionUI"))
             {
-                ImGui.SetNextWindowSize(new Vector2(ImGui.CalcTextSize("X").X * 55, ImGui.GetTextLineHeight() * 7), ImGuiCond.FirstUseEver);
-                ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.FirstUseEver, new(0.5f, 0.5f));
+                ImGui.SetNextWindowSize(new Vector2(ImGui.CalcTextSize("X").X * 55,                                   ImGui.GetTextLineHeight() * 7), ImGuiCond.FirstUseEver);
+                ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.FirstUseEver, new Vector2(0.5f, 0.5f));
                 ImGui.OpenPopup($"Add Action: ({_action?.Name})###AddActionUI");
             }
             if (ImGui.BeginPopupModal($"Add Action: ({_action?.Name})###AddActionUI", ref _showAddActionUI))
@@ -195,7 +195,6 @@ namespace AutoDuty.Windows
             ImGuiComponents.HelpMarker("Clears the entire path, NOTE: there is no confirmation");
             ImGui.SameLine(0, 5);
             if (ImGuiEx.ButtonWrapped("Save Path"))
-            {
                 try
                 {
                     if (Plugin.Actions.Count < 1)
@@ -216,19 +215,19 @@ namespace AutoDuty.Windows
                             if (pathFile.Meta.LastUpdatedVersion < Plugin.Version || _changelog.Length > 0)
                             {
                                 pathFile.Meta.Changelog.Add(new PathFileChangelogEntry
-                                {
-                                    Version = Plugin.Version,
-                                    Change = _changelog
-                                });
+                                                            {
+                                                                Version = Plugin.Version,
+                                                                Change  = _changelog
+                                                            });
                                 _changelog = string.Empty;
                             }
                         }
                     }
 
-                    pathFile ??= new();
+                    pathFile ??= new PathFile();
 
                     pathFile.Actions = [.. Plugin.Actions];
-                    string json = JsonConvert.SerializeObject(pathFile, ConfigurationMain.JsonSerializerSettings);
+                    string json = JsonConvert.SerializeObject(pathFile, ConfigurationMain.jsonSerializerSettings);
                     File.WriteAllText(Plugin.PathFile, json);
                     Plugin.CurrentPath = 0;
                 }
@@ -237,7 +236,7 @@ namespace AutoDuty.Windows
                     Svc.Log.Error(e.ToString());
                     //throw;
                 }
-            }
+
             ImGuiComponents.HelpMarker("Saves the path to the path file specified or the default");
             ImGui.SameLine(0, 5);
             if (ImGuiEx.ButtonWrapped("Load Path"))
@@ -272,7 +271,7 @@ namespace AutoDuty.Windows
                 {
                     if (_action.Name is "MoveToObject" or "Target" or "Interactable")
                     {
-                        if (uint.TryParse(_arguments[0], out var dataId))
+                        if (uint.TryParse(_arguments[0], out uint dataId))
                             AddAction();
                         else
                             ShowPopup("Error", $"{_action.Name}'s must be uint's corresponding to the objects DataId", true);
@@ -316,10 +315,7 @@ namespace AutoDuty.Windows
                 ImGui.TextColored(_argumentTextColor, _argumentHint);
                 ImGui.SameLine();
                 float addX = ImGui.GetCursorPosX();
-                if (ImGui.Button("+##AddArgument"))
-                {
-                    _arguments.Add(string.Empty);
-                }
+                if (ImGui.Button("+##AddArgument")) _arguments.Add(string.Empty);
 
                 for (int i = 0; i < _arguments.Count; i++)
                 {
@@ -393,7 +389,7 @@ namespace AutoDuty.Windows
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                 if (ImGui.BeginCombo("##TagSelection", _actionTag.HasAnyFlag(ActionTag.None, ActionTag.Synced, ActionTag.Unsynced) ? _actionTag.ToCustomString() : ActionTag.None.ToCustomString()))
                 {
-                    foreach (var actionTag in _actionTags)
+                    foreach (ActionTag actionTag in _actionTags)
                     {
                         bool selected = _actionTag.HasFlag(actionTag);
                         if (ImGui.Selectable(actionTag.ToCustomString(), selected))
@@ -420,9 +416,9 @@ namespace AutoDuty.Windows
                     int? dragNext  = null;
 
 
-                    foreach (var item in Plugin.Actions.Select((Value, Index) => (Value, Index)))
+                    foreach ((PathAction Value, int Index) item in Plugin.Actions.Select((Value, Index) => (Value, Index)))
                     {
-                        var v4 = item.Value.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? new Vector4(0, 255, 0, 1) : new Vector4(255, 255, 255, 1);
+                        Vector4 v4 = item.Value.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? new Vector4(0, 255, 0, 1) : new Vector4(255, 255, 255, 1);
 
                         ImGui.PushStyleColor(ImGuiCol.Text, v4);
 
@@ -514,7 +510,9 @@ namespace AutoDuty.Windows
                     }
                 }
                 else
-                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "想要创建路线,您必须进入一个副本。");
+                {
+                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "想要创建路线,您必须进入一个副本");
+                }
             }
             catch (Exception ex) { Svc.Log.Error(ex.ToString()); }
             if (_scrollBottom)
@@ -558,7 +556,10 @@ namespace AutoDuty.Windows
                 _scrollBottom = true;
             }
             else
+            {
                 Plugin.Actions[_buildListSelected] = _action;
+            }
+
             ImGui.CloseCurrentPopup();
             ClearAll();
         }

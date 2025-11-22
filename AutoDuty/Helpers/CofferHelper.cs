@@ -1,5 +1,4 @@
 ﻿using Dalamud.Plugin.Services;
-using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace AutoDuty.Helpers
 
             if (Conditions.Instance()->Mounted)
             {
-                DebugLog("Dismount");
+                this.DebugLog("Dismount");
                 ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
                 return;
             }

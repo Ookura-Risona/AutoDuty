@@ -15,11 +15,14 @@ namespace AutoDuty.Helpers
         internal static long    LastStuckPositionUpdate = 0;
 
         private static byte counter = 0;
+        private static int  index   = 0;
 
         internal static bool IsStuck(out byte count)
         {
             count = 0;
-            if (!Player.Available) return false;
+            if (!Player.Available) 
+                return false;
+
             if (!VNavmesh_IPCSubscriber.Path_IsRunning())
             {
                 LastPositionUpdate = Environment.TickCount64;
@@ -39,17 +42,24 @@ namespace AutoDuty.Helpers
                 LastStuckPosition       = Player.Position;
                 LastStuckPositionUpdate = Environment.TickCount64;
 
-                count                   = counter++;
+                count = counter++;
+                index = Plugin.Indexer;
                 Svc.Log.Debug($"Stuck pathfinding: " + count);
                 return true;
             }
 
             if (Environment.TickCount64 - LastStuckPositionUpdate > Plugin.Configuration.MinStuckTime * 10)
             {
-                count = counter = 0;
+                if (!Plugin.Configuration.StuckOnStep || Plugin.Indexer != index)
+                    ResetCounter();
             }
 
             return false;
+        }
+
+        internal static void ResetCounter()
+        {
+            counter = 0;
         }
     }
 }

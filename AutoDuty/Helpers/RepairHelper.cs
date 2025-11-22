@@ -32,7 +32,7 @@ namespace AutoDuty.Helpers
         internal override unsafe void Stop() 
         {
             base.Stop();
-            _seenAddon           =  false;
+            this._seenAddon           =  false;
             AgentModule.Instance()->GetAgentByInternalId(AgentId.Repair)->Hide();
         }
 
@@ -60,8 +60,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating))
-                Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating)) this.Stop();
 
             if (Conditions.Instance()->Mounted && GotoHelper.State != ActionState.Running)
             {
@@ -92,7 +91,7 @@ namespace AutoDuty.Helpers
                         if (Svc.Condition[ConditionFlag.Occupied39])
                         {
                             Svc.Log.Debug("Done Repairing");
-                            Stop();
+                            this.Stop();
                         }
                         if (!GenericHelpers.TryGetAddonByName("Repair", out addonRepair) && !GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno))
                         {
@@ -100,7 +99,7 @@ namespace AutoDuty.Helpers
                             ActionManager.Instance()->UseAction(ActionType.GeneralAction, 6);
                             return;
                         }
-                        else if (!_seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
+                        else if (!this._seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
                         {
                             Svc.Log.Debug("Clicking Repair");
                             AddonHelper.ClickRepair();
@@ -110,27 +109,26 @@ namespace AutoDuty.Helpers
                         {
                             Svc.Log.Debug("Clicking SelectYesno");
                             AddonHelper.ClickSelectYesno();
-                            _seenAddon = true;
+                            this._seenAddon = true;
                         }
-                        else if (_seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
+                        else if (this._seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
                         {
                             Svc.Log.Debug("Stopping-SelfRepair");
-                            Stop();
+                            this.Stop();
                         }
                     }
                     else
                     {
                         Svc.Log.Debug("Stopping-SelfRepair");
-                        Stop();
+                        this.Stop();
                     }
                 }
                 return;
             }
 
-            if (Svc.ClientState.TerritoryType != _repairVendorTerritoryType && ContentHelper.DictionaryContent.ContainsKey(Svc.ClientState.TerritoryType) && Conditions.Instance()->BoundByDuty)
-                Stop();
+            if (Svc.ClientState.TerritoryType != _repairVendorTerritoryType && ContentHelper.DictionaryContent.ContainsKey(Svc.ClientState.TerritoryType) && Conditions.Instance()->BoundByDuty) this.Stop();
 
-            if (Svc.ClientState.TerritoryType != _repairVendorTerritoryType || _repairVendorGameObject == null || Vector3.Distance(Player.Position, _repairVendorGameObject.Position) > 3f)
+            if (Svc.ClientState.TerritoryType != _repairVendorTerritoryType || this._repairVendorGameObject == null || Vector3.Distance(Player.Position, this._repairVendorGameObject.Position) > 3f)
             {
                 Svc.Log.Debug("Going to RepairVendor");
                 GotoHelper.Invoke(_repairVendorTerritoryType, [_repairVendorLocation], 0.25f, 3f);
@@ -145,9 +143,9 @@ namespace AutoDuty.Helpers
                 else if (!GenericHelpers.TryGetAddonByName("Repair", out addonRepair) && !GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno))
                 {
                     Svc.Log.Debug("Interacting with RepairVendor");
-                    ObjectHelper.InteractWithObject(_repairVendorGameObject);
+                    ObjectHelper.InteractWithObject(this._repairVendorGameObject);
                 }
-                else if (!_seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
+                else if (!this._seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
                 {
                     Svc.Log.Debug("Clicking Repair");
                     AddonHelper.ClickRepair();
@@ -156,12 +154,12 @@ namespace AutoDuty.Helpers
                 {
                     Svc.Log.Debug("Clicking SelectYesno");
                     AddonHelper.ClickSelectYesno();
-                    _seenAddon = true;
+                    this._seenAddon = true;
                 }
-                else if (_seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
+                else if (this._seenAddon && (!GenericHelpers.TryGetAddonByName("SelectYesno", out addonSelectYesno) || !GenericHelpers.IsAddonReady(addonSelectYesno)))
                 {
                     Svc.Log.Debug("Stopping-RepairCity");
-                    Stop();
+                    this.Stop();
                 }
             }
         }

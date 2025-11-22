@@ -1,24 +1,19 @@
 ﻿using Dalamud.Interface.Utility.Raii;
 using Dalamud.Bindings.ImGui;
-using static AutoDuty.AutoDuty;
 using System.Numerics;
 using System.Linq;
 using AutoDuty.Helpers;
 using System.Diagnostics;
-using Dalamud.Interface.Utility;
 using System;
 using System.Collections.Generic;
-using ECommons.DalamudServices;
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
-using AutoDuty.Managers;
 using ECommons.ImGuiMethods;
 using AutoDuty.Updater;
 
 namespace AutoDuty.Windows
 {
     using Data;
-    using ECommons;
 
     internal static class PathsTab
     {
@@ -58,7 +53,7 @@ namespace AutoDuty.Windows
                 Process.Start("explorer.exe", Plugin.PathsDirectory.FullName);
 
             ImGui.SameLine();
-            using (var d = ImRaii.Disabled(_selectedDutyPath == null))
+            using (ImRaii.IEndObject? d = ImRaii.Disabled(_selectedDutyPath == null))
             {
                 if (ImGuiEx.ButtonWrapped("打开文件"))
                     Process.Start("explorer", _selectedDutyPath?.FilePath ?? string.Empty);
@@ -82,10 +77,8 @@ namespace AutoDuty.Windows
 
             bool anyHeaderOpen = headers.Values.Any(b => b);
             if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "折叠所有" : "展开所有"))
-            {
                 foreach (uint key in headers.Keys) 
                     headers[key] = !anyHeaderOpen;
-            }
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
@@ -173,7 +166,6 @@ namespace AutoDuty.Windows
                             ImGuiHelper.ColoredText(path.ColoredNameRegex, path.Name);
 
                             if (multiple && pathSelections != null)
-                            {
                                 if (pathSelections.TryGetValue(path.FileName, out JobWithRole jobs))
                                 {
                                     if(jobs == JobWithRole.None)
@@ -193,11 +185,10 @@ namespace AutoDuty.Windows
                                         }
                                     }
 
-                                    DrawRole(JobWithRole.DPS,   ImGuiHelper.RoleDPSColor);
+                                    DrawRole(JobWithRole.DPS,     ImGuiHelper.RoleDPSColor);
                                     DrawRole(JobWithRole.Healers, ImGuiHelper.RoleHealerColor);
                                     DrawRole(JobWithRole.Tanks,   ImGuiHelper.RoleTankColor);
                                 }
-                            }
                         }
 
                         if (multiple)

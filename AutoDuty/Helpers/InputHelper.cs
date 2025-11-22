@@ -1,7 +1,6 @@
 using System.Runtime.InteropServices;
 using Dalamud.Game.ClientState.Keys;
 using ECommons.DalamudServices;
-using FFXIVClientStructs.FFXIV.Client.UI;
 
 namespace AutoDuty;
 

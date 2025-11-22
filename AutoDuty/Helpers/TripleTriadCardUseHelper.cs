@@ -1,13 +1,9 @@
 ﻿using Dalamud.Plugin.Services;
-using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoDuty.Helpers
 {
@@ -24,8 +20,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
-                Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("CardsRegister", 250))
                 return;
@@ -39,7 +34,7 @@ namespace AutoDuty.Helpers
             if (PlayerHelper.IsCasting || !PlayerHelper.IsReadyFull || Player.IsBusy)
                 return;
 
-            DebugLog("Checking items");
+            this.DebugLog("Checking items");
 
             IEnumerable<InventoryItem> items = InventoryHelper.GetInventorySelection(InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4)
                                                                .Where(iv =>
@@ -53,7 +48,7 @@ namespace AutoDuty.Helpers
 
             if (items.Any())
             {
-                DebugLog("item found");
+                this.DebugLog("item found");
 
                 InventoryItem item = items.First();
 
@@ -61,16 +56,16 @@ namespace AutoDuty.Helpers
 
                 if (!PlayerHelper.IsCasting)
                 {
-                    DebugLog("failed to use item");
+                    this.DebugLog("failed to use item");
                     return;
                 }
 
-                DebugLog("item used");
+                this.DebugLog("item used");
             }
             else
             {
-                DebugLog("no items found");
-                Stop();
+                this.DebugLog("no items found");
+                this.Stop();
             }
         }
     }

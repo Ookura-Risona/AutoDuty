@@ -73,7 +73,6 @@ namespace AutoDuty.Helpers
                     {
                         string[] split = colorText.Split(',');
                         if (split.Length >= 3)
-                        {
                             if (float.TryParse(split[0], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float r))
                                 if (float.TryParse(split[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float g))
                                     if (float.TryParse(split[2], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float b))
@@ -92,10 +91,8 @@ namespace AutoDuty.Helpers
 
                                         Vector4 color = new(r, g, b, a);
                                         ImGui.TextColored(color, coloredText);
-
                                         //Svc.Log.Debug("colored: " + coloredText + " in: " + color);
                                     }
-                        }
                     }
 
                     regex = regex.NextMatch();
@@ -109,7 +106,7 @@ namespace AutoDuty.Helpers
 
         internal static void CenterNextElement(float percentWidth, float xIndent = 0)
         {
-            var buttonWidth = ImGui.GetContentRegionAvail().X * percentWidth;
+            float buttonWidth = ImGui.GetContentRegionAvail().X * percentWidth;
             ImGui.SetCursorPosX(xIndent + (ImGui.GetContentRegionAvail().X - buttonWidth) / 2f);
         }
 
@@ -120,9 +117,9 @@ namespace AutoDuty.Helpers
 
         internal static bool CenteredButton(string label, float percentWidth, float xIndent = 0)
         {
-            var buttonWidth = ImGui.GetContentRegionAvail().X * percentWidth;
+            float buttonWidth = ImGui.GetContentRegionAvail().X * percentWidth;
             ImGui.SetCursorPosX(xIndent + (ImGui.GetContentRegionAvail().X - buttonWidth) / 2f);
-            return ImGui.Button(label, new(buttonWidth, 35f));
+            return ImGui.Button(label, new Vector2(buttonWidth, 35f));
         }
 
         internal static void DrawIcon(FontAwesomeIcon icon)

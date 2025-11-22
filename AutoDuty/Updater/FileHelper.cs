@@ -33,21 +33,21 @@ namespace AutoDuty.Updater
 
         public static byte[] CalculateMD5(string filename)
         {
-            using var md5 = MD5.Create();
-            using var stream = File.OpenRead(filename);
+            using MD5?        md5    = MD5.Create();
+            using FileStream? stream = File.OpenRead(filename);
             return md5.ComputeHash(stream);
         }
 
         internal static void LogInit()
         {
-            var path = $"{Plugin.DalamudDirectory}/dalamud.log";
+            string? path = $"{Plugin.DalamudDirectory}/dalamud.log";
             if (!File.Exists(path)) return;
-            var file = new FileInfo(path);
+            FileInfo? file = new FileInfo(path);
             if (file == null) return;
-            var directory = file.DirectoryName;
-            var filename = file.Name;
+            string? directory = file.DirectoryName;
+            string? filename  = file.Name;
             if (directory.IsNullOrEmpty() || filename.IsNullOrEmpty()) return;
-            var lastMaxOffset = file.Length;
+            long lastMaxOffset = file.Length;
 
             FileWatcher.Path = directory!;
             FileWatcher.Filter = filename;
@@ -58,12 +58,12 @@ namespace AutoDuty.Updater
                 using FileStream fs = new(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 fs.Seek(lastMaxOffset, SeekOrigin.Begin);
                 using StreamReader sr = new(fs);
-                var x = string.Empty;
+                string?            x  = string.Empty;
                 while ((x = sr.ReadLine()) != null)
                 {
                     if (!x.Contains("[AutoDuty]")) continue;
 
-                    var logEntry = new LogMessage() { Message = x };
+                    LogMessage? logEntry = new LogMessage() { Message = x };
 
                     if (x.Contains("[FTL]"))
                         logEntry.LogEventLevel = LogEventLevel.Fatal;

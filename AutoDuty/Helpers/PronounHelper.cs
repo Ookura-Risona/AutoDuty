@@ -25,7 +25,7 @@ public static unsafe class PronounHelper
 
     private static readonly Lazy<IntPtr> PronounModule = new(() =>
                                                              {
-                                                                 var ptr = Framework.Instance()->GetUIModule()->GetPronounModule();
+                                                                 PronounModule* ptr = Framework.Instance()->GetUIModule()->GetPronounModule();
                                                                  return ptr != null ? (IntPtr)ptr : IntPtr.Zero;
                                                              });
 
@@ -38,7 +38,7 @@ public static unsafe class PronounHelper
         {
             const string signature =
                 "E8 ?? ?? ?? ?? 48 8B D8 48 85 C0 0F 85 ?? ?? ?? ?? 8D 4F DD";
-            var address = Svc.SigScanner.ScanText(signature);
+            IntPtr address = Svc.SigScanner.ScanText(signature);
             return (delegate* unmanaged<IntPtr, uint, GameObject*>)address;
         }
         catch (Exception ex)

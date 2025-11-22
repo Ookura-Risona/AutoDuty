@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace AutoDuty.Helpers
 {
     using Dalamud.Plugin.Services;
-    using ECommons.Automation;
     using ECommons.Reflection;
     using ECommons.Throttlers;
     using global::AutoDuty.IPC;

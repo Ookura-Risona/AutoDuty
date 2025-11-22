@@ -5,12 +5,8 @@ using ECommons.DalamudServices;
 namespace AutoDuty.Helpers
 {
     using System.Collections;
-    using FFXIVClientStructs.FFXIV.Common.Configuration;
-    using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     internal static class ConfigHelper
     {
@@ -26,9 +22,13 @@ namespace AutoDuty.Helpers
                 return string.Empty;
             }
             else if (field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase))
+            {
                 return string.Empty;
+            }
             else
+            {
                 return field.GetValue(Plugin.Configuration)?.ToString() ?? string.Empty;
+            }
         }
 
         private static object? ModifyConfig(Type configType, string configValue, out string failReason)
@@ -36,7 +36,9 @@ namespace AutoDuty.Helpers
             failReason = $"value must be of type: {configType.ToString().Replace("System.", "")}";
 
             if (configType == typeof(string))
+            {
                 return configValue;
+            }
             else if (configType.IsEnum)
             {
                 if (Enum.TryParse(configType, configValue, true, out object? configEnum))
@@ -64,7 +66,9 @@ namespace AutoDuty.Helpers
                 return false;
             }
             else if (field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase))
+            {
                 return false;
+            }
             else
             {
                 void PrintError(string failReason)
@@ -72,7 +76,7 @@ namespace AutoDuty.Helpers
                     Svc.Log.Error($"Unable to set config setting: {field.Name.Replace(" > k__BackingField", "").Replace(" < ", "")}: {failReason}");
                 }
 
-                var configType = field.FieldType;// ConfigType(field);
+                Type? configType = field.FieldType;// ConfigType(field);
 
                 if (configType.IsAssignableTo(typeof(IList)))
                 {
@@ -181,19 +185,17 @@ namespace AutoDuty.Helpers
 
         internal static void ListConfig()
         {
-            var i = Assembly.GetExecutingAssembly().GetType("AutoDuty.Windows.Configuration")?.GetFields(All);
+            FieldInfo[]? i = Assembly.GetExecutingAssembly().GetType("AutoDuty.Windows.Configuration")?.GetFields(All);
             if (i == null) return;
-            foreach (var field in i)
-            {
+            foreach (FieldInfo? field in i)
                 if (!field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase) && !field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version",StringComparison.InvariantCultureIgnoreCase))
                     Svc.Log.Info($"{field.Name.Replace(">k__BackingField", "").Replace("<", "")} = {field.GetValue(Plugin.Configuration)} ({field.FieldType.ToString().Replace("System.", "")})");
-            }
         }
 
         internal static FieldInfo? FindConfig(string configName)
         {
-            var i = Assembly.GetExecutingAssembly().GetType("AutoDuty.Windows.Configuration")?.GetFields(All);
-            foreach (var field in i!)
+            FieldInfo[]? i = Assembly.GetExecutingAssembly().GetType("AutoDuty.Windows.Configuration")?.GetFields(All);
+            foreach (FieldInfo? field in i!)
             {
                 if (field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version", StringComparison.InvariantCultureIgnoreCase))
                     continue;

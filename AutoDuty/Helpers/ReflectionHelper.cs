@@ -13,6 +13,7 @@ namespace AutoDuty.Helpers
     using ECommons.EzSharedDataManager;
     using IPC;
     using System.Linq;
+    using Dalamud.Plugin;
     using static Data.Enums;
 
     internal class ReflectionHelper
@@ -26,13 +27,13 @@ namespace AutoDuty.Helpers
 
             internal static void SetPluginEnabled(bool trueFalse)
             {
-                if (DalamudReflector.TryGetDalamudPlugin("YesAlready", out var pl, false, true))
+                if (DalamudReflector.TryGetDalamudPlugin("YesAlready", out IDalamudPlugin pl, false, true))
                     pl.GetFoP("Config").SetFoP("Enabled", trueFalse);
             }
 
             internal static bool GetPluginEnabled()
             {
-                if (DalamudReflector.TryGetDalamudPlugin("YesAlready", out var pl, false, true))
+                if (DalamudReflector.TryGetDalamudPlugin("YesAlready", out IDalamudPlugin pl, false, true))
                     return (bool)pl.GetFoP("Config").GetFoP("Enabled");
                 else return false;
             }
@@ -48,7 +49,7 @@ namespace AutoDuty.Helpers
             {
                 try
                 {
-                    if (BossModReborn_IPCSubscriber.IsEnabled && DalamudReflector.TryGetDalamudPlugin("BossModReborn", out var pl, false, true))
+                    if (BossModReborn_IPCSubscriber.IsEnabled && DalamudReflector.TryGetDalamudPlugin("BossModReborn", out IDalamudPlugin pl, false, true))
                     {
                         Assembly assembly = Assembly.GetAssembly(pl.GetType());
                         Type configType = assembly.GetType("BossMod.AI.AIConfig");
@@ -123,11 +124,8 @@ namespace AutoDuty.Helpers
             static Avarice_Reflection()
             {
                 
-                if (DalamudReflector.TryGetDalamudPlugin("Avarice", out var pl, false, true))
-                {
-                    avariceReady = true;
-                    
-                    /*
+                if (DalamudReflector.TryGetDalamudPlugin("Avarice", out IDalamudPlugin pl, false, true)) avariceReady = true;
+                /*
                     Assembly assembly = Assembly.GetAssembly(pl.GetType());
                     
                     not used anymore, but might as well keep it here as an example
@@ -149,8 +147,6 @@ namespace AutoDuty.Helpers
 
                         avariceReady = true;
                     }*/
-                }
-
             }
         }
 
@@ -175,13 +171,13 @@ namespace AutoDuty.Helpers
 
         internal static FieldRef<T, F> FieldRefAccess<T, F>(FieldInfo fieldInfo, bool needCastclass)
         {
-            var delegateInstanceType = typeof(T);
-            var declaringType        = fieldInfo.DeclaringType;
+            Type delegateInstanceType = typeof(T);
+            Type declaringType        = fieldInfo.DeclaringType;
 
-            var dm = new DynamicMethod($"__refget_{delegateInstanceType.Name}_fi_{fieldInfo.Name}",
-                                       typeof(F).MakeByRefType(), [delegateInstanceType]);
+            DynamicMethod dm = new DynamicMethod($"__refget_{delegateInstanceType.Name}_fi_{fieldInfo.Name}",
+                                                 typeof(F).MakeByRefType(), [delegateInstanceType]);
 
-            var il = dm.GetILGenerator();
+            ILGenerator il = dm.GetILGenerator();
 
             il.Emit(OpCodes.Ldarg_0);
 

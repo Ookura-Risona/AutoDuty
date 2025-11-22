@@ -10,6 +10,10 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 namespace AutoDuty.Helpers
 {
     using Lumina.Excel.Sheets;
+    using System;
+    using System.Collections.Generic;
+    using ECommons.MathHelpers;
+    using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
     internal class DesynthHelper : ActiveHelperBase<DesynthHelper>
     {
@@ -23,16 +27,18 @@ namespace AutoDuty.Helpers
 
         internal override void Start()
         {
-            _maxDesynthLevel = PlayerHelper.GetMaxDesynthLevel();
-            base.Start();
+            this._maxDesynthLevel = PlayerHelper.GetMaxDesynthLevel();
+            if(this.NextCategory(true))
+                base.Start();
         }
 
         private float _maxDesynthLevel = 1;
 
+        private AgentSalvage.SalvageItemCategory curCategory;
+
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
-                Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("Desynth", 250))
                 return;
@@ -47,7 +53,7 @@ namespace AutoDuty.Helpers
 
             if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
             {
-                Stop();
+                this.Stop();
                 return;
             }
 
@@ -56,18 +62,18 @@ namespace AutoDuty.Helpers
 
             if (GenericHelpers.TryGetAddonByName("SalvageResult", out AtkUnitBase* addonSalvageResult) && GenericHelpers.IsAddonReady(addonSalvageResult))
             {
-                DebugLog("Closing SalvageResult");
+                this.DebugLog("Closing SalvageResult");
                 addonSalvageResult->Close(true);
                 return;
             }
             else if (GenericHelpers.TryGetAddonByName("SalvageDialog", out AtkUnitBase* addonSalvageDialog) && GenericHelpers.IsAddonReady(addonSalvageDialog))
             {
-                DebugLog("Confirming SalvageDialog");
+                this.DebugLog("Confirming SalvageDialog");
                 AddonHelper.FireCallBack(addonSalvageDialog, true, 0, false);
                 return;
             }
-            
-            if (!GenericHelpers.TryGetAddonByName<AddonSalvageItemSelector>("SalvageItemSelector", out var addonSalvageItemSelector))
+
+            if (!GenericHelpers.TryGetAddonByName<AddonSalvageItemSelector>("SalvageItemSelector", out AddonSalvageItemSelector* addonSalvageItemSelector))
             {
                 AgentSalvage.Instance()->AgentInterface.Show();
                 EzThrottler.Throttle("Desynth", 2000, true);
@@ -76,31 +82,58 @@ namespace AutoDuty.Helpers
             else if (GenericHelpers.IsAddonReady((AtkUnitBase*)addonSalvageItemSelector) && addonSalvageItemSelector->IsReady)
             {
                 AgentSalvage.Instance()->ItemListRefresh(true);
-                if (AgentSalvage.Instance()->SelectedCategory != AgentSalvage.SalvageItemCategory.InventoryEquipment)
+                if (AgentSalvage.Instance()->SelectedCategory != this.curCategory)
                 {
-                    DebugLog("Switching Category");
-                    AddonHelper.FireCallBack((AtkUnitBase*)addonSalvageItemSelector, true, 11, 0);
+                    this.DebugLog("Switching Category to " + this.curCategory);
+                    AgentSalvage.Instance()->SelectedCategory = this.curCategory;
                     return;
                 }
                 else if (addonSalvageItemSelector->ItemCount > 0)
                 {
-                    var foundOne = false;
+                    HashSet<uint>? gearsetItemIds = null;
+
+                    bool foundOne = false;
                     for (int i = 0; i < AgentSalvage.Instance()->ItemCount; i++)
                     {
-                        var item = AgentSalvage.Instance()->ItemList[i];
-                        var itemId = InventoryManager.Instance()->GetInventorySlot(item.InventoryType, (int)item.InventorySlot)->ItemId;
+                        AgentSalvage.SalvageListItem            item          = AgentSalvage.Instance()->ItemList[i];
+                        InventoryItem* inventoryItem = InventoryManager.Instance()->GetInventorySlot(item.InventoryType, (int)item.InventorySlot);
+                        uint            itemId        = inventoryItem->ItemId;
                             
                         if (itemId == 10146) continue;
 
-                        var itemSheetRow = Svc.Data.Excel.GetSheet<Item>()?.GetRow(itemId);
-                        var itemLevel = itemSheetRow?.LevelItem.ValueNullable?.RowId;
-                        var desynthLevel = PlayerHelper.GetDesynthLevel(item.ClassJob);
+                        Item? itemSheetRow = Svc.Data.Excel.GetSheet<Item>()?.GetRow(itemId);
+                        uint? itemLevel    = itemSheetRow?.LevelItem.ValueNullable?.RowId;
+                        float   desynthLevel = PlayerHelper.GetDesynthLevel(item.ClassJob);
 
-                        if (itemLevel == null || itemSheetRow == null) continue;
+                        if (itemLevel == null || itemSheetRow == null || desynthLevel <= 0) continue;
 
-                        if (!Plugin.Configuration.AutoDesynthSkillUp || (desynthLevel < itemLevel + Plugin.Configuration.AutoDesynthSkillUpLimit && desynthLevel < _maxDesynthLevel))
+                        if (!Plugin.Configuration.AutoDesynthSkillUp || (desynthLevel < itemLevel + Plugin.Configuration.AutoDesynthSkillUpLimit && desynthLevel < this._maxDesynthLevel))
                         {
-                            DebugLog($"Salvaging Item({i}): {itemSheetRow.Value.Name.ToString()} with iLvl {itemLevel} because our desynth level is {desynthLevel}");
+                            if (Plugin.Configuration.AutoDesynthNoGearset)
+                            {
+                                if (gearsetItemIds == null)
+                                {
+                                    gearsetItemIds = [];
+
+                                    RaptureGearsetModule* gearsetModule = RaptureGearsetModule.Instance();
+                                    byte                  num           = gearsetModule->NumGearsets;
+                                    for (byte j = 0; j < num; j++)
+                                    {
+                                        foreach (RaptureGearsetModule.GearsetEntry entry in gearsetModule->Entries)
+                                            foreach (RaptureGearsetModule.GearsetItem gearsetItem in entry.Items)
+                                            {
+                                                uint gearsetItemItemId = gearsetItem.ItemId;
+                                                if(gearsetItemItemId > 0) 
+                                                    gearsetItemIds.Add(gearsetItemItemId);
+                                            }
+                                    }
+                                }
+
+                                if (gearsetItemIds.Contains(inventoryItem->GetItemId()))
+                                    continue;
+                            }
+
+                            this.DebugLog($"Salvaging Item({i}): {itemSheetRow.Value.Name.ToString()} {inventoryItem->ItemId} {inventoryItem->GetItemId()} {inventoryItem->GetBaseItemId()} with iLvl {itemLevel} because our desynth level is {desynthLevel}");
                             foundOne = true;
                             AddonHelper.FireCallBack((AtkUnitBase*)addonSalvageItemSelector, true, 12, i);
                             return;
@@ -108,19 +141,38 @@ namespace AutoDuty.Helpers
                     }
 
                     if (!foundOne)
-                    {
-                        addonSalvageItemSelector->Close(true);
-                        DebugLog("Desynth Finished");
-                        Stop();
-                    }
+                        if (!this.NextCategory())
+                        {
+                            addonSalvageItemSelector->Close(true);
+                            this.DebugLog("Desynth Finished");
+                            this.Stop();
+                        }
                 }
                 else
                 {
-                    addonSalvageItemSelector->Close(true);
-                    DebugLog("Desynth Finished");
-                    Stop();
+                    if (!this.NextCategory())
+                    {
+                        addonSalvageItemSelector->Close(true);
+                        this.DebugLog("Desynth Finished");
+                        this.Stop();
+                    }
                 }
             }
+        }
+
+        public bool NextCategory(bool reset = false)
+        {
+            AgentSalvage.SalvageItemCategory[]? categories = Enum.GetValues<AgentSalvage.SalvageItemCategory>();
+            for (int i = reset ? 0 : (int) this.curCategory + 1; i < categories.Length; i++)
+            {
+                if(Bitmask.IsBitSet(Plugin.Configuration.AutoDesynthCategories, i))
+                {
+                    this.curCategory = categories[i];
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

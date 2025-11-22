@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoDuty.Helpers
 {
-    using Dalamud.Game.ClientState.Objects.SubKinds;
     using Dalamud.Game.ClientState.Objects.Types;
-    using Dalamud.Game.ClientState.Party;
-    using ECommons;
     using ECommons.DalamudServices;
     using ECommons.GameFunctions;
     using ECommons.PartyFunctions;
-    using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
     public static class PartyHelper
     {
@@ -45,10 +39,7 @@ namespace AutoDuty.Helpers
             {
                 IGameObject? member = PronounHelper.GetIGameObjectFromPronounID(42 + i);
 
-                if (member is IBattleChara battleChara)
-                {
-                    party.Add(battleChara);
-                }
+                if (member is IBattleChara battleChara) party.Add(battleChara);
             }
 
             return party;

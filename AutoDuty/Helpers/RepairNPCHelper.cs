@@ -2,7 +2,6 @@
 using ECommons.DalamudServices;
 using Lumina.Data.Files;
 using Lumina.Data.Parsing.Layer;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -10,7 +9,6 @@ using System.Numerics;
 namespace AutoDuty.Helpers
 {
     using Lumina.Excel.Sheets;
-    using Serilog;
 
     public static class RepairNPCHelper
     {

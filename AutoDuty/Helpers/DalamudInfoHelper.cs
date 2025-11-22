@@ -60,9 +60,9 @@ namespace AutoDuty.Helpers
                 {
                     try
                     {
-                        string file = File.ReadAllText(startinfo.ConfigurationPath);
-                        var ob = JsonConvert.DeserializeObject<dynamic>(file);
-                        string type = ob.DalamudBetaKind;
+                        string   file = File.ReadAllText(startinfo.ConfigurationPath);
+                        dynamic? ob   = JsonConvert.DeserializeObject<dynamic>(file);
+                        string   type = ob.DalamudBetaKind;
                         if (type is not null && !string.IsNullOrEmpty(type) && type != "release")
                         {
                             stagingChecked = true;

@@ -1,7 +1,5 @@
-﻿using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Objects.Types;
+﻿using Dalamud.Game.ClientState.Objects.Types;
 using ECommons.DalamudServices;
-using ECommons.GameFunctions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -15,8 +13,11 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 
 namespace AutoDuty.Helpers
 {
+    using Dalamud.Game.ClientState.Objects.SubKinds;
+    using Dalamud.Game.ClientState.Party;
     using FFXIVClientStructs.FFXIV.Client.Game.Object;
     using Lumina.Excel.Sheets;
+    using Buddy = FFXIVClientStructs.FFXIV.Client.Game.UI.Buddy;
     using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
     internal static class ObjectHelper
@@ -66,25 +67,19 @@ namespace AutoDuty.Helpers
 
         internal static unsafe IGameObject? GetPartyMemberFromRole(string role)
         {
-            if (Player.Object != null && Player.Object.ClassJob.Value.GetJobRole().ToString().Contains(role, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return Player.Object;
-            }
+            if (Player.Object != null && Player.Object.ClassJob.Value.GetJobRole().ToString().Contains(role, StringComparison.InvariantCultureIgnoreCase)) return Player.Object;
 
-            if (Svc.Party.PartyId != 0)
-            {
-                return Svc.Party.FirstOrDefault(x => x.ClassJob.Value.GetJobRole().ToString().Contains(role, StringComparison.InvariantCultureIgnoreCase))?.GameObject;
-            }
+            if (Svc.Party.PartyId != 0) return Svc.Party.FirstOrDefault(x => x.ClassJob.Value.GetJobRole().ToString().Contains(role, StringComparison.InvariantCultureIgnoreCase))?.GameObject;
 
-            var buddies = UIState.Instance()->Buddy.BattleBuddies.ToArray().Where(x => x.DataId != 0);
-            foreach (var buddy in buddies)
+            IEnumerable<Buddy.BuddyMember>? buddies = UIState.Instance()->Buddy.BattleBuddies.ToArray().Where(x => x.DataId != 0);
+            foreach (Buddy.BuddyMember buddy in buddies)
             {
-                var gameObject = Svc.Objects.FirstOrDefault(x => x.EntityId == buddy.EntityId);
+                IGameObject? gameObject = Svc.Objects.FirstOrDefault(x => x.EntityId == buddy.EntityId);
 
                 if (gameObject == null) 
                     continue;
 
-                var classJob = ((ICharacter)gameObject).ClassJob.ValueNullable;
+                ClassJob? classJob = ((ICharacter)gameObject).ClassJob.ValueNullable;
 
                 if (classJob == null) 
                     continue;
@@ -103,10 +98,10 @@ namespace AutoDuty.Helpers
         internal static unsafe float GetBattleDistanceToPlayer(IGameObject gameObject)
         {
             if (gameObject == null) return float.MaxValue;
-            var player = Player.Object;
+            IPlayerCharacter? player = Player.Object;
             if (player == null) return float.MaxValue;
 
-            var distance = Vector3.Distance(player.Position, gameObject.Position) - player.HitboxRadius;
+            float distance = Vector3.Distance(player.Position, gameObject.Position) - player.HitboxRadius;
             distance -= gameObject.HitboxRadius;
             return distance;
         }
@@ -120,11 +115,11 @@ namespace AutoDuty.Helpers
         {
             try
             {
-                if (gameObject == null || !gameObject.IsTargetable) 
+                if (gameObject is not { IsTargetable: true }) 
                     return;
                 if (face) 
                     Plugin.OverrideCamera.Face(gameObject.Position);
-                var gameObjectPointer = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
+                GameObject* gameObjectPointer = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
                 TargetSystem.Instance()->InteractWithObject(gameObjectPointer, false);
             }
             catch (Exception ex)
@@ -134,7 +129,7 @@ namespace AutoDuty.Helpers
         }
         internal static unsafe AtkUnitBase* InteractWithObjectUntilAddon(IGameObject? gameObject, string addonName)
         {
-            if (GenericHelpers.TryGetAddonByName<AtkUnitBase>(addonName, out var addon) && GenericHelpers.IsAddonReady(addon))
+            if (GenericHelpers.TryGetAddonByName<AtkUnitBase>(addonName, out AtkUnitBase* addon) && GenericHelpers.IsAddonReady(addon))
                 return addon;
 
             if (EzThrottler.Throttle("InteractWithObjectUntilAddon"))
@@ -156,7 +151,7 @@ namespace AutoDuty.Helpers
 
         internal static unsafe bool InteractWithObjectUntilNotTargetable(IGameObject? gameObject)
         {
-            if (gameObject == null || !gameObject.IsTargetable)
+            if (gameObject is not { IsTargetable: true })
                 return true;
 
             if (EzThrottler.Throttle("InteractWithObjectUntilNotTargetable"))
@@ -170,12 +165,11 @@ namespace AutoDuty.Helpers
             if (Svc.Party.Count < 4)
                 return false;
 
-            var healer = false;
-            var tank = false;
-            var dpsCount = 0;
+            bool healer = false;
+            bool tank = false;
+            int dpsCount = 0;
 
-            foreach (var item in Svc.Party)
-            {
+            foreach (IPartyMember? item in Svc.Party)
                 switch (item.ClassJob.ValueNullable?.Role)
                 {
                     case 1:
@@ -191,7 +185,7 @@ namespace AutoDuty.Helpers
                     default:
                         break;
                 }
-            }
+
             return (tank && healer && dpsCount > 1);
         }
     }

@@ -12,7 +12,6 @@ namespace AutoDuty.Helpers
 {
     using Lumina.Excel.Sheets;
     using System;
-    using Windows;
 
     internal class GotoHelper : ActiveHelperBase<GotoHelper>
     {
@@ -99,8 +98,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating))
-                Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating)) this.Stop();
 
             if (!EzThrottler.Check("Goto"))
                 return;
@@ -123,12 +121,12 @@ namespace AutoDuty.Helpers
 
             if (Svc.ClientState.TerritoryType != _territoryType)
             {
-                uint which = _territoryType == 128 ? 1u : (_territoryType == 132 ? 2u : (_territoryType == 130 ? 3u : 0u));
-                bool moveFromInnOrBarracks = _territoryType == 128 || _territoryType == 132 || _territoryType == 130;
+                uint which                 = _territoryType                                        == 128 ? 1u : (_territoryType == 132 ? 2u : (_territoryType == 130 ? 3u : 0u));
+                bool moveFromInnOrBarracks = _territoryType is 128 or 132 or 130;
                 
                 if (moveFromInnOrBarracks && (Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) || Svc.ClientState.TerritoryType == GotoInnHelper.InnTerritoryType(which)))
                 {
-                    var exitGameObject = Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) ? ObjectHelper.GetObjectByDataId(GotoBarracksHelper.ExitBarracksDoorDataId(which)) : ObjectHelper.GetObjectByDataId(GotoInnHelper.ExitInnDoorDataId(which));
+                    IGameObject? exitGameObject = Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) ? ObjectHelper.GetObjectByDataId(GotoBarracksHelper.ExitBarracksDoorDataId(which)) : ObjectHelper.GetObjectByDataId(GotoInnHelper.ExitInnDoorDataId(which));
                     if (MovementHelper.Move(exitGameObject, 0.25f, 3f))
                         if (ObjectHelper.InteractWithObjectUntilAddon(exitGameObject, "SelectYesno") != null)
                             AddonHelper.ClickSelectYesno();
@@ -144,7 +142,7 @@ namespace AutoDuty.Helpers
                     {
                         this.InfoLog($"We are unable to find the closest Aetheryte to: {_territoryType}, Most likely the zone does not have one");
 
-                        Stop();
+                        this.Stop();
                         return;
                     }
 
@@ -171,20 +169,19 @@ namespace AutoDuty.Helpers
 
                 if (aetheryteLoc?.RowId != aetheryteMe?.RowId)
                 {
-                    if (TeleportHelper.MoveToClosestAetheryte())
-                    {
-                        TeleportHelper.TeleportAethernet(aetheryteLoc?.AethernetName.ValueNullable?.Name.ToString() ?? "", _territoryType);
-                    }
+                    if (TeleportHelper.MoveToClosestAetheryte()) TeleportHelper.TeleportAethernet(aetheryteLoc?.AethernetName.ValueNullable?.Name.ToString() ?? "", _territoryType);
                     return;
                 }
             }
             //Svc.Log.Info($"{_locationIndex < _moveLocations.Count} || ({_gameObject} != null && {ObjectHelper.GetDistanceToPlayer(_gameObject!)} > {_lastPointTollerance}) && {PlayerHelper.IsReady}");
-            if (_locationIndex < _moveLocations.Count || (_gameObject != null && ObjectHelper.GetDistanceToPlayer(_gameObject) > _lastPointTollerance) && PlayerHelper.IsReady)
+            if (_locationIndex < _moveLocations.Count || (this._gameObject != null && ObjectHelper.GetDistanceToPlayer(this._gameObject) > _lastPointTollerance) && PlayerHelper.IsReady)
             {
                 Vector3 moveLoc;
                 float lastPointTollerance = _lastPointTollerance;
-                if (_gameObject != null)
-                    moveLoc = _gameObject.Position;
+                if (this._gameObject != null)
+                {
+                    moveLoc = this._gameObject.Position;
+                }
                 else if (_locationIndex < _moveLocations.Count)
                 {
                     moveLoc = _moveLocations[_locationIndex];
@@ -192,14 +189,16 @@ namespace AutoDuty.Helpers
                         lastPointTollerance = _tollerance;
                 }
                 else
+                {
                     return;
+                }
 
                 if (MovementHelper.Move(moveLoc, _tollerance, lastPointTollerance, _useFlight, _useMesh))
                     _locationIndex++;
                 return;
             }
 
-            Stop();
+            this.Stop();
         }
 
         public override void OnCommand(string[] argsArray)

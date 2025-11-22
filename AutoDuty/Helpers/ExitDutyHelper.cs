@@ -24,7 +24,7 @@ namespace AutoDuty.Helpers
 
             if (Svc.ClientState.TerritoryType != 0)
             {
-                _currentTerritoryType = Svc.ClientState.TerritoryType;
+                this._currentTerritoryType = Svc.ClientState.TerritoryType;
                 base.Start();
             }
         }
@@ -42,9 +42,9 @@ namespace AutoDuty.Helpers
             if (!PlayerHelper.IsReady || PlayerHelper.InCombat)
                 return;
 
-            if (Svc.ClientState.TerritoryType != _currentTerritoryType || !Plugin.InDungeon || Svc.ClientState.TerritoryType == 0)
+            if (Svc.ClientState.TerritoryType != this._currentTerritoryType || !Plugin.InDungeon || Svc.ClientState.TerritoryType == 0)
             {
-                Stop();
+                this.Stop();
                 return;
             }
 

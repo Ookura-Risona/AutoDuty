@@ -11,6 +11,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
+    using Lumina.Excel;
     using Lumina.Excel.Sheets;
 
     internal static class MapHelper
@@ -27,22 +28,22 @@ namespace AutoDuty.Helpers
 
         internal static Aetheryte? GetClosestAethernet(uint territoryType, Vector3 location)
         {
-            var closestDistance = float.MaxValue;
-            Aetheryte? closestAetheryte = null;
-            var map = Svc.Data.GetExcelSheet<TerritoryType>().GetRowOrDefault(territoryType)?.Map.Value;
-            var aetherytes = Svc.Data.GetExcelSheet<Aetheryte>();
+            float                  closestDistance  = float.MaxValue;
+            Aetheryte?             closestAetheryte = null;
+            Map?                   map              = Svc.Data.GetExcelSheet<TerritoryType>().GetRowOrDefault(territoryType)?.Map.Value;
+            ExcelSheet<Aetheryte>? aetherytes       = Svc.Data.GetExcelSheet<Aetheryte>();
 
             if (aetherytes == null || map == null)
                 return null;
 
-            foreach (var aetheryte in aetherytes)
+            foreach (Aetheryte aetheryte in aetherytes)
             {
                 if (( aetheryte.IsAetheryte && aetheryte.Territory.RowId != territoryType ) || aetheryte.Territory.ValueNullable == null || aetheryte.Territory.Value.RowId != territoryType) continue;
                 MapMarker mapMarker = Svc.Data.GetSubrowExcelSheet<MapMarker>().AllRows().FirstOrDefault(m => m.DataType == 4 && m.DataKey.RowId == aetheryte.AethernetName.RowId);
 
                 if (mapMarker.RowId > 0)
                 {
-                    var distance = Vector2.Distance(ConvertWorldXZToMap(location.ToVector2(), map.Value), ConvertMarkerToMap(mapMarker, map.Value));
+                    float distance = Vector2.Distance(ConvertWorldXZToMap(location.ToVector2(), map.Value), ConvertMarkerToMap(mapMarker, map.Value));
 
                     if (distance < closestDistance)
                     {
@@ -57,21 +58,21 @@ namespace AutoDuty.Helpers
 
         internal static Aetheryte? GetClosestAetheryte(uint territoryType, Vector3 location)
         {
-            var closestDistance = float.MaxValue;
-            Aetheryte? closestAetheryte = null;
-            var map = Svc.Data.GetExcelSheet<TerritoryType>()?.GetRowOrDefault(territoryType)?.Map.Value;
-            var aetherytes = Svc.Data.GetExcelSheet<Aetheryte>();
+            float                  closestDistance  = float.MaxValue;
+            Aetheryte?             closestAetheryte = null;
+            Map?                   map              = Svc.Data.GetExcelSheet<TerritoryType>()?.GetRowOrDefault(territoryType)?.Map.Value;
+            ExcelSheet<Aetheryte>? aetherytes       = Svc.Data.GetExcelSheet<Aetheryte>();
 
             if (aetherytes == null || map == null)
                 return null;
 
-            foreach (var aetheryte in aetherytes)
+            foreach (Aetheryte aetheryte in aetherytes)
             {
                 if (!aetheryte.IsAetheryte || aetheryte.Territory.ValueNullable == null || aetheryte.Territory.Value.RowId != territoryType || aetheryte.PlaceName.ValueNullable == null) continue;
 
-                var mapMarker = Svc.Data.GetSubrowExcelSheet<MapMarker>().Flatten().FirstOrDefault(m => m.DataType == 3 && m.DataKey.RowId == aetheryte.RowId);
+                MapMarker mapMarker = Svc.Data.GetSubrowExcelSheet<MapMarker>().Flatten().FirstOrDefault(m => m.DataType == 3 && m.DataKey.RowId == aetheryte.RowId);
 
-                var distance = Vector2.Distance(ConvertWorldXZToMap(location.ToVector2(), map.Value), ConvertMarkerToMap(mapMarker, map.Value));
+                float distance = Vector2.Distance(ConvertWorldXZToMap(location.ToVector2(), map.Value), ConvertMarkerToMap(mapMarker, map.Value));
 
                 if (distance < closestDistance)
                 {
@@ -129,9 +130,9 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            if (flagMapMarker != null && Svc.ClientState.TerritoryType == flagMapMarker.Value.TerritoryId && flagMapMarkerVector3 != null && flagMapMarkerVector3.Value.Y == 0)
+            if (flagMapMarker != null && Svc.ClientState.TerritoryType == flagMapMarker.Value.TerritoryId && flagMapMarkerVector3 is { Y: 0 })
             {
-                flagMapMarkerVector3 = VNavmesh_IPCSubscriber.Query_Mesh_PointOnFloor(new(flagMapMarker.Value.XFloat, 1024, flagMapMarker.Value.YFloat), false, 5);
+                flagMapMarkerVector3 = VNavmesh_IPCSubscriber.Query_Mesh_PointOnFloor(new Vector3(flagMapMarker.Value.XFloat, 1024, flagMapMarker.Value.YFloat), false, 5);
                 GotoHelper.ForceStop();
                 GotoHelper.Invoke(flagMapMarker.Value.TerritoryId, [flagMapMarkerVector3.Value], 0.25f, 0.25f, false, MovementHelper.IsFlyingSupported);
                 return;

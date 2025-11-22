@@ -27,6 +27,32 @@
       "Note": ""
     },
     {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 233.83916,
+        "Y": 156.0,
+        "Z": -30.059208
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 170.68636,
+        "Y": 154.77454,
+        "Z": -66.33374
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
@@ -106,14 +132,14 @@
     },
     {
       "Tag": "None",
-      "Name": "WaitFor",
+      "Name": "Wait",
       "Position": {
-        "X": 83.61,
-        "Y": -107.99,
-        "Z": -31.14
+        "X": 83.667145,
+        "Y": -107.98585,
+        "Z": -30.997816
       },
       "Arguments": [
-        "Combat"
+        "500"
       ],
       "Note": ""
     },
@@ -132,40 +158,40 @@
     },
     {
       "Tag": "None",
-      "Name": "WaitFor",
+      "Name": "Wait",
       "Position": {
         "X": 51.0,
         "Y": -107.99,
         "Z": -72.18
       },
       "Arguments": [
-        "Combat"
+        "500"
       ],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "WaitFor",
+      "Name": "Wait",
       "Position": {
         "X": -24.32,
         "Y": -104.0,
         "Z": 0.08
       },
       "Arguments": [
-        "Combat"
+        "500"
       ],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "WaitFor",
+      "Name": "Wait",
       "Position": {
         "X": -24.32,
         "Y": -104.0,
         "Z": 0.08
       },
       "Arguments": [
-        "Combat"
+        "500"
       ],
       "Note": ""
     },
@@ -184,14 +210,14 @@
     },
     {
       "Tag": "None",
-      "Name": "WaitFor",
+      "Name": "Wait",
       "Position": {
         "X": -60.12,
         "Y": -103.94,
         "Z": 0.06
       },
       "Arguments": [
-        "Combat"
+        "500"
       ],
       "Note": ""
     },
@@ -327,19 +353,6 @@
     },
     {
       "Tag": "None",
-      "Name": "WaitFor",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "IsReady"
-      ],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
       "Name": "Boss",
       "Position": {
         "X": -566.27,
@@ -349,20 +362,7 @@
       "Arguments": [
         ""
       ],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "WaitFor",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "IsReady"
-      ],
-      "Note": ""
+      "Note": "Gaius van Baelsar"
     }
   ],
   "Meta": {
@@ -399,6 +399,10 @@
       {
         "Version": 246,
         "Change": "Replaced old automove instruction"
+      },
+      {
+        "Version": 262,
+        "Change": "Added W2W and replaced mech arms WaitFor Combat with simple Waits"
       }
     ],
     "Notes": []

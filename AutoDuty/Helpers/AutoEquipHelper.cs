@@ -9,6 +9,8 @@ using System;
 
 namespace AutoDuty.Helpers
 {
+    using Lumina.Excel.Sheets;
+
     internal unsafe class AutoEquipHelper : ActiveHelperBase<AutoEquipHelper>
     {
         public override string[]? Commands { get; init; } = ["autoequip", "equiprec"];
@@ -94,19 +96,19 @@ namespace AutoDuty.Helpers
 
             if (!this._statesExecuted.HasFlag(AutoEquipState.Setting_Up))
             {
-                DebugLog($"RecommendEquipModule - SetupForClassJob");
+                this.DebugLog($"RecommendEquipModule - SetupForClassJob");
                 RecommendEquipModule.Instance()->SetupForClassJob((byte)Svc.ClientState.LocalPlayer!.ClassJob.RowId);
                 this._statesExecuted |= AutoEquipState.Setting_Up;
             }
             else if (!this._statesExecuted.HasFlag(AutoEquipState.Equipping))
             {
-                DebugLog($"RecommendEquipModule - EquipRecommendedGear");
+                this.DebugLog($"RecommendEquipModule - EquipRecommendedGear");
                 RecommendEquipModule.Instance()->EquipRecommendedGear();
                 this._statesExecuted |= AutoEquipState.Equipping;
             }
             else
             {
-                DebugLog($"Stop");
+                this.DebugLog($"Stop");
                 this.Stop();
             }
         }
@@ -123,31 +125,31 @@ namespace AutoDuty.Helpers
 
             if (!this._statesExecuted.HasFlag(AutoEquipState.Updating_Gearset))
             {
-                DebugLog($"RaptureGearsetModule - UpdateGearset");
+                this.DebugLog($"RaptureGearsetModule - UpdateGearset");
                 RaptureGearsetModule.Instance()->UpdateGearset(RaptureGearsetModule.Instance()->CurrentGearsetIndex);
                 this._statesExecuted |= AutoEquipState.Updating_Gearset;
                 EzThrottler.Throttle("AutoEquipGearSetter", 500, true);
             }
             else if (!this._statesExecuted.HasFlag(AutoEquipState.Getting_Recommended_Gear))
             {
-                DebugLog($"Gearsetter_IPCSubscriber - GetRecommendationsForGearset");
+                this.DebugLog($"Gearsetter_IPCSubscriber - GetRecommendationsForGearset");
                 this._gearset     =  Gearsetter_IPCSubscriber.GetRecommendationsForGearset((byte)RaptureGearsetModule.Instance()->CurrentGearsetIndex);
                 this._statesExecuted |= AutoEquipState.Getting_Recommended_Gear;
             }
             else if (this._gearset != null && this._index < this._gearset.Count)
             {
                 (uint itemId, InventoryType? inventoryType, byte? sourceInventorySlot, RaptureGearsetModule.GearsetItemIndex targetSlot) = this._gearset[this._index];
-                DebugLog($"Equip item {itemId} in {targetSlot} from {inventoryType} (slot {sourceInventorySlot})");
+                this.DebugLog($"Equip item {itemId} in {targetSlot} from {inventoryType} (slot {sourceInventorySlot})");
 
                 if (inventoryType != null && sourceInventorySlot != null)
                 {
-                    var itemData = InventoryHelper.GetExcelItem(itemId);
+                    Item? itemData = InventoryHelper.GetExcelItem(itemId);
                     if (itemData == null) return;
-                    var equipSlotIndex = targetSlot;// InventoryHelper.GetEquippedSlot(itemData.Value);
+                    RaptureGearsetModule.GearsetItemIndex equipSlotIndex = targetSlot;// InventoryHelper.GetEquippedSlot(itemData.Value);
 
                     if (InventoryManager.Instance()->GetInventoryContainer(inventoryType.Value)->Items[(int)sourceInventorySlot].ItemId != itemId)
                     {
-                        DebugLog($"Item in slot does not match expected item");
+                        this.DebugLog($"Item in slot does not match expected item");
                         this._statesExecuted |= AutoEquipState.Recommended_Gear_Need_Second_Pass;
                         this._index++;
                         return;
@@ -158,7 +160,7 @@ namespace AutoDuty.Helpers
                     {
                         if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
                         {
-                            DebugLog("Moving to inventory ignored because no empty inventory slot");
+                            this.DebugLog("Moving to inventory ignored because no empty inventory slot");
                         }
                         else
                         {
@@ -166,48 +168,49 @@ namespace AutoDuty.Helpers
 
                             if (slot <= 0)
                             {
-                                DebugLog("Moving to inventory ignored because no empty inventory slot found.. somehow");
+                                this.DebugLog("Moving to inventory ignored because no empty inventory slot found.. somehow");
                             }
                             else
                             {
                                 InventoryManager.Instance()->MoveItemSlot(InventoryType.EquippedItems, (ushort)equipSlotIndex, inv, slot, true);
-                                DebugLog("Moving old item to inventory");
+                                this.DebugLog("Moving old item to inventory");
                                 return;
                             }
                         }
                     }
 
 
-
-                    DebugLog("Actually equipping");
+                    this.DebugLog("Actually equipping");
                     InventoryHelper.EquipGear(itemData.Value, (InventoryType)inventoryType, (int)sourceInventorySlot, equipSlotIndex);
                     if (InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->Items[(int)equipSlotIndex].ItemId == itemId)
                     {
-                        DebugLog($"Successfully Equipped {itemData.Value.Name} to {equipSlotIndex.ToCustomString()}");
+                        this.DebugLog($"Successfully Equipped {itemData.Value.Name} to {equipSlotIndex.ToCustomString()}");
                         this._index++;
                     }
                 }
                 else
+                {
                     this._index++;
+                }
             }
             else if (this._statesExecuted.HasFlag(AutoEquipState.Recommended_Gear_Need_Second_Pass) && !this._statesExecuted.HasFlag(AutoEquipState.Updating_Gearset_Second_Pass))
             {
                 // Gearsetter returns the same ring slot for both hands if two instances of the same ring should be used. This allows equiping one of them and the other one.
-                DebugLog($"RaptureGearsetModule - UpdateGearsetSecondPass");
+                this.DebugLog($"RaptureGearsetModule - UpdateGearsetSecondPass");
                 RaptureGearsetModule.Instance()->UpdateGearset(RaptureGearsetModule.Instance()->CurrentGearsetIndex);
                 this._statesExecuted |= AutoEquipState.Updating_Gearset_Second_Pass;
                 EzThrottler.Throttle("AutoEquipGearSetter", 500, true);
             }
             else if (this._statesExecuted.HasFlag(AutoEquipState.Recommended_Gear_Need_Second_Pass) && !this._statesExecuted.HasFlag(AutoEquipState.Getting_Recommended_Gear_Second_Pass))
             {
-                DebugLog($"Gearsetter_IPCSubscriber - GetRecommendationsForGearset");
+                this.DebugLog($"Gearsetter_IPCSubscriber - GetRecommendationsForGearset");
                 this._gearset     =  Gearsetter_IPCSubscriber.GetRecommendationsForGearset((byte)RaptureGearsetModule.Instance()->CurrentGearsetIndex);
                 this._index       = 0;
                 this._statesExecuted |= AutoEquipState.Getting_Recommended_Gear_Second_Pass;
             }
             else
             {
-                DebugLog($"Gearsetter doesn't recommend any more");
+                this.DebugLog($"Gearsetter doesn't recommend any more");
                 this.Stop();
             }
         }

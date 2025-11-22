@@ -1,12 +1,8 @@
 ﻿using AutoDuty.IPC;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
-using ECommons;
-using ECommons.Automation;
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Component.GUI;
 using System.Numerics;
 
 namespace AutoDuty.Helpers
@@ -65,20 +61,20 @@ namespace AutoDuty.Helpers
         {
             if (Plugin.States.HasFlag(PluginState.Navigating))
             {
-                DebugLog("AutoDuty is Started, Stopping GCTurninHelper");
-                Stop();
+                this.DebugLog("AutoDuty is Started, Stopping GCTurninHelper");
+                this.Stop();
                 return;
             }
             if (!this._turninStarted && AutoRetainer_IPCSubscriber.IsBusy())
             {
-                InfoLog("TurnIn has Started");
+                this.InfoLog("TurnIn has Started");
                 this._turninStarted = true;
                 return;
             }
             else if (this._turninStarted && !AutoRetainer_IPCSubscriber.IsBusy())
             {
-                DebugLog("TurnIn is Complete");
-                Stop();
+                this.DebugLog("TurnIn is Complete");
+                this.Stop();
                 return;
             }
 
@@ -86,39 +82,40 @@ namespace AutoDuty.Helpers
                 return;
 
             if (GotoHelper.State == ActionState.Running)
-            {
                 //DebugLog("Goto Running");
                 return;
-            }
             Plugin.Action = "GC Turning In";
 
             if (GotoHelper.State != ActionState.Running && Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()))
             {
-                DebugLog("Moving to GC Supply");
+                this.DebugLog("Moving to GC Supply");
                 if (Plugin.Configuration.AutoGCTurninUseTicket && InventoryHelper.ItemCount(_aetheryteTicketId) > 0)
                 {
                     if (!PlayerHelper.IsCasting)
                         InventoryHelper.UseItem(_aetheryteTicketId);
                 }
                 else
+                {
                     GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), [GCSupplyLocation], 0.25f, 2f, false);
+                }
+
                 return;
             }
 
             if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) > 4 && PlayerHelper.IsReady && VNavmesh_IPCSubscriber.Nav_IsReady() && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() && VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0)
             {
-                DebugLog("Setting Move to Personnel Officer");
+                this.DebugLog("Setting Move to Personnel Officer");
                 MovementHelper.Move(GCSupplyLocation, 0.25f, 4f);
                 return;
             }
             else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) > 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
             {
-                DebugLog("Moving to Personnel Officer");
+                this.DebugLog("Moving to Personnel Officer");
                 return;
             }
             else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
             {
-                DebugLog("Stopping Path");
+                this.DebugLog("Stopping Path");
                 VNavmesh_IPCSubscriber.Path_Stop();
                 return;
             }
@@ -147,7 +144,7 @@ namespace AutoDuty.Helpers
                 }
                 else*/
                 {
-                    DebugLog("Starting TurnIn proper");
+                    this.DebugLog("Starting TurnIn proper");
                     AutoRetainer_IPCSubscriber.EnqueueGCInitiation();
                 }
                 return;

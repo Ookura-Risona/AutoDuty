@@ -3,8 +3,6 @@ using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
-using FFXIVClientStructs.FFXIV.Component.GUI;
-using ECommons;
 using System.Collections.Generic;
 
 namespace AutoDuty.Helpers
@@ -82,7 +80,7 @@ namespace AutoDuty.Helpers
             if (Plugin.States.HasFlag(PluginState.Navigating))
             {
                 Svc.Log.Debug($"AutoDuty has Started, Stopping GotoInn");
-                Stop();
+                this.Stop();
             }
 
             if (!EzThrottler.Check("GotoInn"))
@@ -104,11 +102,11 @@ namespace AutoDuty.Helpers
             if (Svc.ClientState.TerritoryType == InnTerritoryType(_whichGrandCompany))
             {
                 Svc.Log.Debug($"We are in the Inn, stopping GotoInn");
-                Stop();
+                this.Stop();
                 return;
             }
 
-            if (Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(_whichGrandCompany) || _innKeepGameObject == null || Vector3.Distance(Svc.ClientState.LocalPlayer.Position, _innKeepGameObject.Position) > 7f)
+            if (Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(_whichGrandCompany) || this._innKeepGameObject == null || Vector3.Distance(Svc.ClientState.LocalPlayer.Position, this._innKeepGameObject.Position) > 7f)
             {
                 Svc.Log.Debug($"We are not in the correct TT or our innkeepGO is null or out innkeepPosition is > 7f, moving there");
                 GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(_whichGrandCompany), _innKeepLocation, 0.25f, 5f, false);
@@ -117,7 +115,7 @@ namespace AutoDuty.Helpers
             else if (PlayerHelper.IsValid)
             {
                 Svc.Log.Debug($"Interacting with GO and Addons");
-                ObjectHelper.InteractWithObject(_innKeepGameObject);
+                ObjectHelper.InteractWithObject(this._innKeepGameObject);
                 AddonHelper.ClickSelectString(0);
                 AddonHelper.ClickSelectYesno();
                 AddonHelper.ClickTalk();

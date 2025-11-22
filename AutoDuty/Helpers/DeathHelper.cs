@@ -10,7 +10,6 @@ using System;
 
 namespace AutoDuty.Helpers
 {
-    using System.Numerics;
     using Windows;
     using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
@@ -113,25 +112,32 @@ namespace AutoDuty.Helpers
 
             if (Plugin.Indexer != -1)
             {
-                ContentPathsManager.ContentPathContainer container     = ContentPathsManager.DictionaryPaths[Plugin.CurrentTerritoryType];
-                ContentPathsManager.DutyPath             dutyPath = container.Paths[Plugin.CurrentPath];
-                bool                                     revivalFound  = dutyPath.RevivalFound;
+                ContentPathsManager.ContentPathContainer container    = ContentPathsManager.DictionaryPaths[Plugin.CurrentTerritoryType];
+                ContentPathsManager.DutyPath             dutyPath     = container.Paths[Plugin.CurrentPath];
+                bool                                     revivalFound = dutyPath.RevivalFound;
 
                 bool isBoss = Plugin.Actions[Plugin.Indexer].Name.Equals("Boss");
                 if (!revivalFound)
-                {
                     if (Plugin.Indexer > 0 && isBoss)
                         return Plugin.Indexer;
-                }
-
-
-
 
                 Svc.Log.Info($"Finding Revival Point starting at {Plugin.Indexer}. Using Revival Action: {revivalFound}");
                 for (int i = Plugin.Indexer; i >= 0; i--)
                 {
-                    if (Plugin.Actions[i].Name.Equals(isBoss ? "Revival" : "Boss", StringComparison.InvariantCultureIgnoreCase) && i != Plugin.Indexer)
-                        return isBoss ? i : i + 1;
+                    string name = Plugin.Actions[i].Name;
+
+
+                    bool found = name.Equals("Revival", StringComparison.InvariantCultureIgnoreCase);
+
+                    if(!found && !isBoss)
+                        found = name.Equals("Boss", StringComparison.InvariantCultureIgnoreCase);
+
+                    if (found && i != Plugin.Indexer)
+                    {
+                        int waypoint = isBoss ? i : i + 1;
+                        Svc.Log.Debug($"Revival Point: {i}");
+                        return waypoint;
+                    }
                     /* Pre 7.2
                     else
                     {
@@ -153,14 +159,17 @@ namespace AutoDuty.Helpers
                 return;
             }
             
-            if (_gameObject == null || !_gameObject.IsTargetable)
+            if (_gameObject is not { IsTargetable: true })
             {
                 Svc.Log.Debug($"OnRevive: Couldn't find shortcut");
                 Plugin.Indexer = 0;
                 //Stop();
                 //return;
             } else
+            {
                 Svc.Log.Debug("OnRevive: Found shortcut");
+            }
+
             Svc.Framework.Update += OnRevive;
         }
 
@@ -169,6 +178,7 @@ namespace AutoDuty.Helpers
             Svc.Framework.Update -= OnRevive;
             if (VNavmesh_IPCSubscriber.Path_IsRunning())
                 VNavmesh_IPCSubscriber.Path_Stop();
+            BossMod_IPCSubscriber.SetMovement(true);
             Plugin.Stage = Stage.Reading_Path;
             Svc.Log.Debug("DeathHelper - Player is Alive, and we are done with Revived Actions, changing state to Alive");
             _deathState               = PlayerLifeState.Alive;
@@ -181,7 +191,7 @@ namespace AutoDuty.Helpers
 
             float distanceToPlayer;
 
-            if (_gameObject == null || !_gameObject.IsTargetable || (distanceToPlayer = ObjectHelper.GetDistanceToPlayer(_gameObject)) > 50)
+            if (!(_gameObject?.IsTargetable ?? false) || (distanceToPlayer = ObjectHelper.GetDistanceToPlayer(_gameObject)) > 30)
             {
                 Svc.Log.Debug("OnRevive: Done");
                 if(Plugin.Indexer == 0) 
@@ -191,7 +201,7 @@ namespace AutoDuty.Helpers
             }
             if (_oldIndex == Plugin.Indexer)
                 Plugin.Indexer = FindWaypoint();
-
+            
             if (distanceToPlayer > 2)
             {
                 MovementHelper.Move(_gameObject, 0.25f, 2);

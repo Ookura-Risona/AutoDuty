@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 
 namespace AutoDuty.Data
 {
-    using ECommons.DalamudServices;
     using Helpers;
     using Lumina.Excel.Sheets;
     using Newtonsoft.Json;
@@ -56,10 +55,11 @@ namespace AutoDuty.Data
 
         public class TrustMember
         {
-            public byte Index { get; set; }
-            public TrustRole Role { get; set; } // 0 = DPS, 1 = Healer, 2 = Tank, 3 = G'raha All Rounder
-            public ClassJob? Job { get; set; } = null;//closest actual job that applies. G'raha gets Blackmage
-            public string Name { get; set; } = string.Empty;
+            public byte            Index      { get; set; }
+            public byte            MemberId   { get; set; }
+            public TrustRole       Role       { get; set; }         // 0 = DPS, 1 = Healer, 2 = Tank, 3 = G'raha All Rounder
+            public ClassJob?       Job        { get; set; } = null; //closest actual job that applies. G'raha gets Blackmage
+            public string          Name       { get; set; } = string.Empty;
             public TrustMemberName MemberName { get; set; }
 
             public uint Level { get; set; }
@@ -72,16 +72,16 @@ namespace AutoDuty.Data
 
             public void ResetLevel()
             {
-                Level      = LevelInit;
-                LevelIsSet = LevelInit == LevelCap;
+                this.Level      = this.LevelInit;
+                this.LevelIsSet = this.LevelInit == this.LevelCap;
             }
 
             public void SetLevel(uint level)
             {
-                if (level >= LevelInit-1)
+                if (level >= this.LevelInit-1)
                 {
-                    LevelIsSet = true;
-                    Level = level;
+                    this.LevelIsSet = true;
+                    this.Level         = level;
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace AutoDuty.Data
             public List<PathFileChangelogEntry> Changelog { get; set; } = [];
 
             [JsonIgnore]
-            public int LastUpdatedVersion => Changelog.Count > 0 ? Changelog.Last().Version : CreatedAt;
+            public int LastUpdatedVersion => this.Changelog.Count > 0 ? this.Changelog.Last().Version : this.CreatedAt;
 
             [JsonPropertyName("notes")]
             public List<string> Notes { get; set; } = [];
@@ -219,10 +219,7 @@ namespace AutoDuty.Data
                 using StreamReader sr = new(fs);
                 string? x;
                 List<string> strings = [];
-                while ((x = sr.ReadLine()) != null)
-                {
-                    strings.Add(x);
-                }
+                while ((x = sr.ReadLine()) != null) strings.Add(x);
                 return strings;
             }
         }
@@ -270,6 +267,8 @@ namespace AutoDuty.Data
 
             public int count    = 1;
             public int curCount = 0;
+
+            public byte? gearset;
         }
     }
 }

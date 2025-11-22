@@ -238,7 +238,8 @@ namespace AutoDuty.Data
             Paused = 7,
             Dead = 8,
             Revived = 9,
-            Interactable = 10
+            Interactable = 10,
+            Idle = 11
         }
 
         public enum ActionState : int

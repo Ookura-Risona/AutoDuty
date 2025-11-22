@@ -5,14 +5,12 @@ using Dalamud.Interface.Windowing;
 using ECommons.DalamudServices;
 using Dalamud.Bindings.ImGui;
 using System.Numerics;
-using static AutoDuty.AutoDuty;
 using ECommons.ImGuiMethods;
 
 namespace AutoDuty.Windows;
 
 using System;
 using System.Collections.Generic;
-using Dalamud.Game.ClientState.Keys;
 
 public unsafe class Overlay : Window
 {

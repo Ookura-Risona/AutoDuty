@@ -7,12 +7,18 @@
         "Option": "Aggressive"
       },
       {
-        "Track": "Everything",
-        "Option": "Enabled"
-      },
-      {
         "Track": "Retarget",
         "Option": "Always"
+      }
+    ],
+    "BossMod.Autorotation.xan.BLU": [
+      {
+        "Track": "Targeting",
+        "Option": "Auto"
+      },
+      {
+        "Track": "AOE",
+        "Option": "AOE"
       }
     ],
     "BossMod.Autorotation.xan.BLM": [

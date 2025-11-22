@@ -29,13 +29,13 @@ public unsafe class OverrideCamera : IDisposable
 {
     public bool Enabled
     {
-        get => _rmiCameraHook.IsEnabled;
+        get => this._rmiCameraHook.IsEnabled;
         set
         {
             if (value)
-                _rmiCameraHook.Enable();
+                this._rmiCameraHook.Enable();
             else
-                _rmiCameraHook.Disable();
+                this._rmiCameraHook.Disable();
         }
     }
 
@@ -52,35 +52,35 @@ public unsafe class OverrideCamera : IDisposable
     public OverrideCamera()
     {
         Svc.Hook.InitializeFromAttributes(this);
-        Svc.Log.Information($"RMICamera address: 0x{_rmiCameraHook.Address:X}");
+        Svc.Log.Information($"RMICamera address: 0x{this._rmiCameraHook.Address:X}");
     }
 
     public void Dispose()
     {
-        _rmiCameraHook.Dispose();
+        this._rmiCameraHook.Dispose();
     }
 
     internal void Face(Vector3 pos)
     {
-        Enabled         = true;
-        SpeedH          = SpeedV = 360.Degrees();
-        DesiredAzimuth  = Angle.FromDirectionXZ(pos - Player.Object.Position) + 180.Degrees();
-        DesiredAltitude = -30.Degrees();
+        this.Enabled        = true;
+        this.SpeedH         = this.SpeedV = 360.Degrees();
+        this.DesiredAzimuth = Angle.FromDirectionXZ(pos - Player.Object.Position) + 180.Degrees();
+        this.DesiredAltitude   = -30.Degrees();
     }
 
     private void RMICameraDetour(CameraEx* self, int inputMode, float speedH, float speedV)
     {
-        _rmiCameraHook.Original(self, inputMode, speedH, speedV);
-        if (IgnoreUserInput || inputMode == 0) // let user override...
+        this._rmiCameraHook.Original(self, inputMode, speedH, speedV);
+        if (this.IgnoreUserInput || inputMode == 0) // let user override...
         {
-            var dt = Framework.Instance()->FrameDeltaTime;
-            var deltaH = (DesiredAzimuth - self->DirH.Radians()).Normalized();
-            var deltaV = (DesiredAltitude - self->DirV.Radians()).Normalized();
-            var maxH = SpeedH.Rad * dt;
-            var maxV = SpeedV.Rad * dt;
+            float dt     = Framework.Instance()->FrameDeltaTime;
+            Angle deltaH = (this.DesiredAzimuth  - self->DirH.Radians()).Normalized();
+            Angle deltaV = (this.DesiredAltitude - self->DirV.Radians()).Normalized();
+            float maxH   = this.SpeedH.Rad * dt;
+            float maxV   = this.SpeedV.Rad    * dt;
             self->InputDeltaH = Math.Clamp(deltaH.Rad, -maxH, maxH);
             self->InputDeltaV = Math.Clamp(deltaV.Rad, -maxV, maxV);
-            Enabled           = false;
+            this.Enabled         = false;
         }
     }
 }

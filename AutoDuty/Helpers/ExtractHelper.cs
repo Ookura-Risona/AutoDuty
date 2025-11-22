@@ -21,19 +21,21 @@ namespace AutoDuty.Helpers
         internal override void Start()
         {
             if (!QuestManager.IsQuestComplete(66174))
+            {
                 Svc.Log.Info("Materia Extraction requires having completed quest: Forging the Spirit");
+            }
             else
             {
                 base.Start();
 
-                _stoppingCategory = Plugin.Configuration.AutoExtractAll ? 6 : 0;
+                this._stoppingCategory = Plugin.Configuration.AutoExtractAll ? 6 : 0;
             }
         }
 
         internal override unsafe void Stop()
         {
-            _currentCategory = 0;
-            _switchedCategory = false;
+            this._currentCategory = 0;
+            this._switchedCategory   = false;
             base.Stop();
         }
 
@@ -43,8 +45,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
-                Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("Extract", 250))
                 return;
@@ -59,7 +60,7 @@ namespace AutoDuty.Helpers
 
             if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
             {
-                Stop();
+                this.Stop();
                 return;
             }
 
@@ -74,26 +75,28 @@ namespace AutoDuty.Helpers
             }
 
             if (!GenericHelpers.TryGetAddonByName("Materialize", out AtkUnitBase* addonMaterialize))
+            {
                 ActionManager.Instance()->UseAction(ActionType.GeneralAction, 14);
+            }
             else if (GenericHelpers.IsAddonReady(addonMaterialize))
             {
-                if (_currentCategory <= _stoppingCategory)
+                if (this._currentCategory <= this._stoppingCategory)
                 {
-                    var list = addonMaterialize->GetNodeById(12)->GetAsAtkComponentList();
+                    AtkComponentList* list = addonMaterialize->GetNodeById(12)->GetAsAtkComponentList();
 
                     if (list == null) return;
 
-                    var spiritbondTextNode = list->UldManager.NodeList[2]->GetComponent()->GetTextNodeById(5)->GetAsAtkTextNode();
-                    var categoryTextNode = addonMaterialize->GetNodeById(4)->GetAsAtkComponentDropdownList()->UldManager.NodeList[1]->GetAsAtkComponentCheckBox()->GetTextNodeById(3)->GetAsAtkTextNode();
+                    AtkTextNode* spiritbondTextNode = list->UldManager.NodeList[2]->GetComponent()->GetTextNodeById(5)->GetAsAtkTextNode();
+                    AtkTextNode* categoryTextNode   = addonMaterialize->GetNodeById(4)->GetAsAtkComponentDropdownList()->UldManager.NodeList[1]->GetAsAtkComponentCheckBox()->GetTextNodeById(3)->GetAsAtkTextNode();
 
                     if (spiritbondTextNode == null || categoryTextNode == null) return;
 
                     //switch to Category, if not on it
-                    if (!_switchedCategory)
+                    if (!this._switchedCategory)
                     {
-                        Svc.Log.Debug($"AutoExtract - Switching to Category: {_currentCategory}");
-                        AddonHelper.FireCallBack(addonMaterialize, false, 1, _currentCategory);
-                        _switchedCategory = true;
+                        Svc.Log.Debug($"AutoExtract - Switching to Category: {this._currentCategory}");
+                        AddonHelper.FireCallBack(addonMaterialize, false, 1, this._currentCategory);
+                        this._switchedCategory = true;
                         return;
                     }
 
@@ -105,15 +108,15 @@ namespace AutoDuty.Helpers
                     }
                     else
                     {
-                        _currentCategory++;
-                        _switchedCategory = false;
+                        this._currentCategory++;
+                        this._switchedCategory = false;
                     }
                 }
                 else
                 {
                     addonMaterialize->Close(true);
                     Svc.Log.Info("Extract Materia Finished");
-                    Stop();
+                    this.Stop();
                 }
             }
         }

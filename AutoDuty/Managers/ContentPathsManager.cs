@@ -24,11 +24,11 @@ namespace AutoDuty.Managers
         {
             public ContentPathContainer(Content content)
             {
-                Content = content;
-                id      = content.TerritoryType;
+                this.Content = content;
+                this.id         = content.TerritoryType;
 
-                ColoredNameString = $"({ImGuiHelper.idColor}{this.id}</>) {ImGuiHelper.dutyColor}{this.Content!.Name}</>";
-                ColoredNameRegex  = RegexHelper.ColoredTextRegex().Match(this.ColoredNameString);
+                this.ColoredNameString = $"({ImGuiHelper.idColor}{this.id}</>) {ImGuiHelper.dutyColor}{this.Content!.Name}</>";
+                this.ColoredNameRegex     = RegexHelper.ColoredTextRegex().Match(this.ColoredNameString);
             }
 
             public uint id { get; }
@@ -56,9 +56,7 @@ namespace AutoDuty.Managers
                 if (this.Paths.Count > 1)
                 {
                     if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(this.Content.TerritoryType, out Dictionary<string, JobWithRole>? jobConfig))
-                    {
                         foreach ((string? pathName, JobWithRole pathJobs) in jobConfig)
-                        {
                             if (pathJobs.HasJob((Job)job))
                             {
                                 int pInx = this.Paths.IndexOf(dp => dp.FileName.Equals(pathName));
@@ -69,12 +67,9 @@ namespace AutoDuty.Managers
                                     return this.Paths[pathIndex];
                                 }
                             }
-                        }
-                    }
 
                     //temporary while w2w gets integrated
                     if (!defaultPath.W2WFound && Plugin.Configuration.W2WJobs.HasJob(job.Value))
-                    {
                         for (int index = 0; index < this.Paths.Count; index++)
                         {
                             string curPath = this.Paths[index].Name;
@@ -84,7 +79,6 @@ namespace AutoDuty.Managers
                                 return this.Paths[index];
                             }
                         }
-                    }
                 }
 
                 pathIndex = 0;
@@ -101,25 +95,25 @@ namespace AutoDuty.Managers
         {
             public DutyPath(string filePath, ContentPathContainer container)
             {
-                FilePath  = filePath;
-                FileName  = Path.GetFileName(filePath);
-                Name      = FileName.Replace(".json", string.Empty);
+                this.FilePath  = filePath;
+                this.FileName  = Path.GetFileName(filePath);
+                this.Name      = this.FileName.Replace(".json", string.Empty);
                 this.container = container;
 
 
-                UpdateColoredNames();
+                this.UpdateColoredNames();
             }
 
             public void UpdateColoredNames()
             {
-                Match pathMatch = RegexHelper.PathFileRegex().Match(FileName);
+                Match pathMatch = RegexHelper.PathFileRegex().Match(this.FileName);
 
-                string pathFileColor = Plugin.Configuration.DoNotUpdatePathFiles.Contains(FileName) ? ImGuiHelper.pathFileColorNoUpdate : ImGuiHelper.pathFileColor;
-                id = uint.Parse(pathMatch.Groups[2].Value);
-                ColoredNameString = pathMatch.Success ?
+                string pathFileColor = Plugin.Configuration.DoNotUpdatePathFiles.Contains(this.FileName) ? ImGuiHelper.pathFileColorNoUpdate : ImGuiHelper.pathFileColor;
+                this.id = uint.Parse(pathMatch.Groups[2].Value);
+                this.ColoredNameString = pathMatch.Success ?
                                              $"<0.8,0.8,1>{pathMatch.Groups[4]}</>{pathFileColor}{pathMatch.Groups[5]}</>" :
-                                             FileName;
-                ColoredNameRegex = RegexHelper.ColoredTextRegex().Match(ColoredNameString);
+                                             this.FileName;
+                this.ColoredNameRegex = RegexHelper.ColoredTextRegex().Match(this.ColoredNameString);
             }
 
             public readonly ContentPathContainer container;
@@ -139,24 +133,22 @@ namespace AutoDuty.Managers
             {
                 get
                 {
-                    if (pathFile == null)
-                    {
+                    if (this.pathFile == null)
                         try
                         {
-                            RevivalFound = false;
-                            W2WFound     = false;
+                            this.RevivalFound = false;
+                            this.W2WFound     = false;
 
                             string json;
 
-                            using (StreamReader streamReader = new(FilePath, Encoding.UTF8))
+                            using (StreamReader streamReader = new(this.FilePath, Encoding.UTF8))
                                 json = streamReader.ReadToEnd();
 
 
-                            pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.JsonSerializerSettings);
+                            this.pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.jsonSerializerSettings);
 
-                            RevivalFound = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
-                            W2WFound     = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
-                            
+                            this.RevivalFound = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
+                            this.W2WFound     = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
                             /*
                             if (this.pathFile.Meta.LastUpdatedVersion < 189)
                             {
@@ -173,18 +165,17 @@ namespace AutoDuty.Managers
                         }
                         catch (Exception ex)
                         {
-                            Svc.Log.Info($"{FilePath} is not a valid duty path: {ex}");
-                            DictionaryPaths[id].Paths.Remove(this);
+                            Svc.Log.Info($"{this.FilePath} is not a valid duty path: {ex}");
+                            DictionaryPaths[this.id].Paths.Remove(this);
                         }
-                    }
 
-                    return pathFile!;
+                    return this.pathFile!;
                 }
             }
 
-            public List<PathAction> Actions      => PathFile.Actions;
+            public List<PathAction> Actions      => this.PathFile.Actions;
             public bool             RevivalFound { get; private set; }
-            public bool             W2WFound { get; private set; }
+            public bool             W2WFound     { get; private set; }
         }
     }
 

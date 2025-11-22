@@ -121,13 +121,11 @@ namespace AutoDuty.Helpers
             Svc.Log.Debug($"Leveling Mode: We found {curContent?.Name ?? "no duty"} to run");
 
             if (trust && curContent != null)
-            {
                 if (!TrustHelper.SetLevelingTrustMembers(curContent, mode))
                 {
                     Svc.Log.Debug($"Leveling Mode: We were unable to set our LevelingTrustMembers");
                     curContent = null;
                 }
-            }
 
             return curContent;
         }

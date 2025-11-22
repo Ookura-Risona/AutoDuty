@@ -28,17 +28,10 @@ namespace AutoDuty.Helpers
         internal override void Start()
         {
             if (!QuestManager.IsQuestComplete(65970))
-            {
                 Svc.Log.Info("Gold Saucer requires having completed quest: It Could Happen To You");
-            }
             else if(!EnoughCardsInInventory())
-            {
                 Svc.Log.Info("Not enough TTT cards in inventory");
-            }
-            else if (State != ActionState.Running)
-            {
-                base.Start();
-            }
+            else if (State != ActionState.Running) base.Start();
         }
 
         public const           int         GoldSaucerTerritoryType       = 144;
@@ -55,7 +48,7 @@ namespace AutoDuty.Helpers
         {
             if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
             {
-                Stop();
+                this.Stop();
                 return;
             }
 
@@ -63,10 +56,8 @@ namespace AutoDuty.Helpers
                 return;
 
             if (GotoHelper.State == ActionState.Running)
-            {
                 //Svc.Log.Debug("Goto Running");
                 return;
-            }
 
             if (Svc.ClientState.TerritoryType != GoldSaucerTerritoryType)
             {
@@ -116,7 +107,7 @@ namespace AutoDuty.Helpers
 
                     if (readerExchange.Entries.Count <= 0)
                     {
-                        Stop();
+                        this.Stop();
                         return;
                     }
 

@@ -21,7 +21,8 @@ using static AutoDuty.Helpers.PlayerHelper;
 
 namespace AutoDuty.Managers
 {
-    using System.Xml;
+    using System.Reflection;
+    using FFXIVClientStructs.FFXIV.Client.Game.Object;
 
     internal class ActionsManager(AutoDuty _plugin, TaskManager _taskManager)
     {
@@ -59,12 +60,14 @@ namespace AutoDuty.Managers
             {
                 if (action != null)
                 {
-                    var thisType = GetType();
-                    var actionTask = thisType.GetMethod(action.Name);
+                    Type?       thisType   = this.GetType();
+                    MethodInfo? actionTask = thisType.GetMethod(action.Name);
                     _taskManager.Enqueue(() => actionTask?.Invoke(this, [action]), $"InvokeAction-{actionTask?.Name}");
                 }
                 else
+                {
                     Svc.Log.Error("no action");
+                }
             }
             catch (Exception ex)
             {
@@ -78,7 +81,7 @@ namespace AutoDuty.Managers
 
         public unsafe void ConditionAction(PathAction action)
         {
-            var conditionActionArray = action.Arguments.ToArray();
+            string[]? conditionActionArray = action.Arguments.ToArray();
             // There are 4 paths that uses conditionaction before the argument array was split, 
             // so we need to handle that case until they can be modified to use properly split arguments and retested
             if (action.Arguments.Count == 0) return;
@@ -89,36 +92,36 @@ namespace AutoDuty.Managers
                 conditionActionArray = action.Arguments[0].Split("&");
             }
             Plugin.Action = $"ConditionAction: {conditionActionArray[0]}, {conditionActionArray[1]}";
-            var condition = conditionActionArray[0];
+            string? condition = conditionActionArray[0];
             string[] conditionArray = [];
             if (condition.Any(x => x.EqualsAny(';')))
                 conditionArray = condition.Split(";");
-            var actions = conditionActionArray[1];
+            string? actions = conditionActionArray[1];
             string[] actionArray = [];
             if (actions.Any(x => x.EqualsAny(';')))
                 actionArray = actions.Split(";");
-            var invokeAction = false;
-            var operation = new Dictionary<string, Func<object, object, bool>>
-                            {
-                                { ">", (x,  y) => Convert.ToSingle(x) > Convert.ToSingle(y) },
-                                { ">=", (x, y) => Convert.ToSingle(x) >= Convert.ToSingle(y) },
-                                { "<", (x,  y) => Convert.ToSingle(x) < Convert.ToSingle(y) },
-                                { "<=", (x, y) => Convert.ToSingle(x) <= Convert.ToSingle(y) },
-                                { "==", (x, y) => x                   == y },
-                                { "!=", (x, y) => x                   != y }
-                            };
-            var operatorValue = string.Empty;
-            var operationResult = false;
+            bool invokeAction = false;
+            Dictionary<string, Func<object, object, bool>>? operation = new Dictionary<string, Func<object, object, bool>>
+                                                                        {
+                                                                            { ">", (x,  y) => Convert.ToSingle(x) > Convert.ToSingle(y) },
+                                                                            { ">=", (x, y) => Convert.ToSingle(x) >= Convert.ToSingle(y) },
+                                                                            { "<", (x,  y) => Convert.ToSingle(x) < Convert.ToSingle(y) },
+                                                                            { "<=", (x, y) => Convert.ToSingle(x) <= Convert.ToSingle(y) },
+                                                                            { "==", (x, y) => x                   == y },
+                                                                            { "!=", (x, y) => x                   != y }
+                                                                        };
+            string? operatorValue = string.Empty;
+            bool operationResult = false;
 
             switch (conditionArray[0])
             {
                 case "GetDistanceToPlayer":
                     {
                         if (conditionArray.Length < 4) return;
-                        if (!conditionArray[1].TryGetVector3(out var vector3)) return;
-                        if (!float.TryParse(conditionArray[3], out var distance)) return;
+                        if (!conditionArray[1].TryGetVector3(out Vector3 vector3)) return;
+                        if (!float.TryParse(conditionArray[3], out float distance)) return;
                         if (!(operatorValue = conditionArray[2]).EqualsAny(operation.Keys)) return;
-                        var getDistance = GetDistanceToPlayer(vector3);
+                        float getDistance = GetDistanceToPlayer(vector3);
                         if (operationResult = operation[operatorValue](getDistance, distance))
                             invokeAction = true;
                         Svc.Log.Info($"Condition: {getDistance}{operatorValue}{distance} = {operationResult}");
@@ -127,12 +130,12 @@ namespace AutoDuty.Managers
                 case "ObjectDistanceToPoint":
                     {
                         if (conditionArray.Length < 5) return;
-                        if (!conditionArray[2].TryGetVector3(out var vector3)) return;
-                        if (!float.TryParse(conditionArray[4], out var distance)) return;
+                        if (!conditionArray[2].TryGetVector3(out Vector3 vector3)) return;
+                        if (!float.TryParse(conditionArray[4], out float distance)) return;
                         if (!(operatorValue = conditionArray[3]).EqualsAny(operation.Keys)) return;
                         IGameObject? targetObject = null;
                         if ((targetObject = GetObjectByDataId(uint.TryParse(conditionArray[1], out uint dataId) ? dataId : 0)) == null) return;
-                        var getDistance = Vector3.Distance(vector3, targetObject.Position);
+                        float getDistance = Vector3.Distance(vector3, targetObject.Position);
                         if (operationResult = operation[operatorValue](getDistance, distance))
                             invokeAction = true;
                         Svc.Log.Info($"Condition: {getDistance}{operatorValue}{distance} = {operationResult}");
@@ -140,10 +143,10 @@ namespace AutoDuty.Managers
                     }
                 case "ItemCount":
                     if (conditionArray.Length < 4) return;
-                    if (!uint.TryParse(conditionArray[1], out var itemId)) return;
-                    if (!uint.TryParse(conditionArray[3], out var quantity)) return;
-                    if (!operation.TryGetValue(operatorValue = conditionArray[2], out var operationFunc)) return;
-                    var itemCount = InventoryHelper.ItemCount(itemId);
+                    if (!uint.TryParse(conditionArray[1], out uint itemId)) return;
+                    if (!uint.TryParse(conditionArray[3], out uint quantity)) return;
+                    if (!operation.TryGetValue(operatorValue = conditionArray[2], out Func<object, object, bool>? operationFunc)) return;
+                    int itemCount = InventoryHelper.ItemCount(itemId);
                     if (operationResult = operationFunc(itemCount, quantity))
                         invokeAction = true;
                     Svc.Log.Info($"Condition: {itemCount}{operatorValue}{quantity} = {operationResult}");
@@ -154,7 +157,7 @@ namespace AutoDuty.Managers
                         IGameObject? gameObject = null;
                         if ((gameObject = GetObjectByDataId(uint.TryParse(conditionArray[1], out uint dataId) ? dataId : 0)) != null)
                         {
-                            var csObj = gameObject.Struct();
+                            GameObject* csObj = gameObject.Struct();
                             switch (conditionArray[2])
                             {
                                 case "EventState":
@@ -172,10 +175,10 @@ namespace AutoDuty.Managers
             }
             if (invokeAction)
             {
-                var actionActual = actionArray[0];
+                string? actionActual = actionArray[0];
                 string actionArguments = actionArray.Length > 1 ? actionArray[1] : "";
                 Svc.Log.Debug($"ConditionAction: Invoking Action: {actionActual} with Arguments: {actionArguments}");
-                InvokeAction(new PathAction() { Name = actionActual, Arguments = [actionArguments] });
+                this.InvokeAction(new PathAction() { Name = actionActual, Arguments = [actionArguments] });
             }
         }
 
@@ -204,14 +207,14 @@ namespace AutoDuty.Managers
             {
                 if (Plugin.Configuration.AutoManageRotationPluginState)
                 {
-                    _autoManageRotationPluginState = true;
+                    this._autoManageRotationPluginState = true;
                     Plugin.Configuration.AutoManageRotationPluginState = false;
                 }
                 Plugin.SetRotationPluginSettings(false, true);
             }
             else if (action.Arguments[0].Equals("on", StringComparison.InvariantCultureIgnoreCase))
             {
-                if (_autoManageRotationPluginState)
+                if (this._autoManageRotationPluginState)
                     Plugin.Configuration.AutoManageRotationPluginState = true;
 
                 Plugin.SetRotationPluginSettings(true, true);
@@ -223,7 +226,7 @@ namespace AutoDuty.Managers
             if (!Player.Available)
                 return;
 
-            var boolTrueFalse = action.Arguments[0].Equals("true", StringComparison.InvariantCultureIgnoreCase);
+            bool boolTrueFalse = action.Arguments[0].Equals("true", StringComparison.InvariantCultureIgnoreCase);
             Plugin.Action = $"StopForCombat: {action.Arguments[0]}";
             Plugin.StopForCombat = boolTrueFalse;
             _taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(boolTrueFalse), "StopForCombat");
@@ -233,7 +236,7 @@ namespace AutoDuty.Managers
 
         public unsafe void ForceAttack(PathAction action)
         {
-            var tot = action.Arguments[0].IsNullOrEmpty() ? 10000 : int.TryParse(action.Arguments[0], out int time) ? time : 0;
+            int tot = action.Arguments[0].IsNullOrEmpty() ? 10000 : int.TryParse(action.Arguments[0], out int time) ? time : 0;
             if (action.Arguments[0].IsNullOrEmpty())
                 action.Arguments[0] = "10000";
             _taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 16), "ForceAttack-GA16");
@@ -277,7 +280,7 @@ namespace AutoDuty.Managers
             if (!Player.Available)
                 return;
             Plugin.Action = $"AutoMove For {action.Arguments[0]}";
-            var movementMode = Svc.GameConfig.UiControl.TryGetUInt("MoveMode", out var mode) ? mode : 0;
+            uint movementMode = Svc.GameConfig.UiControl.TryGetUInt("MoveMode", out uint mode) ? mode : 0;
             _taskManager.Enqueue(() => { if (movementMode == 1) Svc.GameConfig.UiControl.Set("MoveMode", 0); }, "AutoMove-MoveMode");
             _taskManager.Enqueue(() => Chat.ExecuteCommand("/automove on"), "AutoMove-On");
             _taskManager.Enqueue(() => EzThrottler.Throttle("AutoMove", Convert.ToInt32(action.Arguments[0])), "AutoMove-Throttle");
@@ -302,7 +305,7 @@ namespace AutoDuty.Managers
         public unsafe void WaitFor(PathAction action)
         {
             Plugin.Action = $"WaitFor: {action.Arguments[0]}";
-            var waitForWhats = action.Arguments[0].Split(';');
+            string[]? waitForWhats = action.Arguments[0].Split(';');
             switch (waitForWhats[0])
             {
                 case "Combat":
@@ -327,8 +330,8 @@ namespace AutoDuty.Managers
                 case "DistanceTo":
                     if (waitForWhats.Length < 3)
                         return;
-                    if (waitForWhats[1].TryGetVector3(out var position)) return;
-                    if (float.TryParse(waitForWhats[2], out var distance)) return;
+                    if (waitForWhats[1].TryGetVector3(out Vector3 position)) return;
+                    if (float.TryParse(waitForWhats[2], out float distance)) return;
 
                     _taskManager.Enqueue(() => Vector3.Distance(Player.Position, position) <= distance, int.MaxValue, $"WaitFor-DistanceTo({position})<={distance}");
                     break;
@@ -346,7 +349,7 @@ namespace AutoDuty.Managers
                 case "BNpcInRadius":
                     if (waitForWhats.Length == 1)
                         return;
-                    _taskManager.Enqueue(() => !(GetObjectsByRadius(int.TryParse(waitForWhats[1], out var radius) ? radius : 0)?.Count > 0), $"WaitFor-BNpcInRadius{waitForWhats[1]}");
+                    _taskManager.Enqueue(() => !(GetObjectsByRadius(int.TryParse(waitForWhats[1], out int radius) ? radius : 0)?.Count > 0), $"WaitFor-BNpcInRadius{waitForWhats[1]}");
                     _taskManager.Enqueue(() => IsReady, int.MaxValue, "WaitFor");
                     break;
             }
@@ -385,7 +388,7 @@ namespace AutoDuty.Managers
 
         public unsafe void MoveToObject(PathAction action)
         {
-            if (!TryGetObjectIdRegex(action.Arguments[0], out var objectDataId)) return;
+            if (!this.TryGetObjectIdRegex(action.Arguments[0], out string? objectDataId)) return;
 
             IGameObject? gameObject = null;
             Plugin.Action = $"MoveToObject: {objectDataId}";
@@ -402,7 +405,7 @@ namespace AutoDuty.Managers
 
         private bool TargetCheck(IGameObject? gameObject)
         {
-            if (gameObject == null || gameObject.IsTargetable || gameObject.IsValid() || Svc.Targets.Target == gameObject)
+            if (gameObject is not { IsTargetable: not true } || gameObject.IsValid() || Svc.Targets.Target == gameObject)
                 return true;
 
             if (EzThrottler.Check("TargetCheck"))
@@ -415,13 +418,13 @@ namespace AutoDuty.Managers
 
         public unsafe void Target(PathAction action)
         {
-            if (!TryGetObjectIdRegex(action.Arguments[0], out var objectDataId)) return;
+            if (!this.TryGetObjectIdRegex(action.Arguments[0], out string? objectDataId)) return;
 
             IGameObject? gameObject = null;
             Plugin.Action = $"Target: {objectDataId}";
 
             _taskManager.Enqueue(() => TryGetObjectByDataId(uint.Parse(objectDataId), out gameObject), "Target-GetGameObject");
-            _taskManager.Enqueue(() => TargetCheck(gameObject), "Target-Check");
+            _taskManager.Enqueue(() => this.TargetCheck(gameObject),                                      "Target-Check");
             _taskManager.Enqueue(() => Plugin.Action = "");
         }
 
@@ -448,7 +451,7 @@ namespace AutoDuty.Managers
             else if (AddonHelper.ClickTalk())
                 return true;
 
-            if (gameObject == null || !gameObject.IsTargetable || !gameObject.IsValid() || !IsValid)
+            if (gameObject is not { IsTargetable: true } || !gameObject.IsValid() || !IsValid)
                 return true;
 
             if (EzThrottler.Throttle("Interactable", 1000))
@@ -473,18 +476,18 @@ namespace AutoDuty.Managers
         private unsafe void Interactable(IGameObject? gameObject)
         {
             _taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(false));
-            _taskManager.Enqueue(() => InteractableCheck(gameObject), "Interactable-InteractableCheck");
+            _taskManager.Enqueue(() => this.InteractableCheck(gameObject), "Interactable-InteractableCheck");
             _taskManager.Enqueue(() => IsCasting, 500, "Interactable-WaitIsCasting");
             _taskManager.Enqueue(() => !IsCasting, "Interactable-WaitNotIsCasting");
             _taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(true));
             _taskManager.DelayNext("Interactable-DelayNext100", 100);
             _taskManager.Enqueue(() =>
             {
-                var boolAddonSelectYesno = GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) && GenericHelpers.IsAddonReady(addonSelectYesno);
+                bool boolAddonSelectYesno = GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) && GenericHelpers.IsAddonReady(addonSelectYesno);
 
-                var boolAddonSelectString = GenericHelpers.TryGetAddonByName("SelectString", out AtkUnitBase* addonSelectString) && GenericHelpers.IsAddonReady(addonSelectString);
+                bool boolAddonSelectString = GenericHelpers.TryGetAddonByName("SelectString", out AtkUnitBase* addonSelectString) && GenericHelpers.IsAddonReady(addonSelectString);
 
-                var boolAddonTalk = GenericHelpers.TryGetAddonByName("Talk", out AtkUnitBase* addonTalk) && GenericHelpers.IsAddonReady(addonTalk);
+                bool boolAddonTalk = GenericHelpers.TryGetAddonByName("Talk", out AtkUnitBase* addonTalk) && GenericHelpers.IsAddonReady(addonTalk);
 
                 if (!boolAddonSelectYesno && !boolAddonTalk && (!(gameObject?.IsTargetable ?? false) ||
                 Conditions.Instance()->Mounted ||
@@ -510,7 +513,7 @@ namespace AutoDuty.Managers
                     if (TryGetObjectByDataId(gameObject?.DataId ?? 0, out gameObject))
                     {
                         Svc.Log.Debug($"Interactable - Looping because {gameObject?.Name} is still Targetable: {gameObject?.IsTargetable} and we did not change conditions,  Position: {gameObject?.Position} Distance: {GetDistanceToPlayer(gameObject!.Position)}");
-                        Interactable(gameObject);
+                        this.Interactable(gameObject);
                     }
                 }
             }, "Interactable-LoopCheck");
@@ -521,9 +524,9 @@ namespace AutoDuty.Managers
             List<uint> dataIds = [];
             string objectDataId = string.Empty;
             if (action.Arguments.Count > 1)
-                action.Arguments.Each(x => dataIds.Add(TryGetObjectIdRegex(x, out objectDataId) ? (uint.TryParse(objectDataId, out var dataId) ? dataId : 0) : 0));
+                action.Arguments.Each(x => dataIds.Add(this.TryGetObjectIdRegex(x, out objectDataId) ? (uint.TryParse(objectDataId, out uint dataId) ? dataId : 0) : 0));
             else
-                dataIds.Add(TryGetObjectIdRegex(action.Arguments[0], out objectDataId) ? (uint.TryParse(objectDataId, out var dataId) ? dataId : 0) : 0);
+                dataIds.Add(this.TryGetObjectIdRegex(action.Arguments[0], out objectDataId) ? (uint.TryParse(objectDataId, out uint dataId) ? dataId : 0) : 0);
 
             if (dataIds.All(x => x.Equals(0u))) return;
 
@@ -574,7 +577,7 @@ namespace AutoDuty.Managers
 
         private void BossLoot(List<IGameObject>? gameObjects, int index)
         {
-            if (gameObjects == null || gameObjects.Count < 1)
+            if (gameObjects is not { Count: >= 1 })
             {
                 _taskManager.DelayNext("BossLoot-WaitASecToLootChest", 1000);
                 return;
@@ -587,7 +590,7 @@ namespace AutoDuty.Managers
             {
                 index++;
                 if (gameObjects.Count > index)
-                    BossLoot(gameObjects, index);
+                    this.BossLoot(gameObjects, index);
                 else
                     _taskManager.DelayNext("BossLoot-WaitASecToLootChest", 1000);
             }, "BossLoot-LoopOrDelay");
@@ -599,15 +602,15 @@ namespace AutoDuty.Managers
             int index = 0;
             List<IGameObject>? treasureCofferObjects = null;
             Plugin.SkipTreasureCoffer = false;
-            StopForCombat(new PathAction() { Arguments = ["true", "noWait"] });
-            _taskManager.Enqueue(() => BossMoveCheck(action.Position),                           "Boss-MoveCheck");
+            this.StopForCombat(new PathAction() { Arguments = ["true", "noWait"] });
+            _taskManager.Enqueue(() => this.BossMoveCheck(action.Position),                           "Boss-MoveCheck");
             if (Plugin.BossObject == null)
                 _taskManager.Enqueue(() => (Plugin.BossObject = GetBossObject()) != null, "Boss-GetBossObject");
-            _taskManager.Enqueue(() => Plugin.Action = $"Boss: {Plugin.BossObject?.Name.TextValue ?? ""}", "Boss-SetActionVar");
-            _taskManager.Enqueue(() => Svc.Targets.Target = Plugin.BossObject, "Boss-SetTarget");
-            _taskManager.Enqueue(() => Svc.Condition[ConditionFlag.InCombat], "Boss-WaitInCombat");
-            _taskManager.Enqueue(() => BossCheck(), int.MaxValue, "Boss-BossCheck");
-            _taskManager.Enqueue(() => { Plugin.BossObject = null; }, "Boss-ClearBossObject");
+            _taskManager.Enqueue(() => Plugin.Action      = $"Boss: {Plugin.BossObject?.Name.TextValue ?? ""}", "Boss-SetActionVar");
+            _taskManager.Enqueue(() => Svc.Targets.Target = Plugin.BossObject,                                  "Boss-SetTarget");
+            _taskManager.Enqueue(() => Svc.Condition[ConditionFlag.InCombat],                                   "Boss-WaitInCombat");
+            _taskManager.Enqueue(() => this.BossCheck(),                                                           int.MaxValue, "Boss-BossCheck");
+            _taskManager.Enqueue(() => { Plugin.BossObject = null; },                                           "Boss-ClearBossObject");
 
             if (Plugin.Configuration.LootTreasure)
             {
@@ -625,7 +628,7 @@ namespace AutoDuty.Managers
                     float.TryParse(action.Arguments[1], out lootRange);
 
                 _taskManager.Enqueue(() => treasureCofferObjects = GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Treasure)?.Where(x => BelowDistanceToPoint(x.Position, lootPos, lootRange, 10)).ToList(), "Boss-GetTreasureChestsBounded");
-                _taskManager.Enqueue(() => BossLoot(treasureCofferObjects, index), "Boss-LootCheck");
+                _taskManager.Enqueue(() => this.BossLoot(treasureCofferObjects, index),                                                                                                                                                  "Boss-LootCheck");
             }
         }
 
@@ -669,23 +672,23 @@ namespace AutoDuty.Managers
             if (!EzThrottler.Throttle("PraeUpdate", 50))
                 return;
 
-            var objects = GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc);
+            List<IGameObject>? objects = GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc);
 
             if (objects != null)
             {
-                var protoArmOrDoor = objects.FirstOrDefault(x => x.IsTargetable && x.DataId is 14566 or 14616 && GetDistanceToPlayer(x) <= 25);
+                IGameObject? protoArmOrDoor = objects.FirstOrDefault(x => x is { IsTargetable: true, DataId: 14566 or 14616 } && GetDistanceToPlayer(x) <= 25);
                 if (protoArmOrDoor != null)
                     Svc.Targets.Target = protoArmOrDoor;
             }
 
             if (Svc.Condition[ConditionFlag.Mounted] && Svc.Targets.Target != null && Svc.Targets.Target.IsHostile())
             {
-                var dir = Vector2.Normalize(new Vector2(Svc.Targets.Target.Position.X, Svc.Targets.Target.Position.Z) - new Vector2(Player.Position.X, Player.Position.Z));
+                Vector2 dir = Vector2.Normalize(new Vector2(Svc.Targets.Target.Position.X, Svc.Targets.Target.Position.Z) - new Vector2(Player.Position.X, Player.Position.Z));
                 float rot = (float)Math.Atan2(dir.X, dir.Y);
 
                 Player.Object.Struct()->SetRotation(rot);
 
-                var targetPosition = Svc.Targets.Target.Position;
+                Vector3 targetPosition = Svc.Targets.Target.Position;
                 ActionManager.Instance()->UseActionLocation(ActionType.Action, 1128, Player.Object.GameObjectId, &targetPosition);
             }
         }
@@ -716,7 +719,7 @@ namespace AutoDuty.Managers
                     {
                         case "1":
                             Plugin.Framework_Update_InDuty += this.PraeFrameworkUpdateMount;
-                            Interactable(new PathAction { Arguments = ["2012819"] });
+                            this.Interactable(new PathAction { Arguments = ["2012819"] });
                             break;
                         case "2":
                             Plugin.Framework_Update_InDuty -= this.PraeFrameworkUpdateMount;
@@ -738,24 +741,22 @@ namespace AutoDuty.Managers
                             _taskManager.Enqueue(() =>
                             {
                                 if (gameObject != null)
-                                {
                                     switch ((OID)gameObject.DataId)
                                     {
                                         case OID.Blue:
-                                            GlobalStringStore = "2000213";
+                                            this.GlobalStringStore = "2000213";
                                             break;
                                         case OID.Red:
-                                            GlobalStringStore = "2000214";
+                                            this.GlobalStringStore = "2000214";
                                             break;
                                         case OID.Green:
-                                            GlobalStringStore = "2000215";
+                                            this.GlobalStringStore = "2000215";
                                             break;
                                     }
-                                }
                             }, "DutySpecificCode");
                             break;
                         case "2":
-                            _taskManager.Enqueue(() => Interactable(new PathAction() { Arguments = [GlobalStringStore ?? ""] }), "DutySpecificCode");
+                            _taskManager.Enqueue(() => this.Interactable(new PathAction() { Arguments = [this.GlobalStringStore ?? ""] }), "DutySpecificCode");
                             break;
                         case "3":
                             _taskManager.Enqueue(() => (gameObject = GetObjectByDataId(2000216)) != null, "DutySpecificCode");
@@ -840,7 +841,9 @@ namespace AutoDuty.Managers
                                     if (gameObject == null) return true;
 
                                     if (GetBattleDistanceToPlayer(gameObject) > 2.5f)
+                                    {
                                         MovementHelper.Move(gameObject, 0.25f, 2.5f);
+                                    }
                                     else
                                     {
                                         MovementHelper.Stop();
@@ -864,7 +867,9 @@ namespace AutoDuty.Managers
                                 if (gameObject == null) return true;
 
                                 if (GetBattleDistanceToPlayer(gameObject) > 2.5f)
+                                {
                                     MovementHelper.Move(gameObject, 0.25f, 2.5f);
+                                }
                                 else
                                 {
                                     MovementHelper.Stop();

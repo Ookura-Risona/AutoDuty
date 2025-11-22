@@ -2,9 +2,6 @@
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using Dalamud.Game.ClientState.Objects.Types;
-using FFXIVClientStructs.FFXIV.Component.GUI;
-using ECommons;
-using System.Linq;
 using System.Numerics;
 using System.Collections.Generic;
 
@@ -33,7 +30,7 @@ namespace AutoDuty.Helpers
             GotoHelper.ForceStop();
             base.Stop();
             _whichHousing = Housing.Apartment;
-            _index = 0;
+            this._index      = 0;
         }
 
         internal static bool InPrivateHouse(Housing whichHousing) =>
@@ -100,7 +97,7 @@ namespace AutoDuty.Helpers
             if (Plugin.States.HasFlag(PluginState.Navigating))
             {
                 Svc.Log.Debug($"AutoDuty has Started, Stopping GotoHousing");
-                Stop();
+                this.Stop();
             }
 
             if (!EzThrottler.Check("GotoHousing"))
@@ -122,7 +119,7 @@ namespace AutoDuty.Helpers
             if (InPrivateHouse(_whichHousing))
             {
                 Svc.Log.Debug($"We are in a private house, Stopping GotoHousing");
-                Stop();
+                this.Stop();
                 return;
             }
 
@@ -133,17 +130,17 @@ namespace AutoDuty.Helpers
                     Svc.Log.Debug($"We are not in the correct housing area, teleporting there");
                     if (_whichHousing == Housing.Apartment && !TeleportHelper.TeleportApartment() && TeleportHelper.ApartmentTeleportId == 0)
                     {
-                        Stop();
+                        this.Stop();
                         return;
                     }
                     else if (_whichHousing == Housing.Personal_Home && !TeleportHelper.TeleportPersonalHome() && TeleportHelper.PersonalHomeTeleportId == 0)
                     {
-                        Stop();
+                        this.Stop();
                         return;
                     }
                     else if (_whichHousing == Housing.FC_Estate && !TeleportHelper.TeleportFCEstate() && TeleportHelper.FCEstateTeleportId == 0)
                     {
-                        Stop();
+                        this.Stop();
                         return;
                     }
                     EzThrottler.Throttle("GotoHousing", 7500, true);
@@ -152,17 +149,19 @@ namespace AutoDuty.Helpers
             }
             else if (PlayerHelper.IsValid)
             {
-                if (_index < _entrancePath.Count)
+                if (this._index < _entrancePath.Count)
                 {
-                    Svc.Log.Debug($"Our entrancePath has entries, moving to index {_index} which is {_entrancePath[_index]}");
-                    if (((_index + 1) != _entrancePath.Count && MovementHelper.Move(_entrancePath[_index], 0.25f, 0.25f, false, false)) || MovementHelper.Move(_entrancePath[_index], 0.25f, 3f, false, false))
+                    Svc.Log.Debug($"Our entrancePath has entries, moving to index {this._index} which is {_entrancePath[this._index]}");
+                    if (((this._index + 1) != _entrancePath.Count && MovementHelper.Move(_entrancePath[this._index], 0.25f, 0.25f, false, false)) || MovementHelper.Move(_entrancePath[this._index], 0.25f, 3f, false, false))
                     {
-                        Svc.Log.Debug($"We are at index {_index} increasing our index");
-                        _index++;
+                        Svc.Log.Debug($"We are at index {this._index} increasing our index");
+                        this._index++;
                     }
                 }
                 else if (_entranceGameObject == null)
+                {
                     Svc.Log.Debug($"unable to find entrance door {TeleportHelper.FCEstateWardCenterVector3} {TeleportHelper.FCEstateEntranceGameObject}");
+                }
                 else if (MovementHelper.Move(_entranceGameObject, 0.25f, 3f, false, false))
                 {
                     Svc.Log.Debug($"We are in range of the entrance door, entering");
@@ -172,7 +171,9 @@ namespace AutoDuty.Helpers
                     AddonHelper.ClickTalk();
                 }
                 else
+                {
                     Svc.Log.Debug($"Moving closer to {_entranceGameObject?.Name} at location {_entranceGameObject?.Position}, we are {Vector3.Distance(_entranceGameObject?.Position ?? Vector3.Zero, Player.Position)} away");
+                }
             }
         }
     }

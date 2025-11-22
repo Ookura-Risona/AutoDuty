@@ -46,8 +46,7 @@ namespace AutoDuty.Helpers
 
         internal static void ScheduleInvoker(IFramework _)
         {
-            foreach (var schedule in Schedules)
-            {
+            foreach (KeyValuePair<string, Schedule> schedule in Schedules)
                 if (schedule.Value.TimeMS != 0 ? Environment.TickCount >= schedule.Value.TimeMS : schedule.Value.Condition?.Invoke() ?? false)
                 {
                     Svc.Log.Debug($"SchedulerHelper - Executing action {schedule.Key}");
@@ -57,11 +56,10 @@ namespace AutoDuty.Helpers
                     else
                         schedule.Value.TimeMS = Environment.TickCount + schedule.Value.Interval;
                 }
-            }
 
             while (_schedulesToRemove.Count !=0)
             {
-                var schedule = _schedulesToRemove.Dequeue();
+                string? schedule = _schedulesToRemove.Dequeue();
                 if (schedule.IsNullOrEmpty())
                     return;
                 Svc.Log.Debug($"SchedulerHelper - {schedule} Removed from Scheduler");
@@ -80,7 +78,9 @@ namespace AutoDuty.Helpers
                     Schedules[name] = schedule;
                 }
                 else
+                {
                     Svc.Log.Debug($"SchedulerHelper - {name} Added to Scheduler");
+                }
             }
         }
     }

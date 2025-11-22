@@ -18,6 +18,7 @@ namespace AutoDuty.IPC
     using ECommons.GameFunctions;
     using Helpers;
     using System.ComponentModel;
+    using Dalamud.Plugin;
 
     internal static class AutoRetainer_IPCSubscriber
     {
@@ -43,6 +44,7 @@ namespace AutoDuty.IPC
             if (Plugin.Configuration.EnableAutoRetainer && IsEnabled)
             {
                 long? remaining = GetClosestRetainerVentureSecondsRemaining(Player.CID);
+                Svc.Log.Debug($"AutoRetainer IPC - Closest Retainer Venture Remaining Time: {remaining}");
                 return remaining.HasValue && remaining < Plugin.Configuration.AutoRetainer_RemainingTime;
             }
 
@@ -127,13 +129,11 @@ namespace AutoDuty.IPC
         public static void DisablePresets()
         {
             if (Plugin.Configuration.AutoManageBossModAISettings)
-            {
                 if (Presets_GetActive() != null)
                 {
                     Svc.Log.Debug($"BossMod Disabling Presets");
                     Presets_ClearActive();
                 }
-            }
         }
 
         public static void SetRange(float range)
@@ -857,12 +857,11 @@ namespace AutoDuty.IPC
     {
         internal static bool IsReady(string pluginName) => DalamudReflector.TryGetDalamudPlugin(pluginName, out _, false, true);
 
-        internal static Version Version(string pluginName) => DalamudReflector.TryGetDalamudPlugin(pluginName, out var dalamudPlugin, false, true) ? dalamudPlugin.GetType().Assembly.GetName().Version : new Version(0, 0, 0, 0);
+        internal static Version Version(string pluginName) => DalamudReflector.TryGetDalamudPlugin(pluginName, out IDalamudPlugin dalamudPlugin, false, true) ? dalamudPlugin.GetType().Assembly.GetName().Version : new Version(0, 0, 0, 0);
 
         internal static void DisposeAll(EzIPCDisposalToken[] _disposalTokens)
         {
-            foreach (var token in _disposalTokens)
-            {
+            foreach (EzIPCDisposalToken token in _disposalTokens)
                 try
                 {
                     token.Dispose();
@@ -871,7 +870,6 @@ namespace AutoDuty.IPC
                 {
                     Svc.Log.Error($"Error while unregistering IPC: {ex}");
                 }
-            }
         }
     }
 }

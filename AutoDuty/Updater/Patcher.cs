@@ -11,7 +11,7 @@ namespace AutoDuty.Updater
 
     public class Patcher
     {
-        internal static ActionState PatcherState => PatcherTask != null && !PatcherTask.IsCompleted && !PatcherTask.IsCanceled && !PatcherTask.IsFaulted ? ActionState.Running : ActionState.None;
+        internal static ActionState PatcherState => PatcherTask is { IsCompleted: false, IsCanceled: false, IsFaulted: false } ? ActionState.Running : ActionState.None;
             
         internal static Task<bool>? PatcherTask = null;
 
@@ -38,22 +38,22 @@ namespace AutoDuty.Updater
             Svc.Log.Info("Patching Started");
             try
             {
-                var localFileInfos = Plugin.PathsDirectory.EnumerateFiles("*.json", SearchOption.AllDirectories);
-                var localFilesDictionary = localFileInfos.ToDictionary(
-                    fileInfo => fileInfo.Name,
-                    fileInfo => BitConverter.ToString(FileHelper.CalculateMD5(fileInfo.FullName)).Replace("-", "")
-                );
-                var list = await GitHubHelper.GetPathFileListAsync();
+                IEnumerable<FileInfo>? localFileInfos = Plugin.PathsDirectory.EnumerateFiles("*.json", SearchOption.AllDirectories);
+                Dictionary<string, string>? localFilesDictionary = localFileInfos.ToDictionary(
+                                                                                               fileInfo => fileInfo.Name,
+                                                                                               fileInfo => BitConverter.ToString(FileHelper.CalculateMD5(fileInfo.FullName)).Replace("-", "")
+                                                                                              );
+                Dictionary<string, string>? list = await GitHubHelper.GetPathFileListAsync();
                 if (list == null) return false;
 
                 HashSet<string> doNotUpdatePathFiles = ConfigurationMain.Instance.GetCurrentConfig.DoNotUpdatePathFiles;
 
-                var downloadList = list.Where(kvp => !doNotUpdatePathFiles.Contains(kvp.Key) && (!localFilesDictionary.ContainsKey(kvp.Key) || !localFilesDictionary[kvp.Key].Equals(kvp.Value, StringComparison.OrdinalIgnoreCase)));
+                IEnumerable<KeyValuePair<string, string>>? downloadList = list.Where(kvp => !doNotUpdatePathFiles.Contains(kvp.Key) && (!localFilesDictionary.ContainsKey(kvp.Key) || !localFilesDictionary[kvp.Key].Equals(kvp.Value, StringComparison.OrdinalIgnoreCase)));
 
-                foreach (var file in downloadList)
+                foreach (KeyValuePair<string, string> file in downloadList)
                 {
-                    var result = await GitHubHelper.DownloadFileAsync($"https://raw.githubusercontent.com/Ookura-Risona/AutoDuty/refs/heads/master/AutoDuty/Paths/{file.Key}",$"{Plugin.PathsDirectory.FullName}/{file.Key}");
-                    var logger = result ? $"Succesfully downloaded: {file.Key}" : $"Failed to download: {file.Key}";
+                    bool    result = await GitHubHelper.DownloadFileAsync($"https://raw.githubusercontent.com/erdelf/AutoDuty/refs/heads/master/AutoDuty/Paths/{file.Key}",$"{Plugin.PathsDirectory.FullName}/{file.Key}");
+                    string? logger = result ? $"Succesfully downloaded: {file.Key}" : $"Failed to download: {file.Key}";
                     Svc.Log.Info(logger);
                 }
                 return true;

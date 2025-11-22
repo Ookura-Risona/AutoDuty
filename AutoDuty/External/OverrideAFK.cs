@@ -20,17 +20,17 @@ internal unsafe class OverrideAFK
 
     public OverrideAFK()
     {
-        var uiModule = UIModule.Instance();
-        var uiModuleVtbl = (void**)uiModule->VirtualTable;
-        var getAfkModule = (delegate* unmanaged[Stdcall]<UIModule*, AfkModule*>)uiModuleVtbl[55];
-        _module = getAfkModule(uiModule);
+        UIModule*                                           uiModule     = UIModule.Instance();
+        void**                                              uiModuleVtbl = (void**)uiModule->VirtualTable;
+        delegate* unmanaged[Stdcall]<UIModule*, AfkModule*> getAfkModule = (delegate* unmanaged[Stdcall]<UIModule*, AfkModule*>)uiModuleVtbl[55];
+        this._module = getAfkModule(uiModule);
     }
 
     public void ResetTimers()
     {
-        _module->ElapsedForAfkMessage = 0;
-        _module->ElapsedForKick = 0;
-        _module->ElapsedUnk1 = 0;
-        _module->ElapsedUnk2 = 0;
+        this._module->ElapsedForAfkMessage = 0;
+        this._module->ElapsedForKick       = 0;
+        this._module->ElapsedUnk1          = 0;
+        this._module->ElapsedUnk2             = 0;
     }
 }

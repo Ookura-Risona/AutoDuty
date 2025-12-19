@@ -9,9 +9,9 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
-    using Lumina.Excel.Sheets;
     using System;
     using System.Collections.Generic;
+    using Lumina.Excel.Sheets;
     using ECommons.MathHelpers;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
@@ -38,7 +38,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon) this.Stop();
+            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("Desynth", 250))
                 return;
@@ -49,7 +49,7 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            Plugin.Action = "Desynthing Inventory";
+            Plugin.action = "Desynthing Inventory";
 
             if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
             {
@@ -107,9 +107,9 @@ namespace AutoDuty.Helpers
 
                         if (itemLevel == null || itemSheetRow == null || desynthLevel <= 0) continue;
 
-                        if (!Plugin.Configuration.AutoDesynthSkillUp || (desynthLevel < itemLevel + Plugin.Configuration.AutoDesynthSkillUpLimit && desynthLevel < this._maxDesynthLevel))
+                        if (!Configuration.AutoDesynthSkillUp || (desynthLevel < itemLevel + Configuration.AutoDesynthSkillUpLimit && desynthLevel < this._maxDesynthLevel))
                         {
-                            if (Plugin.Configuration.AutoDesynthNoGearset)
+                            if (Configuration.AutoDesynthNoGearset)
                             {
                                 if (gearsetItemIds == null)
                                 {
@@ -133,7 +133,7 @@ namespace AutoDuty.Helpers
                                     continue;
                             }
 
-                            this.DebugLog($"Salvaging Item({i}): {itemSheetRow.Value.Name.ToString()} {inventoryItem->ItemId} {inventoryItem->GetItemId()} {inventoryItem->GetBaseItemId()} with iLvl {itemLevel} because our desynth level is {desynthLevel}");
+                            this.DebugLog($"Salvaging Item({i}): {itemSheetRow.Value.Name} {inventoryItem->ItemId} {inventoryItem->GetItemId()} {inventoryItem->GetBaseItemId()} with iLvl {itemLevel} because our desynth level is {desynthLevel}");
                             foundOne = true;
                             AddonHelper.FireCallBack((AtkUnitBase*)addonSalvageItemSelector, true, 12, i);
                             return;
@@ -165,7 +165,7 @@ namespace AutoDuty.Helpers
             AgentSalvage.SalvageItemCategory[]? categories = Enum.GetValues<AgentSalvage.SalvageItemCategory>();
             for (int i = reset ? 0 : (int) this.curCategory + 1; i < categories.Length; i++)
             {
-                if(Bitmask.IsBitSet(Plugin.Configuration.AutoDesynthCategories, i))
+                if(Bitmask.IsBitSet(Configuration.AutoDesynthCategories, i))
                 {
                     this.curCategory = categories[i];
                     return true;

@@ -3,11 +3,12 @@ using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using AutoDuty.IPC;
 using System.Numerics;
-using System.Collections.Generic;
 using ECommons.Throttlers;
 
 namespace AutoDuty.Helpers
 {
+    using System.Collections.Generic;
+
     internal static class FollowHelper
     {
         private static IGameObject? _followTarget = null;
@@ -56,7 +57,7 @@ namespace AutoDuty.Helpers
 
         private static void FollowUpdate(IFramework framework)
         {
-            if (_followTarget == null || Svc.ClientState.LocalPlayer == null || !EzThrottler.Throttle("FollowUpdate", 50))
+            if (_followTarget == null || !Player.Available || !EzThrottler.Throttle("FollowUpdate", 50))
                 return;
 
             if (ObjectHelper.GetDistanceToPlayer(_followTarget) >= _followDistance)

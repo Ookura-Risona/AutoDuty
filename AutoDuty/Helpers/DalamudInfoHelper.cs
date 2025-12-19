@@ -1,19 +1,21 @@
 ﻿using ECommons.DalamudServices;
 using ECommons.Reflection;
-using System;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Dalamud.Networking.Http;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Http;
     using Dalamud.Common;
     using Newtonsoft.Json;
 
     internal static class DalamudInfoHelper
     {
+        private const string DalDeclarative = "https://raw.githubusercontent.com/goatcorp/dalamud-declarative/refs/heads/main/config.yaml";
+
         private static bool stagingChecked = false;
         private static bool isStaging      = false;
 
@@ -25,22 +27,26 @@ namespace AutoDuty.Helpers
             if (stagingChecked) 
                 return isStaging;
 
-            if (DalamudReflector.TryGetDalamudStartInfo(out DalamudStartInfo? startinfo, Svc.PluginInterface))
+            if (DalamudReflector.TryGetDalamudStartInfo(out DalamudStartInfo? startInfo, Svc.PluginInterface))
             {
                 try
                 {
+                    if (startInfo.GameVersion == null)
+                        return false;
+
+
                     SocketsHttpHandler httpHandler    = new() { AutomaticDecompression = DecompressionMethods.All, ConnectCallback = new HappyEyeballsCallback().ConnectCallback };
                     HttpClient         client         = new(httpHandler) { Timeout = TimeSpan.FromSeconds(10) };
-                    const string       dalDeclarative = "https://raw.githubusercontent.com/goatcorp/dalamud-declarative/refs/heads/main/config.yaml";
-                    using Stream       stream         = client.GetStreamAsync(dalDeclarative).Result;
+                    using Stream       stream         = client.GetStreamAsync(DalDeclarative).Result;
                     using StreamReader reader         = new(stream);
 
                     for (int i = 0; i <= 4; i++)
                     {
-                        string line = reader.ReadLine().Trim();
-                        if (i != 4) continue;
+                        string line = reader.ReadLine()!.Trim();
+                        if (i != 4) 
+                            continue;
                         string version = line.Split(":").Last().Trim().Replace("'", "");
-                        if (version != startinfo.GameVersion.ToString())
+                        if (version != startInfo.GameVersion.ToString())
                         {
                             stagingChecked = true;
                             isStaging      = false;
@@ -56,23 +62,23 @@ namespace AutoDuty.Helpers
                     return false;
                 }
 
-                if (File.Exists(startinfo.ConfigurationPath))
+                if (File.Exists(startInfo.ConfigurationPath))
                 {
                     try
                     {
-                        string   file = File.ReadAllText(startinfo.ConfigurationPath);
-                        dynamic? ob   = JsonConvert.DeserializeObject<dynamic>(file);
-                        string   type = ob.DalamudBetaKind;
+                        string   file = File.ReadAllText(startInfo.ConfigurationPath);
+                        dynamic ob   = JsonConvert.DeserializeObject<dynamic>(file) ?? throw new Exception("configuration can't be deserialized");
+                        string type = ob.DalamudBetaKind;
                         if (type is not null && !string.IsNullOrEmpty(type) && type != "release")
                         {
                             stagingChecked = true;
-                            isStaging = true;
+                            isStaging      = true;
                             return true;
                         }
                         else
                         {
                             stagingChecked = true;
-                            isStaging = false;
+                            isStaging      = false;
                             return false;
                         }
                     }

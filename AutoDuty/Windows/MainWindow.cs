@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Numerics;
 using AutoDuty.Helpers;
 using AutoDuty.IPC;
 using Dalamud.Interface;
@@ -17,7 +15,9 @@ using Dalamud.Bindings.ImGui;
 
 namespace AutoDuty.Windows;
 
-public class MainWindow : Window, IDisposable
+using System;
+
+public sealed class MainWindow : Window, IDisposable
 {
     internal static string CurrentTabName = "";
 
@@ -59,44 +59,44 @@ public class MainWindow : Window, IDisposable
     {
     }
 
-    internal static void Start()
-    {
+    internal static void Start() => 
         ImGui.SameLine(0, 5);
-    }
 
     internal static void LoopsConfig()
     {
-        if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("次", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("Times", ref Plugin.Configuration.LoopTimes, 1)))
-        {
-            if (Plugin.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
-                if (Plugin.PlaylistCurrentEntry != null)
-                    Plugin.PlaylistCurrentEntry.count = Plugin.Configuration.LoopTimes;
+        using ImRaii.IEndObject _ = ImRaii.Disabled(ConfigurationMain.Instance.MultiBox && !ConfigurationMain.Instance.host);
 
-            Plugin.Configuration.Save();
+        if ((AutoDuty.Configuration.UseSliderInputs  && ImGui.SliderInt("次", ref AutoDuty.Configuration.LoopTimes, 0, 100)) || 
+            (!AutoDuty.Configuration.UseSliderInputs && ImGui.InputInt("次", ref AutoDuty.Configuration.LoopTimes, 1)))
+        {
+            if (AutoDuty.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
+                Plugin.PlaylistCurrentEntry?.count = AutoDuty.Configuration.LoopTimes;
+
+            Configuration.Save();
         }
     }
 
     internal static void StopResumePause()
     {
-        using (ImRaii.Disabled(!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running))
+        using (ImRaii.Disabled(!Plugin.states.HasFlag(PluginState.Looping) && !Plugin.states.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running))
         {
-            if (ImGui.Button("停止"))
+            if (ImGui.Button($"停止###Stop2"))
             {
-                Plugin.Stage = Stage.Stopped;
+                StopAndReset();
                 return;
             }
             ImGui.SameLine(0, 5);
         }
 
-        using (ImRaii.Disabled((!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running) || Plugin.CurrentTerritoryContent == null))
+        using (ImRaii.Disabled((!Plugin.states.HasFlag(PluginState.Looping) && !Plugin.states.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running) || Plugin.CurrentTerritoryContent == null))
         {
             if (Plugin.Stage == Stage.Paused)
             {
                 if (ImGui.Button("继续"))
                 {
-                    Plugin.TaskManager.SetStepMode(false);
-                    Plugin.Stage = Plugin.PreviousStage;
-                    Plugin.States &= ~PluginState.Paused;
+                    Plugin.taskManager.StepMode = false;
+                    Plugin.Stage = Plugin.previousStage;
+                    Plugin.states &= ~PluginState.Paused;
                 }
             }
             else
@@ -106,30 +106,31 @@ public class MainWindow : Window, IDisposable
         }
     }
 
+    private static void StopAndReset()
+    {
+        Plugin.playlistIndex = 0;
+        Plugin.Stage = Stage.Stopped;
+    }
+
     internal static void GotoAndActions()
     {
-        if(Plugin.States.HasFlag(PluginState.Other))
+        if(Plugin.states.HasFlag(PluginState.Other))
         {
-            if(ImGui.Button("停止"))
-                Plugin.Stage = Stage.Stopped;
+            if(ImGui.Button("停止###Stop1"))
+                StopAndReset();
             ImGui.SameLine(0,5);
         }
 
-        using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping) || Plugin.States.HasFlag(PluginState.Navigating)))
+        using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Looping) || Plugin.states.HasFlag(PluginState.Navigating)))
         {
-            using (ImRaii.Disabled(Plugin.Configuration is { OverrideOverlayButtons: true, GotoButton: false }))
+            using (ImRaii.Disabled(AutoDuty.Configuration is { OverrideOverlayButtons: true, GotoButton: false }))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && GotoHelper.State != ActionState.Running))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if ((GotoHelper.State == ActionState.Running && GCTurninHelper.State != ActionState.Running && RepairHelper.State != ActionState.Running) || MapHelper.State == ActionState.Running || GotoHousingHelper.State == ActionState.Running)
+                    if (ImGui.Button("前往"))
                     {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("前往")) ImGui.OpenPopup("GotoPopup");
-                    }
+                        ImGui.OpenPopup("GotoPopup");
+                    }   
                 }
             }
 
@@ -138,8 +139,8 @@ public class MainWindow : Window, IDisposable
                 if (ImGui.Selectable("军营")) GotoBarracksHelper.Invoke();
                 if (ImGui.Selectable("旅馆")) GotoInnHelper.Invoke();
                 if (ImGui.Selectable("军票提交")) GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), [GCTurninHelper.GCSupplyLocation], 0.25f, 3f);
-                if (ImGui.Selectable("旗帜")) MapHelper.MoveToMapMarker();
-                if (ImGui.Selectable("传唤铃")) SummoningBellHelper.Invoke(Plugin.Configuration.PreferredSummoningBellEnum);
+                if (ImGui.Selectable("旗标")) MapHelper.MoveToMapMarker();
+                if (ImGui.Selectable("传唤铃")) SummoningBellHelper.Invoke(AutoDuty.Configuration.PreferredSummoningBellEnum);
                 if (ImGui.Selectable("公寓")) GotoHousingHelper.Invoke(Housing.Apartment);
                 if (ImGui.Selectable("个人房屋")) GotoHousingHelper.Invoke(Housing.Personal_Home);
                 if (ImGui.Selectable("部队房屋")) GotoHousingHelper.Invoke(Housing.FC_Estate);
@@ -151,157 +152,110 @@ public class MainWindow : Window, IDisposable
 
 
             ImGui.SameLine(0, 5);
-            using (ImRaii.Disabled(Plugin.Configuration is { AutoGCTurnin: false, OverrideOverlayButtons: false } || !Plugin.Configuration.TurninButton))
+            using (ImRaii.Disabled(AutoDuty.Configuration is { AutoGCTurnin: false, OverrideOverlayButtons: false } || !AutoDuty.Configuration.TurninButton))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && GCTurninHelper.State != ActionState.Running))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if (GCTurninHelper.State == ActionState.Running)
+                    if (ImGui.Button("军票"))
                     {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("军票"))
-                        {
-                            if (AutoRetainer_IPCSubscriber.IsEnabled)
-                                GCTurninHelper.Invoke();
-                            else
-                                ShowPopup("缺少插件", "军队筹备需要 AutoRetainer 插件。获取 @ https://raw.githubusercontent.com/Ookura-Risona/DalamudPlugins/main/pluginmaster.json");
-                        }
                         if (AutoRetainer_IPCSubscriber.IsEnabled)
-                            ToolTip("点击前往调用AutoRetainer进行军队筹备");
+                            GCTurninHelper.Invoke();
                         else
-                            ToolTip("军队筹备需要 AutoRetainer 插件。获取 @ https://raw.githubusercontent.com/Ookura-Risona/DalamudPlugins/main/pluginmaster.json");
+                            ShowPopup("缺少插件", "军队筹备需要 AutoRetainer 插件。获取 @ https://raw.githubusercontent.com/Ookura-Risona/DalamudPlugins/main/pluginmaster.json");
                     }
+                    if (AutoRetainer_IPCSubscriber.IsEnabled)
+                        ToolTip("点击前往调用 AutoRetainer 进行军队筹备");
+                    else
+                        ToolTip("军队筹备需要 AutoRetainer 插件。获取 @ https://raw.githubusercontent.com/Ookura-Risona/DalamudPlugins/main/pluginmaster.json");
                 }
             }
             ImGui.SameLine(0, 5);
-            using (ImRaii.Disabled(Plugin.Configuration is { AutoDesynth: false, OverrideOverlayButtons: false } || !Plugin.Configuration.DesynthButton))
+            using (ImRaii.Disabled(AutoDuty.Configuration is { AutoDesynth: false, OverrideOverlayButtons: false } || !AutoDuty.Configuration.DesynthButton))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && DesynthHelper.State != ActionState.Running))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if (DesynthHelper.State == ActionState.Running)
-                    {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("分解"))
-                            DesynthHelper.Invoke();
-                        ToolTip("Click to Desynth all Items in Inventory");
-                    }
+                    if (ImGui.Button("分解"))
+                        DesynthHelper.Invoke();
+                    ToolTip("Click to Desynth all Items in Inventory");
+                    
                 }
             }
             ImGui.SameLine(0, 5);
-            using (ImRaii.Disabled(Plugin.Configuration is { AutoExtract: false, OverrideOverlayButtons: false } || !Plugin.Configuration.ExtractButton))
+            using (ImRaii.Disabled(AutoDuty.Configuration is { AutoExtract: false, OverrideOverlayButtons: false } || !AutoDuty.Configuration.ExtractButton))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && ExtractHelper.State != ActionState.Running))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if (ExtractHelper.State == ActionState.Running)
+                    if (ImGui.Button("精炼"))
                     {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("精炼"))
-                        {
-                            if (QuestManager.IsQuestComplete(66174))
-                                ExtractHelper.Invoke();
-                            else
-                                ShowPopup("缺少前置任务", "精炼需要完成任务: 情感培育之力");
-                        }
                         if (QuestManager.IsQuestComplete(66174))
-                            ToolTip("点击进行精炼");
+                            ExtractHelper.Invoke();
                         else
-                            ToolTip("精炼需要完成任务: 情感培育之力");
+                            ShowPopup("缺少前置任务", "精炼需要完成任务: 情感培育之力");
                     }
+                    if (QuestManager.IsQuestComplete(66174))
+                        ToolTip("点击进行精炼");
+                    else
+                        ToolTip("精炼需要完成任务: 情感培育之力");
                 }
             }
             
             ImGui.SameLine(0, 5);
-            using (ImRaii.Disabled(Plugin.Configuration is { AutoRepair: false, OverrideOverlayButtons: false } || !Plugin.Configuration.RepairButton))
+            using (ImRaii.Disabled(AutoDuty.Configuration is { AutoRepair: false, OverrideOverlayButtons: false } || !AutoDuty.Configuration.RepairButton))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && RepairHelper.State != ActionState.Running))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if (RepairHelper.State == ActionState.Running)
+                    if (ImGui.Button("修理"))
                     {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
+                        if (InventoryHelper.CanRepair(100))
+                            RepairHelper.Invoke();
+                        //else
+                            //ShowPopup("", "");
                     }
-                    else
-                    {
-                        if (ImGui.Button("修理"))
-                            if (InventoryHelper.CanRepair(100))
-                                RepairHelper.Invoke();
-                        //else
-                        //ShowPopup("", "");
-                        //if ()
-                            ToolTip("点击修理装备");
-                        //else
-                            //ToolTip("");
-                    }
-                }
-            }
-            ImGui.SameLine(0, 5);
-            using (ImRaii.Disabled(Plugin.Configuration is { AutoEquipRecommendedGear: false, OverrideOverlayButtons: false } || !Plugin.Configuration.EquipButton))
-            {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && AutoEquipHelper.State != ActionState.Running))
-                {
-                    if (AutoEquipHelper.State == ActionState.Running)
-                    {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("装备")) AutoEquipHelper.Invoke();
-                        //else
-                        //ShowPopup("", "");
-                        //if ()
-                        ToolTip("点击装备装备");
-                        //else
+                    //if ()
+                        ToolTip("点击修理装备");
+                    //else
                         //ToolTip("");
+                    
+                }
+            }
+            ImGui.SameLine(0, 5);
+            using (ImRaii.Disabled(AutoDuty.Configuration is { AutoEquipRecommendedGear: false, OverrideOverlayButtons: false } || !AutoDuty.Configuration.EquipButton))
+            {
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
+                {
+                    if (ImGui.Button("装备"))
+                    {
+                        AutoEquipHelper.Invoke();
+                        //else
+                        //ShowPopup("", "");
                     }
+
+                    //if ()
+                    ToolTip("点击装备装备");
+                    //else
+                    //ToolTip("");
                 }
             }
 
             ImGui.SameLine(0, 5);
-            using (ImRaii.Disabled(Plugin.Configuration is { AutoOpenCoffers: false, OverrideOverlayButtons: false } || !Plugin.Configuration.CofferButton))
+            using (ImRaii.Disabled(AutoDuty.Configuration is { AutoOpenCoffers: false, OverrideOverlayButtons: false } || !AutoDuty.Configuration.CofferButton))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other) && CofferHelper.State != ActionState.Running))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if (CofferHelper.State == ActionState.Running)
-                    {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("装备箱")) 
-                            CofferHelper.Invoke();
-                        ToolTip("点击开启装备箱");
-                    }
+                    if (ImGui.Button("装备箱")) 
+                        CofferHelper.Invoke();
+                    ToolTip("点击开启装备箱");
                 }
             }
             ImGui.SameLine(0, 5);
 
-            using (ImRaii.Disabled(!(Plugin.Configuration.TripleTriadRegister || Plugin.Configuration.TripleTriadSell) && (!Plugin.Configuration.OverrideOverlayButtons || !Plugin.Configuration.TTButton)))
+            using (ImRaii.Disabled(!(AutoDuty.Configuration.TripleTriadRegister || AutoDuty.Configuration.TripleTriadSell) && (!AutoDuty.Configuration.OverrideOverlayButtons || !AutoDuty.Configuration.TTButton)))
             {
-                using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Other)))
+                using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Other)))
                 {
-                    if ((GotoHelper.State == ActionState.Running && TripleTriadCardUseHelper.State != ActionState.Running && TripleTriadCardSellHelper.State != ActionState.Running))
-                    {
-                        if (ImGui.Button("停止"))
-                            Plugin.Stage = Stage.Stopped;
-                    }
-                    else
-                    {
-                        if (ImGui.Button("幻卡"))
-                            ImGui.OpenPopup("TTPopup");
-                    }
+                    if (ImGui.Button("幻卡"))
+                        ImGui.OpenPopup("TTPopup");
+                    
                 }
             }
 
@@ -390,26 +344,26 @@ public class MainWindow : Window, IDisposable
         ImGui.BeginTabBar(id, flags);
 
 
-        bool valid = (BossMod_IPCSubscriber.IsEnabled  || Plugin.Configuration.UsingAlternativeBossPlugin)     &&
-                     (VNavmesh_IPCSubscriber.IsEnabled || Plugin.Configuration.UsingAlternativeMovementPlugin) &&
-                     (BossMod_IPCSubscriber.IsEnabled  || Plugin.Configuration.UsingAlternativeRotationPlugin);
+        bool valid = (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeBossPlugin)     &&
+                     (VNavmesh_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeMovementPlugin) &&
+                     (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeRotationPlugin);
 
         if (!valid)
             openTabName = "Info";
 
-        foreach ((string name, Action function, Vector4? color, bool child) x in tabs)
+        foreach ((string name, Action function, Vector4? color, bool child) in tabs)
         {
-            if (x.name.IsNullOrEmpty()) 
+            if (name.IsNullOrEmpty()) 
                 continue;
-            if (x.color != null) 
-                ImGui.PushStyleColor(ImGuiCol.Tab, x.color.Value);
+            if (color != null) 
+                ImGui.PushStyleColor(ImGuiCol.Tab, color.Value);
             
-            if ((valid || x.name == "Info") && ImGui.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
+            if ((valid || name == "Info") && ImGui.BeginTabItem(name, openTabName == name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
-                if (x.color != null) 
+                if (color != null) 
                     ImGui.PopStyleColor();
-                if (x.child) 
-                    ImGui.BeginChild(x.name + "child");
+                if (child) 
+                    ImGui.BeginChild(name + "child");
 
                 if(!valid)
                 {
@@ -417,15 +371,15 @@ public class MainWindow : Window, IDisposable
                     ImGui.TextColored(EzColor.Red, "You need to do the basic setup below. Enjoy");
                 }
 
-                x.function();
+                function();
 
-                if (x.child) 
+                if (child) 
                     ImGui.EndChild();
                 ImGui.EndTabItem();
             }
             else
             {
-                if (x.color != null) 
+                if (color != null) 
                     ImGui.PopStyleColor();
             }
         }
@@ -435,7 +389,7 @@ public class MainWindow : Window, IDisposable
         ImGui.EndTabBar();
     }
 
-    private static readonly List<(string, Action, Vector4?, bool)> tabList =
+    private static readonly (string, Action, Vector4?, bool)[] tabList =
     [
         ("主界面", MainTab.Draw, null, false), 
         ("创建", BuildTab.Draw, null, false), 
@@ -459,6 +413,6 @@ public class MainWindow : Window, IDisposable
                 return;
         }
 
-        EzTabBar("MainTab", null, openTabName, ImGuiTabBarFlags.None, tabList.ToArray());
+        EzTabBar("MainTab", null, openTabName, ImGuiTabBarFlags.None, tabList);
     }
 }

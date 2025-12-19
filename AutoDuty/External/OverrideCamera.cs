@@ -3,11 +3,13 @@
 using Dalamud.Hooking;
 using Dalamud.Utility.Signatures;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using System;
 using System.Runtime.InteropServices;
+// ReSharper disable All
+#pragma warning disable IDE0044
 
 namespace AutoDuty.External;
 
+using System;
 using System.Numerics;
 using ECommons.DalamudServices;
 using ECommons.MathHelpers;
@@ -25,7 +27,7 @@ public unsafe struct CameraEx
     [FieldOffset(0x15C)] public float DirVMax; // +45deg by default
 }
 
-public unsafe class OverrideCamera : IDisposable
+public sealed unsafe class OverrideCamera : IDisposable
 {
     public bool Enabled
     {
@@ -55,16 +57,17 @@ public unsafe class OverrideCamera : IDisposable
         Svc.Log.Information($"RMICamera address: 0x{this._rmiCameraHook.Address:X}");
     }
 
-    public void Dispose()
-    {
+    public void Dispose() => 
         this._rmiCameraHook.Dispose();
-    }
 
     internal void Face(Vector3 pos)
     {
+        if (!Player.Available)
+            return;
+
         this.Enabled        = true;
         this.SpeedH         = this.SpeedV = 360.Degrees();
-        this.DesiredAzimuth = Angle.FromDirectionXZ(pos - Player.Object.Position) + 180.Degrees();
+        this.DesiredAzimuth = Angle.FromDirectionXZ(pos - Player.Object!.Position) + 180.Degrees();
         this.DesiredAltitude   = -30.Degrees();
     }
 

@@ -5,10 +5,11 @@ using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using ECommons.UIHelpers.AddonMasterImplementations;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+
     internal static unsafe class AddonHelper
     {
         internal static bool SeenAddon = false;

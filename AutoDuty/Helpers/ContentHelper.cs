@@ -1,13 +1,13 @@
 ﻿using ECommons;
 using ECommons.DalamudServices;
-using System.Collections.Generic;
-using System.Linq;
 using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Lumina.Data;
 
 namespace AutoDuty.Helpers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using static Data.Classes;
     using Dalamud.Utility;
     using Lumina.Excel;
@@ -29,9 +29,8 @@ namespace AutoDuty.Helpers
             return true;
         }
 
-        private static int DawnIndex(uint index, uint ex)
-        {
-            return ex switch
+        private static int DawnIndex(uint index, uint ex) =>
+            ex switch
             {
                 0 => (int)index - 200,
                 1 => (int)index - 215,
@@ -41,7 +40,6 @@ namespace AutoDuty.Helpers
                 5 => (int)index - 24,
                 _ => -1
             };
-        }
 
         private static bool TryGetTrustIndex(int indexIn, uint ex, out int indexOut)
         {
@@ -51,16 +49,14 @@ namespace AutoDuty.Helpers
             return true;
         }
 
-        private static int TrustIndex(int index, uint ex)
-        {
-            return ex switch
+        private static int TrustIndex(int index, uint ex) =>
+            ex switch
             {
                 3 => index,
                 4 => index - 11,
                 5 => index - 22,
                 _ => -1
             };
-        }
 
         internal static void PopulateDuties()
         {
@@ -81,48 +77,52 @@ namespace AutoDuty.Helpers
 
                 static string CleanName(string name)
                 {
-                    string result = char.ToUpper(name.First()) + name.Substring(1);
+                    string result = char.ToUpper(name.First()) + name[1..];
                     return result;
                 }
                 
                 DawnContent?           dawnContent      = listDawnContent.FirstOrDefault(x => x.Content.ValueNullable?.RowId == contentFinderCondition.RowId);
                 ContentFinderCondition englishCondition = contentFinderConditionsEnglish?.GetRow(contentFinderCondition.RowId) ?? contentFinderCondition;
 
-                Content? content = new Content
-                                   {
-                                       UnlockQuest = dawnContent?.RowId != default(uint) ? dawnContent?.Unknown0 ?? 0 : 0
-                                   };
-                content.Id                     = contentFinderCondition.Content.RowId;
-                content.RowId                  = contentFinderCondition.RowId;
-                content.Name                   = CleanName(contentFinderCondition.Name.ToDalamudString().TextValue);
-                content.EnglishName            = CleanName(englishCondition!.Name.ToDalamudString().TextValue);
-                content.TerritoryType          = contentFinderCondition.TerritoryType.Value.RowId;
-                content.ContentType            = contentFinderCondition.ContentType.Value.RowId;
-                content.ContentMemberType      = contentFinderCondition.ContentMemberType.ValueNullable?.RowId ?? 0;
-                content.ContentFinderCondition = contentFinderCondition.RowId;
-                content.ExVersion              = contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId;
-                content.ClassJobLevelRequired  = contentFinderCondition.ClassJobLevelRequired;
-                content.ItemLevelRequired      = contentFinderCondition.ItemLevelRequired;
-                content.DawnRowId              = dawnContent?.RowId ?? 0;
-                content.DawnIndex              = TryGetDawnIndex(dawnContent?.RowId ?? 0, contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int dawnIndex) ? dawnIndex : -1;
-                content.DawnIndicator          = (ushort) (dawnContent?.RowId != default(uint) ? dawnContent?.Unknown15 ?? 0u : 0u);
-                content.TrustIndex             = TryGetTrustIndex(listDawnContent.Where(dawnContent => dawnContent.Unknown13).IndexOf(x => x.Content.Value.RowId == contentFinderCondition.RowId), contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int trustIndex) ? trustIndex : -1;
-                content.VariantContent         = ListVVDContent.Any(variantContent => variantContent        == contentFinderCondition.TerritoryType.Value.RowId);
-                content.VVDIndex               = ListVVDContent.FindIndex(variantContent => variantContent  == contentFinderCondition.TerritoryType.Value.RowId);
-                content.GCArmyIndex            = ListGCArmyContent.FindIndex(gcArmyContent => gcArmyContent == contentFinderCondition.TerritoryType.Value.RowId);
-                content.GCArmyContent          = content.GCArmyIndex >= 0;
+                Content content = new()
+                                  {
+                                      UnlockQuest            = dawnContent?.RowId != default(uint) ? dawnContent?.Unknown0 ?? 0 : 0,
+                                      Id                     = contentFinderCondition.Content.RowId,
+                                      RowId                  = contentFinderCondition.RowId,
+                                      Name                   = CleanName(contentFinderCondition.Name.ToDalamudString().TextValue),
+                                      EnglishName            = CleanName(englishCondition!.Name.ToDalamudString().TextValue),
+                                      TerritoryType          = contentFinderCondition.TerritoryType.Value.RowId,
+                                      ContentType            = contentFinderCondition.ContentType.Value.RowId,
+                                      ContentMemberType      = contentFinderCondition.ContentMemberType.ValueNullable?.RowId ?? 0,
+                                      ContentFinderCondition = contentFinderCondition.RowId,
+                                      ExVersion              = contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId,
+                                      ClassJobLevelRequired  = contentFinderCondition.ClassJobLevelRequired,
+                                      ItemLevelRequired      = contentFinderCondition.ItemLevelRequired,
+                                      DawnRowId              = dawnContent?.RowId ?? 0,
+                                      DawnIndex              = TryGetDawnIndex(dawnContent?.RowId ?? 0, contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int dawnIndex) ? dawnIndex : -1,
+                                      DawnIndicator          = (ushort)(dawnContent?.RowId != default(uint) ? dawnContent?.Unknown15 ?? 0u : 0u),
+                                      TrustIndex = TryGetTrustIndex(listDawnContent.Where(dawnC => dawnC.Unknown13).IndexOf(x => x.Content.Value.RowId == contentFinderCondition.RowId),
+                                                                    contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int trustIndex) ? trustIndex : -1,
+                                      VariantContent = ListVVDContent.Any(variantContent => variantContent        == contentFinderCondition.TerritoryType.Value.RowId),
+                                      VVDIndex       = ListVVDContent.FindIndex(variantContent => variantContent  == contentFinderCondition.TerritoryType.Value.RowId),
+                                      GCArmyIndex    = ListGCArmyContent.FindIndex(gcArmyContent => gcArmyContent == contentFinderCondition.TerritoryType.Value.RowId)
+                                  };
 
-                if (contentFinderCondition.ContentType.Value.RowId == 2)
-                    content.DutyModes |= DutyMode.Regular;
-
-                if (contentFinderCondition.ContentType.Value.RowId == 4)
-                    content.DutyModes |= DutyMode.Trial;
-
-                if (contentFinderCondition.ContentType.Value.RowId == 5)
-                    content.DutyModes |= DutyMode.Raid;
-
-                if (contentFinderCondition.ContentType.Value.RowId == 30 && contentFinderCondition.TerritoryType.Value.RowId.EqualsAny(ListVVDContent))
-                    content.DutyModes |= DutyMode.Variant;
+                switch (contentFinderCondition.ContentType.Value.RowId)
+                {
+                    case 2:
+                        content.DutyModes |= DutyMode.Regular;
+                        break;
+                    case 4:
+                        content.DutyModes |= DutyMode.Trial;
+                        break;
+                    case 5:
+                        content.DutyModes |= DutyMode.Raid;
+                        break;
+                    case 30 when contentFinderCondition.TerritoryType.Value.RowId.EqualsAny(ListVVDContent):
+                        content.DutyModes |= DutyMode.Variant;
+                        break;
+                }
 
                 if (contentFinderCondition.TerritoryType.Value.RowId.EqualsAny(ListGCArmyContent))
                     content.DutyModes |= DutyMode.Squadron;
@@ -155,12 +155,15 @@ namespace AutoDuty.Helpers
                 DictionaryContent.Add(contentFinderCondition.TerritoryType.Value.RowId, content);
             }
             
-            DictionaryContent = DictionaryContent.OrderBy(content => content.Value.ExVersion).ThenBy(content => content.Value.ClassJobLevelRequired).ThenBy(content => content.Value.TerritoryType).ToDictionary();
+            DictionaryContent = DictionaryContent.OrderBy(content => content.Value.ExVersion).
+                                                  ThenBy(content => content.Value.ClassJobLevelRequired).
+                                                  ThenBy(content => content.Value.ItemLevelRequired).
+                                                  ThenBy(content => content.Value.TerritoryType).ToDictionary();
         }
 
         public static bool CanRun(this Content content, short level = -1, DutyMode mode = DutyMode.None, bool trustCheckLevels = true, bool? unsync = null)
         {
-            if ((Player.Available ? Player.Object.GetRole() : CombatRole.NonCombat) == CombatRole.NonCombat)
+            if ((Player.Available ? Player.Job.GetCombatRole() : CombatRole.NonCombat) == CombatRole.NonCombat)
                 return false;
 
             if (!UIState.IsInstanceContentUnlocked(content.Id))
@@ -170,9 +173,9 @@ namespace AutoDuty.Helpers
                 level = PlayerHelper.GetCurrentLevelFromSheet();
 
             if (mode == DutyMode.None)
-                mode = Plugin.Configuration.DutyModeEnum;
+                mode = Configuration.DutyModeEnum;
 
-            unsync ??= Plugin.Configuration.Unsynced && mode.EqualsAny(DutyMode.Raid, DutyMode.Regular, DutyMode.Trial);
+            unsync ??= Configuration.Unsynced && mode.EqualsAny(DutyMode.Raid, DutyMode.Regular, DutyMode.Trial);
 
             if (unsync.Value)
                 if (content.ExVersion == 5)

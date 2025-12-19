@@ -11,23 +11,29 @@ using ECommons.ImGuiMethods;
 using ECommons.MathHelpers;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using Serilog.Events;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using static AutoDuty.Helpers.RepairNPCHelper;
 using static AutoDuty.Windows.ConfigTab;
 
 namespace AutoDuty.Windows;
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Party;
 using Data;
 using ECommons.Automation;
 using ECommons.Configuration;
 using ECommons.ExcelServices;
+using ECommons.GameFunctions;
 using ECommons.PartyFunctions;
 using ECommons.UIHelpers.AddonMasterImplementations;
 using ECommons.UIHelpers.AtkReaderImplementations;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Group;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Info;
@@ -38,15 +44,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Properties;
-using System;
-using System.IO;
-using System.IO.Pipes;
 using System.Numerics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Achievement = Lumina.Excel.Sheets.Achievement;
-using ExitDutyHelper = Helpers.ExitDutyHelper;
+using Buddy = FFXIVClientStructs.FFXIV.Client.Game.UI.Buddy;
+using ExitDutyHelper = ExitDutyHelper;
 using Map = Lumina.Excel.Sheets.Map;
-using Thread = System.Threading.Thread;
 using Vector2 = FFXIVClientStructs.FFXIV.Common.Math.Vector2;
 
 [JsonObject(MemberSerialization.OptIn)]
@@ -54,10 +59,10 @@ public class ConfigurationMain
 {
     public const string CONFIGNAME_BARE = "Bare";
 
-    public static ConfigurationMain Instance;
+    public static ConfigurationMain Instance { get; set; } = null!;
 
-    [JsonProperty]
-    public string DefaultConfigName = CONFIGNAME_BARE;
+    [JsonProperty] 
+    public string DefaultConfigName { get; set; } = CONFIGNAME_BARE;
 
     [JsonProperty]
     private string activeProfileName = CONFIGNAME_BARE;
@@ -82,9 +87,11 @@ public class ConfigurationMain
         public          string Name;
         public          string World;
 
-        public string GetName() => this.Name.Any() ? $"{this.Name}@{this.World}" : this.CID.ToString();
+        public readonly string GetName() =>
+            this.Name.Length != 0 ? $"{this.Name}@{this.World}" : this.CID.ToString();
 
-        public override int GetHashCode() => this.CID.GetHashCode();
+        public readonly override int GetHashCode() => 
+            this.CID.GetHashCode();
     }
 
     [JsonProperty]
@@ -112,11 +119,19 @@ public class ConfigurationMain
 
     [JsonProperty]
     internal bool host = false;
+    [JsonProperty]
+    internal bool multiBoxSynchronizePath = true;
+    [JsonProperty]
+    internal bool multiBoxScrambleNames = false;
 
     public class MultiboxUtility
     {
-        private const int    BUFFER_SIZE            = 4096;
-        private const string PIPE_NAME              = "AutoDutyPipe";
+        public static string        PipeName      { get; set; } = "AutoDutyPipe";
+        public static string        ServerName    { get; set; } = ".";
+        public static TransportType TransportType { get; set; } = TransportType.NamedPipe;
+        public static string        ServerAddress { get; set; } = "127.0.0.1";
+        public static int           ServerPort    { get; set; } = 1716;
+
 
         private const string SERVER_AUTH_KEY = "AD_Server_Auth!";
         private const string CLIENT_AUTH_KEY = "AD_Client_Auth!";
@@ -127,11 +142,13 @@ public class ConfigurationMain
         private const string KEEPALIVE_RESPONSE_KEY = "KEEP_ALIVE received";
 
         private const string DUTY_QUEUE_KEY = "DUTY_QUEUE";
-        private const string DUTY_EXIT_KEY = "DUTY_EXIT";
+        private const string DUTY_EXIT_KEY  = "DUTY_EXIT";
 
-        private const string DEATH_KEY   = "DEATH";
-        private const string UNDEATH_KEY = "UNDEATH";
+        private const string DEATH_KEY       = "DEATH";
+        private const string UNDEATH_KEY     = "UNDEATH";
         private const string DEATH_RESET_KEY = "DEATH_RESET";
+
+        private const string PATH_STEPS = "PATH_STEPS";
 
         private const string STEP_COMPLETED = "STEP_COMPLETED";
         private const string STEP_START     = "STEP_START";
@@ -164,7 +181,7 @@ public class ConfigurationMain
                 if(stepBlock)
                     if (Instance.host)
                     {
-                        Plugin.Action = "Waiting for clients";
+                        Plugin.action = "Waiting for clients";
                         Server.CheckStepProgress();
                     }
                     else
@@ -198,68 +215,26 @@ public class ConfigurationMain
 
         internal static class Server
         {
-            public const             int             MAX_SERVERS = 3;
-            private static readonly  Thread?[]       threads     = new Thread?[MAX_SERVERS];
-            private static readonly  StreamString?[] streams     = new StreamString?[MAX_SERVERS];
-            internal static readonly ClientInfo?[]   clients        = new ClientInfo?[MAX_SERVERS];
+            public const             int             MAX_SERVERS   = 3;
+            private static readonly  StreamString?[] streams       = new StreamString?[MAX_SERVERS];
+            internal static readonly ClientInfo?[]   clients       = new ClientInfo?[MAX_SERVERS];
+            private static readonly  Queue<string>[] messageQueues = [new(), new(), new()];
 
             internal static readonly DateTime[] keepAlives    = new DateTime[MAX_SERVERS];
             internal static readonly bool[]     stepConfirms  = new bool[MAX_SERVERS];
             private static readonly  bool[]     deathConfirms = new bool[MAX_SERVERS];
 
-            private static readonly NamedPipeServerStream?[] pipes = new NamedPipeServerStream[MAX_SERVERS];
+            private static ITransport? transport;
+            private static CancellationTokenSource? serverCts;
 
             public static void Set(bool on)
             {
                 try
                 {
                     if (on)
-                        for (int i = 0; i < MAX_SERVERS; i++)
-                        {
-                            threads[i] = new Thread(ServerThread);
-                            threads[i]?.Start(i);
-                        }
+                        StartServer();
                     else
-                        for (int i = 0; i < MAX_SERVERS; i++)
-                        {
-                            if (pipes[i]?.IsConnected ?? false)
-                                pipes[i]?.Disconnect();
-                            pipes[i]?.Close();
-                            pipes[i]?.Dispose();
-                            threads[i] = null;
-                            streams[i] = null;
-                            clients[i] = null;
-
-                            keepAlives[i]   = DateTime.MinValue;
-                            stepConfirms[i] = false;
-
-                            Chat.ExecuteCommand("/partycmd breakup");
-
-                            SchedulerHelper.ScheduleAction("MultiboxServer PartyBreakup Accept", () =>
-                                                                                                 {
-                                                                                                     unsafe
-                                                                                                     {
-                                                                                                         Utf8String inviterName = InfoProxyPartyInvite.Instance()->InviterName;
-
-                                                                                                         if(UniversalParty.Length <= 1)
-                                                                                                         {
-                                                                                                             SchedulerHelper.DescheduleAction("MultiboxServer PartyBreakup Accept");
-                                                                                                             return;
-                                                                                                         }
-
-
-                                                                                                         if (GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) &&
-                                                                                                             GenericHelpers.IsAddonReady(addonSelectYesno))
-                                                                                                         {
-                                                                                                             AddonMaster.SelectYesno yesno = new(addonSelectYesno);
-                                                                                                             if (yesno.Text.Contains(inviterName.ToString()))
-                                                                                                                 yesno.Yes();
-                                                                                                             else
-                                                                                                                 yesno.No();
-                                                                                                         }
-                                                                                                     }
-                                                                                                 }, 500, false);
-                        }
+                        StopServer();
                 }
                 catch (Exception ex)
                 {
@@ -267,47 +242,171 @@ public class ConfigurationMain
                 }
             }
 
-
-            private static void ServerThread(object? data)
+            private static void StartServer()
             {
                 try
                 {
-                    int index = (int)(data ?? throw new ArgumentNullException(nameof(data)));
+                    if (transport != null) return;
+                    
+                    transport = TransportType switch 
+                    {
+                        TransportType.NamedPipe => new NamedPipeTransport(PipeName),
+                        TransportType.Tcp => new TcpTransport(ServerPort),
+                        _ => throw new NotImplementedException(TransportType.ToString()),
+                    };
 
-                    NamedPipeServerStream pipeServer = new(PIPE_NAME, PipeDirection.InOut, MAX_SERVERS, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-                    pipes[index] = pipeServer;
+                    transport.StartServer(MAX_SERVERS);
+                    serverCts = new CancellationTokenSource();
+                    Task.Run(() => AcceptLoop(serverCts.Token), serverCts.Token);
+                    DebugLog($"Server started with {TransportType} transport");
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog($"StartServer error: {ex}");
+                }
+            }
 
-                    int threadId = Thread.CurrentThread.ManagedThreadId;
+            private static void StopServer()
+            {
+                try
+                {
+                    serverCts?.Cancel();
+                    transport?.StopServer();
+                    transport?.Dispose();
+                    transport = null;
+                    serverCts = null;
 
-                    DebugLog($"Server thread started with ID: {threadId}");
-                    pipeServer.WaitForConnection();
+                    for (int i = 0; i < MAX_SERVERS; i++)
+                    {
+                        streams[i] = null;
+                        clients[i] = null;
+                        messageQueues[i].Clear();
+                        keepAlives[i] = DateTime.MinValue;
+                        stepConfirms[i] = false;
+                    }
 
-                    DebugLog($"Client connected on ID: {threadId}");
+                    if (!InDungeon)
+                    {
+                        Chat.ExecuteCommand("/partycmd breakup");
 
+                        SchedulerHelper.ScheduleAction("MultiboxServer PartyBreakup Accept", () =>
+                                                                                                {
+                                                                                                    unsafe
+                                                                                                    {
+                                                                                                        Utf8String inviterName = InfoProxyPartyInvite.Instance()->InviterName;
 
-                    StreamString ss = new(pipeServer);
+                                                                                                        if (UniversalParty.Length <= 1)
+                                                                                                        {
+                                                                                                            SchedulerHelper.DescheduleAction("MultiboxServer PartyBreakup Accept");
+                                                                                                            return;
+                                                                                                        }
+
+                                                                                                        if (GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) &&
+                                                                                                            GenericHelpers.IsAddonReady(addonSelectYesno))
+                                                                                                        {
+                                                                                                            AddonMaster.SelectYesno yesno = new(addonSelectYesno);
+                                                                                                            if (yesno.Text.Contains(inviterName.ToString()))
+                                                                                                                yesno.Yes();
+                                                                                                            else
+                                                                                                                yesno.No();
+                                                                                                        }
+
+                                                                                                        if (GenericHelpers.TryGetAddonByName("Social", out AtkUnitBase* addonSocial) &&
+                                                                                                            GenericHelpers.IsAddonReady(addonSocial))
+                                                                                                        {
+                                                                                                            ErrorLog("/partycmd breakup opened the party menu instead");
+                                                                                                            SchedulerHelper.DescheduleAction("MultiboxServer PartyBreakup Accept");
+                                                                                                            return;
+                                                                                                        }
+                                                                                                    }
+                                                                                                }, 500, false);
+                    }
+
+                    DebugLog("Server stopped");
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog($"StopServer error: {ex}");
+                }
+            }
+
+            private static async void AcceptLoop(CancellationToken ct)
+            {
+                try
+                {
+                    while (!ct.IsCancellationRequested)
+                    {
+                        Stream s = await transport!.AcceptConnectionAsync(ct);
+                        int idx = -1;
+                        for (int i = 0; i < MAX_SERVERS; i++)
+                        {
+                            if (streams[i] == null)
+                            {
+                                idx = i;
+                                break;
+                            }
+                        }
+                        if (idx == -1)
+                        {
+                            try
+                            {
+                                await s.DisposeAsync();
+                            }
+                            catch (Exception ex)
+                            {
+                                ErrorLog(ex.ToString());
+                            }
+                            continue;
+                        }
+
+                        streams[idx] = new StreamString(s);
+
+                        int capturedIdx = idx;
+                        _ = Task.Run(() => ConnectionHandler(s, capturedIdx, ct), ct);
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    DebugLog("AcceptLoop ended due to cancellation");
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog($"AcceptLoop error: {ex}");
+                }
+            }
+
+            private static async void ConnectionHandler(Stream stream, int index, CancellationToken ct)
+            {
+                try
+                {
+                    await using Stream s = stream;
+                    if (streams[index] == null)
+                        return;
+                    StreamString ss = streams[index]!;
                     ss.WriteString(SERVER_AUTH_KEY);
-
                     if (ss.ReadString() != CLIENT_AUTH_KEY)
                         return;
 
-                    DebugLog($"Client authenticated on ID: {threadId}");
-                    streams[index] = ss;
+                    DebugLog($"Client {index} authenticated");
+                    keepAlives[index] = DateTime.Now;
+                    Task sendTask = Task.Run(async () => await ServerSendThread(index, ct), ct);
 
-                    while (pipes[index]?.IsConnected ?? false)
+                    while (!ct.IsCancellationRequested && !sendTask.IsCompleted)
                     {
-                        string   message = ss.ReadString().Trim();
-                        string[] split   = message.Split("|");
-
+                        await Task.Delay(100, ct);
+                        string message = ss.ReadString().Trim();
+                        string[] split = message.Split("|");
 
                         switch (split[0])
                         {
+                            case "" when message.Length == 0:
+                                DebugLog($"Client {index} closed the connection.");
+                                return;
                             case CLIENT_CID_KEY:
                                 clients[index] = new ClientInfo(ulong.Parse(split[1]), split[2], ushort.Parse(split[3]));
 
-                                Svc.Framework.RunOnTick(() =>
+                                _ = Svc.Framework.RunOnTick(() =>
                                                         {
-
                                                             unsafe
                                                             {
                                                                 ClientInfo client = clients[index]!;
@@ -315,7 +414,7 @@ public class ConfigurationMain
 
                                                                 if (!PartyHelper.IsPartyMember(client.CID))
                                                                 {
-                                                                    if (client.WorldId == Player.CurrentWorldId)
+                                                                    if (client.WorldId == Player.CurrentWorld.RowId)
                                                                         InfoProxyPartyInvite.Instance()->InviteToParty(client.CID, client.CName, client.WorldId);
                                                                     else
                                                                         InfoProxyPartyInvite.Instance()->InviteToPartyContentId(client.CID, 0);
@@ -324,12 +423,12 @@ public class ConfigurationMain
                                                                 }
                                                                 stepConfirms[index] = false;
                                                             }
-                                                        });
-
+                                                        }, cancellationToken: ct);
                                 break;
                             case KEEPALIVE_KEY:
                                 ss.WriteString(KEEPALIVE_RESPONSE_KEY);
-                                keepAlives[index] = DateTime.Now;
+                                break;
+                            case KEEPALIVE_RESPONSE_KEY:
                                 break;
                             case STEP_COMPLETED:
                                 stepConfirms[index] = true;
@@ -344,13 +443,55 @@ public class ConfigurationMain
                                 break;
                             default:
                                 ss.WriteString($"Unknown Message: {message}");
-                                break;
+                                continue;
                         }
+                        keepAlives[index] = DateTime.Now;
                     }
+                }
+                catch (OperationCanceledException)
+                {
+                    DebugLog("Connection handler ended due to cancellation");
                 }
                 catch (Exception e)
                 {
-                    DebugLog($"SERVER ERROR: {e.Message}\n{e.StackTrace}");
+                    ErrorLog($"ConnectionHandler error: {e.Message}\n{e.StackTrace}");
+                }
+                finally
+                {
+                    streams[index] = null;
+                    clients[index] = null;
+                }
+            }
+
+            private static async Task ServerSendThread(int index, CancellationToken ct)
+            {
+                try
+                {
+                    DebugLog("SEND Initialized with " + index);
+
+                    while (!ct.IsCancellationRequested && streams[index] != null)
+                    {
+                        if (messageQueues[index].Count > 0)
+                        {
+                            string message = messageQueues[index].Dequeue();
+                            streams[index]?.WriteString(message);
+                        } 
+                        else if ((DateTime.Now - keepAlives[index]).TotalSeconds > 15)
+                        {
+                            // if no messages to send and the connection is stale, send a keepalive to check. (Usually this is the clients job but the tcp socket doesn't die immediately)
+                            streams[index]?.WriteString(KEEPALIVE_KEY);
+                            await Task.Delay(1000, ct);
+                        }
+                        await Task.Delay(100, ct);
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    DebugLog("SendLoop ended due to cancellation");
+                }
+                catch (Exception e)
+                {
+                    ErrorLog("SERVER SEND ERROR: " + e);
                 }
             }
 
@@ -383,7 +524,7 @@ public class ConfigurationMain
 
             public static void CheckStepProgress()
             {
-                if((Plugin.Stage != Stage.Looping && Plugin.Indexer >= 0 && Plugin.Indexer < Plugin.Actions.Count && Plugin.Actions[Plugin.Indexer].Tag == ActionTag.Treasure || stepConfirms.All(x => x)) && stepBlock)
+                if((Plugin.Stage != Stage.Looping && Plugin.indexer >= 0 && Plugin.indexer < Plugin.Actions.Count && Plugin.Actions[Plugin.indexer].Tag == ActionTag.Treasure || stepConfirms.All(x => x)) && stepBlock)
                 {
                     for (int i = 0; i < stepConfirms.Length; i++)
                         stepConfirms[i] = false;
@@ -400,7 +541,7 @@ public class ConfigurationMain
             public static void SendStepStart()
             {
                 DebugLog("Synchronizing Clients to Server step");
-                SendToAllClients($"{STEP_START}|{Plugin.Indexer}");
+                SendToAllClients($"{STEP_START}|{Plugin.indexer}");
             }
 
             public static void ExitDuty()
@@ -420,79 +561,94 @@ public class ConfigurationMain
                 stepBlock = false;
             }
 
+            public static void SendPath() => 
+                SendToAllClients($"{PATH_STEPS}|{JsonConvert.SerializeObject(Plugin.Actions, JsonSerializerSettings)}");
+
             private static void SendToAllClients(string message)
             {
-                foreach (StreamString? ss in streams) 
-                    ss?.WriteString(message);
+                DebugLog("Enqueuing to send: " + message);
+                foreach (Queue<string> queue in messageQueues)
+                    queue.Enqueue(message);
             }
 
             internal record ClientInfo(ulong CID, string CName, ushort WorldId);
         }
 
-        private static class Client
+        internal static class Client
         {
-            private static Thread?                thread;
-            private static NamedPipeClientStream? pipe;
-            private static StreamString?          clientSS;
+            private static StreamString? clientSS;
+            private static CancellationTokenSource? clientCts;
 
             public static void Set(bool on)
             {
                 if (on)
                 {
-                    thread = new Thread(ClientThread);
-                    thread.Start();
+                    clientCts = new CancellationTokenSource();
+                    Task.Run(() => ClientConnectionThread(clientCts.Token), clientCts.Token);
                 }
                 else
                 {
-                    pipe?.Close();
-                    pipe?.Dispose();
+                    try
+                    {
+                        clientCts?.Cancel();
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorLog(ex.ToString());
+                    }
                     clientSS = null;
-                    thread   = null;
+                    clientCts = null;
                 }
             }
 
-
-            private static void ClientThread(object? data)
+            private static async void ClientConnectionThread(CancellationToken ct)
             {
                 try
                 {
-                    NamedPipeClientStream pipeClient = new(".", PIPE_NAME, PipeDirection.InOut, PipeOptions.Asynchronous);
+                    using ITransport transport = TransportType switch 
+                    {
+                        TransportType.NamedPipe => new NamedPipeTransport(PipeName, ServerName),
+                        TransportType.Tcp => new TcpTransport(ServerAddress, ServerPort),
+                        _ => throw new NotImplementedException(TransportType.ToString()),
+                    };
 
-                    pipe = pipeClient;
+                    DebugLog($"Connecting to server ({TransportType})...\n");
+                    await using Stream clientStream = await transport.ConnectToServerAsync(ct);
 
-                    DebugLog("Connecting to server...\n");
-                    pipeClient.Connect();
-
-                    clientSS = new StreamString(pipeClient);
+                    clientSS = new StreamString(clientStream);
 
                     if (clientSS.ReadString() == SERVER_AUTH_KEY)
                     {
                         clientSS.WriteString(CLIENT_AUTH_KEY);
 
-                        Svc.Framework.RunOnTick(() =>
+                        _ = Svc.Framework.RunOnTick(() =>
                                                 {
                                                     if (Player.CID != 0)
-                                                        clientSS.WriteString($"{CLIENT_CID_KEY}|{Player.CID}|{Player.Name}|{Player.CurrentWorldId}");
-                                                });
+                                                        clientSS.WriteString($"{CLIENT_CID_KEY}|{Player.CID}|{Player.Name}|{Player.CurrentWorld.RowId}");
+                                                }, cancellationToken: ct);
 
-
-                        new Thread(ClientKeepAliveThread).Start();
-
-                        while (pipe?.IsConnected ?? false)
+                        _ = Task.Run(() => ClientKeepAliveThread(ct), ct);
+                        while (!ct.IsCancellationRequested)
                         {
                             string   message = clientSS.ReadString().Trim();
                             string[] split   = message.Split("|");
 
                             switch (split[0])
                             {
+                                case "" when message.Length == 0:
+                                    DebugLog("Server closed the connection.");
+                                    return;
                                 case STEP_START:
                                     if (int.TryParse(split[1], out int step))
                                     {
-                                        Plugin.Indexer = step;
+                                        Plugin.indexer = step;
                                         stepBlock      = false;
                                         Plugin.Stage   = Stage.Idle;
                                         Plugin.Stage   = Stage.Reading_Path;
                                     }
+                                    break;
+                                case KEEPALIVE_KEY:
+                                    clientSS.WriteString(KEEPALIVE_RESPONSE_KEY);
                                     break;
                                 case KEEPALIVE_RESPONSE_KEY:
                                     break;
@@ -508,9 +664,13 @@ public class ConfigurationMain
                                                                                                         {
                                                                                                             unsafe
                                                                                                             {
-                                                                                                                Utf8String inviterName = InfoProxyPartyInvite.Instance()->InviterName;
+                                                                                                                if(UniversalParty.Length > 1)
+                                                                                                                {
+                                                                                                                    PartyHelper.LeaveParty();
+                                                                                                                    return;
+                                                                                                                }
 
-                                                                                                                
+                                                                                                                Utf8String inviterName = InfoProxyPartyInvite.Instance()->InviterName;
                                                                                                                 if (InfoProxyPartyInvite.Instance()->InviterWorldId != 0 && 
                                                                                                                     UniversalParty.Length <= 1 &&
                                                                                                                     GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) &&
@@ -530,52 +690,71 @@ public class ConfigurationMain
                                                                                                             }
                                                                                                         }, 500, false);
                                     break;
+                                case PATH_STEPS:
+                                    List<PathAction>? steps = JsonConvert.DeserializeObject<List<PathAction>>(message[(split[0].Length+1)..], JsonSerializerSettings);
+                                    if (steps is { Count: > 0 })
+                                    {
+                                        DebugLog("setting steps from host");
+                                        Plugin.Actions = steps;
+                                    }
+                                    break;
                                 default:
                                     ErrorLog("Unknown response: " + message);
                                     break;
                             }
                         }
                     }
-
+                }
+                catch (OperationCanceledException)
+                {
+                    DebugLog("ClientConnection ended due to cancellation");
                 }
                 catch (Exception e)
                 {
-                    DebugLog($"Client ERROR: {e.Message}\n{e.StackTrace}");
+                    ErrorLog($"Client ERROR: {e.Message}\n{e.StackTrace}");
+                }
+                finally
+                {
+                    Instance.MultiBox = false;
                 }
             }
 
-            private static void ClientKeepAliveThread(object? data)
+            private static async void ClientKeepAliveThread(CancellationToken ct)
             {
                 try
                 {
-                    Thread.Sleep(1000);
-                    while (pipe?.IsConnected ?? false)
+                    await Task.Delay(1000, ct);
+                    while (!ct.IsCancellationRequested && clientSS != null)
                     {
                         clientSS?.WriteString(KEEPALIVE_KEY);
-                        Thread.Sleep(10000);
+                        await Task.Delay(10000, ct);
                     }
+                }
+                catch (OperationCanceledException)
+                {
+                    DebugLog("ClientKeepalive ended due to cancellation");
                 }
                 catch (Exception e)
                 {
-                    DebugLog("Client KEEPALIVE Error: " + e);
+                    ErrorLog("Client KEEPALIVE Error: " + e);
                 }
             }
 
             public static void SendStepCompleted()
             {
-                if (clientSS == null || !(pipe?.IsConnected ?? false))
+                if (clientSS == null)
                 {
                     DebugLog("Client not connected, cannot send step completed.");
                     return;
                 }
-                Plugin.Action = "Waiting for others";
+                Plugin.action = "Waiting for others";
                 clientSS.WriteString(STEP_COMPLETED);
                 DebugLog("Step completed sent to server.");
             }
 
             public static void SendDeath(bool dead)
             {
-                if (clientSS == null || !(pipe?.IsConnected ?? false))
+                if (clientSS == null)
                 {
                     DebugLog("Client not connected, cannot send death.");
                     return;
@@ -586,26 +765,22 @@ public class ConfigurationMain
         }
 
 
-        private static void DebugLog(string message)
-        {
+        private static void DebugLog(string message) => 
             Svc.Log.Debug($"Pipe Connection: {message}");
-        }
-        private static void ErrorLog(string message)
-        {
+
+        private static void ErrorLog(string message) => 
             Svc.Log.Error($"Pipe Connection: {message}");
-        }
 
         private class StreamString(Stream ioStream)
         {
-            private readonly Stream          ioStream       = ioStream;
             private readonly UnicodeEncoding streamEncoding = new();
 
             public string ReadString()
             {
-                int b1 = this.ioStream.ReadByte();
-                int b2 = this.ioStream.ReadByte();
+                int b1 = ioStream.ReadByte();
+                int b2 = ioStream.ReadByte();
 
-                if(b1 == -1)
+                if (b1 == -1 || b2 == -1)
                 {
                     DebugLog("End of stream reached.");
                     return string.Empty;
@@ -613,11 +788,21 @@ public class ConfigurationMain
 
                 int    len      = b1 * 256 + b2;
                 byte[] inBuffer = new byte[len];
-                this.ioStream.Read(inBuffer, 0, len);
+                int n = 0;
+                while (n < len)
+                {
+                    int c = ioStream.Read(inBuffer, n, len-n);
+                    if (c == 0)
+                    {
+                        ErrorLog("Stream closed unexpectedly");
+                        return string.Empty;
+                    }
+                    n += c;
+                }
+
                 string readString = this.streamEncoding.GetString(inBuffer);
 
                 DebugLog("Reading: " + readString);
-
                 return readString;
             }
 
@@ -627,12 +812,12 @@ public class ConfigurationMain
 
                 byte[] outBuffer = this.streamEncoding.GetBytes(outString);
                 int    len       = outBuffer.Length;
-                if (len > ushort.MaxValue) 
-                    len = (int)ushort.MaxValue;
-                this.ioStream.WriteByte((byte)(len / 256));
-                this.ioStream.WriteByte((byte)(len & 255));
-                this.ioStream.Write(outBuffer, 0, len);
-                this.ioStream.Flush();
+                if (len > ushort.MaxValue)
+                    throw new ArgumentException("String too long to write to stream");
+                ioStream.WriteByte((byte)(len / 256));
+                ioStream.WriteByte((byte)(len & 255));
+                ioStream.Write(outBuffer, 0, len);
+                ioStream.Flush();
 
                 return outBuffer.Length + 2;
             }
@@ -672,7 +857,7 @@ public class ConfigurationMain
 
         void RegisterProfileData(ProfileData profile)
         {
-            if (profile.CIDs.Any())
+            if (profile.CIDs.Count == 0)
                 foreach (ulong cid in profile.CIDs)
                     this.profileByCID[cid] = profile.Name;
             this.profileByName[profile.Name] = profile;
@@ -809,34 +994,31 @@ public class ConfigurationMain
     public ProfileData? GetProfile(string name) => 
         this.profileByName.GetValueOrDefault(name);
 
-    public void SetCharacterDefault()
-    {
+    public void SetCharacterDefault() =>
         Svc.Framework.RunOnTick(() =>
-                          {
+                                {
 
-                              if (!PlayerHelper.IsValid)
-                                  return;
+                                    if (!PlayerHelper.IsValid)
+                                        return;
 
-                              ulong cid = Player.CID;
+                                    ulong cid = Player.CID;
 
-                              if (this.profileByCID.TryGetValue(cid, out string? oldProfile))
-                                  this.profileByName[oldProfile].CIDs.Remove(cid);
+                                    if (this.profileByCID.TryGetValue(cid, out string? oldProfile))
+                                        this.profileByName[oldProfile].CIDs.Remove(cid);
 
-                              this.GetCurrentProfile.CIDs.Add(cid);
-                              this.profileByCID.Add(cid, this.ActiveProfileName);
-                              this.charByCID[cid] = new CharData
-                                                    {
-                                                        CID  = cid,
-                                                        Name = Player.Name,
-                                                        World = Player.CurrentWorld
-                              };
+                                    this.GetCurrentProfile.CIDs.Add(cid);
+                                    this.profileByCID.Add(cid, this.ActiveProfileName);
+                                    this.charByCID[cid] = new CharData
+                                                          {
+                                                              CID   = cid,
+                                                              Name  = Player.Name,
+                                                              World = Player.CurrentWorldName
+                                                          };
 
-                              EzConfig.Save();
-                          });
-    }
+                                    EzConfig.Save();
+                                });
 
-    public void RemoveCharacterDefault()
-    {
+    public void RemoveCharacterDefault() =>
         Svc.Framework.RunOnTick(() =>
                                 {
                                     if (!PlayerHelper.IsValid)
@@ -849,21 +1031,43 @@ public class ConfigurationMain
 
                                     EzConfig.Save();
                                 });
-    }
 
-    public static void DebugLog(string message)
-    {
+    public static void DebugLog(string message) => 
         Svc.Log.Debug($"Configuration Main: {message}");
-    }
 
-    public static JsonSerializerSettings jsonSerializerSettings = new()
-                                                                   {
-                                                                       Formatting           = Formatting.Indented,
-                                                                       DefaultValueHandling = DefaultValueHandling.Include,
-                                                                       Converters           = [new StringEnumConverter(new DefaultNamingStrategy())],
-                                                                       
-                                                                   };
+    public static JsonSerializerSettings JsonSerializerSettings { get; } = new()
+                                                                           {
+                                                                               Formatting                     = Formatting.Indented,
+                                                                               DefaultValueHandling           = DefaultValueHandling.Include,
+                                                                               Converters                     = [new StringEnumConverter(new DefaultNamingStrategy())],
+                                                                               TypeNameHandling               = TypeNameHandling.Auto,
+                                                                               TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+                                                                               Culture                        = CultureInfo.InvariantCulture,
+                                                                               SerializationBinder            = new AutoDutySerializationBinder()
+                                                                           };
+
+    public class AutoDutySerializationBinder : DefaultSerializationBinder
+    {
+        
+        public override Type BindToType(string? assemblyName, string typeName)
+        {
+            bool isInternal = (assemblyName?.StartsWith("AutoDuty") ?? false);
+
+            if (isInternal)
+            {
+                Type? type = typeof(Configuration).Assembly.GetType(typeName);
+                if (type != null)
+                    return type;
+            }
+
+            return base.BindToType(assemblyName, typeName);
+        }
+    }
 }
+
+
+
+
 
 [JsonObject(MemberSerialization.OptOut)]
 public class ProfileData
@@ -935,6 +1139,7 @@ public class Configuration
     public bool Unsynced                       = false;
     public bool HideUnavailableDuties          = false;
     public bool PreferTrustOverSupportLeveling = false;
+    public bool SquadronAssignLowestMembers    = true;
 
     public bool ShowMainWindowOnStartup = false;
 
@@ -946,9 +1151,8 @@ public class Configuration
         get => this.showOverlay;
         set
         {
-            this.showOverlay = value;
-            if (Plugin.Overlay != null)
-                Plugin.Overlay.IsOpen = value;
+            this.showOverlay       = value;
+            Plugin.Overlay?.IsOpen = value;
         }
     }
     internal bool hideOverlayWhenStopped = false;
@@ -959,7 +1163,7 @@ public class Configuration
         {
             this.hideOverlayWhenStopped = value;
             if (Plugin.Overlay != null) 
-                SchedulerHelper.ScheduleAction("LockOverlaySetter", () => Plugin.Overlay.IsOpen = !value || Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating), () => Plugin.Overlay != null);
+                SchedulerHelper.ScheduleAction("LockOverlaySetter", () => Plugin.Overlay.IsOpen = !value || Plugin.states.HasAnyFlag(PluginState.Looping, PluginState.Navigating), () => Plugin.Overlay != null);
         }
     }
     internal bool lockOverlay = false;
@@ -1066,7 +1270,7 @@ public class Configuration
         {
             this.maxDistanceToTargetRoleBased = value;
             if (value)
-                SchedulerHelper.ScheduleAction("MaxDistanceToTargetRoleBasedBMRoleChecks", () => Plugin.BMRoleChecks(), () => PlayerHelper.IsReady);
+                SchedulerHelper.ScheduleAction("MaxDistanceToTargetRoleBasedBMRoleChecks", () => BMRoleChecks(), () => PlayerHelper.IsReady);
         }
     }
     public float MaxDistanceToTargetFloat    = 2.6f;
@@ -1080,7 +1284,7 @@ public class Configuration
         {
             this.positionalRoleBased = value;
             if (value)
-                SchedulerHelper.ScheduleAction("PositionalRoleBasedBMRoleChecks", () => Plugin.BMRoleChecks(), () => PlayerHelper.IsReady);
+                SchedulerHelper.ScheduleAction("PositionalRoleBasedBMRoleChecks", () => BMRoleChecks(), () => PlayerHelper.IsReady);
         }
     }
     public float MaxDistanceToTargetRoleMelee  = 2.6f;
@@ -1099,8 +1303,13 @@ public class Configuration
     public byte       RebuildNavmeshAfterStuckXTimes = 5;
     public int        MinStuckTime                   = 500;
     public bool       StuckOnStep                    = true;
-    public bool       StuckReturn                    = true;
+    public bool       stuckReturn                    = true;
     public int        StuckReturnX                   = 10;
+    public bool StuckReturn
+    {
+        get => this.stuckReturn && !ConfigurationMain.Instance.MultiBox;
+        set => this.stuckReturn = value;
+    }
 
     public bool PathDrawEnabled   = false;
     public int  PathDrawStepCount = 5;
@@ -1204,6 +1413,7 @@ public class Configuration
                 this.AutoDesynth = false;
         }
     }
+
     public int  AutoGCTurninSlotsLeft     = 5;
     public bool AutoGCTurninSlotsLeftBool = false;
     public bool AutoGCTurninUseTicket     = false;
@@ -1221,44 +1431,45 @@ public class Configuration
     #endregion
 
     #region Termination
-    public bool                                        EnableTerminationActions   = true;
-    public bool                                        StopLevel                  = false;
-    public int                                         StopLevelInt               = 1;
-    public bool                                        StopNoRestedXP             = false;
-    public bool                                        StopItemQty                = false;
-    public bool                                        StopItemAll                = false;
-    public Dictionary<uint, KeyValuePair<string, int>> StopItemQtyItemDictionary  = [];
-    public int                                         StopItemQtyInt             = 1;
-    public bool                                        ExecuteCommandsTermination = false;
-    public List<string>                                CustomCommandsTermination  = [];
-    public bool                                        PlayEndSound               = false;
-    public bool                                        CustomSound                = false;
-    public float                                       CustomSoundVolume          = 0.5f;
-    public Sounds                                      SoundEnum                  = Sounds.None;
-    public string                                      SoundPath                  = "";
-    public TerminationMode                             TerminationMethodEnum      = TerminationMode.Do_Nothing;
-    public bool                                        TerminationKeepActive      = true;
+    public bool                                        EnableTerminationActions    = true;
+    public bool                                        StopLevel                   = false;
+    public int                                         StopLevelInt                = 1;
+    public bool                                        StopNoRestedXP              = false;
+    public bool                                        StopItemQty                 = false;
+    public bool                                        StopItemAll                 = false;
+    public Dictionary<uint, KeyValuePair<string, int>> StopItemQtyItemDictionary   = [];
+    public int                                         StopItemQtyInt              = 1;
+    public bool                                        TerminationBLUSpellsEnabled = false;
+    public List<uint>                                  TerminationBLUSpells        = [];
+    public bool                                        TerminationBLUSpellsAll     = false;
+    public bool                                        ExecuteCommandsTermination  = false;
+    public List<string>                                CustomCommandsTermination   = [];
+    public bool                                        PlayEndSound                = false;
+    public bool                                        CustomSound                 = false;
+    public float                                       CustomSoundVolume           = 0.5f;
+    public Sounds                                      SoundEnum                   = Sounds.None;
+    public string                                      SoundPath                   = "";
+    public TerminationMode                             TerminationMethodEnum       = TerminationMode.Do_Nothing;
+    public bool                                        TerminationKeepActive       = true;
     #endregion
 
-    public void Save()
-    {
+    public static void Save() => 
         EzConfig.Save();
-    }
 
     public TrustMemberName?[] SelectedTrustMembers = new TrustMemberName?[3];
 }
 
 public static class ConfigTab
 {
-    internal static string FollowName = "";
+    internal static string followName = "";
 
-    private static Configuration Configuration => Plugin.Configuration;
-    private static string preLoopCommand = string.Empty;
-    private static string betweenLoopCommand = string.Empty;
-    private static string terminationCommand = string.Empty;
-    private static Dictionary<uint, Item> Items { get; set; } = Svc.Data.GetExcelSheet<Item>()?.Where(x => !x.Name.ToString().IsNullOrEmpty()).ToDictionary(x => x.RowId, x => x) ?? [];
-    private static string stopItemQtyItemNameInput = "";
-    private static KeyValuePair<uint, string> stopItemQtySelectedItem = new(0, "");
+    private static Configuration              Configuration => AutoDuty.Configuration;
+    private static string                     preLoopCommand     = string.Empty;
+    private static string                     betweenLoopCommand = string.Empty;
+    private static string                     terminationCommand = string.Empty;
+    private static Dictionary<uint, Item>     Items { get; set; } = Svc.Data.GetExcelSheet<Item>()?.Where(x => !x.Name.ToString().IsNullOrEmpty()).ToDictionary(x => x.RowId, x => x) ?? [];
+    private static string                     stopItemQtyItemNameInput = "";
+    private static KeyValuePair<uint, string> stopItemQtySelectedItem  = new(0, "");
 
     private static string                     autoOpenCoffersNameInput    = "";
     private static KeyValuePair<uint, string> autoOpenCoffersSelectedItem = new(0, "");
@@ -1271,16 +1482,23 @@ public static class ConfigTab
         public ushort StatusId;
     }
 
-    private static List<ConsumableItem> ConsumableItems { get; } = Svc.Data.GetExcelSheet<Item>()
-                                                                     ?.Where(x => !x.Name.ToString().IsNullOrEmpty() && x.ItemUICategory.ValueNullable?.RowId is 44 or 45 or 46 && x.ItemAction.ValueNullable?.Data[0] is 48 or 49)
-                                                                      .Select(x => new ConsumableItem() { StatusId = x.ItemAction.Value!.Data[0], ItemId = x.RowId, Name = x.Name.ToString(), CanBeHq = x.CanBeHq }).ToList() ?? [];
+    private static List<ConsumableItem> ConsumableItems { get; } = [..Svc.Data.GetExcelSheet<Item>()
+                                                                         .Where(x => !x.Name.ToString().IsNullOrEmpty() && 
+                                                                                     x.ItemUICategory.ValueNullable?.RowId is 44 or 45 or 46 && x.ItemAction.ValueNullable?.Data[0] is 48 or 49)
+                                                                         .Select(x => new ConsumableItem
+                                                                                      {
+                                                                                          StatusId = x.ItemAction.Value!.Data[0],
+                                                                                          ItemId   = x.RowId,
+                                                                                          Name     = x.Name.ToString(),
+                                                                                          CanBeHq  = x.CanBeHq
+                                                                                      })];
 
     private static string         consumableItemsItemNameInput = "";
     private static ConsumableItem consumableItemsSelectedItem  = new();
 
     private static string profileRenameInput = "";
 
-    private static readonly Sounds[] _validSounds = ((Sounds[])Enum.GetValues(typeof(Sounds))).Where(s => s is not Sounds.None and not Sounds.Unknown).ToArray();
+    private static readonly Sounds[] validSounds = [..((Sounds[])Enum.GetValues(typeof(Sounds))).Where(s => s is not Sounds.None and not Sounds.Unknown)];
 
     private static bool overlayHeaderSelected      = false;
     private static bool multiboxHeaderSelected     = false;
@@ -1342,10 +1560,11 @@ public static class ConfigTab
                     ImGui.Text(key);
 
                     ProfileData? profile = ConfigurationMain.Instance.GetProfile(key);
-                    if(profile?.CIDs.Any() ?? false)
+                    if(profile?.CIDs.Count != 0)
                     {
                         ImGui.SameLine();
-                        ImGuiEx.TextWrapped(ImGuiHelper.VersionColor, string.Join(", ", profile.CIDs.Select(cid => ConfigurationMain.Instance.charByCID.TryGetValue(cid, out ConfigurationMain.CharData cd) ? cd.GetName() : cid.ToString())));
+                        ImGuiEx.TextWrapped(ImGuiHelper.VersionColor, 
+                                            string.Join(", ", profile!.CIDs.Select(cid => ConfigurationMain.Instance.charByCID.TryGetValue(cid, out ConfigurationMain.CharData cd) ? cd.GetName() : cid.ToString())));
                     }
                 }
         }
@@ -1552,17 +1771,17 @@ public static class ConfigTab
 
             if (devHeaderSelected)
             {
-                if (ImGui.Checkbox("启动时更新配置", ref ConfigurationMain.Instance.updatePathsOnStartup))
+                if (ImGui.Checkbox("启动时更新配置##DevUpdatePathsOnStartup", ref ConfigurationMain.Instance.updatePathsOnStartup))
                     Configuration.Save();
 
-                if (ImGui.Button("打印模块列表")) 
+                if (ImGui.Button("打印模块列表##DevPrintModList")) 
                     Svc.Log.Info(string.Join("\n", PluginInterface.InstalledPlugins.Where(pl => pl.IsLoaded).GroupBy(pl => pl.Manifest.InstalledFromUrl).OrderByDescending(g => g.Count()).Select(g => g.Key+"\n\t"+string.Join("\n\t", g.Select(pl => pl.Name)))));
                 unsafe
                 {
                     ImGuiEx.Text("Invited by: " + InfoProxyPartyInvite.Instance()->InviterName + " | " + InfoProxyPartyInvite.Instance()->InviterWorldId);
                 }
 
-                if (ImGui.CollapsingHeader("Available Duty Support")) //ImGui.Button("check duty support?"))
+                if (ImGui.CollapsingHeader("Available Duty Support##DevDutySupport")) //ImGui.Button("check duty support?"))
                     if(GenericHelpers.TryGetAddonMaster<AddonMaster.DawnStory>(out AddonMaster.DawnStory? m))
                         if (m.IsAddonReady)
                         {
@@ -1572,19 +1791,20 @@ public static class ConfigTab
                             foreach (AddonMaster.DawnStory.Entry? x in m.Entries)
                             {
                                 ImGuiEx.Text($"{x.Name} / {x.ReaderEntry.Callback} / {x.Index}");
-                                if (ImGuiEx.HoveredAndClicked() && x.Status != 2) x.Select();
+                                if (ImGuiEx.HoveredAndClicked() && x.Status != 2)
+                                    x.Select();
                             }
                         }
 
-                if (ImGui.CollapsingHeader("Available Squadron stuff"))
+                if (ImGui.CollapsingHeader("Available Squadron stuff##DevSquadron"))
                     unsafe
                     {
                         if (GenericHelpers.TryGetAddonByName("GcArmyCapture", out AtkUnitBase* armyCaptureAtk) && GenericHelpers.IsAddonReady(armyCaptureAtk))
                         {
                             ImGui.Indent();
-                            if (ImGui.CollapsingHeader("Duties"))
+                            if (ImGui.CollapsingHeader("Duties##DevSquadronDuties"))
                             {
-                                ReaderGCArmyCapture armyCapture = new ReaderGCArmyCapture(armyCaptureAtk);
+                                ReaderGCArmyCapture armyCapture = new(armyCaptureAtk);
                                 ImGui.Text($"{armyCapture.PlayerCharLvl} ({armyCapture.PlayerCharIlvl}) {armyCapture.PlayerCharName}");
                                 ImGui.Columns(6);
 
@@ -1622,10 +1842,10 @@ public static class ConfigTab
                                 }
                                 ImGui.Columns(1);
                             }
-                            if (ImGui.CollapsingHeader("Available Members"))
+                            if (ImGui.CollapsingHeader("Available Members##DevGCArmyMembers"))
                                 if (GenericHelpers.TryGetAddonByName("GcArmyMemberList", out AtkUnitBase* armyMemberListAtk) && GenericHelpers.IsAddonReady(armyMemberListAtk))
                                 {
-                                    ReaderGCArmyMemberList armyMemberList = new ReaderGCArmyMemberList(armyMemberListAtk);
+                                    ReaderGCArmyMemberList armyMemberList = new(armyMemberListAtk);
 
                                     ImGui.Columns(13);
 
@@ -1692,7 +1912,7 @@ public static class ConfigTab
                         }
                     }
 
-                if (ImGui.CollapsingHeader("Available TT cards"))
+                if (ImGui.CollapsingHeader("Available TT cards##DevAvailableTTShop"))
                     unsafe
                     {
                         if (GenericHelpers.TryGetAddonByName("TripleTriadCoinExchange", out AtkUnitBase* exchangeAddon))
@@ -1712,18 +1932,183 @@ public static class ConfigTab
                             }
                     }
 
-                if(ImGui.Button("Return?"))
+                if (ImGui.CollapsingHeader("Partycheck##DevPartyInfo"))
+                {
+                    ImGui.Indent();
+                    unsafe
+                    {
+                        ImGui.Text("Party Size: " + Svc.Party.Count);
+                    
+                        bool healer   = false;
+                        bool tank     = false;
+                        int  dpsCount = 0;
+
+                        foreach (IPartyMember? item in Svc.Party)
+                        {
+                            ImGui.Text($"{item.ClassJob.ValueNullable?.Role} {((Job) item.ClassJob.RowId)} {((Job)item.ClassJob.RowId).GetCombatRole()}");
+                            switch (item.ClassJob.ValueNullable?.Role)
+                            {
+                                case 1:
+                                    tank = true;
+                                    break;
+                                case 2:
+                                case 3:
+                                    dpsCount++;
+                                    break;
+                                case 4:
+                                    healer = true;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        ImGui.NewLine();
+                        ImGui.Text($"valid: {tank && healer && dpsCount > 1}");
+                        ImGui.NewLine();
+                        foreach (UniversalPartyMember member in UniversalParty.Members)
+                        {
+                            ImGui.Text($"{member.ClassJob} {member.ClassJob.GetCombatRole()}");
+                        }
+                        ImGui.NewLine();
+
+                        foreach (PartyMember member in GroupManager.Instance()->MainGroup.PartyMembers)
+                        {
+                            ImGui.Text($"{(Job) member.ClassJob} {((Job) member.ClassJob).GetCombatRole()}");
+                        }
+                        ImGui.NewLine();
+                        try
+                        {
+                            InfoProxyPartyMember* instance = InfoProxyPartyMember.Instance();
+                            ImGui.Text(instance->EntryCount.ToString());
+                            ImGui.Text(instance->GetEntryCount().ToString());
+
+                            for (uint i = 0; i < instance->GetEntryCount(); i++)
+                            {
+                                InfoProxyCommonList.CharacterData* characterData = instance->GetEntry(i);
+                                ImGui.Text($"{(Job) characterData->Job} {((Job)characterData->Job).GetCombatRole()}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Svc.Log.Error(ex.ToString());
+                        }
+                    }
+                    ImGui.Unindent();
+                }
+
+                if (ImGui.CollapsingHeader("BLU loadout##DevBlueLoadout"))
+                {
+                    unsafe
+                    {
+                        Span<uint> blu = ActionManager.Instance()->BlueMageActions;
+                        foreach (uint u in blu)
+                        {
+                            if (u != 0)
+                            {
+                                if (BLUHelper.spellsById.TryGetValue(BLUHelper.NormalToAoz(u), out BLUHelper.BLUSpell? spell))
+                                {
+                                    ImGui.AlignTextToFramePadding();
+                                    ImGui.Text($"{u}: {BLUHelper.NormalToAoz(u)} {spell.Entry} {spell.Name}");
+                                    ImGui.SameLine();
+                                    if (ImGui.Button($"Unload##DevBlueLoadoutUnload_{u}"))
+                                        BLUHelper.SpellLoadoutOut(spell.Entry);
+                                }
+
+                            } else
+                            {
+                                ImGui.Text("Nothing loaded");
+                                ImGui.SameLine();
+                                if (ImGui.Button($"Load##DevBlueLoadoutLoad"))
+                                {
+                                    BLUHelper.SpellLoadoutIn((byte)Random.Shared.Next(1, 124));
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (ImGui.CollapsingHeader("RetainerInventoryPrices##DevRetainerPricesCheck"))
+                {
+                    unsafe
+                    {
+                        ImGui.Indent();
+
+
+                        InventoryContainer* container = InventoryManager.Instance()->GetInventoryContainer(InventoryType.RetainerMarket);
+                        Span<ulong>         prices    = InventoryManager.Instance()->RetainerMarketPrices;
+                        ImGui.Columns(2);
+
+                        for (int i = 0; i < container->Size; i++)
+                        {
+                            InventoryItem item = container->Items[i];
+                            ImGui.Text(item.Quantity.ToString());
+                            ImGui.NextColumn();
+                            ulong price = prices[i];
+                            ImGuiEx.Text(price.ToString());
+                            ImGui.NextColumn();
+                        }
+
+                        ImGui.Columns();
+                        ImGui.Unindent();
+                    }
+                }
+
+                if (ImGui.CollapsingHeader("BuddyChecks##DevBuddyChecks"))
+                {
+                    unsafe
+                    {
+                        Span<Buddy.BuddyMember> span = new(UIState.Instance()->Buddy.DutyHelperInfo.DutyHelpers, 7);
+                        ImGui.Columns(3);
+                        foreach (Buddy.BuddyMember member in span)
+                        {
+                            ImGui.Text(member.DataId.ToString());
+                            ImGui.NextColumn();
+                            ImGui.Text(member.EntityId.ToString());
+                            ImGui.NextColumn();
+                            ImGui.Text(member.Synced.ToString());
+                            ImGui.NextColumn();
+                        }
+                        ImGui.Columns(1);
+                        ImGui.Text($"Party {Svc.Party.Length}");
+                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Count}");
+                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(1).FirstOrDefault()?.ObjectKind}");
+                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(1).FirstOrDefault()?.BaseId}");
+                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(2).FirstOrDefault()?.BaseId}");
+                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(3).FirstOrDefault()?.BaseId}");
+                        ImGui.Text($"Buddies: {Svc.Buddies.Length}");
+                        ImGui.Text($"Buddies: {Svc.Buddies.Count}");
+                        ImGui.Text($"Pet: {Svc.Buddies.PetBuddy?.GameObject?.Name}");
+                        ImGui.Text($"Pet: {Svc.Buddies.PetBuddy?.GameObject?.Name}");
+                        ImGui.Text($"Companion: {Svc.Buddies.CompanionBuddy?.GameObject?.Name}");
+                    }
+                }
+
+
+                if(ImGui.Button("CheckAction##DevCheckActionStatus"))
+                    unsafe
+                    {
+                        Svc.Log.Warning(ActionManager.Instance()->GetActionStatus(ActionType.Action, 23282).ToString());
+                    }
+                ImGui.SameLine();
+                if (ImGui.Button("CheckAction2##DevCheckActionStatus2"))
+                    unsafe
+                    {
+                        Svc.Log.Warning(ActionManager.Instance()->GetActionStatus(ActionType.Action, 23277).ToString());
+                    }
+
+                if (ImGui.Button("Return?##DevReturnButton"))
                     unsafe
                     {
                         VNavmesh_IPCSubscriber.Path_Stop();
                         ActionManager.Instance()->UseAction(ActionType.Action, 6);
                     }
 
-                if (ImGui.Button("开启循环")) 
+                if (ImGui.Button("开启循环##DevRotationOn")) 
                     Plugin.SetRotationPluginSettings(true, ignoreConfig: true, ignoreTimer: true);
 
                 ImGui.SameLine();
-                if (ImGui.Button("关闭循环"))
+                if (ImGui.Button("关闭循环##DevRotationoff"))
                 {
                     Plugin.SetRotationPluginSettings(false, ignoreConfig: true, ignoreTimer: true);
                     if(Wrath_IPCSubscriber.IsEnabled)
@@ -1733,7 +2118,7 @@ public static class ConfigTab
                 if (ImGui.Button("BetweenLoopActions##DevBetweenLoops"))
                 {
                     Plugin.CurrentTerritoryContent =  ContentHelper.DictionaryContent.Values.First();
-                    Plugin.States                  |= PluginState.Other;
+                    Plugin.states                  |= PluginState.Other;
                     Plugin.LoopTasks(false);
                 }
 
@@ -1744,13 +2129,13 @@ public static class ConfigTab
                     Svc.Log.Debug(treasures.Count() + "\n" + string.Join("\n", treasures.Select(igo => igo.Position.ToString())));
                 }
 
-                if (ImGui.CollapsingHeader("teleport playthings"))
+                if (ImGui.CollapsingHeader("teleport playthings##DevTPPlay"))
                 {
                     ImGui.Indent();
-                    if (ImGui.CollapsingHeader("Warps"))
+                    if (ImGui.CollapsingHeader("Warps##DevWarps"))
                     {
                         ImGui.Indent();
-                        foreach (Warp warp in Svc.Data.GameData.GetExcelSheet<Warp>())
+                        foreach (Warp warp in Svc.Data.GameData.GetExcelSheet<Warp>()!)
                         {
                             if (warp.TerritoryType.RowId != 152)
                                 continue;
@@ -1767,15 +2152,15 @@ public static class ConfigTab
                     }
 
                     if (ImGui.CollapsingHeader("LevelTest"))
-                        foreach ((Level lvl, Vector3, Vector3) level in Svc.Data.GameData.GetExcelSheet<Level>().Where(lvl => lvl.Territory.RowId == 152)
+                        foreach ((Level lvl, Vector3, Vector3) level in Svc.Data.GameData.GetExcelSheet<Level>()!.Where(lvl => lvl.Territory.RowId == 152)
                                                                            .Select(lvl => (lvl, (new Vector3(lvl.X, lvl.Y, lvl.Z))))
                                                                            .Select(tuple => (tuple.lvl, tuple.Item2, (tuple.Item2 - Player.Position))).OrderBy(lvl => lvl.Item3.LengthSquared()))
                             ImGui.Text($"{level.lvl.RowId} {level.Item2} {level.Item3} {string.Join(" | ", level.lvl.Object.GetType().GenericTypeArguments.Select(t => t.FullName))}: {level.lvl.Object.RowId}");
 
-                    ImGuiEx.Text($"{typeof(Achievement).Assembly.GetTypes().Where(x => x.FullName.StartsWith("Lumina.Excel.Sheets")).
+                    ImGuiEx.Text($"{typeof(Achievement).Assembly.GetTypes().Where(x => x.FullName?.StartsWith("Lumina.Excel.Sheets") ?? false).
                                                         Select(x => (x, x.GetProperties().Where(f => f.PropertyType.Name == "RowRef`1" && f.PropertyType.GenericTypeArguments[0].FullName == typeof(Map).FullName))).
                                                         Where(x => x.Item2.Any()).
-                                                        Select(x => $"{x.Item1} references {x.Item2.Select(x => x.Name).Print(", ")}").Print("\n")}");
+                                                        Select(x => $"{x.x} references {x.Item2.Select(pi => pi.Name).Print(", ")}").Print("\n")}");
                     ImGui.Unindent();
                 }
             }
@@ -1823,7 +2208,7 @@ public static class ConfigTab
                             if (ImGui.Selectable(rotationPlugin.ToCustomString(), Configuration.rotationPlugin == rotationPlugin, ImGuiSelectableFlags.AllowItemOverlap))
                             {
                                 Configuration.rotationPlugin = rotationPlugin;
-                                Plugin.Configuration.Save();
+                                Configuration.Save();
                             }
                         }
 
@@ -1992,7 +2377,7 @@ public static class ConfigTab
                         BossMod_IPCSubscriber.RefreshPreset("AutoDuty", Resources.AutoDutyPreset);
                         BossMod_IPCSubscriber.RefreshPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
                     }
-                    if (ImGui.Checkbox("自动更新预设", ref Configuration.BM_UpdatePresetsAutomatically)) 
+                    if (ImGui.Checkbox("自动更新预设", ref Configuration.BM_UpdatePresetsAutomatically))
                         Configuration.Save();
                     if (ImGui.Checkbox("根据职能设置到目标的最大距离", ref Configuration.maxDistanceToTargetRoleBased))
                     {
@@ -2032,7 +2417,7 @@ public static class ConfigTab
                     if (ImGui.Checkbox("根据玩家职能设置身位", ref Configuration.positionalRoleBased))
                     {
                         Configuration.PositionalRoleBased = Configuration.positionalRoleBased;
-                        Plugin.BMRoleChecks();
+                        BMRoleChecks();
                         Configuration.Save();
                     }
                     using (ImRaii.Disabled(Configuration.positionalRoleBased))
@@ -2094,7 +2479,7 @@ public static class ConfigTab
                 }
                 
                 if (ImGui.Checkbox("仅开启BOSS宝箱", ref Configuration.LootBossTreasureOnly))
-                        Configuration.Save();
+                    Configuration.Save();
 
                 ImGuiComponents.HelpMarker("AutoDuty将绕过非BOSS宝箱，仅开启BOSS宝箱。\n部分路径可能无法适配。");
                 ImGui.PopItemWidth();
@@ -2125,7 +2510,7 @@ public static class ConfigTab
                 }
             }
 
-            if (ImGui.Checkbox("卡住时使用返回##StuckUseReturn", ref Configuration.StuckReturn))
+            if (ImGui.Checkbox("卡住时使用返回##StuckUseReturn", ref Configuration.stuckReturn))
                 Configuration.Save();
 
             if (Configuration.StuckReturn)
@@ -2227,8 +2612,7 @@ public static class ConfigTab
             using (ImRaii.Disabled(!Configuration.EnablePreLoopActions))
             {
                 ImGui.Separator();
-                MakeCommands("在循环开始时执行命令",
-                             ref Configuration.ExecuteCommandsPreLoop, ref Configuration.CustomCommandsPreLoop, ref preLoopCommand);
+                MakeCommands("在循环开始时执行命令", ref Configuration.ExecuteCommandsPreLoop, ref Configuration.CustomCommandsPreLoop, ref preLoopCommand, "CommandsPreLoop");
 
                 ImGui.Separator();
 
@@ -2580,7 +2964,7 @@ public static class ConfigTab
                 ImGuiComponents.HelpMarker("将在循环之间的所有 AutoDuty 进程延迟 X 秒");
                 ImGui.Separator();
 
-                MakeCommands("在所有循环之间执行命令", ref Configuration.ExecuteCommandsBetweenLoop, ref Configuration.CustomCommandsBetweenLoop, ref betweenLoopCommand);
+                MakeCommands("在所有循环之间执行命令", ref Configuration.ExecuteCommandsBetweenLoop, ref Configuration.CustomCommandsBetweenLoop, ref betweenLoopCommand, "CommandsBetweenLoop");
 
                 if (ImGui.Checkbox("自动精炼", ref Configuration.AutoExtract))
                     Configuration.Save();
@@ -2694,7 +3078,7 @@ public static class ConfigTab
 
                 using (ImGuiHelper.RequiresPlugin(ExternalPlugin.AutoRetainer, "DiscardConfig", inline: true))
                 {
-                    if (ImGui.Checkbox("丢弃物品", ref Configuration.DiscardItems)) 
+                    if (ImGui.Checkbox("丢弃物品", ref Configuration.DiscardItems))
                         Configuration.Save();
                 }
                 if (!AutoRetainer_IPCSubscriber.IsEnabled)
@@ -2737,7 +3121,7 @@ public static class ConfigTab
                         ImGui.Unindent();
                     }
 
-                    if (ImGui.Checkbox($"保护装备套装##Desynth{nameof(Configuration.AutoDesynthNoGearset)}", ref Configuration.AutoDesynthNoGearset)) 
+                    if (ImGui.Checkbox($"保护装备套装##Desynth{nameof(Configuration.AutoDesynthNoGearset)}", ref Configuration.AutoDesynthNoGearset))
                         Configuration.Save();
 
                     if (ImGui.CollapsingHeader("分解类别"))
@@ -2799,7 +3183,7 @@ public static class ConfigTab
                             }
                             ImGui.PopItemWidth();
                         }
-                        if (ImGui.Checkbox("使用军队传送卷", ref Configuration.AutoGCTurninUseTicket)) 
+                        if (ImGui.Checkbox("使用军队传送卷", ref Configuration.AutoGCTurninUseTicket))
                             Configuration.Save();
                         ImGui.Unindent();
                     }
@@ -2980,7 +3364,8 @@ public static class ConfigTab
                         }
                     }
                     ImGui.PopItemWidth();
-                    if (!ImGui.BeginListBox("##ItemList", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * Configuration.StopItemQtyItemDictionary.Count) + 5))) return;
+                    if (!ImGui.BeginListBox("##ItemList", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * Configuration.StopItemQtyItemDictionary.Count) + 5)))
+                        return;
 
                     foreach (KeyValuePair<uint, KeyValuePair<string, int>> item in Configuration.StopItemQtyItemDictionary)
                     {
@@ -2996,11 +3381,54 @@ public static class ConfigTab
                         Configuration.Save();
                 }
 
-                MakeCommands("在所有循环终止时执行命令",
-                             ref Configuration.ExecuteCommandsTermination,  ref Configuration.CustomCommandsTermination, ref terminationCommand);
+                if (ImGui.Checkbox("Stop Looping when BLU spell unlocked", ref Configuration.TerminationBLUSpellsEnabled))
+                    Configuration.Save();
 
-                if (ImGui.Checkbox("完成所有循环后播放声音： ", ref Configuration.PlayEndSound)) //Heavily Inspired by ChatAlerts
+                if (Configuration.TerminationBLUSpellsEnabled)
+                {
+                    ImGui.Indent();
+
+                    if(ImGui.BeginCombo("##TerminationBlueSpell", "Select BLU spell"))
+                    {
+                        foreach (BLUHelper.BLUSpell bluSpell in BLUHelper.spells)
+                        {
+                            if (!BLUHelper.SpellUnlocked(bluSpell))
+                                if (ImGui.Selectable($"({bluSpell.Entry}) {bluSpell.Name}"))
+                                {
+                                    Configuration.TerminationBLUSpells.Add(bluSpell.ID);
+                                    Configuration.TerminationBLUSpells = [..Configuration.TerminationBLUSpells.OrderBy(sp => BLUHelper.spellsById[sp].Entry)];
+                                    Configuration.Save();
+                                }
+                        }
+
+                        ImGui.EndCombo();
+                    }
+
+                    if (ImGui.BeginListBox("##TerminationBluSpellList", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * Configuration.TerminationBLUSpells.Count) + 5)))
+                    {
+                        foreach (uint bluSpell in Configuration.TerminationBLUSpells)
+                        {
+                            BLUHelper.BLUSpell spell = BLUHelper.spellsById[bluSpell];
+                            ImGui.Selectable($"({spell.Entry}) {spell.Name}");
+                            if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+                            {
+                                Configuration.TerminationBLUSpells.Remove(bluSpell);
+                                Configuration.Save();
+                                return;
+                            }
+                        }
+                        ImGui.EndListBox();
+                    }
+                    if (ImGui.Checkbox("Stop Looping Only When All Spells Unlocked", ref Configuration.TerminationBLUSpellsAll))
                         Configuration.Save();
+
+                    ImGui.Unindent();
+                }
+
+                MakeCommands("在所有循环终止时执行命令", ref Configuration.ExecuteCommandsTermination,  ref Configuration.CustomCommandsTermination, ref terminationCommand, "CommandsTermination");
+
+                if (ImGui.Checkbox("完成所有循环后播放声音: ", ref Configuration.PlayEndSound)) //Heavily Inspired by ChatAlerts
+                    Configuration.Save();
                 if (Configuration.PlayEndSound)
                 {
                     if (ImGuiEx.IconButton(FontAwesomeIcon.Play, "##ConfigSoundTest", new Vector2(ImGui.GetItemRectSize().Y)))
@@ -3053,11 +3481,33 @@ public static class ConfigTab
 
             ImGuiEx.TextWrapped("Step 1: Have 4 clients logged in and ready with AD open on the same data center not in a party");
             ImGuiEx.TextWrapped("Step 2: One of the clients becomes the host. The host will lead the others. Select host below on the client you want to become host");
-            ImGuiEx.TextWrapped("Step 3: Select Multibox on the host");
-            ImGuiEx.TextWrapped("Step 4: Select Multibox on the 3 clients. Each of them should be invited to the party. Below will be current information about them. if it says \"no info\" they are not connected");
-            ImGuiEx.TextWrapped("Step 5: On the host, select which dungeon you want to run and how often. Click run");
+            ImGuiEx.TextWrapped("Step 3: Select if you want to use Named Pipes or TCP to connect. While both works in either case, Pipes are recommended when all clients are on the same pc. TCP if not.");
+            ImGui.Separator();
 
+            uint text     = ImGui.GetColorU32(ImGuiCol.Text);
+            uint disabled = ImGui.GetColorU32(ImGuiCol.TextDisabled);
 
+            TransportType transportType = ConfigurationMain.MultiboxUtility.TransportType;
+            using (ImRaii.PushColor(ImGuiCol.Text, transportType == TransportType.NamedPipe ? text : disabled))
+            {
+                ImGui.TextWrapped("Named Pipes");
+                ImGuiEx.TextWrapped("Step 4: The pipe name needs to match between clients and host");
+                ImGuiEx.TextWrapped("Step 5: On the clients, the server name can be used to connect to hosts on other computers. The default of \".\" is the local computer.");
+            }
+            ImGui.Separator();
+            using (ImRaii.PushColor(ImGuiCol.Text, transportType == TransportType.Tcp ? text : disabled))
+            {
+                ImGui.TextWrapped("TCP");
+                ImGuiEx.TextWrapped("Step 4: The port needs to match between clients and host");
+                ImGuiEx.TextWrapped("Step 5: On the clients, the server address can be changed to connect to hosts on other computers.");
+                if(OperatingSystem.IsWindows())
+                    ImGui.TextWrapped("UAC might ask you to allow network access");
+            }
+
+            ImGui.Separator();
+            ImGuiEx.TextWrapped("Step 6: Select Multibox on the host");
+            ImGuiEx.TextWrapped("Step 7: Select Multibox on the 3 clients. Each of them should be invited to the party. Below will be current information about them. if it says \"no info\" they are not connected");
+            ImGuiEx.TextWrapped("Step 8: On the host, select which dungeon you want to run and how often. Click run");
 
             bool multiBox = ConfigurationMain.Instance.multiBox;
             if (ImGui.Checkbox(nameof(ConfigurationMain.MultiBox), ref multiBox))
@@ -3068,9 +3518,100 @@ public static class ConfigTab
 
             using(ImRaii.Disabled(ConfigurationMain.Instance.MultiBox))
             {
-                if (ImGui.Checkbox(nameof(ConfigurationMain.host), ref ConfigurationMain.Instance.host))
+                ImGui.Indent();
+                if(ImGuiEx.EnumCombo("Transport Type", ref transportType))
+                {
+                    ConfigurationMain.MultiboxUtility.TransportType = transportType;
                     Configuration.Save();
+                }
+
+                ImGuiComponents.HelpMarker("Named Pipe: Network connectivity depends on system settings.\nTCP: Network connectivity depends on firewall settings.\nIn most cases Named Pipe should work with no changes.");
+
+                switch (transportType)
+                {
+                    case TransportType.NamedPipe:
+                    {
+                        string pipeName = ConfigurationMain.MultiboxUtility.PipeName;
+                        if(ImGui.InputText("Pipe Name", ref pipeName))
+                        {
+                            ConfigurationMain.MultiboxUtility.PipeName = pipeName;
+                            Configuration.Save();
+                        }
+
+                        ImGui.SameLine();
+                        if (ImGui.Button("Reset##MultiboxResetPipeName"))
+                        {
+                            ConfigurationMain.MultiboxUtility.PipeName = "AutoDutyPipe";
+                                Configuration.Save();
+                        }
+
+                        if (!ConfigurationMain.Instance.host)
+                        {
+                            string serverName = ConfigurationMain.MultiboxUtility.ServerName;
+                            if (ImGui.InputText("Server Name", ref serverName))
+                            {
+                                ConfigurationMain.MultiboxUtility.ServerName = serverName;
+                                Configuration.Save();
+                            }
+
+                            ImGui.SameLine();
+                            if (ImGui.Button("Reset##MultiboxResetServerName"))
+                            {
+                                ConfigurationMain.MultiboxUtility.ServerName = ".";
+                                    Configuration.Save();
+                            }
+                        }
+
+                        break;
+                    }
+                    case TransportType.Tcp:
+                    {
+                        if (!ConfigurationMain.Instance.host)
+                        {
+                            string serverAddress = ConfigurationMain.MultiboxUtility.ServerAddress;
+                            if (ImGui.InputText("Server Address", ref serverAddress))
+                            {
+                                ConfigurationMain.MultiboxUtility.ServerAddress = serverAddress;
+                                Configuration.Save();
+                            }
+
+                            ImGui.SameLine();
+                            if (ImGui.Button("Reset##MultiboxResetServerAddress"))
+                            {
+                                ConfigurationMain.MultiboxUtility.ServerAddress = "127.0.0.1";
+                                    Configuration.Save();
+                            }
+                        }
+
+                        int serverPort = ConfigurationMain.MultiboxUtility.ServerPort;
+                        if (ImGui.InputInt("Server Port", ref serverPort))
+                        {
+                            ConfigurationMain.MultiboxUtility.ServerPort = serverPort;
+                            Configuration.Save();
+                        }
+
+                        ImGui.SameLine();
+                        if (ImGui.Button("Reset##MultiboxResetServerPort"))
+                        {
+                            ConfigurationMain.MultiboxUtility.ServerPort = 1716;
+                                Configuration.Save();
+                        }
+
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                if (ImGui.Checkbox($"Host##MultiboxHost", ref ConfigurationMain.Instance.host))
+                    Configuration.Save();
+
+                ImGui.Unindent();
             }
+
+            if (ImGui.Checkbox("Synchronize Paths##MultiboxSynchronizePaths", ref ConfigurationMain.Instance.multiBoxSynchronizePath))
+                Configuration.Save();
+            ImGuiComponents.HelpMarker($"Sends the path from the host to the clients");
 
             if (ConfigurationMain.Instance.MultiBox)
             {
@@ -3079,17 +3620,78 @@ public static class ConfigTab
 
                 if(ConfigurationMain.Instance.host)
                 {
-                    for (int i = 0; i < ConfigurationMain.MultiboxUtility.Server.MAX_SERVERS; i++)
+                    unsafe
                     {
-                        ConfigurationMain.MultiboxUtility.Server.ClientInfo? info = ConfigurationMain.MultiboxUtility.Server.clients[i];
-                        ImGuiEx.Text(info != null ?
-                                         $"Client {i}: {(PartyHelper.IsPartyMember(info.CID) ? "in party" : "no party")} | {DateTime.Now.Subtract(ConfigurationMain.MultiboxUtility.Server.keepAlives[i]).TotalSeconds:F3}s ago | {ConfigurationMain.MultiboxUtility.Server.stepConfirms[i]}" :
-                                         $"Client {i}: No Info");
-                    }
-                    using(ImRaii.Disabled(!Plugin.InDungeon))
-                    {
-                        if(ImGui.Button("Resynchronize"))
-                            ConfigurationMain.MultiboxUtility.Server.SendStepStart();
+                        ImGui.Separator();
+
+                        if (ImGui.Checkbox("Scramble names", ref ConfigurationMain.Instance.multiBoxScrambleNames))
+                            Configuration.Save();
+
+                        ImGui.Columns(5);
+
+                        ImGuiEx.Text("Name");
+                        ImGui.NextColumn();
+                        ImGuiEx.Text("In Party?");
+                        ImGui.NextColumn();
+                        ImGuiEx.Text("Job");
+                        ImGui.NextColumn();
+                        ImGuiEx.Text("Blocking?");
+                        ImGui.NextColumn();
+                        ImGuiEx.Text("Last heard");
+                        ImGui.Separator();
+                        ImGui.NextColumn();
+
+                        InfoProxyPartyMember* partyMembers = InfoProxyPartyMember.Instance();
+
+                        for (int i = 0; i < ConfigurationMain.MultiboxUtility.Server.MAX_SERVERS; i++)
+                        {
+                            ConfigurationMain.MultiboxUtility.Server.ClientInfo? info = ConfigurationMain.MultiboxUtility.Server.clients[i];
+
+                            if(info != null)
+                            {
+                                ImGuiEx.Text(ConfigurationMain.Instance.multiBoxScrambleNames ? i.ToString() : info.CName);
+                                ImGui.NextColumn();
+                                bool inParty = PartyHelper.IsPartyMember(info.CID);
+                                ImGuiEx.Text(inParty ? ImGuiHelper.StateGoodColor : ImGuiHelper.StateBadColor, inParty ? "in party" : "no party");
+                                ImGui.NextColumn();
+                                if(partyMembers != null)
+                                {
+                                    InfoProxyCommonList.CharacterData* data = partyMembers->GetEntryByContentId(info.CID);
+                                    if(data != null)
+                                    {
+                                        Job job = (Job) data->Job;
+                                        ImGuiEx.Text(job.GetCombatRole() switch
+                                        {
+                                            CombatRole.Tank => ImGuiHelper.RoleTankColor,
+                                            CombatRole.Healer => ImGuiHelper.RoleHealerColor,
+                                            CombatRole.DPS => ImGuiHelper.RoleDPSColor,
+                                            _ => ImGuiHelper.StateBadColor
+                                        }, job.ToCustomString());
+                                    }
+                                }
+
+                                ImGui.NextColumn();
+                                ImGuiEx.Text(ConfigurationMain.MultiboxUtility.Server.stepConfirms[i].ToString());
+                                ImGui.NextColumn();
+                                double totalSeconds = DateTime.Now.Subtract(ConfigurationMain.MultiboxUtility.Server.keepAlives[i]).TotalSeconds;
+                                ImGuiEx.Text(totalSeconds < 10 ? ImGuiHelper.StateGoodColor : ImGuiHelper.StateBadColor, $"{totalSeconds:F3}s ago");
+                                ImGui.NextColumn();
+                            }
+                            else
+                            {
+                                ImGui.Text($"{i}: No Info");
+                                for (int j = 0; j < 5; j++)
+                                    ImGui.NextColumn();
+                            }
+                        }
+                        ImGui.Columns(1);
+
+                        using(ImRaii.Disabled(!InDungeon))
+                        {
+                            if(ImGui.Button("Resynchronize Step##MultiboxSynchronizeStep"))
+                                ConfigurationMain.MultiboxUtility.Server.SendStepStart();
+                        }
+                        ImGui.Separator();
                     }
                 }
 
@@ -3097,7 +3699,9 @@ public static class ConfigTab
             }
         }
 
-        void MakeCommands(string checkbox, ref bool execute, ref List<string> commands, ref string curCommand)
+        return;
+
+        static void MakeCommands(string checkbox, ref bool execute, ref List<string> commands, ref string curCommand, string id)
         {
             if (ImGui.Checkbox($"{checkbox}{(execute ? ":" : string.Empty)} ", ref execute))
                 Configuration.Save();
@@ -3108,7 +3712,7 @@ public static class ConfigTab
             {
                 ImGui.Indent();
                 ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - 185 * ImGuiHelpers.GlobalScale);
-                if (ImGui.InputTextWithHint($"##Commands{checkbox}", "输入以 / 开头的命令", ref curCommand, 500, ImGuiInputTextFlags.EnterReturnsTrue))
+                if (ImGui.InputTextWithHint($"##Commands{checkbox}_{id}", "输入以 / 开头的命令", ref curCommand, 500, ImGuiInputTextFlags.EnterReturnsTrue))
                     if (!curCommand.IsNullOrEmpty() && curCommand[0] == '/' && (ImGui.IsKeyDown(ImGuiKey.Enter) || ImGui.IsKeyDown(ImGuiKey.KeypadEnter)))
                     {
                         Configuration.CustomCommandsPreLoop.Add(curCommand);
@@ -3121,13 +3725,13 @@ public static class ConfigTab
                 ImGui.SameLine(0, 5);
                 using (ImRaii.Disabled(curCommand.IsNullOrEmpty() || curCommand[0] != '/'))
                 {
-                    if (ImGui.Button($"添加命令##CommandButton{checkbox}"))
+                    if (ImGui.Button($"添加命令##CommandButton{checkbox}_{id}"))
                     {
                         commands.Add(curCommand);
                         Configuration.Save();
                     }
                 }
-                if (!ImGui.BeginListBox($"##CommandList{checkbox}", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * commands.Count) + 5))) 
+                if (!ImGui.BeginListBox($"##CommandList{checkbox}_{id}", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * commands.Count) + 5))) 
                     return;
 
                 bool removeItem = false;
@@ -3135,7 +3739,7 @@ public static class ConfigTab
 
                 foreach ((string Value, int Index) item in commands.Select((Value, Index) => (Value, Index)))
                 {
-                    ImGui.Selectable($"{item.Value}##Selectable{checkbox}");
+                    ImGui.Selectable($"{item.Value}##Selectable{checkbox}_{id}");
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
                         removeItem = true;
@@ -3159,7 +3763,7 @@ public static class ConfigTab
         ImGui.PushItemWidth(150 * ImGuiHelpers.GlobalScale);
         if (ImGui.BeginCombo("##ConfigEndSoundMethod", Configuration.SoundEnum.ToName()))
         {
-            foreach (Sounds sound in _validSounds)
+            foreach (Sounds sound in validSounds)
                 if (ImGui.Selectable(sound.ToName()))
                 {
                     Configuration.SoundEnum = sound;

@@ -2,12 +2,12 @@
 using ECommons.DalamudServices;
 using Lumina.Data.Files;
 using Lumina.Data.Parsing.Layer;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Lumina.Excel.Sheets;
 
     public static class RepairNPCHelper

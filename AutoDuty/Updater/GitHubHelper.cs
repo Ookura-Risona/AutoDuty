@@ -1,18 +1,19 @@
 ﻿using ECommons.DalamudServices;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Dalamud.Networking.Http;
 
 namespace AutoDuty.Updater
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
     internal static class GitHubHelper
     {
         const string CLIENT_ID = "Iv23liWV5R21nasKaQjP";
@@ -41,7 +42,7 @@ namespace AutoDuty.Updater
             }
         }
 
-        internal static async Task<Dictionary<string, string>?> GetPathFileListAsync()
+        internal static async Task<(Dictionary<string, string>?, Dictionary<string, string>?)> GetPathUpdateInfoAsync()
         {
             try
             {
@@ -53,12 +54,13 @@ namespace AutoDuty.Updater
                 client.Timeout = TimeSpan.FromSeconds(20);
 
                 Dictionary<string, string>? md5List = await client.GetFromJsonAsync<Dictionary<string, string>>("https://raw.githubusercontent.com/erdelf/AutoDuty/refs/heads/master/AutoDuty/Resources/md5s.json");
-                return md5List ?? [];
+                Dictionary<string, string>? delList = await client.GetFromJsonAsync<Dictionary<string, string>>("https://raw.githubusercontent.com/erdelf/AutoDuty/refs/heads/master/AutoDuty/Resources/md5s_Removed.json");
+                return (md5List ?? [], delList ?? []);
             }
             catch (Exception ex)
             {
                 Svc.Log.Error($"{ex}");
-                return null;
+                return (null, null);
             }
         }
 

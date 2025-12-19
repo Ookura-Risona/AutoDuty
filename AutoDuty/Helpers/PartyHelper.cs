@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace AutoDuty.Helpers
+﻿namespace AutoDuty.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Dalamud.Game.ClientState.Objects.Types;
+    using ECommons.Automation;
     using ECommons.DalamudServices;
     using ECommons.GameFunctions;
     using ECommons.PartyFunctions;
+    using FFXIVClientStructs.FFXIV.Client.UI.Arrays;
 
     public static class PartyHelper
     {
@@ -39,7 +40,8 @@ namespace AutoDuty.Helpers
             {
                 IGameObject? member = PronounHelper.GetIGameObjectFromPronounID(42 + i);
 
-                if (member is IBattleChara battleChara) party.Add(battleChara);
+                if (member is IBattleChara battleChara) 
+                    party.Add(battleChara);
             }
 
             return party;
@@ -59,6 +61,23 @@ namespace AutoDuty.Helpers
 
             if (DateTime.Now.Subtract(partyCombatCheckTime).TotalSeconds < partyCombatCheckInterval.TotalSeconds)
                 return partyInCombat;
+
+
+            if (Plugin.pathAction?.Name != "Boss")
+            {
+                EnemyListNumberArray.EnemyListEnemyNumberArray[] inCombatEnemies = [..EnemyListNumberArray.Instance()->Enemies.ToArray().Where(x => x.MaxHPPercent > 0)];
+
+                if (inCombatEnemies.Length > 0 && inCombatEnemies.All(x =>
+                                                                          Svc.Objects.FirstOrDefault(y => y.EntityId == x.EntityId) is IBattleChara chara &&
+                                                                          !ObjectHelper.IsBoss(chara)                                                     &&
+                                                                          (!chara.IsTargetable || ObjectHelper.GetDistanceToPlayer(chara) > 25)))
+                {
+                    Svc.Log.Debug($"Technically in combat but all enemies untargetable.");
+                    partyInCombat        = false;
+                    partyCombatCheckTime = DateTime.Now;
+                    return partyInCombat;
+                }
+            }
 
             List<IBattleChara> members = GetPartyMembers();
             if (!partyInCombat && members.Any(x => !x.Struct()->IsDead() && x.Struct()->InCombat))
@@ -109,5 +128,8 @@ namespace AutoDuty.Helpers
 
             return UniversalParty.Members.Any(upm => upm.ContentID == cid);
         }
+
+        public static void LeaveParty() => 
+            Chat.ExecuteCommand("/partycmd leave");
     }
 }

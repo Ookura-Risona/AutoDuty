@@ -14,10 +14,8 @@ using System.Collections.Generic;
 
 public unsafe class Overlay : Window
 {
-    public Overlay() : base("AutoDuty Overlay", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.AlwaysAutoResize)
-    {
+    public Overlay() : base("AutoDuty Overlay", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.AlwaysAutoResize) => 
         this.RespectCloseHotkey = false;
-    }
 
     private static string hideText = " ";
     private static string hideTextAction = " ";
@@ -35,7 +33,7 @@ public unsafe class Overlay : Window
         
         int heightDiff = (this.lineHeight - this.lineHeightPrev);
 
-        if (Plugin.Configuration.OverlayAnchorBottom && heightDiff != 0)
+        if (AutoDuty.Configuration.OverlayAnchorBottom && heightDiff != 0)
         {
             this.Position ??= this.pos;
             this.Position -= new Vector2(0, ImGui.GetTextLineHeightWithSpacing() * 1.1f * heightDiff) * ImGuiHelpers.GlobalScale;
@@ -61,7 +59,7 @@ public unsafe class Overlay : Window
             return;
         }
 
-        if(!Plugin.Configuration.ShowOverlay)
+        if(!AutoDuty.Configuration.ShowOverlay)
         {
             this.IsOpen = false;
             return;
@@ -69,9 +67,9 @@ public unsafe class Overlay : Window
 
         List<Action> lineActions = [];
 
-        if (!Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
+        if (!Plugin.states.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
         {
-            if (Plugin.Configuration.HideOverlayWhenStopped)
+            if (AutoDuty.Configuration.HideOverlayWhenStopped)
             {
                 this.IsOpen = false;
                 return;
@@ -81,7 +79,7 @@ public unsafe class Overlay : Window
             lineActions.Add(() =>
                             {
                                 MainWindow.GotoAndActions();
-                                if (!Plugin.InDungeon)
+                                if (!InDungeon)
                                 {
                                     ImGui.SameLine(0, 5);
                                     if (ImGuiEx.IconButton($"\uf013##Config", "OpenAutoDuty"))
@@ -89,24 +87,24 @@ public unsafe class Overlay : Window
                                     ImGui.SameLine(0, 5);
                                     if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.WindowClose, "CloseOverlay"))
                                     {
-                                        this.IsOpen                      = false;
-                                        Plugin.Configuration.ShowOverlay = false;
-                                        Plugin.MainWindow.IsOpen         = true;
+                                        this.IsOpen                        = false;
+                                        AutoDuty.Configuration.ShowOverlay = false;
+                                        Plugin.MainWindow.IsOpen           = true;
                                     }
                                 }
                             });
         }
 
-        if (Plugin.InDungeon || Plugin.States.HasFlag(PluginState.Looping))
+        if (InDungeon || Plugin.states.HasFlag(PluginState.Looping))
         {
             this.lineHeight++;
             lineActions.Add(() =>
                             {
-                                using (ImRaii.Disabled(!Plugin.InDungeon || !ContentPathsManager.DictionaryPaths.ContainsKey(Svc.ClientState.TerritoryType)))
+                                using (ImRaii.Disabled(!InDungeon || !ContentPathsManager.DictionaryPaths.ContainsKey(Svc.ClientState.TerritoryType)))
                                 {
                                     if (Plugin.Stage == 0)
                                     {
-                                        if (!Plugin.States.HasFlag(PluginState.Navigating) && !Plugin.States.HasFlag(PluginState.Looping))
+                                        if (!Plugin.states.HasFlag(PluginState.Navigating) && !Plugin.states.HasFlag(PluginState.Looping))
                                             if (ImGui.Button("Start"))
                                             {
                                                 Plugin.LoadPath();
@@ -132,40 +130,40 @@ public unsafe class Overlay : Window
                                 ImGui.SameLine();
                                 if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.WindowClose, "CloseOverlay"))
                                 {
-                                    this.IsOpen                      = false;
-                                    Plugin.Configuration.ShowOverlay = false;
-                                    Plugin.MainWindow.IsOpen         = true;
+                                    this.IsOpen                        = false;
+                                    AutoDuty.Configuration.ShowOverlay = false;
+                                    Plugin.MainWindow.IsOpen           = true;
                                 }
                             });
 
-            if (Plugin.Configuration.ShowDutyLoopText)
+            if (AutoDuty.Configuration.ShowDutyLoopText)
             {
                 this.lineHeight++;
                 lineActions.Add(() =>
                                 {
                                     if (ImGui.Button($"{hideText}##OverlayHideButton"))
                                     {
-                                        Plugin.Configuration.ShowDutyLoopText = false;
-                                        Plugin.Configuration.Save();
+                                        AutoDuty.Configuration.ShowDutyLoopText = false;
+                                        Configuration.Save();
                                     }
 
                                     hideText = ImGui.IsItemHovered() ? "隐藏" : string.Empty;
 
                                     ImGui.SameLine(0, 5);
 
-                                    if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.States.HasFlag(PluginState.Navigating))
+                                    if (Plugin.states.HasFlag(PluginState.Navigating) || Plugin.states.HasFlag(PluginState.Navigating))
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $": {Plugin.CurrentLoop} of {Plugin.Configuration.LoopTimes} Loops" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.states.HasFlag(PluginState.Navigating) ? $": {Plugin.currentLoop} of {AutoDuty.Configuration.LoopTimes} Loops" : "")}";
                                     else
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $": {Plugin.CurrentLoop} of {Plugin.Configuration.LoopTimes} Loops" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.states.HasFlag(PluginState.Navigating) ? $": {Plugin.currentLoop} of {AutoDuty.Configuration.LoopTimes} Loops" : "")}";
 
                                     ImGui.TextColored(new Vector4(93 / 255f, 226 / 255f, 231 / 255f, 1), loopsText);
                                 });
             }
         }
-        if (Plugin.InDungeon || Plugin.States.HasFlag(PluginState.Navigating) || RepairHelper.State == ActionState.Running || GotoHelper.State == ActionState.Running || GotoInnHelper.State == ActionState.Running || GotoBarracksHelper.State == ActionState.Running || GCTurninHelper.State == ActionState.Running || ExtractHelper.State == ActionState.Running || DesynthHelper.State == ActionState.Running || QueueHelper.State == ActionState.Running)
-            if (Plugin.Configuration.ShowActionText)
+        if (InDungeon || Plugin.states.HasFlag(PluginState.Navigating) || RepairHelper.State == ActionState.Running || GotoHelper.State == ActionState.Running || GotoInnHelper.State == ActionState.Running || GotoBarracksHelper.State == ActionState.Running || GCTurninHelper.State == ActionState.Running || ExtractHelper.State == ActionState.Running || DesynthHelper.State == ActionState.Running || QueueHelper.State == ActionState.Running)
+            if (AutoDuty.Configuration.ShowActionText)
             {
                 this.lineHeight++;
 
@@ -173,18 +171,18 @@ public unsafe class Overlay : Window
                                 {
                                     if (ImGui.Button(hideTextAction + "##OverlayHideActionButton"))
                                     {
-                                        Plugin.Configuration.ShowActionText = false;
-                                        Plugin.Configuration.Save();
+                                        AutoDuty.Configuration.ShowActionText = false;
+                                        Configuration.Save();
                                     }
 
                                     hideTextAction = ImGui.IsItemHovered() ? "隐藏" : "";
 
                                     ImGui.SameLine(0, 5);
-                                    ImGui.TextColored(new Vector4(0, 255f, 0, 1), Plugin.Action.Length > 40 ? Plugin.Action[..37] + "..." : Plugin.Action);
+                                    ImGui.TextColored(new Vector4(0, 255f, 0, 1), Plugin.action.Length > 40 ? Plugin.action[..37] + "..." : Plugin.action);
                                 });
             }
 
-        if(Plugin.Configuration.OverlayAnchorBottom)
+        if(AutoDuty.Configuration.OverlayAnchorBottom)
             for (int i = lineActions.Count - 1; i >= 0; i--)
                 lineActions[i]();
         else

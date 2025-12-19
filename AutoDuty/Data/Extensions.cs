@@ -1,15 +1,17 @@
-﻿using ECommons;
-using Dalamud.Bindings.ImGui;
-using System;
-using System.Collections.Generic;
+﻿using Dalamud.Bindings.ImGui;
+using ECommons;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using System.ComponentModel;
 using System.Reflection;
 
 namespace AutoDuty.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class Extensions
     {
         public static void DrawCustomText(this PathAction pathAction, int index, Action? clickedAction)
@@ -22,30 +24,36 @@ namespace AutoDuty.Data
         {
             List<(Vector4 color, string text)> results = [];
 
-            Vector4 v4 = index == Plugin.Indexer ? new Vector4(0, 255, 255, 1) : (pathAction.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? new Vector4(0, 255, 0, 1) : new Vector4(255, 255, 255, 1));
+            Vector4 v4 = index == Plugin.indexer ? new Vector4(0, 255, 255, 1) : (pathAction.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? new Vector4(0, 255, 0, 1) : new Vector4(255, 255, 255, 1));
 
             if (pathAction.Tag.HasFlag(ActionTag.Comment))
             {
                 results.Add((new Vector4(0, 1, 0, 1), pathAction.Note));
                 return results;
             }
-            if (!pathAction.Tag.HasAnyFlag(ActionTag.Revival) && pathAction.Tag != ActionTag.None)
+            if (!pathAction.Tag.HasFlag(ActionTag.Revival) && pathAction.Tag != ActionTag.None)
             {
-                results.Add((index == Plugin.Indexer ? v4 : new Vector4(1, 165 / 255f, 0, 1), $"{pathAction.Tag}"));
-                results.Add((v4, "|"));
+                results.Add((index == Plugin.indexer ? v4 : new Vector4(1, 165 / 255f, 0, 1), $"{pathAction.Tag}"));
+                results.Add((v4, " | "));
             }
             results.Add((v4, $"{pathAction.Name}"));
-            results.Add((v4, "|"));
+            results.Add((v4, " | "));
             results.Add((v4, $"{pathAction.Position.ToCustomString()}"));
             if (!pathAction.Arguments.All(x => x.IsNullOrEmpty()))
             {
-                results.Add((v4, "|"));
+                results.Add((v4, " | "));
                 results.Add((v4, $"{pathAction.Arguments.ToCustomString()}"));
             }
             if (!pathAction.Note.IsNullOrEmpty())
             {
-                results.Add((v4, "|"));
-                results.Add((index == Plugin.Indexer ? v4 : new Vector4(0, 1, 0, 1), $"{pathAction.Note}"));
+                results.Add((v4, " | "));
+                results.Add((index == Plugin.indexer ? v4 : new Vector4(0, 1, 0, 1), $"{pathAction.Note}"));
+            }
+
+            if (pathAction.Conditions.Count != 0)
+            {
+                results.Add((v4, " | "));
+                results.Add((new Vector4(1, 165 / 255f, 0, 1), "Conditions"));
             }
             return results;
         }
@@ -92,53 +100,32 @@ namespace AutoDuty.Data
             return outString;
         }
 
-        public static string ToCustomString(this PathAction pathAction) =>$"{(pathAction.Tag.HasAnyFlag(ActionTag.None, ActionTag.Treasure, ActionTag.Revival) ? "" : $"{pathAction.Tag.ToCustomString()}|")}{pathAction.Name}|{pathAction.Position.ToCustomString()}{(pathAction.Arguments.All(x => x.IsNullOrEmpty()) ? "" : $"|{pathAction.Arguments.ToCustomString()}")}{(pathAction.Note.IsNullOrEmpty() ? "" : $"|{pathAction.Note}")}";
+        public static string ToCustomString(this PathAction pathAction) =>
+            $"{(pathAction.Tag.HasAnyFlag(ActionTag.None, ActionTag.Treasure, ActionTag.Revival) ? "" : $"{pathAction.Tag.ToCustomString()}|")}{pathAction.Name}|{pathAction.Position.ToCustomString()}{(pathAction.Arguments.All(x => x.IsNullOrEmpty()) ? "" : $"|{pathAction.Arguments.ToCustomString()}")}{(pathAction.Note.IsNullOrEmpty() ? "" : $"|{pathAction.Note}")}";
 
         public static string ToCustomString(this Vector3 vector3) => vector3.ToString("F2", CultureInfo.InvariantCulture).Trim('<', '>');
 
-        public static List<string> ToConditional(this string conditionalString)
+        extension(string origin)
         {
-            List<string>? list       = new List<string>();
-            string[]?     firstParse = conditionalString.Replace(" ", string.Empty).Split('(');
-            if (firstParse.Length < 2) return list;
-            string[]? secondparse = firstParse[1].Split(")");
-            if (secondparse.Length < 2) return list;
-            string? method   = firstParse[0];
-            string? argument = secondparse[0];
-            string? operatorValue;
-            string? rightSideValue;
-            if (secondparse[1][1] == '=')
+            public bool TryGetVector3(out Vector3 vector3)
             {
-                operatorValue = $"{secondparse[1][0]}{secondparse[1][1]}";
-                rightSideValue = secondparse[1].Replace(operatorValue, string.Empty);
-            }
-            else
-            {
-                operatorValue = $"{secondparse[1][0]}";
-                rightSideValue = secondparse[1].Replace(operatorValue, string.Empty);
-            }
-            list.Add(method, argument, operatorValue, rightSideValue);
-            return list;
-        }
+                vector3 = Vector3.Zero;
+                CultureInfo            cul         = CultureInfo.InvariantCulture;
+                const StringComparison strComp     = StringComparison.InvariantCulture;
+                string[]               splitString = origin.Replace(" ", string.Empty, strComp).Replace("<", string.Empty, strComp).Replace(">", string.Empty, strComp).Split(",");
 
-
-        public static bool TryGetVector3(this string vector3String, out Vector3 vector3)
-        {
-            vector3 = Vector3.Zero;
-            CultureInfo?     cul         = CultureInfo.InvariantCulture;
-            StringComparison strcomp     = StringComparison.InvariantCulture;
-            string[]?        splitString = vector3String.Replace(" ", string.Empty, strcomp).Replace("<", string.Empty, strcomp).Replace(">", string.Empty, strcomp).Split(",");
-
-            if (splitString.Length < 3) return false;
+                if (splitString.Length < 3) 
+                    return false;
             
-            vector3 = new Vector3(float.Parse(splitString[0], cul), float.Parse(splitString[1], cul), float.Parse(splitString[2], cul));
+                vector3 = new Vector3(float.Parse(splitString[0], cul), float.Parse(splitString[1], cul), float.Parse(splitString[2], cul));
 
-            return true;
+                return true;
+            }
         }
 
-        public static string ToName(this Sounds value)
-        {
-            return value switch
+
+        public static string ToName(this Sounds value) =>
+            value switch
             {
                 Sounds.None => "None",
                 Sounds.Sound01 => "Sound Effect 1",
@@ -159,7 +146,6 @@ namespace AutoDuty.Data
                 Sounds.Sound16 => "Sound Effect 16",
                 _ => "Unknown",
             };
-        }
 
         public static bool IsTrustLeveling(this LevelingMode mode) =>
             mode is LevelingMode.Trust_Group or LevelingMode.Trust_Solo;
@@ -198,5 +184,61 @@ namespace AutoDuty.Data
                 ExternalPlugin.Pandora => "Pandora's Box",
                 _ => throw new ArgumentOutOfRangeException(nameof(plugin), plugin, null)
             };
+
+        public static bool IsFulfilled(this ConditionType conditionType, params string[] conditionArray)
+        {
+            switch (conditionType)
+            {
+                case ConditionType.ItemCount:
+                    if (conditionArray.Length > 2)
+                        if (uint.TryParse(conditionArray[0], out uint itemId))
+                            if (uint.TryParse(conditionArray[2], out uint quantity))
+                                if (PathActionCondition.operations.ContainsKey(conditionArray[1]))
+                                    return new PathActionConditionItemCount
+                                           {
+                                               itemId        = itemId,
+                                               quantity      = quantity,
+                                               operatorValue = conditionArray[1]
+                                           }.IsFulfilled();
+                    break;
+                case ConditionType.ObjectData:
+                    if (conditionArray.Length > 3)
+                        if(uint.TryParse(conditionArray[0], out uint baseId))
+                            if (Enum.TryParse(conditionArray[1], out ObjectDataProperty odp))
+                                return new PathActionConditionObjectData
+                                       {
+                                           baseId   = baseId,
+                                           property = odp,
+                                           value    = int.TryParse(conditionArray[2], out int value) ? value : bool.TryParse(conditionArray[2], out bool confirm) && confirm ? 1 : 0
+                                       }.IsFulfilled();
+                    break;
+                case ConditionType.Job:
+                    if (conditionArray.Length > 0)
+                        if (Enum.TryParse(conditionArray[0], out JobWithRole jwr))
+                            return new PathActionConditionJob
+                                   {
+                                       job = jwr
+                                   }.IsFulfilled();
+                    break;
+                case ConditionType.ActionStatus:
+                    if (conditionArray.Length > 2)
+                        if (Enum.TryParse(conditionArray[0], out ActionType type))
+                            if (uint.TryParse(conditionArray[1], out uint id))
+                                if (uint.TryParse(conditionArray[2], out uint status))
+                                    return new PathActionConditionActionStatus
+                                           {
+                                               type       = type,
+                                               id         = id,
+                                               statusCode = status
+                                           }.IsFulfilled();
+                    break;
+                case ConditionType.None:
+                case ConditionType.Distance:
+                default:
+                    break;
+            }
+
+            return false;
+        }
     }
 }

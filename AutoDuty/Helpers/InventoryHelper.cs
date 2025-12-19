@@ -2,12 +2,12 @@
 using ECommons.ExcelServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using System;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ECommons.Throttlers;
 
 namespace AutoDuty.Helpers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
@@ -205,7 +205,7 @@ namespace AutoDuty.Helpers
             return items.Where(item => item.ItemId > 0);
         }
 
-        internal static bool CanRepair() => CanRepair(Plugin.Configuration.AutoRepairPct);// && (!Plugin.Configuration.AutoRepairSelf || CanRepairItem(LowestEquippedItem().GetItemId()));
+        internal static bool CanRepair() => CanRepair(Configuration.AutoRepairPct);// && (!Plugin.Configuration.AutoRepairSelf || CanRepairItem(LowestEquippedItem().GetItemId()));
         internal static bool CanRepair(uint percent) => (LowestEquippedItem().Condition / 300f) <= percent;// && (!Plugin.Configuration.AutoRepairSelf || CanRepairItem(LowestEquippedItem().GetItemId()));
 
         //artisan

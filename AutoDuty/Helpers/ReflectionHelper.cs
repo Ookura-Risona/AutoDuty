@@ -1,104 +1,29 @@
-﻿using ECommons.Reflection;
-using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 
-#nullable disable
-
 namespace AutoDuty.Helpers
 {
+    using System;
     using System.IO;
+    using System.Linq;
     using ECommons.DalamudServices;
     using ECommons.EzSharedDataManager;
-    using IPC;
-    using System.Linq;
-    using Dalamud.Plugin;
+    using ECommons.Reflection;
     using static Data.Enums;
 
-    internal class ReflectionHelper
+    internal static class ReflectionHelper
     {
         // What do you mean just (BindingFlags) 60 isn't great ?
-        public const BindingFlags All = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
-
-        private static class YesAlready_Reflection
-        {
-            internal static bool IsEnabled => DalamudReflector.TryGetDalamudPlugin("YesAlready", out _, false, true);
-
-            internal static void SetPluginEnabled(bool trueFalse)
-            {
-                if (DalamudReflector.TryGetDalamudPlugin("YesAlready", out IDalamudPlugin pl, false, true))
-                    pl.GetFoP("Config").SetFoP("Enabled", trueFalse);
-            }
-
-            internal static bool GetPluginEnabled()
-            {
-                if (DalamudReflector.TryGetDalamudPlugin("YesAlready", out IDalamudPlugin pl, false, true))
-                    return (bool)pl.GetFoP("Config").GetFoP("Enabled");
-                else return false;
-            }
-        }
-
-        internal static class BossModReborn_Reflection
-        {
-            internal static readonly object configInstance;
-
-            internal static FieldRef<object, float> MaxDistanceToTarget;
-
-            static BossModReborn_Reflection()
-            {
-                try
-                {
-                    if (BossModReborn_IPCSubscriber.IsEnabled && DalamudReflector.TryGetDalamudPlugin("BossModReborn", out IDalamudPlugin pl, false, true))
-                    {
-                        Assembly assembly = Assembly.GetAssembly(pl.GetType());
-                        Type configType = assembly.GetType("BossMod.AI.AIConfig");
-                        FieldInfo fieldInfo = configType.GetField("MaxDistanceToTarget", (BindingFlags)60);
-                        MaxDistanceToTarget = FieldRefAccess<object, float>(fieldInfo, false);
-                        Type managerType = assembly.GetType("BossMod.AI.AIManager");
-                        object instanceField = managerType.GetField("Instance").GetValue(null);
-                        FieldInfo field = managerType.GetField("_config", (BindingFlags)60);
-                        configInstance = field.GetValue(instanceField);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Svc.Log.Error(ex.ToString());
-                }
-            }
-        }
+        public const BindingFlags ALL = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
         internal static class Avarice_Reflection
         {
-            private static readonly StaticBoolMethod isReaperRear;
-            private static readonly StaticBoolMethod isSamuraiRear;
-            private static readonly StaticBoolMethod isDragoonRear;
-            private static readonly StaticBoolMethod isViperRear;
-
-            public static bool IsRear() =>
-                isReaperRear()  ||
-                isSamuraiRear() ||
-                isDragoonRear() ||
-                isViperRear();
-
-            private static readonly StaticBoolMethod isReaperFlank;
-            private static readonly StaticBoolMethod isSamuraiFlank;
-            private static readonly StaticBoolMethod isDragoonFlank;
-            private static readonly StaticBoolMethod isViperFlank;
-
-            public static bool IsFlank() =>
-                isReaperFlank()  ||
-                isSamuraiFlank() ||
-                isDragoonFlank() ||
-                isViperFlank();
-
-            public static readonly bool avariceReady;
-
-            //internal static readonly FieldRef<SortedList<uint, byte>> Positionals;
+            private static readonly bool avariceReady;
 
             public static bool PositionalChanged(out Positional positional)
             {
-                if (avariceReady && Plugin.Configuration is { AutoManageBossModAISettings: true, positionalAvarice: true })
+                if (avariceReady && Configuration is { AutoManageBossModAISettings: true, positionalAvarice: true })
                 {
                     positional = Positional.Any;
 
@@ -110,43 +35,21 @@ namespace AutoDuty.Helpers
                             positional = Positional.Flank;
                     }
 
-                    if (Plugin.Configuration.PositionalEnum != positional)
+                    if (Configuration.PositionalEnum != positional)
                     {
-                        Plugin.Configuration.PositionalEnum = positional;
+                        Configuration.PositionalEnum = positional;
                         return true;
                     }
                 }
-                positional = Plugin.Configuration.PositionalEnum;
+                positional = Configuration.PositionalEnum;
                 return false;
             }
 
 
             static Avarice_Reflection()
             {
-                
-                if (DalamudReflector.TryGetDalamudPlugin("Avarice", out IDalamudPlugin pl, false, true)) avariceReady = true;
-                /*
-                    Assembly assembly = Assembly.GetAssembly(pl.GetType());
-                    
-                    not used anymore, but might as well keep it here as an example
-                    Positionals = StaticFieldRefAccess<SortedList<uint, byte>>(assembly.GetType("Avarice.StaticData.Data").GetField("ActionPositional", BindingFlags.Static | BindingFlags.Public));
-                    
-                    Type utilType = assembly?.GetType("Avarice.Util");
-
-                    if (utilType != null)
-                    {
-                        isReaperRear  = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsReaperAnticipatedRear"));
-                        isSamuraiRear = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsSamuraiAnticipatedRear"));
-                        isDragoonRear = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsDragoonAnticipatedRear"));
-                        isViperRear   = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedRear"));
-
-                        isReaperFlank  = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsReaperAnticipatedFlank"));
-                        isSamuraiFlank = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsSamuraiAnticipatedFlank"));
-                        isDragoonFlank = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsDragoonAnticipatedFlank"));
-                        isViperFlank   = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedFlank"));
-
-                        avariceReady = true;
-                    }*/
+                if (DalamudReflector.TryGetDalamudPlugin("Avarice", out _, false, true)) 
+                    avariceReady = true;
             }
         }
 
@@ -155,7 +58,7 @@ namespace AutoDuty.Helpers
         public delegate ref F FieldRef<F>();
         internal static FieldRef<F> StaticFieldRefAccess<F>(FieldInfo fieldInfo)
         {
-            if (fieldInfo.IsStatic is false)
+            if (!fieldInfo.IsStatic)
                 throw new ArgumentException("Field must be static");
 
             DynamicMethod dm = new($"__refget_{fieldInfo.DeclaringType?.Name ?? "null"}_static_fi_{fieldInfo.Name}", typeof(F).MakeByRefType(), []);
@@ -167,21 +70,19 @@ namespace AutoDuty.Helpers
             return (FieldRef<F>)dm.CreateDelegate(typeof(FieldRef<F>));
         }
 
-        public delegate ref F FieldRef<in T, F>(T instance = default);
+        public delegate ref F FieldRef<in T, F>(T instance);
 
-        internal static FieldRef<T, F> FieldRefAccess<T, F>(FieldInfo fieldInfo, bool needCastclass)
+        internal static FieldRef<T, F> FieldRefAccess<T, F>(FieldInfo fieldInfo, bool needCastClass)
         {
-            Type delegateInstanceType = typeof(T);
-            Type declaringType        = fieldInfo.DeclaringType;
+            Type  delegateInstanceType = typeof(T);
+            Type? declaringType        = fieldInfo.DeclaringType;
 
-            DynamicMethod dm = new DynamicMethod($"__refget_{delegateInstanceType.Name}_fi_{fieldInfo.Name}",
-                                                 typeof(F).MakeByRefType(), [delegateInstanceType]);
+            DynamicMethod dm = new($"__refget_{delegateInstanceType.Name}_fi_{fieldInfo.Name}", typeof(F).MakeByRefType(), [delegateInstanceType]);
 
             ILGenerator il = dm.GetILGenerator();
 
             il.Emit(OpCodes.Ldarg_0);
-
-            if (needCastclass)
+            if (needCastClass && declaringType != null)
                 il.Emit(OpCodes.Castclass, declaringType);
             il.Emit(OpCodes.Ldflda, fieldInfo);
 
@@ -199,21 +100,21 @@ namespace AutoDuty.Helpers
         public delegate FileInfo InstanceFileInfoMethod<in T>(T instance);
 
 
-        public static DelegateType MethodDelegate<DelegateType>(MethodInfo method, object instance = null, Type delegateInstanceType = null, Type[] delegateArgs = null, bool debug = false) where DelegateType : Delegate
+        public static DelegateType MethodDelegate<DelegateType>(MethodInfo method, object? instance = null, Type? delegateInstanceType = null, Type[]? delegateArgs = null, bool debug = false) where DelegateType : Delegate
         {
             try
             {
-                if ((object)method == null)
-                    throw new ArgumentNullException("method");
+                ArgumentNullException.ThrowIfNull(method);
                 Type delegateType = typeof(DelegateType);
+
                 if (method.IsStatic)
                     return (DelegateType)Delegate.CreateDelegate(delegateType, method);
 
-                Type declaringType = method.DeclaringType;
+                Type? declaringType = method.DeclaringType;
 
                 if (instance is null)
                 {
-                    ParameterInfo[] delegateParameters = delegateType.GetMethod("Invoke").GetParameters();
+                    ParameterInfo[] delegateParameters = delegateType.GetMethod("Invoke")!.GetParameters();
                     delegateInstanceType ??= delegateParameters[0].ParameterType;
 
                     if (declaringType is { IsInterface: true } && delegateInstanceType.IsValueType)
@@ -227,7 +128,7 @@ namespace AutoDuty.Helpers
                 ParameterInfo[] parameters     = method.GetParameters();
                 int             numParameters  = parameters.Length;
                 Type[]          parameterTypes = new Type[numParameters + 1];
-                parameterTypes[0] = declaringType;
+                parameterTypes[0] = declaringType!;
                 for (int i = 0; i < numParameters; i++)
                     parameterTypes[i + 1] = parameters[i].ParameterType;
 
@@ -254,8 +155,8 @@ namespace AutoDuty.Helpers
 
                 if (debug)
                 {
-                    Svc.Log.Warning(delegateType.FullName);
-                    Svc.Log.Warning(delegateType.ReflectedType.FullName);
+                    Svc.Log.Warning(delegateType.FullName                ?? string.Empty);
+                    Svc.Log.Warning(delegateType.ReflectedType?.FullName ?? string.Empty);
                     Svc.Log.Warning(dmd.Name + " " + dmd.ReturnType.FullName + " " + string.Join(" | ", dmd.GetParameters().Select(p => p.ParameterType.FullName)));
                     Svc.Log.Warning(string.Join(" | ", delegateArgsResolved.Select(t => t.FullName)));
                     Svc.Log.Warning(string.Join(" | ", parameterTypes.Select(t => t.FullName)));
@@ -268,7 +169,7 @@ namespace AutoDuty.Helpers
                 Svc.Log.Error(ex.ToString());
             }
 
-            return null;
+            return null!;
         }
     }
 }

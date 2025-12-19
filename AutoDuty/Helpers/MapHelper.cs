@@ -1,7 +1,6 @@
 ﻿using ECommons.DalamudServices;
 using ECommons.MathHelpers;
 using System.Numerics;
-using System.Linq;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ECommons.Throttlers;
@@ -11,6 +10,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
+    using System.Linq;
     using Lumina.Excel;
     using Lumina.Excel.Sheets;
 
@@ -93,8 +93,8 @@ namespace AutoDuty.Helpers
             }
             Svc.Log.Info("Moving to Flag Marker");
             State = ActionState.Running;
-            Plugin.States |= PluginState.Other;
-            if (!Plugin.States.HasFlag(PluginState.Looping))
+            Plugin.states |= PluginState.Other;
+            if (!Plugin.states.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(false);
             Svc.Framework.Update += MoveToMapMarkerUpdate;
         }
@@ -109,8 +109,8 @@ namespace AutoDuty.Helpers
             Svc.Framework.Update -= MoveToMapMarkerUpdate;
             VNavmesh_IPCSubscriber.Path_Stop();
             State = ActionState.None;
-            Plugin.States &= ~PluginState.Other;
-            if (!Plugin.States.HasFlag(PluginState.Looping))
+            Plugin.states &= ~PluginState.Other;
+            if (!Plugin.states.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(true);
             flagMapMarker = null;
         }

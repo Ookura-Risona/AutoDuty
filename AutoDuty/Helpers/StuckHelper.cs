@@ -1,11 +1,12 @@
 ﻿using AutoDuty.IPC;
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
-using System;
 using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+
     internal static class StuckHelper
     {
         internal static Vector3 LastPosition = Vector3.Zero;
@@ -37,29 +38,27 @@ namespace AutoDuty.Helpers
             }
 
 
-            if (Environment.TickCount64 - LastPositionUpdate > Plugin.Configuration.MinStuckTime && EzThrottler.Throttle("RequeueMoveTo", 1000))
+            if (Environment.TickCount64 - LastPositionUpdate > Configuration.MinStuckTime && EzThrottler.Throttle("RequeueMoveTo", 1000))
             {
                 LastStuckPosition       = Player.Position;
                 LastStuckPositionUpdate = Environment.TickCount64;
 
                 count = counter++;
-                index = Plugin.Indexer;
+                index = Plugin.indexer;
                 Svc.Log.Debug($"Stuck pathfinding: " + count);
                 return true;
             }
 
-            if (Environment.TickCount64 - LastStuckPositionUpdate > Plugin.Configuration.MinStuckTime * 10)
+            if (Environment.TickCount64 - LastStuckPositionUpdate > Configuration.MinStuckTime * 10)
             {
-                if (!Plugin.Configuration.StuckOnStep || Plugin.Indexer != index)
+                if (!Configuration.StuckOnStep || Plugin.indexer != index)
                     ResetCounter();
             }
 
             return false;
         }
 
-        internal static void ResetCounter()
-        {
+        private static void ResetCounter() => 
             counter = 0;
-        }
     }
 }

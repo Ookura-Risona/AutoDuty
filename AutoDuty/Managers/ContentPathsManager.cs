@@ -3,15 +3,15 @@ using AutoDuty.Windows;
 using ECommons;
 using ECommons.DalamudServices;
 using ECommons.ExcelServices;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AutoDuty.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using Data;
     using Newtonsoft.Json;
     using static Data.Classes;
@@ -25,13 +25,13 @@ namespace AutoDuty.Managers
             public ContentPathContainer(Content content)
             {
                 this.Content = content;
-                this.id         = content.TerritoryType;
+                this.ID         = content.TerritoryType;
 
-                this.ColoredNameString = $"({ImGuiHelper.idColor}{this.id}</>) {ImGuiHelper.dutyColor}{this.Content!.Name}</>";
+                this.ColoredNameString = $"({ImGuiHelper.idColor}{this.ID}</>) {ImGuiHelper.dutyColor}{this.Content!.Name}</>";
                 this.ColoredNameRegex     = RegexHelper.ColoredTextRegex().Match(this.ColoredNameString);
             }
 
-            public uint id { get; }
+            public uint ID { get; }
 
             public Content Content { get; }
 
@@ -55,21 +55,25 @@ namespace AutoDuty.Managers
 
                 if (this.Paths.Count > 1)
                 {
-                    if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(this.Content.TerritoryType, out Dictionary<string, JobWithRole>? jobConfig))
-                        foreach ((string? pathName, JobWithRole pathJobs) in jobConfig)
-                            if (pathJobs.HasJob((Job)job))
-                            {
-                                int pInx = this.Paths.IndexOf(dp => dp.FileName.Equals(pathName));
-
-                                if (pInx < this.Paths.Count)
+                    if (AutoDuty.Configuration.PathSelectionsByPath.TryGetValue(this.Content.TerritoryType, out Dictionary<string, JobWithRole>? jobConfig))
+                        if(jobConfig != null)
+                            foreach ((string? pathName, JobWithRole pathJobs) in jobConfig)
+                                if (pathJobs.HasJob((Job)job))
                                 {
-                                    pathIndex = pInx;
-                                    return this.Paths[pathIndex];
+                                    int pInx = this.Paths.IndexOf(dp => dp.FileName.Equals(pathName));
+
+                                    if (pInx >= 0 && pInx < this.Paths.Count)
+                                    {
+                                        pathIndex = pInx;
+
+                                        Svc.Log.Debug($"Selecting path {pathIndex} from {this.Paths.Count}");
+
+                                        return this.Paths[pathIndex];
+                                    }
                                 }
-                            }
 
                     //temporary while w2w gets integrated
-                    if (!defaultPath.W2WFound && Plugin.Configuration.W2WJobs.HasJob(job.Value))
+                    if (!defaultPath.W2WFound && AutoDuty.Configuration.W2WJobs.HasJob(job.Value))
                         for (int index = 0; index < this.Paths.Count; index++)
                         {
                             string curPath = this.Paths[index].Name;
@@ -85,10 +89,8 @@ namespace AutoDuty.Managers
                 return defaultPath;
             }
 
-            public void AddPath(string name)
-            {
+            public void AddPath(string name) => 
                 this.Paths.Add(new DutyPath(name, this));
-            }
         }
 
         internal class DutyPath
@@ -108,7 +110,7 @@ namespace AutoDuty.Managers
             {
                 Match pathMatch = RegexHelper.PathFileRegex().Match(this.FileName);
 
-                string pathFileColor = Plugin.Configuration.DoNotUpdatePathFiles.Contains(this.FileName) ? ImGuiHelper.pathFileColorNoUpdate : ImGuiHelper.pathFileColor;
+                string pathFileColor = AutoDuty.Configuration.DoNotUpdatePathFiles.Contains(this.FileName) ? ImGuiHelper.pathFileColorNoUpdate : ImGuiHelper.pathFileColor;
                 this.id = uint.Parse(pathMatch.Groups[2].Value);
                 this.ColoredNameString = pathMatch.Success ?
                                              $"<0.8,0.8,1>{pathMatch.Groups[4]}</>{pathFileColor}{pathMatch.Groups[5]}</>" :
@@ -145,7 +147,7 @@ namespace AutoDuty.Managers
                                 json = streamReader.ReadToEnd();
 
 
-                            this.pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.jsonSerializerSettings);
+                            this.pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.JsonSerializerSettings);
 
                             this.RevivalFound = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
                             this.W2WFound     = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));

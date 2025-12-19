@@ -1,17 +1,23 @@
 ﻿using ECommons;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Serilog.Events;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Text.Json.Serialization;
 
 namespace AutoDuty.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Dalamud.Bindings.ImGui;
+    using Dalamud.Game.ClientState.Objects.Types;
+    using ECommons.ImGuiMethods;
+    using FFXIVClientStructs.FFXIV.Client.Game.Object;
     using Helpers;
     using Lumina.Excel.Sheets;
     using Newtonsoft.Json;
+    using ECommons.GameFunctions;
 
     public class Classes
     {
@@ -29,26 +35,26 @@ namespace AutoDuty.Data
 
         public class Content
         {
-            public uint              RowId                  { get; set; }
-            public uint              Id                     { get; set; }
-            public string?           Name                   { get; set; }
-            public string?           EnglishName            { get; set; }
-            public uint              TerritoryType          { get; set; }
-            public uint              ExVersion              { get; set; }
-            public byte              ClassJobLevelRequired  { get; set; }
-            public uint              ItemLevelRequired      { get; set; }
-            public uint              DawnRowId              { get; set; }
-            public int               DawnIndex              { get; set; } = -1;
+            public uint              RowId                  { get; init; }
+            public uint              Id                     { get; init; }
+            public string?           Name                   { get; init; }
+            public string?           EnglishName            { get; init; }
+            public uint              TerritoryType          { get; init; }
+            public uint              ExVersion              { get; init; }
+            public byte              ClassJobLevelRequired  { get; init; }
+            public uint              ItemLevelRequired      { get; init; }
+            public uint              DawnRowId              { get; init; }
+            public int               DawnIndex              { get; init; } = -1;
             public ushort            DawnIndicator          { get; set; }
-            public uint              ContentFinderCondition { get; set; }
+            public uint              ContentFinderCondition { get; init; }
             public uint              ContentType            { get; set; }
             public uint              ContentMemberType      { get; set; }
-            public int               TrustIndex             { get; set; } = -1;
+            public int               TrustIndex             { get; init; } = -1;
             public bool              VariantContent         { get; set; } = false;
-            public int               VVDIndex               { get; set; } = -1;
-            public bool              GCArmyContent          { get; set; } = false;
-            public int               GCArmyIndex            { get; set; } = -1;
-            public List<TrustMember> TrustMembers           { get; set; } = [];
+            public int               VVDIndex               { get; init; } = -1;
+            public int               GCArmyIndex            { get; init; } = -1;
+            public bool              GCArmyContent          => this.GCArmyIndex >= 0;
+            public List<TrustMember> TrustMembers           { get; }      = [];
             public DutyMode          DutyModes              { get; set; } = DutyMode.None;
             public uint              UnlockQuest            { get; init; }
         }
@@ -56,7 +62,7 @@ namespace AutoDuty.Data
         public class TrustMember
         {
             public byte            Index      { get; set; }
-            public byte            MemberId   { get; set; }
+            public byte[]          MemberIds  { get; set; } = [];
             public TrustRole       Role       { get; set; }         // 0 = DPS, 1 = Healer, 2 = Tank, 3 = G'raha All Rounder
             public ClassJob?       Job        { get; set; } = null; //closest actual job that applies. G'raha gets Blackmage
             public string          Name       { get; set; } = string.Empty;
@@ -102,7 +108,6 @@ namespace AutoDuty.Data
 
         public class PathAction
         {
-            [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumConverter))]
             [JsonPropertyName("tag")]
             public ActionTag Tag { get; set; } = ActionTag.None;
 
@@ -115,9 +120,242 @@ namespace AutoDuty.Data
             [JsonPropertyName("arguments")]
             public List<string> Arguments { get; set; } = [];
 
+            [JsonPropertyName("")]
+            public List<PathActionCondition> Conditions { get; set; } = [];
+
             [JsonPropertyName("note")]
             public string Note { get; set; } = string.Empty;
         }
+
+        #region PathActionConditions
+        public abstract class PathActionCondition
+        {
+            public static readonly Dictionary<string, Func<object, object, bool>> operations = new()
+                                                                                                   {
+                                                                                                       { ">", (x,  y) => Convert.ToSingle(x) > Convert.ToSingle(y) },
+                                                                                                       { ">=", (x, y) => Convert.ToSingle(x) >= Convert.ToSingle(y) },
+                                                                                                       { "<", (x,  y) => Convert.ToSingle(x) < Convert.ToSingle(y) },
+                                                                                                       { "<=", (x, y) => Convert.ToSingle(x) <= Convert.ToSingle(y) },
+                                                                                                       { "==", (x, y) => x                   == y },
+                                                                                                       { "!=", (x, y) => x                   != y }
+                                                                                                   };
+
+            public abstract bool IsFulfilled();
+            public abstract void DrawConfig();
+        }
+
+        public class PathActionConditionNot(PathActionCondition condition) : PathActionCondition
+        {
+
+            public required PathActionCondition condition = condition;
+
+            public override bool IsFulfilled() => !this.condition.IsFulfilled();
+
+            public override void DrawConfig() => this.condition.DrawConfig();
+        }
+
+        public class PathActionConditionJob : PathActionCondition
+        {
+            public const ConditionType TYPE = ConditionType.None;
+
+            public          JobWithRole job = JobWithRole.All;
+            public override bool        IsFulfilled() => 
+                this.job.HasJob(PlayerHelper.GetJob());
+
+            public override void        DrawConfig()  => 
+                JobWithRoleHelper.DrawCategory(JobWithRole.All, ref this.job);
+        }
+
+        public class PathActionConditionActionStatus : PathActionCondition
+        {
+            public ActionType type = ActionType.Action;
+            public uint       id;
+            public uint       statusCode;
+
+            public override bool IsFulfilled()
+            {
+                unsafe
+                {
+                    return ActionManager.Instance()->GetActionStatus(this.type, this.id) == this.statusCode;
+                }
+            }
+
+            public override void DrawConfig()
+            {
+                ImGuiEx.EnumCombo("Action Type", ref this.type);
+                ImGui.SameLine();
+                ImGui.InputUInt("Action ID", ref this.id);
+                ImGui.SameLine();
+                ImGui.InputUInt("Status Code", ref this.statusCode);
+            }
+        }
+
+        public class PathActionConditionItemCount : PathActionCondition
+        {
+            public uint   itemId;
+            public uint   quantity;
+            public string operatorValue = operations.Keys.First();
+
+            public override bool IsFulfilled()
+            {
+                if (!operations.TryGetValue(this.operatorValue, out Func<object, object, bool>? operationFunc))
+                    return false;
+                int itemCount = InventoryHelper.ItemCount(this.itemId);
+                return operationFunc(itemCount, this.quantity);
+            }
+
+            public override void DrawConfig()
+            {
+                ImGuiEx.InputUint("itemId", ref this.itemId);
+                ImGui.SameLine();
+                ImGuiEx.Combo("Operation", ref this.operatorValue, operations.Keys);
+                ImGui.SameLine();
+                ImGuiEx.InputUint("Quantity", ref this.quantity);
+            }
+        }
+
+        public class PathActionConditionObjectData : PathActionCondition
+        {
+            public uint               baseId;
+            public ObjectDataProperty property;
+            public int                value;
+
+
+            public override bool IsFulfilled()
+            {
+                IGameObject? gameObject = null;
+                if ((gameObject = ObjectHelper.GetObjectByDataId(this.baseId)) != null)
+                {
+                    unsafe
+                    {
+                        GameObject* csObj = gameObject.Struct();
+
+                        return this.property switch
+                        {
+                            ObjectDataProperty.EventState => csObj->EventState          == (byte)this.value,
+                            ObjectDataProperty.IsTargetable => csObj->GetIsTargetable() == (this.value != 0),
+                            _ => false
+                        };
+                    }
+                }
+                return false;
+            }
+
+            public override void DrawConfig()
+            {
+                ImGuiEx.InputUint("BaseId", ref this.baseId);
+                ImGui.SameLine();
+                ImGuiEx.EnumCombo("Property", ref this.property);
+                ImGui.SameLine();
+                ImGui.InputInt("Value", ref this.value);
+            }
+        }
+
+        public class PathActionConditionDistance : PathActionCondition
+        {
+            public DistanceLocationTypes origin = DistanceLocationTypes.Location;
+            public uint                  originId;
+            public Vector3               originLoc;
+
+
+            public DistanceLocationTypes target = DistanceLocationTypes.Player;
+            public uint                  targetId;
+            public Vector3               targetLoc;
+
+            public string operatorValue = operations.Keys.First();
+
+            public float distance = 1f;
+
+            public override bool IsFulfilled()
+            {
+                unsafe
+                {
+                    Vector3 originVec = this.origin switch
+                    {
+                        DistanceLocationTypes.Player => Player.GameObject->Position,
+                        DistanceLocationTypes.Object => ObjectHelper.GetObjectByDataId(this.originId)?.Position ?? Vector3.PositiveInfinity,
+                        DistanceLocationTypes.Location => this.originLoc,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+
+                    Vector3 targetVec = this.target switch
+                    {
+                        DistanceLocationTypes.Player => Player.GameObject->Position,
+                        DistanceLocationTypes.Object => ObjectHelper.GetObjectByDataId(this.targetId)?.Position ?? Vector3.NegativeInfinity,
+                        DistanceLocationTypes.Location => this.targetLoc,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+
+                    float offset = Vector3.Distance(originVec, targetVec);
+
+                    return operations.TryGetValue(this.operatorValue, out Func<object, object, bool>? operationFunc) && 
+                           operationFunc(offset, this.distance);
+                }
+            }
+
+            public override void DrawConfig()
+            {
+                ImGuiEx.EnumCombo("origin", ref this.origin);
+                
+                switch (this.origin)
+                {
+                    case DistanceLocationTypes.Object:
+                        ImGui.SameLine();
+                        ImGuiEx.InputUint("origin_baseID", ref this.originId);
+                        break;
+                    case DistanceLocationTypes.Location:
+                        ImGui.SameLine();
+                        ImGui.PushItemWidth(50f);
+                        float x = this.originLoc.X;
+                        ImGui.InputFloat("origin_X", ref x);
+                        ImGui.SameLine();
+                        float y = this.originLoc.Y;
+                        ImGui.InputFloat("origin_Y", ref y);
+                        ImGui.SameLine();
+                        float z = this.originLoc.Z;
+                        ImGui.InputFloat("origin_Z", ref z);
+                        this.originLoc = new Vector3(x, y, z);
+                        ImGui.PopItemWidth();
+                        break;
+                    case DistanceLocationTypes.Player:
+                    default:
+                        break;
+                }
+                
+
+                ImGuiEx.EnumCombo("target", ref this.target);
+                
+                switch (this.target)
+                {
+                    case DistanceLocationTypes.Object:
+                        ImGui.SameLine();
+                        ImGuiEx.InputUint("target_baseID", ref this.targetId);
+                        break;
+                    case DistanceLocationTypes.Location:
+                        ImGui.PushItemWidth(50f);
+                        ImGui.SameLine();
+                        float x = this.targetLoc.X;
+                        ImGui.InputFloat("target_X", ref x);
+                        ImGui.SameLine();
+                        float y = this.targetLoc.Y;
+                        ImGui.InputFloat("target_Y", ref y);
+                        ImGui.SameLine();
+                        float z = this.targetLoc.Z;
+                        ImGui.InputFloat("target_Z", ref z);
+                        this.targetLoc = new Vector3(x, y, z);
+                        ImGui.PopItemWidth();
+                        break;
+                    case DistanceLocationTypes.Player:
+                    default:
+                        break;
+                }
+                
+                ImGuiEx.Combo("Operation", ref this.operatorValue, operations.Keys);
+                ImGui.SameLine();
+                ImGui.InputFloat("Distance", ref this.distance);
+            }
+        }
+    #endregion
 
         public class PathFileMetaData
         {
@@ -207,7 +445,7 @@ namespace AutoDuty.Data
 
             public static string Version => $"{Plugin.Version}";
 
-            public static string LogFile => Plugin.DalamudLogEntries.SelectMulti(x => x.Message).ToList().ToCustomString("\n");
+            public static string LogFile => Plugin.dalamudLogEntries.SelectMulti(x => x.Message).ToList().ToCustomString("\n");
 
             public static string InstalledPlugins => PluginInterface.InstalledPlugins.Select(x => $"{x.InternalName}, Version= {x.Version}").ToList().ToCustomString("\n");
 
@@ -215,7 +453,7 @@ namespace AutoDuty.Data
 
             private static List<string> ReadConfigFile()
             {
-                using FileStream fs = new(Plugin.ConfigFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using FileStream fs = new(Plugin.configFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 using StreamReader sr = new(fs);
                 string? x;
                 List<string> strings = [];
@@ -269,6 +507,8 @@ namespace AutoDuty.Data
             public int curCount = 0;
 
             public byte? gearset;
+
+            public bool unsynced;
         }
     }
 }

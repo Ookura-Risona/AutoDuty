@@ -7,12 +7,12 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AutoDuty.Helpers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Windows;
     using FFXIVClientStructs.Interop;
     using FFXIVClientStructs.STD;
@@ -25,19 +25,19 @@ namespace AutoDuty.Helpers
             _dutyMode = DutyMode.None;
             Svc.Log.Info("Queueing: Accepting only");
             Instance.Start();
-            Plugin.Action = "Queueing: Waiting to accept";
+            Plugin.action = "Queueing: Waiting to accept";
         }
 
         internal static void Invoke(Content? content, DutyMode dutyMode)
         {
-            if (State != ActionState.Running && content != null && dutyMode != DutyMode.None && (!_dutyMode.HasAnyFlag(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid) || Plugin.Configuration.Unsynced || Plugin.Configuration.OverridePartyValidation))
+            if (State != ActionState.Running && content != null && dutyMode != DutyMode.None && (!_dutyMode.HasAnyFlag(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid) || AutoDuty.Configuration.Unsynced || AutoDuty.Configuration.OverridePartyValidation))
             {
                 _dutyMode = dutyMode;
                 _content = content;
                 Svc.Log.Info($"Queueing: {dutyMode}: {content.Name}");
 
                 Instance.Start();
-                Plugin.Action = $"Queueing {_dutyMode}: {content.Name}";
+                Plugin.action = $"Queueing {_dutyMode}: {content.Name}";
             }
         }
 
@@ -77,7 +77,8 @@ namespace AutoDuty.Helpers
 
         private void QueueTrust()
         {
-            if (TrustHelper.State == ActionState.Running) return;
+            if (TrustHelper.State == ActionState.Running) 
+                return;
 
             AgentDawn* agentDawn = AgentDawn.Instance();
             if (!TrustHelper.LevelsSetFor(_content))
@@ -88,7 +89,8 @@ namespace AutoDuty.Helpers
 
             if (!agentDawn->IsAddonReady())
             {
-                if (!EzThrottler.Throttle("OpenDawn", 5000) || !AgentHUD.Instance()->IsMainCommandEnabled(82)) return;
+                if (!EzThrottler.Throttle("OpenDawn", 5000) || !AgentHUD.Instance()->IsMainCommandEnabled(82)) 
+                    return;
 
                 Svc.Log.Debug("Queue Helper - Opening Dawn");
                 RaptureAtkModule.Instance()->OpenDawn(_content.RowId);
@@ -130,7 +132,7 @@ namespace AutoDuty.Helpers
                 {
                     TrustHelper.ResetTrustIfInvalid();
                     AgentDawnInterface.DawnMemberEntry* curMembers = agentDawn->Data->MemberData.GetMembers(agentDawn->Data->MemberData.CurrentMembersIndex);
-                    TrustMemberName?[]                  members    = Plugin.Configuration.SelectedTrustMembers;
+                    TrustMemberName?[]                  members    = AutoDuty.Configuration.SelectedTrustMembers;
                     if (members.Any(x => x is null || TrustHelper.Members[(TrustMemberName)x!].Level < _content.ClassJobLevelRequired))
                     {
                         Svc.Log.Info("Not all trust members selected. Selecting automatically now");
@@ -192,12 +194,19 @@ namespace AutoDuty.Helpers
             }
         }
 
+        public static bool ShouldBeUnSynced() =>
+            AutoDuty.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist ? 
+                (Plugin.PlaylistCurrentEntry?.unsynced == true && Plugin.PlaylistCurrentEntry?.DutyMode.EqualsAny(DutyMode.Raid, DutyMode.Regular, DutyMode.Trial) == true) : 
+                AutoDuty.Configuration.Unsynced && AutoDuty.Configuration.DutyModeEnum.EqualsAny(DutyMode.Raid, DutyMode.Regular, DutyMode.Trial);
+
         private void QueueRegular()
         {
-            if (ContentsFinder.Instance()->IsUnrestrictedParty != Plugin.Configuration.Unsynced)
+            bool unsync = ShouldBeUnSynced();
+            Svc.Log.Debug($"Sync check: {unsync}");
+            if (ContentsFinder.Instance()->IsUnrestrictedParty != unsync)
             {
                 Svc.Log.Debug("Queue Helper - Setting UnrestrictedParty");
-                ContentsFinder.Instance()->IsUnrestrictedParty = Plugin.Configuration.Unsynced;
+                ContentsFinder.Instance()->IsUnrestrictedParty = unsync;
                 return;
             }
 
@@ -259,7 +268,7 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.InDungeon || _dutyMode != DutyMode.None && (_content == null || Svc.ClientState.TerritoryType == _content?.TerritoryType)) 
+            if (InDungeon || _dutyMode != DutyMode.None && (_content == null || Svc.ClientState.TerritoryType == _content?.TerritoryType)) 
                 this.Stop();
 
             if (!EzThrottler.Throttle("QueueHelper", 250)|| !PlayerHelper.IsReadyFull || ContentsFinderConfirm() || Conditions.Instance()->InDutyQueue) return;

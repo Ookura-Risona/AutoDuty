@@ -1,5 +1,7 @@
 ﻿using AutoDuty.Helpers;
 using ECommons.EzIpcManager;
+// ReSharper disable UnusedMember.Global
+#pragma warning disable CA1822
 
 #nullable disable
 
@@ -10,10 +12,8 @@ namespace AutoDuty.IPC
 
     internal class IPCProvider
     {
-        internal IPCProvider()
-        {
+        internal IPCProvider() => 
             EzIPC.Init(this);
-        }
 
         [EzIPC] public void   ListConfig()             => ConfigHelper.ListConfig();
         [EzIPC] public string GetConfig(string config) => ConfigHelper.GetConfig(config);
@@ -43,8 +43,8 @@ namespace AutoDuty.IPC
         [EzIPC] public void Run(uint   territoryType, int loops = 0, bool bareMode = false) => Plugin.Run(territoryType, loops, startFromZero: true, bareMode: bareMode);
         [EzIPC] public void Start(bool startFromZero = true)   => Plugin.StartNavigation(startFromZero);
         [EzIPC] public void Stop()                             => Plugin.Stage = Stage.Stopped;
-        [EzIPC] public bool IsNavigating()                     => Plugin.States.HasFlag(PluginState.Navigating);
-        [EzIPC] public bool IsLooping()                        => Plugin.States.HasFlag(PluginState.Looping);
+        [EzIPC] public bool IsNavigating()                     => Plugin.states.HasFlag(PluginState.Navigating);
+        [EzIPC] public bool IsLooping()                        => Plugin.states.HasFlag(PluginState.Looping);
         [EzIPC] public bool IsStopped()                        => Plugin.Stage == Stage.Stopped;
         [EzIPC] public bool ContentHasPath(uint territoryType) => ContentPathsManager.DictionaryPaths.ContainsKey(territoryType);
 

@@ -42,7 +42,7 @@ namespace AutoDuty.Helpers
             if (!PlayerHelper.IsReady || PlayerHelper.InCombat)
                 return;
 
-            if (Svc.ClientState.TerritoryType != this._currentTerritoryType || !Plugin.InDungeon || Svc.ClientState.TerritoryType == 0)
+            if (Svc.ClientState.TerritoryType != this._currentTerritoryType || !InDungeon || Svc.ClientState.TerritoryType == 0)
             {
                 this.Stop();
                 return;

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using ECommons.DalamudServices;
 
 namespace AutoDuty.Helpers
 {
+    using System;
     using System.Collections;
     using System.Globalization;
     using System.Linq;
@@ -27,7 +27,7 @@ namespace AutoDuty.Helpers
             }
             else
             {
-                return field.GetValue(Plugin.Configuration)?.ToString() ?? string.Empty;
+                return field.GetValue(Configuration)?.ToString() ?? string.Empty;
             }
         }
 
@@ -80,7 +80,7 @@ namespace AutoDuty.Helpers
 
                 if (configType.IsAssignableTo(typeof(IList)))
                 {
-                    IList valueList      = (IList)field.GetValue(Plugin.Configuration)!;
+                    IList valueList      = (IList)field.GetValue(Configuration)!;
                     Type  enumerableType = configType.GetElementType() ?? configType.GenericTypeArguments.First();
 
                     switch (configValues[0])
@@ -173,12 +173,12 @@ namespace AutoDuty.Helpers
                     object? newValue = ModifyConfig(configType, configValues[0], out string failReason);
 
                     if (newValue != null)
-                        field.SetValue(Plugin.Configuration, newValue);
+                        field.SetValue(Configuration, newValue);
                     else
                         PrintError(failReason);
                 }
 
-                Plugin.Configuration.Save();
+                Windows.Configuration.Save();
             }
             return false;
         }
@@ -189,7 +189,7 @@ namespace AutoDuty.Helpers
             if (i == null) return;
             foreach (FieldInfo? field in i)
                 if (!field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase) && !field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version",StringComparison.InvariantCultureIgnoreCase))
-                    Svc.Log.Info($"{field.Name.Replace(">k__BackingField", "").Replace("<", "")} = {field.GetValue(Plugin.Configuration)} ({field.FieldType.ToString().Replace("System.", "")})");
+                    Svc.Log.Info($"{field.Name.Replace(">k__BackingField", "").Replace("<", "")} = {field.GetValue(Configuration)} ({field.FieldType.ToString().Replace("System.", "")})");
         }
 
         internal static FieldInfo? FindConfig(string configName)

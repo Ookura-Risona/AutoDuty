@@ -1,11 +1,11 @@
 ﻿using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using System.Collections.Generic;
-using System.Linq;
 using ECommons.Throttlers;
 
 namespace AutoDuty.Helpers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
     using Lumina.Excel.Sheets;
 
@@ -65,17 +65,17 @@ namespace AutoDuty.Helpers
             if (items.Any())
             {
                 this.DebugLog("item found");
-                if (Plugin.Configuration.AutoOpenCoffersGearset != null && module->CurrentGearsetIndex != Plugin.Configuration.AutoOpenCoffersGearset)
+                if (Configuration.AutoOpenCoffersGearset != null && module->CurrentGearsetIndex != Configuration.AutoOpenCoffersGearset)
                 {
                     this.DebugLog("change gearset");
-                    if (!module->IsValidGearset((int)Plugin.Configuration.AutoOpenCoffersGearset))
+                    if (!module->IsValidGearset((int)Configuration.AutoOpenCoffersGearset))
                     {
                         this.DebugLog("invalid gearset");
-                        Plugin.Configuration.AutoOpenCoffersGearset = null;
-                        Plugin.Configuration.Save();
+                        Configuration.AutoOpenCoffersGearset = null;
+                        Windows.Configuration.Save();
                     } else
                     {
-                        module->EquipGearset(Plugin.Configuration.AutoOpenCoffersGearset.Value);
+                        module->EquipGearset(Configuration.AutoOpenCoffersGearset.Value);
                         return;
                     }
                 }
@@ -109,7 +109,7 @@ namespace AutoDuty.Helpers
         }
 
         internal static bool ValidCoffer(Item item) => // Miscellany
-            item.ItemAction.RowId is 1085 or 388 or 367 && item.ItemUICategory.RowId is 61 && (!Plugin.Configuration.AutoOpenCoffersBlacklistUse || !Plugin.Configuration.AutoOpenCoffersBlacklist.ContainsKey(item.RowId));
+            item.ItemAction.RowId is 1085 or 388 or 367 && item.ItemUICategory.RowId is 61 && (!Configuration.AutoOpenCoffersBlacklistUse || !Configuration.AutoOpenCoffersBlacklist.ContainsKey(item.RowId));
         /*
          *  367 Triple Triad Card Pack
          */

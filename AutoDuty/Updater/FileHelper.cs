@@ -1,6 +1,4 @@
 ﻿using AutoDuty.Helpers;
-using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography;
 using ECommons;
 using Serilog.Events;
@@ -8,10 +6,13 @@ using AutoDuty.Windows;
 
 namespace AutoDuty.Updater
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading;
     using static Data.Classes;
     internal static class FileHelper
     {
-        internal static readonly FileSystemWatcher FileSystemWatcher = new(Plugin.PathsDirectory.FullName)
+        internal static readonly FileSystemWatcher FileSystemWatcher = new(Plugin.pathsDirectory.FullName)
         {
             NotifyFilter = NotifyFilters.Attributes
                                                                                         | NotifyFilters.CreationTime
@@ -26,9 +27,9 @@ namespace AutoDuty.Updater
             IncludeSubdirectories = true
         };
 
-        internal static readonly FileSystemWatcher FileWatcher = new();
+        internal static readonly FileSystemWatcher fileWatcher = new();
 
-        private static readonly object _updateLock = new();
+        private static readonly Lock updateLock = new();
 
 
         public static byte[] CalculateMD5(string filename)
@@ -38,32 +39,38 @@ namespace AutoDuty.Updater
             return md5.ComputeHash(stream);
         }
 
-        internal static void LogInit()
+        private static void LogInit()
         {
-            string? path = $"{Plugin.DalamudDirectory}/dalamud.log";
-            if (!File.Exists(path)) return;
-            FileInfo? file = new FileInfo(path);
-            if (file == null) return;
+            string? path = $"{Plugin.dalamudDirectory}/dalamud.log";
+            if (!File.Exists(path)) 
+                return;
+
+            FileInfo file = new(path);
+            if (!file.Exists) 
+                return;
+
             string? directory = file.DirectoryName;
             string? filename  = file.Name;
-            if (directory.IsNullOrEmpty() || filename.IsNullOrEmpty()) return;
+            if (directory.IsNullOrEmpty() || filename.IsNullOrEmpty())
+                return;
+
             long lastMaxOffset = file.Length;
 
-            FileWatcher.Path = directory!;
-            FileWatcher.Filter = filename;
-            FileWatcher.NotifyFilter = NotifyFilters.LastWrite;
+            fileWatcher.Path = directory!;
+            fileWatcher.Filter = filename;
+            fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
 
-            FileWatcher.Changed += (sender, e) =>
+            fileWatcher.Changed += (_, _) =>
             {
                 using FileStream fs = new(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 fs.Seek(lastMaxOffset, SeekOrigin.Begin);
                 using StreamReader sr = new(fs);
-                string?            x  = string.Empty;
-                while ((x = sr.ReadLine()) != null)
+
+                while (sr.ReadLine() is { } x)
                 {
                     if (!x.Contains("[AutoDuty]")) continue;
 
-                    LogMessage? logEntry = new LogMessage() { Message = x };
+                    LogMessage logEntry = new() { Message = x };
 
                     if (x.Contains("[FTL]"))
                         logEntry.LogEventLevel = LogEventLevel.Fatal;
@@ -81,7 +88,7 @@ namespace AutoDuty.Updater
                 }
                 lastMaxOffset = fs.Position;
             };
-            FileWatcher.EnableRaisingEvents = true;
+            fileWatcher.EnableRaisingEvents = true;
         }
 
         internal static void Init()
@@ -97,16 +104,16 @@ namespace AutoDuty.Updater
 
         private static void Update()
         {
-            lock (_updateLock)
+            lock (updateLock)
             {
                 ContentPathsManager.DictionaryPaths = [];
 
                 MainTab.PathsUpdated();
                 PathsTab.PathsUpdated();
 
-                foreach ((uint _, Content? content) in ContentHelper.DictionaryContent)
+                foreach ((_, Content content) in ContentHelper.DictionaryContent)
                 {
-                    IEnumerable<FileInfo> files = Plugin.PathsDirectory.EnumerateFiles($"({content.TerritoryType})*.json", SearchOption.AllDirectories);
+                    IEnumerable<FileInfo> files = Plugin.pathsDirectory.EnumerateFiles($"({content.TerritoryType})*.json", SearchOption.AllDirectories);
 
                     foreach (FileInfo file in files)
                     {

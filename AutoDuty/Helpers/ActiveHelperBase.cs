@@ -82,10 +82,8 @@ namespace AutoDuty.Helpers
         }
 
 
-        internal static void Invoke()
-        {
+        internal static void Invoke() => 
             Instance.Start();
-        }
 
         internal virtual void Start()
         {
@@ -98,25 +96,23 @@ namespace AutoDuty.Helpers
 
             this.InfoLog(this.Name + " started");
             State         =  ActionState.Running;
-            Plugin.States |= PluginState.Other;
+            Plugin.states |= PluginState.Other;
 
-            if (!Plugin.States.HasFlag(PluginState.Looping))
+            if (!Plugin.states.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(false);
 
             if(this.TimeOut > 0)
                 SchedulerHelper.ScheduleAction($"Helper_{this.Name}_TimeOut", this.Stop, this.TimeOut);
 
             if (this.DisplayName != string.Empty)
-                Plugin.Action = this.DisplayName;
+                Plugin.action = this.DisplayName;
             Svc.Framework.Update += this.HelperUpdate;
         }
 
         internal static ActionState State  = ActionState.None;
 
-        internal static void ForceStop()
-        {
+        internal static void ForceStop() => 
             instance?.Stop();
-        }
 
         public void StopIfRunning()
         {
@@ -131,9 +127,9 @@ namespace AutoDuty.Helpers
                 this.InfoLog(this.Name + " finished");
 
             if (this.DisplayName != string.Empty)
-                Plugin.Action = string.Empty;
+                Plugin.action = string.Empty;
 
-            if (!Plugin.States.HasFlag(PluginState.Looping))
+            if (!Plugin.states.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(false);
 
             SchedulerHelper.DescheduleAction($"Helper_{this.Name}_TimeOut");
@@ -148,7 +144,7 @@ namespace AutoDuty.Helpers
 
         protected bool UpdateBase()
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
+            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon)
             {
                 this.Stop();
                 return false;
@@ -170,9 +166,9 @@ namespace AutoDuty.Helpers
                 return;
 
             State         =  ActionState.None;
-            Plugin.States &= ~PluginState.Other;
+            Plugin.states &= ~PluginState.Other;
 
-            if (!Plugin.States.HasFlag(PluginState.Looping))
+            if (!Plugin.states.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(true);
             Svc.Framework.Update -= this.HelperStopUpdate;
         }
@@ -192,19 +188,13 @@ namespace AutoDuty.Helpers
             return true;
         }
 
-        public virtual void OnCommand(string[] args)
-        {
+        public virtual void OnCommand(string[] args) => 
             this.Start();
-        }
 
-        protected void DebugLog(string s)
-        {
+        protected void DebugLog(string s) => 
             Svc.Log.Debug($"{this.Name}: {s}");
-        }
 
-        protected void InfoLog(string s)
-        {
+        protected void InfoLog(string s) => 
             Svc.Log.Info($"{this.Name}: {s}");
-        }
     }
 }

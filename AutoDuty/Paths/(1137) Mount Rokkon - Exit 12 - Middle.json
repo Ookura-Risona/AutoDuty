@@ -274,277 +274,225 @@
       "note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
         "X": 728.3,
         "Y": 57.24,
         "Z": 6.45
       },
-      "arguments": [
+      "Arguments": [
         "25000"
       ],
-      "note": ""
+      "Note": "Jump Puzzle"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 720.66,
-        "Y": 57.24,
-        "Z": 7
+      "Tag": "None",
+      "Name": "JumpTo",
+      "Position": {
+        "X": 720.59534,
+        "Y": 57.242203,
+        "Z": 9.1130705
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "720.614,58.962,11.449"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "CameraFacing",
-      "position": {
-        "X": 720.66,
-        "Y": 57.24,
-        "Z": 9.18
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 720.3848,
+        "Y": 59.20245,
+        "Z": 12.60731
       },
-      "arguments": [
-        "722.05, 62.47, 15.55"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Jump",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 722.5897,
+        "Y": 60.182438,
+        "Z": 12.165153
       },
-      "arguments": [
-        "200"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 722.5355,
+        "Y": 60.702595,
+        "Z": 13.887078
       },
-      "arguments": [
-        "800"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Jump",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 720.384,
+        "Y": 60.711838,
+        "Z": 13.666604
       },
-      "arguments": [
-        "201"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 720.384,
+        "Y": 61.658627,
+        "Z": 16.379862
       },
-      "arguments": [
-        "801"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Jump",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 723.50745,
+        "Y": 62.468132,
+        "Z": 15.383634
       },
-      "arguments": [
-        "202"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 723.94305,
+        "Y": 63.4994,
+        "Z": 18.28947
       },
-      "arguments": [
-        "802"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "CameraFacing",
-      "position": {
-        "X": 722.09,
-        "Y": 62.47,
-        "Z": 16.24
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 721.6997,
+        "Y": 64.25341,
+        "Z": 18.158298
       },
-      "arguments": [
-        "721.62, 65.26, 21.53"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Jump",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 721.75854,
+        "Y": 65.264,
+        "Z": 21.744783
       },
-      "arguments": [
-        "203"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 719.7306,
+        "Y": 66.01882,
+        "Z": 21.829298
       },
-      "arguments": [
-        "803"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 719.72864,
+        "Y": 67.45541,
+        "Z": 24.99615
       },
-      "arguments": [
-        "1000"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "CameraFacing",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 719.72864,
+        "Y": 72.06851,
+        "Z": 33.238586
       },
-      "arguments": [
-        "719.73, 66.02, 21.87"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 719.6873,
+        "Y": 75.61786,
+        "Z": 38.290546
       },
-      "arguments": [
-        "500"
+      "Arguments": [
+        "false"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "CameraFacing",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "JumpTo",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        "716.51, 76.48, 36.53"
+      "Arguments": [
+        "717.704,76.479,38.277"
       ],
-      "note": ""
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "ChatCommand",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        "6000"
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "CameraFacing",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
-        "717.31, 76.48, 37.69"
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "Jump",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
-        "204"
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
-        "804"
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "ChatCommand",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
+      "Arguments": [
         "/autoduty config AutoManageRotationPluginState True"
       ],
-      "note": ""
+      "Note": "Jump puzzle Done"
     },
     {
       "tag": "None",
@@ -916,6 +864,10 @@
       {
         "version": 189,
         "change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 269,
+        "Change": "Fix the jump puzzle"
       }
     ],
     "notes": []

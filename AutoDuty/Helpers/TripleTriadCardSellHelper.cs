@@ -3,13 +3,13 @@ using ECommons.DalamudServices;
 using ECommons;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System.Linq;
 using AutoDuty.IPC;
 using ECommons.Throttlers;
 
 namespace AutoDuty.Helpers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Dalamud.Game.ClientState.Objects.Types;
     using System.Numerics;
     using ECommons.UIHelpers.AtkReaderImplementations;
@@ -34,11 +34,11 @@ namespace AutoDuty.Helpers
             else if (State != ActionState.Running) base.Start();
         }
 
-        public const           int         GoldSaucerTerritoryType       = 144;
+        public const int GoldSaucerTerritoryType = 144;
 
-        public static readonly Vector3     TripleTriadCardVendorLocation = new(-56.1f, 1.6f, 16.6f);
-        private const uint tripleTriadVendorDataId = 1016294u;
-        private static IGameObject? tripleTriadVendorGameObject => ObjectHelper.GetObjectByDataId(tripleTriadVendorDataId);
+        public static readonly Vector3      TripleTriadCardVendorLocation = new(-56.1f, 1.6f, 16.6f);
+        private const          uint         tripleTriadVendorDataId       = 1016294u;
+        private static         IGameObject? TripleTriadVendorGameObject => ObjectHelper.GetObjectByDataId(tripleTriadVendorDataId);
 
         private static unsafe AtkUnitBase*                   addonExchange         = null;
         private static unsafe ReaderTripleTriadCoinExchange? readerExchange        = null;
@@ -46,7 +46,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
+            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon)
             {
                 this.Stop();
                 return;
@@ -95,10 +95,10 @@ namespace AutoDuty.Helpers
                         Svc.Log.Debug($"Clicking SelectIconString");
                         AddonHelper.ClickSelectIconString(1);
                     }
-                    else if (!GenericHelpers.TryGetAddonByName("TripleTriadCoinExchange", out addonExchange) && tripleTriadVendorGameObject != null)
+                    else if (!GenericHelpers.TryGetAddonByName("TripleTriadCoinExchange", out addonExchange) && TripleTriadVendorGameObject != null)
                     {
                         Svc.Log.Debug("Interacting with TTT");
-                        ObjectHelper.InteractWithObject(tripleTriadVendorGameObject);
+                        ObjectHelper.InteractWithObject(TripleTriadVendorGameObject);
                     }
                 }
                 else
@@ -138,7 +138,7 @@ namespace AutoDuty.Helpers
                                         return isCard;
                                     });
             
-            return cardCount >= Plugin.Configuration.TripleTriadSellMinItemCount && slotCount >= Plugin.Configuration.TripleTriadSellMinSlotCount;
+            return cardCount >= Configuration.TripleTriadSellMinItemCount && slotCount >= Configuration.TripleTriadSellMinSlotCount;
         }
     }
 }

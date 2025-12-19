@@ -1,11 +1,8 @@
 ﻿using Dalamud.Interface.Utility.Raii;
 using Dalamud.Bindings.ImGui;
 using System.Numerics;
-using System.Linq;
 using AutoDuty.Helpers;
 using System.Diagnostics;
-using System;
-using System.Collections.Generic;
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
 using ECommons.ImGuiMethods;
@@ -13,6 +10,9 @@ using AutoDuty.Updater;
 
 namespace AutoDuty.Windows
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Data;
 
     internal static class PathsTab
@@ -32,13 +32,13 @@ namespace AutoDuty.Windows
             }
 
             if (_checked)
-                Plugin.Configuration.DoNotUpdatePathFiles.Add(_selectedDutyPath.FileName);
+                AutoDuty.Configuration.DoNotUpdatePathFiles.Add(_selectedDutyPath.FileName);
             else
-                Plugin.Configuration.DoNotUpdatePathFiles.Remove(_selectedDutyPath.FileName);
+                AutoDuty.Configuration.DoNotUpdatePathFiles.Remove(_selectedDutyPath.FileName);
 
             _selectedDutyPath.UpdateColoredNames();
 
-            Plugin.Configuration.Save();
+            Configuration.Save();
         }
 
         internal static void Draw()
@@ -50,7 +50,7 @@ namespace AutoDuty.Windows
             ImGui.Separator();
             ImGui.Spacing();
             if (ImGui.Button("打开文件夹"))
-                Process.Start("explorer.exe", Plugin.PathsDirectory.FullName);
+                Process.Start("explorer.exe", Plugin.pathsDirectory.FullName);
 
             ImGui.SameLine();
             using (ImRaii.IEndObject? d = ImRaii.Disabled(_selectedDutyPath == null))
@@ -65,13 +65,13 @@ namespace AutoDuty.Windows
 
             ImGui.PopStyleColor();
             ImGui.SameLine();
-            using (ImRaii.Disabled(!Plugin.Configuration.PathSelectionsByPath.Any(kvp => kvp.Value.Any())))
+            using (ImRaii.Disabled(AutoDuty.Configuration.PathSelectionsByPath.All(kvp => kvp.Value?.Count != 0)))
             {
                 if (ImGuiEx.ButtonWrapped("清除所有缓存的类"))
                 {
                     _selectedDutyPath = null;
-                    Plugin.Configuration.PathSelectionsByPath.Clear();
-                    Plugin.Configuration.Save();
+                    AutoDuty.Configuration.PathSelectionsByPath.Clear();
+                    Configuration.Save();
                 }
             }
 
@@ -104,19 +104,19 @@ namespace AutoDuty.Windows
                 {
                     bool multiple = false;
 
-                    if (!headers.TryGetValue(container.id, out bool open))
-                        headers[container.id] = open = true;
+                    if (!headers.TryGetValue(container.ID, out bool open))
+                        headers[container.ID] = open = true;
 
                     if (container.Paths.Count > 0)
                     {
                         multiple = true;
-                        if (ImGui.Selectable("##PathHeader_" + container.id, false))
-                            headers[container.id] = !open;
+                        if (ImGui.Selectable("##PathHeader_" + container.ID, false))
+                            headers[container.ID] = !open;
                         ImGui.SameLine();
-                        ImGuiHelper.ColoredText(container.ColoredNameRegex, $"({container.id}) {container.Content.Name}");
+                        ImGuiHelper.ColoredText(container.ColoredNameRegex, $"({container.ID}) {container.Content.Name}");
                     }
 
-                    List<Tuple<CombatRole, Job>>[]   pathJobs       = Enumerable.Range(0, container.Paths.Count).Select(_ => new List<Tuple<CombatRole, Job>>()).ToArray();
+                    List<Tuple<CombatRole, Job>>[]   pathJobs       = [.. Enumerable.Range(0, container.Paths.Count).Select(_ => new List<Tuple<CombatRole, Job>>())];
                     Dictionary<string, JobWithRole>? pathSelections = null;
                     if (open)
                     {
@@ -125,9 +125,12 @@ namespace AutoDuty.Windows
                             ImGui.BeginGroup();
                             ImGui.Indent(20);
 
+                            /*
                             if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(container.id, out pathSelections))
-                                foreach ((string? path, JobWithRole jobs) in pathSelections)
-                                    ;//pathJobs[container.Paths.IndexOf(dp => dp.FileName.Equals(jobs))].Add(new Tuple<CombatRole, Job>(path.GetCombatRole(), path));
+                                if (pathSelections != null)
+                                    foreach ((string? path, JobWithRole jobs) in pathSelections)
+                                        ; //pathJobs[container.Paths.IndexOf(dp => dp.FileName.Equals(jobs))].Add(new Tuple<CombatRole, Job>(path.GetCombatRole(), path));
+                            */
                         }
 
                         foreach (ContentPathsManager.DutyPath path in container.Paths)
@@ -140,11 +143,18 @@ namespace AutoDuty.Windows
                                 }
                                 else
                                 {
-                                    _checked          = Plugin.Configuration.DoNotUpdatePathFiles.Contains(path.FileName);
+                                    _checked          = AutoDuty.Configuration.DoNotUpdatePathFiles.Contains(path.FileName);
                                     _selectedDutyPath = path;
                                 }
 
                                 showJobSelection = false;
+                            }
+
+                            if (path.PathFile == null)
+                            {
+                                ImGui.SameLine(20);
+                                ImGui.TextColored(ImGuiHelper.StateBadColor, "BROKEN");
+                                return;
                             }
 
                             if (ImGui.IsItemHovered() && path.PathFile.Meta.Notes.Count > 0)
@@ -204,7 +214,7 @@ namespace AutoDuty.Windows
                 ImGui.PopStyleVar(3);
             }
 
-            if (showJobSelection)
+            if (showJobSelection && _selectedDutyPath != null)
             {
                 ImGui.NextColumn();
                 ImGui.Indent(ImGui.GetContentRegionAvail().X / 3*2);
@@ -218,8 +228,8 @@ namespace AutoDuty.Windows
                     ImGui.EndChild();
                     ImGui.EndTable();
 
-                    Plugin.Configuration.PathSelectionsByPath.Remove(_selectedDutyPath.container.id);
-                    Plugin.Configuration.Save();
+                    AutoDuty.Configuration.PathSelectionsByPath.Remove(_selectedDutyPath.container.ID);
+                    Configuration.Save();
 
                     _selectedDutyPath = null;
 
@@ -232,9 +242,9 @@ namespace AutoDuty.Windows
                 bool        firstPath   = _selectedDutyPath.container.IsFirstPath(_selectedDutyPath);
                 JobWithRole jwr = JobWithRole.None;
 
-                PathSelectionHelper.AddPathSelectionEntry(_selectedDutyPath.container.id);
+                PathSelectionHelper.AddPathSelectionEntry(_selectedDutyPath.container.ID);
 
-                if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(_selectedDutyPath.container.id, out Dictionary<string, JobWithRole>? pathSelections))
+                if (AutoDuty.Configuration.PathSelectionsByPath.TryGetValue(_selectedDutyPath.container.ID, out Dictionary<string, JobWithRole>? pathSelections))
                     if (pathSelections!.TryGetValue(_selectedDutyPath.FileName, out JobWithRole dutyRoles)) 
                         jwr = dutyRoles;
 
@@ -244,16 +254,16 @@ namespace AutoDuty.Windows
 
                 if(jwr != jwrCheck)
                 {
-                    Dictionary<string, JobWithRole> pathJobConfigs = Plugin.Configuration.PathSelectionsByPath[_selectedDutyPath.container.id]!;
+                    Dictionary<string, JobWithRole> pathJobConfigs = AutoDuty.Configuration.PathSelectionsByPath[_selectedDutyPath.container.ID]!;
 
                     foreach (string key in pathJobConfigs.Keys) 
                         pathJobConfigs[key] &= ~jwr;
 
                     pathJobConfigs[_selectedDutyPath.FileName] = jwr;
 
-                    PathSelectionHelper.RebuildDefaultPaths(_selectedDutyPath.container.id);
+                    PathSelectionHelper.RebuildDefaultPaths(_selectedDutyPath.container.ID);
 
-                    Plugin.Configuration.Save();
+                    Configuration.Save();
                 }
 
                 ImGui.EndChild();
@@ -264,9 +274,7 @@ namespace AutoDuty.Windows
             ImGui.EndTable();
         }
 
-        internal static void PathsUpdated()
-        {
+        internal static void PathsUpdated() => 
             _selectedDutyPath = null;
-        }
     }
 }

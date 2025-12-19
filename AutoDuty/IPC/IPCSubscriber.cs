@@ -3,26 +3,29 @@ using ECommons.EzIpcManager;
 using ECommons.Reflection;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
+
+// ReSharper disable InconsistentNaming
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 #pragma warning disable CS0169 // Field is never used
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 #nullable disable
 
 namespace AutoDuty.IPC
 {
+    using System;
+    using System.Collections.Generic;
     using ECommons.GameFunctions;
     using Helpers;
     using System.ComponentModel;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Dalamud.Plugin;
 
     internal static class AutoRetainer_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(AutoRetainer_IPCSubscriber), "AutoRetainer.PluginState", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(AutoRetainer_IPCSubscriber), "AutoRetainer.PluginState", SafeWrapper.IPCException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("AutoRetainer");
 
@@ -41,11 +44,11 @@ namespace AutoDuty.IPC
 
         public static bool RetainersAvailable()
         {
-            if (Plugin.Configuration.EnableAutoRetainer && IsEnabled)
+            if (Configuration.EnableAutoRetainer && IsEnabled)
             {
                 long? remaining = GetClosestRetainerVentureSecondsRemaining(Player.CID);
                 Svc.Log.Debug($"AutoRetainer IPC - Closest Retainer Venture Remaining Time: {remaining}");
-                return remaining.HasValue && remaining < Plugin.Configuration.AutoRetainer_RemainingTime;
+                return remaining.HasValue && remaining < Configuration.AutoRetainer_RemainingTime;
             }
 
             return false;
@@ -56,7 +59,7 @@ namespace AutoDuty.IPC
 
     internal static class AM_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(AM_IPCSubscriber), "AutoBot", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(AM_IPCSubscriber), "AutoBot", SafeWrapper.IPCException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("AutoBot");
 
@@ -69,7 +72,7 @@ namespace AutoDuty.IPC
 
     internal static class BossModReborn_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(BossModReborn_IPCSubscriber), "BossMod", SafeWrapper.AnyException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(BossModReborn_IPCSubscriber), "BossMod", SafeWrapper.AnyException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("BossModReborn");
 
@@ -83,7 +86,7 @@ namespace AutoDuty.IPC
 
     internal static class BossMod_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(BossMod_IPCSubscriber), "BossMod", SafeWrapper.AnyException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(BossMod_IPCSubscriber), "BossMod", SafeWrapper.AnyException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("BossMod") || IPCSubscriber_Common.IsReady("BossModReborn");
 
@@ -117,7 +120,7 @@ namespace AutoDuty.IPC
 
         public static void SetPreset(string name, string preset)
         {
-            if (Plugin.Configuration.AutoManageBossModAISettings)
+            if (AutoDuty.Configuration.AutoManageBossModAISettings)
                 if (Presets_GetActive() != name)
                 {
                     Svc.Log.Debug($"BossMod Setting Preset: {name}");
@@ -128,7 +131,7 @@ namespace AutoDuty.IPC
 
         public static void DisablePresets()
         {
-            if (Plugin.Configuration.AutoManageBossModAISettings)
+            if (AutoDuty.Configuration.AutoManageBossModAISettings)
                 if (Presets_GetActive() != null)
                 {
                     Svc.Log.Debug($"BossMod Disabling Presets");
@@ -138,7 +141,7 @@ namespace AutoDuty.IPC
 
         public static void SetRange(float range)
         {
-            if (Plugin.Configuration.AutoManageBossModAISettings)
+            if (AutoDuty.Configuration.AutoManageBossModAISettings)
             {
                 Svc.Log.Debug($"BossMod Setting Range to: {range}");
 
@@ -151,7 +154,7 @@ namespace AutoDuty.IPC
 
         public static void SetMovement(bool on)
         {
-            if (Plugin.Configuration.AutoManageBossModAISettings)
+            if (AutoDuty.Configuration.AutoManageBossModAISettings)
             {
                 Svc.Log.Debug($"BossMod Setting Movement: {on}");
 
@@ -164,7 +167,7 @@ namespace AutoDuty.IPC
 
         public static void SetPositional(Positional positional)
         {
-            if (Plugin.Configuration.AutoManageBossModAISettings)
+            if (AutoDuty.Configuration.AutoManageBossModAISettings)
             {
                 Svc.Log.Debug($"BossMod Setting Positional: {positional}");
 
@@ -174,7 +177,7 @@ namespace AutoDuty.IPC
 
         public static void InBoss(bool boss)
         {
-            if (Plugin.Configuration.AutoManageBossModAISettings)
+            if (AutoDuty.Configuration.AutoManageBossModAISettings)
             {
                 string role = boss ? "None" : Role.Tank.ToString();
 
@@ -187,7 +190,7 @@ namespace AutoDuty.IPC
     
     internal static class YesAlready_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(YesAlready_IPCSubscriber), "YesAlready", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(YesAlready_IPCSubscriber), "YesAlready", SafeWrapper.IPCException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("YesAlready");
 
@@ -202,7 +205,7 @@ namespace AutoDuty.IPC
 
     internal static class Gearsetter_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Gearsetter_IPCSubscriber), "Gearsetter", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Gearsetter_IPCSubscriber), "Gearsetter", SafeWrapper.IPCException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("Gearsetter");
 
@@ -213,7 +216,7 @@ namespace AutoDuty.IPC
 
     internal static class Stylist_IPCSubscriber
     {
-        private static                   EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Stylist_IPCSubscriber), "Stylist", SafeWrapper.IPCException);
+        private static readonly          EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Stylist_IPCSubscriber), "Stylist", SafeWrapper.IPCException);
         internal static                  bool                 IsEnabled => IPCSubscriber_Common.IsReady("Stylist");
         [EzIPC] internal static readonly Action<bool?, bool?> UpdateCurrentGearsetEx; //bool? moveItemsFromInventory, bool? shouldEquip
         [EzIPC] internal static readonly Func<bool>           IsBusy;
@@ -223,7 +226,7 @@ namespace AutoDuty.IPC
 
     internal static class VNavmesh_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(VNavmesh_IPCSubscriber), "vnavmesh", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(VNavmesh_IPCSubscriber), "vnavmesh", SafeWrapper.IPCException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("vnavmesh");
 
@@ -267,7 +270,7 @@ namespace AutoDuty.IPC
 
     internal static class PandorasBox_IPCSubscriber
     {
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(PandorasBox_IPCSubscriber), "PandorasBox", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(PandorasBox_IPCSubscriber), "PandorasBox", SafeWrapper.IPCException);
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("PandorasBox");
 
@@ -396,7 +399,7 @@ namespace AutoDuty.IPC
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("WrathCombo");
 
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Wrath_IPCSubscriber), "WrathCombo", SafeWrapper.IPCException);
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(Wrath_IPCSubscriber), "WrathCombo", SafeWrapper.IPCException);
 
         /// <summary>
         ///     Register your plugin for control of Wrath Combo.
@@ -549,8 +552,8 @@ namespace AutoDuty.IPC
                     Register();
                     return false;
                 case SetResult.BlacklistedLease:
-                    Plugin.Configuration.AutoManageRotationPluginState = false;
-                    Plugin.Configuration.Save();
+                    Configuration.AutoManageRotationPluginState = false;
+                    Windows.Configuration.Save();
                     return false;
                 case SetResult.IPCDisabled:
                 case SetResult.Duplicate:
@@ -580,9 +583,9 @@ namespace AutoDuty.IPC
                     SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.IncludeNPCs,        true);
                     SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.OnlyAttackInCombat, false);
 
-                    DPSRotationMode dpsConfig = Plugin.CurrentPlayerItemLevelandClassJob.Value.GetCombatRole() == CombatRole.Tank ?
-                                                    Plugin.Configuration.Wrath_TargetingTank :
-                                                    Plugin.Configuration.Wrath_TargetingNonTank;
+                    DPSRotationMode dpsConfig = Plugin.currentPlayerItemLevelAndClassJob.Value.GetCombatRole() == CombatRole.Tank ?
+                                                    Configuration.Wrath_TargetingTank :
+                                                    Configuration.Wrath_TargetingNonTank;
                     SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.DPSRotationMode, dpsConfig);
 
                     SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
@@ -599,8 +602,8 @@ namespace AutoDuty.IPC
 
                 if (_curLease == null && IsEnabled)
                 {
-                    Plugin.Configuration.AutoManageRotationPluginState = false;
-                    Plugin.Configuration.Save();
+                    Configuration.AutoManageRotationPluginState = false;
+                    Windows.Configuration.Save();
                 }
             }
             return _curLease != null;
@@ -611,8 +614,8 @@ namespace AutoDuty.IPC
             switch ((CancellationReason) reason)
             {
                 case CancellationReason.WrathUserManuallyCancelled:
-                    Plugin.Configuration.AutoManageRotationPluginState = false;
-                    Plugin.Configuration.Save();
+                    Configuration.AutoManageRotationPluginState = false;
+                    Windows.Configuration.Save();
                     break;
                 case CancellationReason.LeaseePluginDisabled:
                 case CancellationReason.WrathPluginDisabled:
@@ -753,9 +756,8 @@ namespace AutoDuty.IPC
             AllTargetsWhenSolo
         }
 
-        public static string GetHostileTypeDescription(TargetHostileType type)
-        {
-            return type switch
+        public static string GetHostileTypeDescription(TargetHostileType type) =>
+            type switch
             {
                 TargetHostileType.AllTargetsCanAttack => "All Targets Can Attack aka Tank/Autoduty Mode",
                 TargetHostileType.TargetsHaveTarget => "Targets Have A Target",
@@ -763,7 +765,6 @@ namespace AutoDuty.IPC
                 TargetHostileType.AllTargetsWhenSolo => "All Targets When Solo",
                 _ => "Unknown Target Type"
             };
-        }
 
         /// <summary>
         /// The type of targeting.
@@ -831,8 +832,8 @@ namespace AutoDuty.IPC
             Farthest,
         }
 
-        private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(RSR_IPCSubscriber), "RotationSolverReborn", SafeWrapper.IPCException);
-        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("RotationSolver");
+        private static readonly EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(RSR_IPCSubscriber), "RotationSolverReborn", SafeWrapper.IPCException);
+        internal static         bool                 IsEnabled => IPCSubscriber_Common.IsReady("RotationSolver");
 
         [EzIPC] private static readonly Action<StateCommandType, TargetingType> AutodutyChangeOperatingMode;
         [EzIPC] private static readonly Action<StateCommandType>                ChangeOperatingMode;
@@ -840,12 +841,12 @@ namespace AutoDuty.IPC
 
         public static void RotationAuto()
         {
-            OtherCommand(OtherCommandType.Settings, $"HostileType {Plugin.Configuration.RSR_TargetHostileType}");
+            OtherCommand(OtherCommandType.Settings, $"HostileType {Configuration.RSR_TargetHostileType}");
             OtherCommand(OtherCommandType.Settings, "FriendlyPartyNpcHealRaise3 true");
             OtherCommand(OtherCommandType.Settings, "AutoOffAfterCombat false");
-            AutodutyChangeOperatingMode(StateCommandType.AutoDuty, Plugin.CurrentPlayerItemLevelandClassJob.Value.GetCombatRole() == CombatRole.Tank ?
-                                                                       Plugin.Configuration.RSR_TargetingTypeTank :
-                                                                       Plugin.Configuration.RSR_TargetingTypeNonTank);
+            AutodutyChangeOperatingMode(StateCommandType.AutoDuty, Plugin.currentPlayerItemLevelAndClassJob.Value.GetCombatRole() == CombatRole.Tank ?
+                                                                       Configuration.RSR_TargetingTypeTank :
+                                                                       Configuration.RSR_TargetingTypeNonTank);
         }
 
         public static void RotationStop() => ChangeOperatingMode(StateCommandType.Off);

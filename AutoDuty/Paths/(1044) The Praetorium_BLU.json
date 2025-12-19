@@ -12,6 +12,7 @@
         "false",
         "92"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -25,6 +26,7 @@
       "Arguments": [
         "2012811"
       ],
+      "Conditions": [],
       "Note": "Magitek Terminal"
     },
     {
@@ -38,6 +40,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -51,19 +54,25 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Rotation",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "Job;Blue_Mage",
-        "Rotation;off"
+        "off"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "job": "Blue_Mage"
+        }
       ],
       "Note": ""
     },
@@ -79,33 +88,61 @@
         "true",
         "92"
       ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 175.41,
+        "Y": 154.68,
+        "Z": -68.05
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "W2W",
-      "Name": "ConditionAction",
+      "Name": "Wait",
       "Position": {
-        "X": 175.41466,
-        "Y": 154.67581,
-        "Z": -68.05216
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [
-        "ActionStatus;Action;23282;573",
-        "Wait;2500"
+        "2500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionActionStatus, AutoDuty",
+          "type": "Action",
+          "id": 23282,
+          "statusCode": 573
+        }
       ],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Action",
       "Position": {
         "X": 181.5,
         "Y": 154.1,
         "Z": -72.2
       },
       "Arguments": [
-        "Job;Blue_Mage",
-        "Action;Action;7559"
+        "Action",
+        "7559"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "job": "Blue_Mage"
+        }
       ],
       "Note": ""
     },
@@ -120,19 +157,26 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Action",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "Job;Blue_Mage",
-        "Action;Action;23282"
+        "Action",
+        "23282"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "job": "Blue_Mage"
+        }
       ],
       "Note": ""
     },
@@ -147,19 +191,26 @@
       "Arguments": [
         "ConditionFlag;Casting;false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Action",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "Job;Blue_Mage",
-        "Action;Action;11419"
+        "Action",
+        "11419"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "job": "Blue_Mage"
+        }
       ],
       "Note": ""
     },
@@ -174,6 +225,7 @@
       "Arguments": [
         "ConditionFlag;Casting;false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -187,19 +239,26 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Action",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "Job;Blue_Mage",
-        "Action;Action;23277"
+        "Action",
+        "23277"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "job": "Blue_Mage"
+        }
       ],
       "Note": ""
     },
@@ -214,19 +273,25 @@
       "Arguments": [
         "ConditionFlag;Casting;false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Rotation",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "Job;Blue_Mage",
-        "Rotation;on"
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "job": "Blue_Mage"
+        }
       ],
       "Note": ""
     },
@@ -241,6 +306,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -254,6 +320,7 @@
       "Arguments": [
         "2012813"
       ],
+      "Conditions": [],
       "Note": "Magitek Transporter"
     },
     {
@@ -267,6 +334,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -280,6 +348,7 @@
       "Arguments": [
         "2012815"
       ],
+      "Conditions": [],
       "Note": "Magitek Terminal"
     },
     {
@@ -293,6 +362,7 @@
       "Arguments": [
         "1"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -306,6 +376,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -319,6 +390,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -332,6 +404,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -345,6 +418,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -358,6 +432,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -371,6 +446,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -384,6 +460,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -397,6 +474,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -410,6 +488,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -423,6 +502,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -436,6 +516,7 @@
       "Arguments": [
         "1"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -449,6 +530,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -462,6 +544,7 @@
       "Arguments": [
         "10"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -475,6 +558,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -488,6 +572,7 @@
       "Arguments": [
         "2"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -501,6 +586,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -514,6 +600,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -527,6 +614,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -540,6 +628,7 @@
       "Arguments": [
         "2012817"
       ],
+      "Conditions": [],
       "Note": "Magitek Terminal"
     },
     {
@@ -553,51 +642,20 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Gaius van Baelsar"
     }
   ],
   "Meta": {
-    "CreatedAt": 269,
+    "CreatedAt": 273,
     "Changelog": [
       {
-        "Version": 114,
-        "Change": "Added ForceAttack for Cermet Door as fallback (No DutySpecCode) and Added a Wait and MoveTo before final boss to prevent leaving early."
+        "Version": 276,
+        "Change": ""
       },
       {
-        "Version": 135,
-        "Change": "Added Duty Specific Code for Magitek stage"
-      },
-      {
-        "Version": 161,
-        "Change": "Converted to new JSON Structure"
-      },
-      {
-        "Version": 163,
-        "Change": "Converted to newer JSON Structure"
-      },
-      {
-        "Version": 164,
-        "Change": "Converted to JSON Structure with Tags"
-      },
-      {
-        "Version": 189,
-        "Change": "Adjusted tags to string values"
-      },
-      {
-        "Version": 241,
-        "Change": "Wait before b2 adjusted"
-      },
-      {
-        "Version": 246,
-        "Change": "Replaced old automove instruction"
-      },
-      {
-        "Version": 262,
-        "Change": "Added W2W and replaced mech arms WaitFor Combat with simple Waits"
-      },
-      {
-        "Version": 269,
-        "Change": "Adjusting Wait W2W steps"
+        "Version": 276,
+        "Change": "Seperate the move and wait steps to keep party together for healing"
       }
     ],
     "Notes": []

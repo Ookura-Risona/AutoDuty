@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AutoDuty.Helpers
+﻿namespace AutoDuty.Helpers
 {
+    using System;
+    using System.Collections.Generic;
     using Data;
     using ECommons.ExcelServices;
 
@@ -10,10 +9,10 @@ namespace AutoDuty.Helpers
     {
         public static void AddPathSelectionEntry(uint territoryId)
         {
-            if (!Plugin.Configuration.PathSelectionsByPath.ContainsKey(territoryId))
+            if (!Configuration.PathSelectionsByPath.ContainsKey(territoryId))
             {
                 Dictionary<string, JobWithRole> jobs = [];
-                Plugin.Configuration.PathSelectionsByPath.Add(territoryId, jobs);
+                Configuration.PathSelectionsByPath.Add(territoryId, jobs);
                 if (ContentPathsManager.DictionaryPaths.TryGetValue(territoryId, out ContentPathsManager.ContentPathContainer? container))
                     foreach (Job job in Enum.GetValues<Job>())
                     {
@@ -22,7 +21,7 @@ namespace AutoDuty.Helpers
                         jobs[path] |= job.JobToJobWithRole();
                     }
 
-                Plugin.Configuration.Save();
+                Windows.Configuration.Save();
             }
         }
 
@@ -30,20 +29,24 @@ namespace AutoDuty.Helpers
         {
             ContentPathsManager.ContentPathContainer container = ContentPathsManager.DictionaryPaths[territoryId];
 
-            Dictionary<string, JobWithRole>? pathJobConfigs = Plugin.Configuration.PathSelectionsByPath[territoryId];
+            Dictionary<string, JobWithRole>? pathJobConfigs = Configuration.PathSelectionsByPath[territoryId];
 
             JobWithRole jwr = JobWithRole.All;
 
-            foreach (string key in pathJobConfigs.Keys)
-                jwr &= ~pathJobConfigs[key];
-
-            foreach (Job job in jwr.ContainedJobs())
+            if (pathJobConfigs != null)
             {
-                string path = container.SelectPath(out _, job)!.FileName;
-                pathJobConfigs.TryAdd(path, JobWithRole.None);
-                pathJobConfigs[path] |= job.JobToJobWithRole();
+                foreach (string key in pathJobConfigs.Keys)
+                    jwr &= ~pathJobConfigs[key];
+
+                foreach (Job job in jwr.ContainedJobs())
+                {
+                    string path = container.SelectPath(out _, job)!.FileName;
+                    pathJobConfigs.TryAdd(path, JobWithRole.None);
+                    pathJobConfigs[path] |= job.JobToJobWithRole();
+                }
             }
-            Plugin.Configuration.Save();
+
+            Windows.Configuration.Save();
         }
     }
 }

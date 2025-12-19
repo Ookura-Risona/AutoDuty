@@ -1,5 +1,4 @@
-﻿using System;
-using Dalamud.Game.ClientState.Objects.Types;
+﻿using Dalamud.Game.ClientState.Objects.Types;
 using ECommons;
 using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
@@ -10,6 +9,8 @@ using GameObject = FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject;
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace AutoDuty.Helpers;
+
+using System;
 
 // Straight from Wrath
 public static unsafe class PronounHelper

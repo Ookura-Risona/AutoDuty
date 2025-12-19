@@ -4,30 +4,28 @@ namespace AutoDuty.Helpers
 {
     internal static class SummoningBellHelper
     {
-        internal static uint SummoningBellDataIds(uint territoryType)
-        {
-            return territoryType switch
+        internal static uint SummoningBellDataIds(uint territoryType) =>
+            territoryType switch
             {
-                0 => 2000403, //Inn
-                1 => 196630, //Apartment
-                2 => 196630, //Personal_Home
-                3 => 196630, //FC_Estate
-                129 => 2000401, //Limsa_Lominsa_Lower_Decks
-                133 => 2000401, //Old_Gridania
-                131 => 2000401, //Uldah_Steps_of_Thal
-                419 => 2000401, //The_Pillars
-                635 => 2000441, //Rhalgrs_Reach
-                628 => 2000441, //Kugane
-                759 => 2006565, //The_Doman_Enclave
-                819 => 2010284, //The_Crystarium
-                820 => 2010284, //Eulmore
-                962 => 2000441, //Old_Sharlayan
-                963 => 2000441, //Radz_at_Han
+                0 => 2000403,    //Inn
+                1 => 196630,     //Apartment
+                2 => 196630,     //Personal_Home
+                3 => 196630,     //FC_Estate
+                129 => 2000401,  //Limsa_Lominsa_Lower_Decks
+                133 => 2000401,  //Old_Gridania
+                131 => 2000401,  //Uldah_Steps_of_Thal
+                419 => 2000401,  //The_Pillars
+                635 => 2000441,  //Rhalgrs_Reach
+                628 => 2000441,  //Kugane
+                759 => 2006565,  //The_Doman_Enclave
+                819 => 2010284,  //The_Crystarium
+                820 => 2010284,  //Eulmore
+                962 => 2000441,  //Old_Sharlayan
+                963 => 2000441,  //Radz_at_Han
                 1185 => 2000441, //Tuliyollal
                 1186 => 2000441, //Nexus_Arcade
                 _ => 0
             };
-        }
 
         internal static readonly uint[] HousingZones = [
             339u, // Mist
@@ -37,9 +35,8 @@ namespace AutoDuty.Helpers
             979u, // Empyreum
         ];
 
-        private static Vector3 SummoningBellVector3s(uint territoryType)
-        {
-            return territoryType switch
+        private static Vector3 SummoningBellVector3S(uint territoryType) =>
+            territoryType switch
             {
                 129 => new Vector3(-123.88806f,  17.990356f,    21.469421f),
                 133 => new Vector3(171.00781f,   15.487854f,    -101.487854f),
@@ -56,11 +53,10 @@ namespace AutoDuty.Helpers
                 1186 => new Vector3(-151.59845f, 0.59503174f,   -15.304871f),
                 _ => Vector3.Zero 
             };
-        }
 
         internal static void Invoke(SummoningBellLocations summoningBellLocation) 
         {
-            switch (Plugin.Configuration.PreferredSummoningBellEnum)
+            switch (Configuration.PreferredSummoningBellEnum)
             {
                 case SummoningBellLocations.Inn:
                     GotoInnHelper.Invoke();
@@ -74,8 +70,21 @@ namespace AutoDuty.Helpers
                 case SummoningBellLocations.FC_Estate:
                     GotoHousingHelper.Invoke((Housing)SummoningBellLocations.FC_Estate);
                     break;
+                case SummoningBellLocations.Limsa_Lominsa_Lower_Decks:
+                case SummoningBellLocations.Old_Gridania:
+                case SummoningBellLocations.Uldah_Steps_of_Thal:
+                case SummoningBellLocations.The_Pillars:
+                case SummoningBellLocations.Rhalgrs_Reach:
+                case SummoningBellLocations.Kugane:
+                case SummoningBellLocations.The_Doman_Enclave:
+                case SummoningBellLocations.The_Crystarium:
+                case SummoningBellLocations.Eulmore:
+                case SummoningBellLocations.Old_Sharlayan:
+                case SummoningBellLocations.Radz_at_Han:
+                case SummoningBellLocations.Tuliyollal:
+                case SummoningBellLocations.Nexus_Arcade:
                 default:
-                    GotoHelper.Invoke((uint)Plugin.Configuration.PreferredSummoningBellEnum, SummoningBellVector3s((uint)summoningBellLocation), 0.25f, 4);
+                    GotoHelper.Invoke((uint)Configuration.PreferredSummoningBellEnum, SummoningBellVector3S((uint)summoningBellLocation), 0.25f, 4);
                     break;
             }
         }

@@ -6,41 +6,51 @@ using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System;
 
 namespace AutoDuty.Helpers
 {
+    using System;
     using Windows;
     using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
     internal static class DeathHelper
     {
-        private static PlayerLifeState _deathState = PlayerLifeState.Alive;
+        private static PlayerLifeState deathState = PlayerLifeState.Alive;
         internal static PlayerLifeState DeathState
         {
-            get => _deathState;
+            get => deathState;
             set
             {
-                if(_deathState != value)
+                if (Plugin.Stage == Stage.Stopped)
+                    return;
+
+                if(deathState != value)
                     ConfigurationMain.MultiboxUtility.IsDead(value == PlayerLifeState.Dead);
 
-                if (value == PlayerLifeState.Dead)
+                switch (value)
                 {
-                    if (value != _deathState)
+                    case PlayerLifeState.Dead:
                     {
-                        DebugLog("Player is Dead changing state to Dead");
-                        SchedulerHelper.ScheduleAction(nameof(OnDeath), OnDeath, 500, false); 
+                        if (value != deathState)
+                        {
+                            DebugLog("Player is Dead changing state to Dead");
+                            SchedulerHelper.ScheduleAction(nameof(OnDeath), OnDeath, 500, false); 
+                        }
+
+                        break;
                     }
+                    case PlayerLifeState.Revived:
+                        SchedulerHelper.DescheduleAction(nameof(OnDeath));
+                        DebugLog("Player is Revived changing state to Revived");
+                        oldIndex              = Plugin.indexer;
+                        findShortcutStartTime = Environment.TickCount;
+                        FindShortcut();
+                        break;
+                    case PlayerLifeState.Alive:
+                    default:
+                        break;
                 }
-                else if (value == PlayerLifeState.Revived)
-                {
-                    SchedulerHelper.DescheduleAction(nameof(OnDeath));
-                    DebugLog("Player is Revived changing state to Revived");
-                    _oldIndex = Plugin.Indexer;
-                    _findShortcutStartTime = Environment.TickCount;
-                    FindShortcut();
-                }
-                _deathState = value;
+                deathState = value;
             }
         }
 
@@ -52,16 +62,16 @@ namespace AutoDuty.Helpers
                 SchedulerHelper.DescheduleAction(nameof(OnDeath));
             }
 
-            Plugin.StopForCombat = true;
-            Plugin.SkipTreasureCoffer = true;
+            Plugin.stopForCombat = true;
+            Plugin.skipTreasureCoffer = true;
 
             if (VNavmesh_IPCSubscriber.Path_IsRunning())
                 VNavmesh_IPCSubscriber.Path_Stop();
 
-            if (Plugin.TaskManager.IsBusy)
-                Plugin.TaskManager.Abort();
+            if (Plugin.taskManager.IsBusy)
+                Plugin.taskManager.Abort();
             
-            if (Plugin.Configuration.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Variant))
+            if (AutoDuty.Configuration.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Variant))
             {
                 bool yesNo = GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) && GenericHelpers.IsAddonReady(addonSelectYesno);
                 bool dead  = PartyHelper.PartyDead();
@@ -79,9 +89,9 @@ namespace AutoDuty.Helpers
             }
         }
 
-        private static int _oldIndex = 0;
-        private static IGameObject? _gameObject => ObjectHelper.GetObjectByDataId(2000700);
-        private static int _findShortcutStartTime = 0;
+        private static int          oldIndex = 0;
+        private static IGameObject? GameObject => ObjectHelper.GetObjectByDataIds(2000700, 2000789);
+        private static int          findShortcutStartTime = 0;
 
         private static int FindWaypoint()
         {
@@ -110,19 +120,19 @@ namespace AutoDuty.Helpers
                 return closestWaypointIndex;
             }*/
 
-            if (Plugin.Indexer != -1)
+            if (Plugin.indexer != -1)
             {
-                ContentPathsManager.ContentPathContainer container    = ContentPathsManager.DictionaryPaths[Plugin.CurrentTerritoryType];
-                ContentPathsManager.DutyPath             dutyPath     = container.Paths[Plugin.CurrentPath];
+                ContentPathsManager.ContentPathContainer container    = ContentPathsManager.DictionaryPaths[Plugin.currentTerritoryType];
+                ContentPathsManager.DutyPath             dutyPath     = container.Paths[Plugin.currentPath];
                 bool                                     revivalFound = dutyPath.RevivalFound;
 
-                bool isBoss = Plugin.Actions[Plugin.Indexer].Name.Equals("Boss");
+                bool isBoss = Plugin.Actions[Plugin.indexer].Name.Equals("Boss");
                 if (!revivalFound)
-                    if (Plugin.Indexer > 0 && isBoss)
-                        return Plugin.Indexer;
+                    if (Plugin.indexer > 0 && isBoss)
+                        return Plugin.indexer;
 
-                Svc.Log.Info($"Finding Revival Point starting at {Plugin.Indexer}. Using Revival Action: {revivalFound}");
-                for (int i = Plugin.Indexer; i >= 0; i--)
+                Svc.Log.Info($"Finding Revival Point starting at {Plugin.indexer}. Using Revival Action: {revivalFound}");
+                for (int i = Plugin.indexer; i >= 0; i--)
                 {
                     string name = Plugin.Actions[i].Name;
 
@@ -132,7 +142,7 @@ namespace AutoDuty.Helpers
                     if(!found && !isBoss)
                         found = name.Equals("Boss", StringComparison.InvariantCultureIgnoreCase);
 
-                    if (found && i != Plugin.Indexer)
+                    if (found && i != Plugin.indexer)
                     {
                         int waypoint = isBoss ? i : i + 1;
                         Svc.Log.Debug($"Revival Point: {i}");
@@ -152,17 +162,17 @@ namespace AutoDuty.Helpers
 
         private static void FindShortcut()
         {
-            if (_gameObject == null && Environment.TickCount <= (_findShortcutStartTime + 5000))
+            if (GameObject == null && Environment.TickCount <= (findShortcutStartTime + 5000))
             {
                 Svc.Log.Debug($"OnRevive: Searching for shortcut");
                 SchedulerHelper.ScheduleAction("FindShortcut", FindShortcut, 500);
                 return;
             }
             
-            if (_gameObject is not { IsTargetable: true })
+            if (GameObject is not { IsTargetable: true })
             {
                 Svc.Log.Debug($"OnRevive: Couldn't find shortcut");
-                Plugin.Indexer = 0;
+                Plugin.indexer = 0;
                 //Stop();
                 //return;
             } else
@@ -179,45 +189,52 @@ namespace AutoDuty.Helpers
             if (VNavmesh_IPCSubscriber.Path_IsRunning())
                 VNavmesh_IPCSubscriber.Path_Stop();
             BossMod_IPCSubscriber.SetMovement(true);
+            Plugin.Stage = Stage.Idle;
             Plugin.Stage = Stage.Reading_Path;
             Svc.Log.Debug("DeathHelper - Player is Alive, and we are done with Revived Actions, changing state to Alive");
-            _deathState               = PlayerLifeState.Alive;
-            Plugin.SkipTreasureCoffer = false;
+            deathState               = PlayerLifeState.Alive;
+            Plugin.skipTreasureCoffer = false;
         }
 
         private static unsafe void OnRevive(IFramework _)
         {
-            if (!EzThrottler.Throttle("OnRevive", 500) || (!PlayerHelper.IsReady && !Conditions.Instance()->OccupiedInQuestEvent) || PlayerHelper.IsCasting) return;
+            if (!EzThrottler.Throttle("OnRevive", 500) || (!PlayerHelper.IsReady && !Conditions.Instance()->OccupiedInQuestEvent) || PlayerHelper.IsCasting) 
+                return;
+
+            if (PlayerHelper.HasStatusAny([43, 44], 90) || PlayerHelper.HasStatusAny([148, 1140]))
+            {
+                Plugin.indexer = oldIndex;
+                Stop();
+                return ;
+            }
 
             float distanceToPlayer;
 
-            if (!(_gameObject?.IsTargetable ?? false) || (distanceToPlayer = ObjectHelper.GetDistanceToPlayer(_gameObject)) > 30)
+            if (!(GameObject?.IsTargetable ?? false) || (distanceToPlayer = ObjectHelper.GetDistanceToPlayer(GameObject)) > 30)
             {
                 Svc.Log.Debug("OnRevive: Done");
-                if(Plugin.Indexer == 0) 
-                    Plugin.Indexer = FindWaypoint();
+                if(Plugin.indexer == 0) 
+                    Plugin.indexer = FindWaypoint();
                 Stop();
                 return;
             }
-            if (_oldIndex == Plugin.Indexer)
-                Plugin.Indexer = FindWaypoint();
+            if (oldIndex == Plugin.indexer)
+                Plugin.indexer = FindWaypoint();
             
             if (distanceToPlayer > 2)
             {
-                MovementHelper.Move(_gameObject, 0.25f, 2);
-                Svc.Log.Debug($"OnRevive: Moving to {_gameObject.Name} at: {_gameObject.Position} which is {distanceToPlayer} away");
+                MovementHelper.Move(GameObject, 0.25f, 2);
+                Svc.Log.Debug($"OnRevive: Moving to {GameObject.Name} at: {GameObject.Position} which is {distanceToPlayer} away");
             }
             else
             {
-                Svc.Log.Debug($"OnRevive: Interacting with {_gameObject.Name} until SelectYesno Addon appears, and ClickingYes");
-                ObjectHelper.InteractWithObjectUntilAddon(_gameObject, "SelectYesno");
+                Svc.Log.Debug($"OnRevive: Interacting with {GameObject.Name} until SelectYesno Addon appears, and ClickingYes");
+                ObjectHelper.InteractWithObjectUntilAddon(GameObject, "SelectYesno");
                 AddonHelper.ClickSelectYesno();
             }
         }
 
-        public static void DebugLog(string s)
-        {
+        private static void DebugLog(string s) => 
             Svc.Log.Debug($"DeathHelper: {s}");
-        }
     }
 }

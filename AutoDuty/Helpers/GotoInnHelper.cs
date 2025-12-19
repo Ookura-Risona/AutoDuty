@@ -3,10 +3,13 @@ using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
-using System.Collections.Generic;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using ECommons.ExcelServices;
+
     internal class GotoInnHelper : ActiveHelperBase<GotoInnHelper>
     {
 
@@ -16,16 +19,18 @@ namespace AutoDuty.Helpers
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno", "SelectString", "Talk"];
 
-        internal static void Invoke(uint whichGrandCompany = 0)
-        {
-            _whichGrandCompany = whichGrandCompany is 0 or > 3 ? 
-                                     PlayerHelper.GetGrandCompany() : 
-                                     whichGrandCompany;
+        private static GrandCompany whichGrandCompany = 0;
 
-            if (Svc.ClientState.TerritoryType != InnTerritoryType(_whichGrandCompany))
+        internal static void Invoke(GrandCompany grandCompany = GrandCompany.Unemployed)
+        {
+            whichGrandCompany = grandCompany is GrandCompany.Unemployed or > GrandCompany.ImmortalFlames ?
+                                                  PlayerHelper.GetGrandCompany() :
+                                                  grandCompany;
+
+            if (Svc.ClientState.TerritoryType != InnTerritoryType(whichGrandCompany))
             {
                 Instance.Start();
-                Svc.Log.Info($"Goto Inn Started {_whichGrandCompany}");
+                Svc.Log.Info($"Goto Inn Started {whichGrandCompany}");
             }
         }
 
@@ -33,37 +38,43 @@ namespace AutoDuty.Helpers
         internal override void Stop() 
         {
             GotoHelper.ForceStop();
-            _whichGrandCompany = 0;
+            whichGrandCompany = 0;
             base.Stop();
         }
 
-        internal static uint InnTerritoryType(uint _grandCompany) => _grandCompany switch
+        internal static uint InnTerritoryType(GrandCompany grandCompany) => grandCompany switch
         {
-            1 => 177u,
-            2 => 179u,
+            GrandCompany.Maelstrom => 177u,
+            GrandCompany.TwinAdder => 179u,
             _ => 178u
         };
-        internal static uint ExitInnDoorDataId(uint _grandCompany) => _grandCompany switch
+
+        internal static uint ExitInnDoorDataId(GrandCompany grandCompany) => grandCompany switch
         {
-            1 => 2001010u,
-            2 => 2000087u,
+            GrandCompany.Maelstrom => 2001010u,
+            GrandCompany.TwinAdder => 2000087u,
             _ => 2001011u
         };
 
-        private static uint _whichGrandCompany = 0;
-        private static List<Vector3> _innKeepLocation => _whichGrandCompany switch
+        private static List<Vector3> InnKeepLocation => whichGrandCompany switch
         {
-            1 => [new Vector3(15.42688f, 39.99999f, 12.466553f)],
-            2 => [new Vector3(25.6627f,  -8f,       99.74237f)],
-            _ => [new Vector3(28.85994f, 6.999999f, -80.12716f)]
+            GrandCompany.Maelstrom => [new Vector3(15.42688f,          39.99999f, 12.466553f)],
+            GrandCompany.TwinAdder => [new Vector3(25.6627f,           -8f,       99.74237f)],
+            GrandCompany.ImmortalFlames => [new Vector3(28.85994f, 6.999999f, -80.12716f)],
+            GrandCompany.Unemployed => [],
+            _ => throw new ArgumentOutOfRangeException()
         };
-        private static uint _innKeepDataId => _whichGrandCompany switch
+
+        private static uint InnKeepDataId => whichGrandCompany switch
         {
-            1 => 1000974u,
-            2 => 1000102u,
-            _ => 1001976u
+            GrandCompany.Maelstrom => 1000974u,
+            GrandCompany.TwinAdder => 1000102u,
+            GrandCompany.ImmortalFlames => 1001976u,
+            GrandCompany.Unemployed => 0,
+            _ => throw new ArgumentOutOfRangeException()
         };
-        private IGameObject? _innKeepGameObject => ObjectHelper.GetObjectByDataId(_innKeepDataId);
+
+        private static IGameObject? InnKeepGameObject => ObjectHelper.GetObjectByDataId(InnKeepDataId);
 
         protected override unsafe void HelperStopUpdate(IFramework framework)
         {
@@ -77,7 +88,7 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating))
+            if (Plugin.states.HasFlag(PluginState.Navigating))
             {
                 Svc.Log.Debug($"AutoDuty has Started, Stopping GotoInn");
                 this.Stop();
@@ -88,7 +99,7 @@ namespace AutoDuty.Helpers
 
             EzThrottler.Throttle("GotoInn", 50);
 
-            if (Svc.ClientState.LocalPlayer == null)
+            if (!Player.Available)
             {
                 Svc.Log.Debug($"Our player is null");
                 return;
@@ -97,25 +108,25 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State == ActionState.Running)
                 return;
 
-            Plugin.Action = "Retiring to Inn";
+            Plugin.action = "Retiring to Inn";
 
-            if (Svc.ClientState.TerritoryType == InnTerritoryType(_whichGrandCompany))
+            if (Svc.ClientState.TerritoryType == InnTerritoryType(whichGrandCompany))
             {
                 Svc.Log.Debug($"We are in the Inn, stopping GotoInn");
                 this.Stop();
                 return;
             }
 
-            if (Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(_whichGrandCompany) || this._innKeepGameObject == null || Vector3.Distance(Svc.ClientState.LocalPlayer.Position, this._innKeepGameObject.Position) > 7f)
+            if (Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(whichGrandCompany) || InnKeepGameObject == null || Vector3.Distance(Player.Position, InnKeepGameObject.Position) > 7f)
             {
                 Svc.Log.Debug($"We are not in the correct TT or our innkeepGO is null or out innkeepPosition is > 7f, moving there");
-                GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(_whichGrandCompany), _innKeepLocation, 0.25f, 5f, false);
+                GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(whichGrandCompany), InnKeepLocation, 0.25f, 5f, false);
                 return;
             }
             else if (PlayerHelper.IsValid)
             {
                 Svc.Log.Debug($"Interacting with GO and Addons");
-                ObjectHelper.InteractWithObject(this._innKeepGameObject);
+                ObjectHelper.InteractWithObject(InnKeepGameObject);
                 AddonHelper.ClickSelectString(0);
                 AddonHelper.ClickSelectYesno();
                 AddonHelper.ClickTalk();

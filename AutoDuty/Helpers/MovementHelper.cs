@@ -2,13 +2,12 @@
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using System.Linq;
 using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using ECommons.GameFunctions;
 
 namespace AutoDuty.Helpers
 {
+    using System.Linq;
     using ECommons.Automation;
     using Lumina.Excel.Sheets;
 
@@ -56,14 +55,14 @@ namespace AutoDuty.Helpers
                 return true;
             }
 
-            if (PlayerHelper.IsMoving && !Player.Object.Struct()->Character.InCombat && Vector3.Distance(Player.Object.Position, position) >= 10)
+            if (PlayerHelper.IsMoving && !Player.Character->InCombat && Vector3.Distance(Player.Position, position) >= 10)
             {
                 //sprint
                 if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0 && ActionManager.Instance()->QueuedActionId != 4 && !PlayerHelper.IsCasting)
                     ActionManager.Instance()->UseAction(ActionType.GeneralAction, 4);
 
                 //peloton
-                if (ActionManager.Instance()->GetActionStatus(ActionType.Action, 7557) == 0 && ActionManager.Instance()->QueuedActionId != 7557 && !PlayerHelper.IsCasting && !Player.Object.StatusList.Any(x => x.StatusId == 1199))
+                if (ActionManager.Instance()->GetActionStatus(ActionType.Action, 7557) == 0 && ActionManager.Instance()->QueuedActionId != 7557 && !PlayerHelper.IsCasting && Player.Status.All(x => x.StatusId != 1199))
                     ActionManager.Instance()->UseAction(ActionType.Action, 7557);
             }
 

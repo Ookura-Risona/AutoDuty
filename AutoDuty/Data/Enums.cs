@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace AutoDuty.Data
+﻿namespace AutoDuty.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
@@ -110,7 +109,8 @@ namespace AutoDuty.Data
             Summoner    = 1 << 18,
             Red_Mage    = 1 << 19,
             Pictomancer = 1 << 20,
-            Casters     = Black_Mage | Summoner | Red_Mage | Pictomancer,
+            Blue_Mage   = 1 << 21,
+            Casters     = Black_Mage | Summoner | Red_Mage | Pictomancer | Blue_Mage,
             DPS         = Melee      | Aiming   | Casters,
             All         = Tanks      | Healers  | DPS 
         }
@@ -408,29 +408,63 @@ namespace AutoDuty.Data
             Pandora
         }
 
-        public static bool HasAnyFlag<T>(this T instance, params T[] parameter) where T : Enum
+        public enum ConditionType
         {
-            return parameter.Any(enu => instance.HasFlag(enu));
+            None,
+            Distance,
+            ItemCount,
+            ObjectData,
+            Job,
+            ActionStatus
+        }
+
+        public enum ObjectDataProperty
+        {
+            EventState,
+            IsTargetable
+        }
+
+        public enum DistanceLocationTypes
+        {
+            Player,
+            Object,
+            Location
+        }
+
+
+        extension<T>(T instance) where T : Enum
+        {
+            public bool HasAnyFlag(params T[] parameter) => 
+                parameter.Any(enu => instance.HasFlag(enu));
+
+            public T[] GetFlags() =>
+                [.. Enum.GetValues(typeof(T)).Cast<T>().Where(t => instance.HasFlag(t))];
         }
     }
 
     public static class JobWithRoleHelper
     {
-        private static readonly List<JobWithRole> enumVals = Enum.GetValues<JobWithRole>().Skip(1).ToList();
+        private static readonly List<JobWithRole> enumVals = [..Enum.GetValues<JobWithRole>().Skip(1)];
 
-        public static Dictionary<JobWithRole, IEnumerable<JobWithRole>> categories = enumVals.Select(jwr => (jwr, enumVals.Where(jwrr => jwr != jwrr && jwr.HasFlag(jwrr)))).Where(j => j.Item2.Any())
-                                                                                             .ToDictionary(j => j.jwr, j => j.Item2);
+        private static readonly Dictionary<JobWithRole, IEnumerable<JobWithRole>> CATEGORIES = enumVals.Select(jwr => (jwr, enumVals.Where(jwrr => jwr != jwrr && jwr.HasFlag(jwrr)))).Where(j => j.Item2.Any())
+                                                                                                       .ToDictionary(j => j.jwr, j => j.Item2);
 
-        public static Dictionary<JobWithRole, IEnumerable<JobWithRole>> values = enumVals.Select(jwr => (jwr, enumVals.Where(jwrr => jwr != jwrr && jwrr.HasFlag(jwr)))).Where(j => j.Item2.Any())
-                                                                                         .ToDictionary(j => j.jwr, j => j.Item2);
+        private static readonly Dictionary<JobWithRole, IEnumerable<JobWithRole>> VALUES = enumVals.Select(jwr => (jwr, enumVals.Where(jwrr => jwr != jwrr && jwrr.HasFlag(jwr)))).Where(j => j.Item2.Any())
+                                                                                                   .ToDictionary(j => j.jwr, j => j.Item2);
 
-        public static bool HasJobFlagFast(this JobWithRole value, JobWithRole flag) =>
-            (value & flag) == flag;
-
-        public static bool HasJob(this JobWithRole jwr, Job job)
+        extension(JobWithRole value)
         {
-            JobWithRole jw = job.JobToJobWithRole();
-            return jwr.HasJobFlagFast(jw);
+            public bool HasJobFlagFast(JobWithRole flag) =>
+                (value & flag) == flag;
+
+            public bool HasJob(Job job)
+            {
+                JobWithRole jw = job.JobToJobWithRole();
+                return value.HasJobFlagFast(jw);
+            }
+
+            public IEnumerable<Job> ContainedJobs() =>
+                Enum.GetValuesAsUnderlyingType<Job>().Cast<Job>().Where(job => value.HasJob(job));
         }
 
         public static JobWithRole JobToJobWithRole(this Job job) =>
@@ -457,11 +491,9 @@ namespace AutoDuty.Data
                 Job.ACN or Job.SMN => JobWithRole.Summoner,
                 Job.RDM => JobWithRole.Red_Mage,
                 Job.PCT => JobWithRole.Pictomancer,
+                Job.BLU => JobWithRole.Blue_Mage,
                 _ => JobWithRole.None
             };
-
-        public static IEnumerable<Job> ContainedJobs(this JobWithRole jwr) =>
-            Enum.GetValuesAsUnderlyingType<Job>().Cast<Job>().Where(job => jwr.HasJob(job));
 
         public static void DrawSelectable(JobWithRole jwr, ref JobWithRole config, bool allowRemoval = true)
         {
@@ -472,7 +504,7 @@ namespace AutoDuty.Data
                 if (ImGui.CheckboxFlags(jwr.ToString().Replace("_", " "), ref flag, (int)jwr))
                 {
                     config = (JobWithRole)flag;
-                    Plugin.Configuration.Save();
+                    Windows.Configuration.Save();
                 }
             }
         }
@@ -489,9 +521,9 @@ namespace AutoDuty.Data
             if (collapse)
             {
                 ImGui.Indent();
-                foreach (JobWithRole jobW in categories[category])
-                    if (values[jobW].MinBy(jwr => categories[jwr].Count()) == category)
-                        if (categories.ContainsKey(jobW))
+                foreach (JobWithRole jobW in CATEGORIES[category])
+                    if (VALUES[jobW].MinBy(jwr => CATEGORIES[jwr].Count()) == category)
+                        if (CATEGORIES.ContainsKey(jobW))
                         {
                             DrawCategory(jobW, ref config, allowRemoval);
                         }

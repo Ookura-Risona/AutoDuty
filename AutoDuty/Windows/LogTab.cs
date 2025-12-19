@@ -5,14 +5,14 @@ using ECommons.ImGuiMethods;
 using ECommons.Throttlers;
 using Dalamud.Bindings.ImGui;
 using Serilog.Events;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 using static AutoDuty.Updater.GitHubHelper;
 
 namespace AutoDuty.Windows
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using ECommons.DalamudServices;
 
     internal static class LogTab
@@ -50,16 +50,16 @@ namespace AutoDuty.Windows
                 _whatHappenedInput = string.Empty;
             }
             ImGuiEx.Spacing();
-            if (ImGui.Checkbox("自动滚动", ref Plugin.Configuration.AutoScroll))
-                Plugin.Configuration.Save();
+            if (ImGui.Checkbox("自动滚动", ref AutoDuty.Configuration.AutoScroll))
+                Configuration.Save();
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Trash))
-                Plugin.DalamudLogEntries.Clear();
+                Plugin.dalamudLogEntries.Clear();
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("清除日志");
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Copy))
-                ImGui.SetClipboardText(Plugin.DalamudLogEntries.SelectMulti(x => x.Message).ToList().ToCustomString("\n"));
+                ImGui.SetClipboardText(Plugin.dalamudLogEntries.SelectMulti(x => x.Message).ToList().ToCustomString("\n"));
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("复制完整日志");
             ImGui.SameLine();
@@ -102,23 +102,23 @@ namespace AutoDuty.Windows
                 ImGui.SetTooltip("点击以打开创建问题的弹出窗口（在 GitHub 认证后），填写表单并提交问题至仓库");
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-            if (ImGuiEx.EnumCombo("##LogEventLevel", ref Plugin.Configuration.LogEventLevel))
+            if (ImGuiEx.EnumCombo("##LogEventLevel", ref AutoDuty.Configuration.LogEventLevel))
             {
-                if(Svc.Log.MinimumLogLevel > Plugin.Configuration.LogEventLevel)
-                    Svc.Log.MinimumLogLevel = Plugin.Configuration.LogEventLevel;
-                Plugin.Configuration.Save();
+                if(Svc.Log.MinimumLogLevel > AutoDuty.Configuration.LogEventLevel)
+                    Svc.Log.MinimumLogLevel = AutoDuty.Configuration.LogEventLevel;
+                Configuration.Save();
             }
 
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("筛选日志事件级别");
             ImGuiEx.Spacing();
 
-            if (Plugin.Configuration.LogEventLevel < LogEventLevel.Information) ImGui.TextWrapped("AutoDuty can't change the log level dalamud uses. To see debug related things, you have to go in the dalamud log \"/xllog\" and set the appropriate level in the top left.");
+            if (AutoDuty.Configuration.LogEventLevel < LogEventLevel.Information) ImGui.TextWrapped("AutoDuty can't change the log level dalamud uses. To see debug related things, you have to go in the dalamud log \"/xllog\" and set the appropriate level in the top left.");
 
             ImGuiEx.Spacing();
             ImGui.BeginChild("scrolling", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y), true, ImGuiWindowFlags.HorizontalScrollbar);
 
-            Plugin.DalamudLogEntries.Each(e => { if (e.LogEventLevel >= Plugin.Configuration.LogEventLevel) ImGui.TextColored(GetLogEntryColor(e.LogEventLevel), e.Message); });
+            Plugin.dalamudLogEntries.Each(e => { if (e.LogEventLevel >= AutoDuty.Configuration.LogEventLevel) ImGui.TextColored(GetLogEntryColor(e.LogEventLevel), e.Message); });
 
             if (EzThrottler.Throttle("AddLogEntries", 25))
                 while (_logEntriesToAdd.Count != 0)
@@ -126,10 +126,10 @@ namespace AutoDuty.Windows
                     LogMessage? logEntry = _logEntriesToAdd.Dequeue();
                     if (logEntry == null)
                         return;
-                    Plugin.DalamudLogEntries.Add(logEntry);
+                    Plugin.dalamudLogEntries.Add(logEntry);
                 }
 
-            if (Plugin.Configuration.AutoScroll && ImGui.GetScrollY() >= ImGui.GetScrollMaxY())
+            if (AutoDuty.Configuration.AutoScroll && ImGui.GetScrollY() >= ImGui.GetScrollMaxY())
                 ImGui.SetScrollHereY(1.0f);
 
             ImGui.EndChild();

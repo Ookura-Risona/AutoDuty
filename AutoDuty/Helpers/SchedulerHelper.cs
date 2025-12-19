@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System;
-using Dalamud.Plugin.Services;
+﻿using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+
     internal static class SchedulerHelper
     {
         internal class Schedule

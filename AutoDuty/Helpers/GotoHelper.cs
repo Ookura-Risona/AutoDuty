@@ -5,13 +5,14 @@ using ECommons;
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
-    using Lumina.Excel.Sheets;
     using System;
+    using System.Collections.Generic;
+    using Lumina.Excel.Sheets;
+    using GrandCompany = ECommons.ExcelServices.GrandCompany;
 
     internal class GotoHelper : ActiveHelperBase<GotoHelper>
     {
@@ -45,14 +46,14 @@ namespace AutoDuty.Helpers
             {
                 Svc.Log.Info($"Goto Started, Going to {territoryType}{(moveLocations.Count > 0 ? $" and moving to {moveLocations[^1]} using {moveLocations.Count} pathLocations" : "")}");
                 
-                _territoryType = territoryType;
-                _gameObjectDataId = gameObjectDataId;
-                _moveLocations = moveLocations;
-                _tollerance = tollerance;
-                _lastPointTollerance = lastPointTollerance;
-                _useAethernetTravel = useAethernetTravel;
-                _useFlight = useFlight;
-                _useMesh = useMesh;
+                GotoHelper.territoryType      = territoryType;
+                GotoHelper.gameObjectDataId   = gameObjectDataId;
+                GotoHelper.moveLocations      = moveLocations;
+                tolerance          = tollerance;
+                lastPointTolerance            = lastPointTollerance;
+                GotoHelper.useAethernetTravel = useAethernetTravel;
+                GotoHelper.useFlight          = useFlight;
+                GotoHelper.useMesh            = useMesh;
                 Instance.Start();
             }
         }
@@ -63,20 +64,20 @@ namespace AutoDuty.Helpers
                 this.InfoLog($"Goto Finished");
             Svc.Framework.Update -= this.HelperUpdate;
             State                =  ActionState.None;
-            Plugin.States        &= ~PluginState.Other;
-            if (!Plugin.States.HasFlag(PluginState.Looping))
+            Plugin.states        &= ~PluginState.Other;
+            if (!Plugin.states.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(true);
 
-            _territoryType = 0;
-            _gameObjectDataId = 0;
-            _moveLocations = [];
-            _locationIndex = 0;
-            _tollerance = 0.25f;
-            _lastPointTollerance = 0.25f;
-            _useAethernetTravel = false;
-            _useFlight = false;
-            _useMesh = true;
-            Plugin.Action = "";
+            territoryType = 0;
+            gameObjectDataId = 0;
+            moveLocations = [];
+            locationIndex = 0;
+            tolerance = 0.25f;
+            lastPointTolerance = 0.25f;
+            useAethernetTravel = false;
+            useFlight = false;
+            useMesh = true;
+            Plugin.action = "";
 
             if (GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno))
                 addonSelectYesno->Close(true);
@@ -84,63 +85,73 @@ namespace AutoDuty.Helpers
                 VNavmesh_IPCSubscriber.Path_Stop();
         }
 
-        private static uint _territoryType = 0;
-        private static uint _gameObjectDataId = 0;
-        private static List<Vector3> _moveLocations = [];
-        private static int _locationIndex = 0;
-        private static float _tollerance = 0.25f;
-        private static float _lastPointTollerance = 0.25f;
-        private static bool _useAethernetTravel = false;
-        private static bool _useFlight = false;
-        private static bool _useMesh = true;
-        private IGameObject? _gameObject => _gameObjectDataId > 0 ? ObjectHelper.GetObjectByDataId(_gameObjectDataId) : null;
+        private static uint          territoryType      = 0;
+        private static uint          gameObjectDataId   = 0;
+        private static List<Vector3> moveLocations      = [];
+        private static int           locationIndex      = 0;
+        private static float         tolerance          = 0.25f;
+        private static float         lastPointTolerance = 0.25f;
+        private static bool          useAethernetTravel = false;
+        private static bool          useFlight          = false;
+        private static bool          useMesh            = true;
+        private static IGameObject?  GameObject => gameObjectDataId > 0 ? ObjectHelper.GetObjectByDataId(gameObjectDataId) : null;
 
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating)) this.Stop();
+            if (Plugin.states.HasFlag(PluginState.Navigating)) this.Stop();
 
             if (!EzThrottler.Check("Goto"))
                 return;
 
             EzThrottler.Throttle("Goto", 50);
 
-            Plugin.Action = $"Going to {TerritoryName.GetTerritoryName(_territoryType)}{(_moveLocations.Count > 0 ? $" at {_moveLocations[^1]}" : "")}";
+            Plugin.action = $"Going to {TerritoryName.GetTerritoryName(territoryType)}{(moveLocations.Count > 0 ? $" at {moveLocations[^1]}" : "")}";
 
-            if (Svc.ClientState.LocalPlayer == null)
+            if (!Player.Available)
                 return;
 
             if (!PlayerHelper.IsValid || PlayerHelper.IsCasting || PlayerHelper.IsJumping || !VNavmesh_IPCSubscriber.Nav_IsReady())
                 return;
 
-            if (Plugin.InDungeon)
+            if (InDungeon)
             {
                 ExitDutyHelper.Invoke();
                 return;
             }
 
-            if (Svc.ClientState.TerritoryType != _territoryType)
+            if (Svc.ClientState.TerritoryType != territoryType)
             {
-                uint which                 = _territoryType                                        == 128 ? 1u : (_territoryType == 132 ? 2u : (_territoryType == 130 ? 3u : 0u));
-                bool moveFromInnOrBarracks = _territoryType is 128 or 132 or 130;
+                GrandCompany which = territoryType switch
+                {
+                    128 => GrandCompany.Maelstrom,
+                    132 => GrandCompany.TwinAdder,
+                    130 => GrandCompany.ImmortalFlames,
+                    _ => GrandCompany.Unemployed
+                };
+
+                bool         moveFromInnOrBarracks = territoryType is 128 or 132 or 130;
                 
                 if (moveFromInnOrBarracks && (Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) || Svc.ClientState.TerritoryType == GotoInnHelper.InnTerritoryType(which)))
                 {
-                    IGameObject? exitGameObject = Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) ? ObjectHelper.GetObjectByDataId(GotoBarracksHelper.ExitBarracksDoorDataId(which)) : ObjectHelper.GetObjectByDataId(GotoInnHelper.ExitInnDoorDataId(which));
+                    IGameObject? exitGameObject = Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) ? 
+                                                      ObjectHelper.GetObjectByDataId(GotoBarracksHelper.ExitBarracksDoorDataId(which)) : 
+                                                      ObjectHelper.GetObjectByDataId(GotoInnHelper.ExitInnDoorDataId(which));
+
                     if (MovementHelper.Move(exitGameObject, 0.25f, 3f))
                         if (ObjectHelper.InteractWithObjectUntilAddon(exitGameObject, "SelectYesno") != null)
                             AddonHelper.ClickSelectYesno();
                     return;
                 }
                
-                Aetheryte? aetheryte = MapHelper.GetClosestAetheryte(_territoryType, _moveLocations.Count > 0 ? _moveLocations[0] : Vector3.Zero);
+                Aetheryte? aetheryte = MapHelper.GetClosestAetheryte(territoryType, moveLocations.Count > 0 ? moveLocations[0] : Vector3.Zero);
                 if (aetheryte == null)
                 {
-                    aetheryte = MapHelper.GetClosestAethernet(_territoryType, _moveLocations.Count > 0 ? _moveLocations[0] : Vector3.Zero);
+                    aetheryte = MapHelper.GetClosestAethernet(territoryType, moveLocations.Count > 0 ? moveLocations[0] : Vector3.Zero);
 
                     if (aetheryte == null)
                     {
-                        this.InfoLog($"We are unable to find the closest Aetheryte to: {_territoryType}, Most likely the zone does not have one");
+                        this.InfoLog($"We are unable to find the closest Aetheryte to: {territoryType}, Most likely the zone does not have one");
 
                         this.Stop();
                         return;
@@ -154,7 +165,7 @@ namespace AutoDuty.Helpers
                     else
                     {
                         if (TeleportHelper.MoveToClosestAetheryte())
-                            TeleportHelper.TeleportAethernet(aetheryte.Value.AethernetName.ValueNullable?.Name.ToString() ?? "", _territoryType);
+                            TeleportHelper.TeleportAethernet(aetheryte.Value.AethernetName.ValueNullable?.Name.ToString() ?? "", territoryType);
                     }
                     return;
                 }
@@ -162,39 +173,40 @@ namespace AutoDuty.Helpers
                 EzThrottler.Throttle("Goto", 7500, true);
                 return;
             }
-            else if(_useAethernetTravel)
+            else if(useAethernetTravel)
             {
-                Aetheryte? aetheryteLoc = MapHelper.GetClosestAethernet(_territoryType, _moveLocations.Count > 0 ? _moveLocations[0] : Vector3.Zero);
-                Aetheryte? aetheryteMe = MapHelper.GetClosestAethernet(_territoryType, Svc.ClientState.LocalPlayer.Position);
+                Aetheryte? aetheryteLoc = MapHelper.GetClosestAethernet(territoryType, moveLocations.Count > 0 ? moveLocations[0] : Vector3.Zero);
+                Aetheryte? aetheryteMe = MapHelper.GetClosestAethernet(territoryType, Player.Position);
 
                 if (aetheryteLoc?.RowId != aetheryteMe?.RowId)
                 {
-                    if (TeleportHelper.MoveToClosestAetheryte()) TeleportHelper.TeleportAethernet(aetheryteLoc?.AethernetName.ValueNullable?.Name.ToString() ?? "", _territoryType);
+                    if (TeleportHelper.MoveToClosestAetheryte()) 
+                        TeleportHelper.TeleportAethernet(aetheryteLoc?.AethernetName.ValueNullable?.Name.ToString() ?? "", territoryType);
                     return;
                 }
             }
             //Svc.Log.Info($"{_locationIndex < _moveLocations.Count} || ({_gameObject} != null && {ObjectHelper.GetDistanceToPlayer(_gameObject!)} > {_lastPointTollerance}) && {PlayerHelper.IsReady}");
-            if (_locationIndex < _moveLocations.Count || (this._gameObject != null && ObjectHelper.GetDistanceToPlayer(this._gameObject) > _lastPointTollerance) && PlayerHelper.IsReady)
+            if (locationIndex < moveLocations.Count || (GameObject != null && ObjectHelper.GetDistanceToPlayer(GameObject) > lastPointTolerance) && PlayerHelper.IsReady)
             {
                 Vector3 moveLoc;
-                float lastPointTollerance = _lastPointTollerance;
-                if (this._gameObject != null)
+                float pointTolerance = lastPointTolerance;
+                if (GameObject != null)
                 {
-                    moveLoc = this._gameObject.Position;
+                    moveLoc = GameObject.Position;
                 }
-                else if (_locationIndex < _moveLocations.Count)
+                else if (locationIndex < moveLocations.Count)
                 {
-                    moveLoc = _moveLocations[_locationIndex];
-                    if (_locationIndex < (_moveLocations.Count - 1))
-                        lastPointTollerance = _tollerance;
+                    moveLoc = moveLocations[locationIndex];
+                    if (locationIndex < moveLocations.Count - 1)
+                        pointTolerance = tolerance;
                 }
                 else
                 {
                     return;
                 }
 
-                if (MovementHelper.Move(moveLoc, _tollerance, lastPointTollerance, _useFlight, _useMesh))
-                    _locationIndex++;
+                if (MovementHelper.Move(moveLoc, tolerance, pointTolerance, useFlight, useMesh))
+                    locationIndex++;
                 return;
             }
 
@@ -207,19 +219,21 @@ namespace AutoDuty.Helpers
             switch (argsArray[1])
             {
                 case "inn":
-                    GotoInnHelper.Invoke(argsArray.Length > 2 ? Convert.ToUInt32(argsArray[2]) : PlayerHelper.GetGrandCompany());
+                    GotoInnHelper.Invoke(argsArray.Length > 2 ? 
+                                             (GrandCompany) Convert.ToUInt32(argsArray[2]) : 
+                                             PlayerHelper.GetGrandCompany());
                     break;
                 case "barracks":
                     GotoBarracksHelper.Invoke();
                     break;
                 case "gc":
                 case "gcsupply":
-                    GotoHelper.Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), [GCTurninHelper.GCSupplyLocation], 0.25f, 2f, false);
+                    Invoke(PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()), [GCTurninHelper.GCSupplyLocation], 0.25f, 2f, false);
                     break;
                 case "ar":
                 case "bell":
                 case "summoningbell":
-                    SummoningBellHelper.Invoke(Plugin.Configuration.PreferredSummoningBellEnum);
+                    SummoningBellHelper.Invoke(Configuration.PreferredSummoningBellEnum);
                     break;
                 case "ap":
                 case "apartment":

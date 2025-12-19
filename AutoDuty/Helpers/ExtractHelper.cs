@@ -28,7 +28,7 @@ namespace AutoDuty.Helpers
             {
                 base.Start();
 
-                this._stoppingCategory = Plugin.Configuration.AutoExtractAll ? 6 : 0;
+                this._stoppingCategory = Configuration.AutoExtractAll ? 6 : 0;
             }
         }
 
@@ -45,7 +45,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon) this.Stop();
+            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("Extract", 250))
                 return;
@@ -56,7 +56,7 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            Plugin.Action = "Extracting Materia";
+            Plugin.action = "Extracting Materia";
 
             if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
             {

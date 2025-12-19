@@ -7,6 +7,8 @@ using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
+    using ECommons.ExcelServices;
+
     internal class GCTurninHelper : ActiveHelperBase<GCTurninHelper>
     {
         protected override string Name        { get; } = nameof(GCTurninHelper);
@@ -31,19 +33,40 @@ namespace AutoDuty.Helpers
 
         internal override void Stop() 
         {
-            this._turninStarted = false;
+            this.turninStarted = false;
             GotoHelper.ForceStop();
             base.Stop();
         }
 
-        internal static Vector3 GCSupplyLocation => PlayerHelper.GetGrandCompany() == 1 ? new Vector3(94.02183f, 40.27537f, 74.475525f) : (PlayerHelper.GetGrandCompany() == 2 ? new Vector3(-68.678566f, -0.5015295f, -8.470145f) : new Vector3(-142.82619f, 4.0999994f, -106.31349f));
+        internal static Vector3 GCSupplyLocation =>
+            PlayerHelper.GetGrandCompany() switch
+            {
+                GrandCompany.Maelstrom => new Vector3(94.02183f,        40.27537f,   74.475525f),
+                GrandCompany.TwinAdder => new Vector3(-68.678566f,      -0.5015295f, -8.470145f),
+                _ => new Vector3(-142.82619f, 4.0999994f,  -106.31349f),
+            };
 
-        private IGameObject? _personnelOfficerGameObject => ObjectHelper.GetObjectByDataId(_personnelOfficerDataId);
-        private static uint _personnelOfficerDataId => PlayerHelper.GetGrandCompany() == 1 ? 1002388u : (PlayerHelper.GetGrandCompany() == 2 ? 1002394u : 1002391u);
-        private static uint _aetheryteTicketId = PlayerHelper.GetGrandCompany() == 1 ? 21069u : (PlayerHelper.GetGrandCompany() == 2 ? 21070u : 21071u);
-        private bool _turninStarted = false;
+        private static uint PersonnelOfficerDataId =>
+            PlayerHelper.GetGrandCompany() switch
+            {
+                GrandCompany.Maelstrom => 1002388u,
+                GrandCompany.TwinAdder => 1002394u,
+                _ => 1002391u
+            };
 
-        protected override unsafe void HelperStopUpdate(IFramework framework)
+        private static IGameObject? PersonnelOfficerGameObject => ObjectHelper.GetObjectByDataId(PersonnelOfficerDataId);
+
+        private static uint AetheryteTicketId =>
+            PlayerHelper.GetGrandCompany() switch
+            {
+                GrandCompany.Maelstrom => 21069u,
+                GrandCompany.TwinAdder => 21070u,
+                _ => 21071u
+            };
+
+        private bool turninStarted = false;
+
+        protected override void HelperStopUpdate(IFramework framework)
         {
             if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.OccupiedInQuestEvent])
             {
@@ -57,25 +80,25 @@ namespace AutoDuty.Helpers
             }
         }
 
-        protected override unsafe void HelperUpdate(IFramework framework)
+        protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating))
+            if (Plugin.states.HasFlag(PluginState.Navigating))
             {
                 this.DebugLog("AutoDuty is Started, Stopping GCTurninHelper");
                 this.Stop();
                 return;
             }
-            if (!this._turninStarted && AutoRetainer_IPCSubscriber.IsBusy())
+
+            switch (this.turninStarted)
             {
-                this.InfoLog("TurnIn has Started");
-                this._turninStarted = true;
-                return;
-            }
-            else if (this._turninStarted && !AutoRetainer_IPCSubscriber.IsBusy())
-            {
-                this.DebugLog("TurnIn is Complete");
-                this.Stop();
-                return;
+                case false when AutoRetainer_IPCSubscriber.IsBusy():
+                    this.InfoLog("TurnIn has Started");
+                    this.turninStarted = true;
+                    return;
+                case true when !AutoRetainer_IPCSubscriber.IsBusy():
+                    this.DebugLog("TurnIn is Complete");
+                    this.Stop();
+                    return;
             }
 
             if (!EzThrottler.Throttle("Turnin", 250))
@@ -84,15 +107,15 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State == ActionState.Running)
                 //DebugLog("Goto Running");
                 return;
-            Plugin.Action = "GC Turning In";
+            Plugin.action = "GC Turning In";
 
             if (GotoHelper.State != ActionState.Running && Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()))
             {
                 this.DebugLog("Moving to GC Supply");
-                if (Plugin.Configuration.AutoGCTurninUseTicket && InventoryHelper.ItemCount(_aetheryteTicketId) > 0)
+                if (Configuration.AutoGCTurninUseTicket && InventoryHelper.ItemCount(AetheryteTicketId) > 0)
                 {
                     if (!PlayerHelper.IsCasting)
-                        InventoryHelper.UseItem(_aetheryteTicketId);
+                        InventoryHelper.UseItem(AetheryteTicketId);
                 }
                 else
                 {
@@ -119,7 +142,7 @@ namespace AutoDuty.Helpers
                 VNavmesh_IPCSubscriber.Path_Stop();
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0 && !this._turninStarted)
+            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0 && !this.turninStarted)
             {
                 /*
                 if (_personnelOfficerGameObject == null)

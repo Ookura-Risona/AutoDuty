@@ -1,14 +1,13 @@
-using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using AutoDuty.IPC;
-using System.Collections.Generic;
 using Dalamud.Plugin.Services;
 using ECommons.Throttlers;
-using System;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+    using System.Collections.Generic;
     using Lumina.Excel.Sheets;
 
     internal unsafe class AutoEquipHelper : ActiveHelperBase<AutoEquipHelper>
@@ -18,7 +17,7 @@ namespace AutoDuty.Helpers
 
         internal override void Start()
         {
-            switch (Plugin.Configuration.AutoEquipRecommendedGearSource)
+            switch (Configuration.AutoEquipRecommendedGearSource)
             {
                 case GearsetUpdateSource.Gearsetter when Gearsetter_IPCSubscriber.IsEnabled:
                     this.TimeOut = 10_000;
@@ -97,7 +96,7 @@ namespace AutoDuty.Helpers
             if (!this._statesExecuted.HasFlag(AutoEquipState.Setting_Up))
             {
                 this.DebugLog($"RecommendEquipModule - SetupForClassJob");
-                RecommendEquipModule.Instance()->SetupForClassJob((byte)Svc.ClientState.LocalPlayer!.ClassJob.RowId);
+                RecommendEquipModule.Instance()->SetupForClassJob((byte)Player.ClassJob.RowId);
                 this._statesExecuted |= AutoEquipState.Setting_Up;
             }
             else if (!this._statesExecuted.HasFlag(AutoEquipState.Equipping))
@@ -155,7 +154,7 @@ namespace AutoDuty.Helpers
                         return;
                     }
 
-                    if (Plugin.Configuration.AutoEquipRecommendedGearGearsetterOldToInventory && equipSlotIndex is not RaptureGearsetModule.GearsetItemIndex.MainHand and not RaptureGearsetModule.GearsetItemIndex.OffHand &&
+                    if (Configuration.AutoEquipRecommendedGearGearsetterOldToInventory && equipSlotIndex is not RaptureGearsetModule.GearsetItemIndex.MainHand and not RaptureGearsetModule.GearsetItemIndex.OffHand &&
                         !InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->Items[(int)equipSlotIndex].IsEmpty())
                     {
                         if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)

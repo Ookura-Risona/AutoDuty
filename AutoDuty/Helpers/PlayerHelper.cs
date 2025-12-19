@@ -2,7 +2,6 @@
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using ECommons;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -11,22 +10,24 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 namespace AutoDuty.Helpers
 {
     using System;
+    using System.Linq;
     using Dalamud.Utility;
     using FFXIVClientStructs.FFXIV.Client.Game.Control;
     using Lumina.Excel.Sheets;
+    using GrandCompany = ECommons.ExcelServices.GrandCompany;
 
     internal static class PlayerHelper
     {
-        internal static unsafe uint GetGrandCompanyTerritoryType(uint grandCompany) => grandCompany switch
+        internal static unsafe uint GetGrandCompanyTerritoryType(GrandCompany grandCompany) => grandCompany switch
         {
-            1 => 128u,
-            2 => 132u,
+            GrandCompany.Maelstrom => 128u,
+            GrandCompany.TwinAdder => 132u,
             _ => 130u
         };
 
-        internal static unsafe uint GetGrandCompany() => UIState.Instance()->PlayerState.GrandCompany;
+        internal static unsafe GrandCompany GetGrandCompany() => (GrandCompany) PlayerState.Instance()->GrandCompany;
 
-        internal static unsafe uint GetGrandCompanyRank() => UIState.Instance()->PlayerState.GetGrandCompanyRank();
+        internal static unsafe uint GetGrandCompanyRank() => PlayerState.Instance()->GetGrandCompanyRank();
 
         internal static uint GetMaxDesynthLevel() => Svc.Data.Excel.GetSheet<Item>().Where(x => x.Desynth > 0).OrderBy(x => x.LevelItem.RowId).LastOrDefault().LevelItem.RowId;
 
@@ -45,7 +46,7 @@ namespace AutoDuty.Helpers
                 float radius = 25;
                 if (!Player.Available) 
                     return radius;
-                radius = (Svc.Data.GetExcelSheet<ClassJob>().GetRowOrDefault(Player.Object.ClassJob.RowId)?.GetJobRole() ?? JobRole.None) switch
+                radius = (Svc.Data.GetExcelSheet<ClassJob>().GetRowOrDefault(Player.ClassJob.RowId)?.GetJobRole() ?? JobRole.None) switch
                 {
                     JobRole.Tank or JobRole.Melee => 2.6f,
                     _ => radius
@@ -59,14 +60,16 @@ namespace AutoDuty.Helpers
             get
             {
                 float radius = 10;
-                if (!Player.Available) return radius;
-                radius = (Svc.Data.GetExcelSheet<ClassJob>().GetRowOrDefault(Player.Object.ClassJob.RowId)?.GetJobRole() ?? JobRole.None) switch
+                if (!Player.Available) 
+                    return radius;
+
+                radius = (Player.ClassJob.ValueNullable?.GetJobRole() ?? JobRole.None) switch
                 {
                     JobRole.Tank or JobRole.Melee => 2.6f,
                     _ => radius
                 };
 
-                if (Player.Object.ClassJob.RowId == 38)
+                if (Player.Job is Job.DNC)
                     radius = 3;
                 return radius;
             }
@@ -135,14 +138,13 @@ namespace AutoDuty.Helpers
             return gearsetModule->GetGearset(gearsetId)->ItemLevel;
         }*/
 
-        internal static Job GetJob() => Player.Available ? Player.Job : Plugin.JobLastKnown;
+        internal static Job GetJob() => Player.Available ? Player.Job : Plugin.jobLastKnown;
 
         internal static CombatRole GetCombatRole(this Job? job) => 
             job != null ? GetCombatRole((Job)job) : CombatRole.NonCombat;
 
-        internal static CombatRole GetCombatRole(this Job job)
-        {
-            return job switch
+        internal static CombatRole GetCombatRole(this Job job) =>
+            job switch
             {
                 Job.GLA or Job.PLD or Job.MRD or Job.WAR or Job.DRK or Job.GNB => CombatRole.Tank,
                 Job.CNJ or Job.WHM or Job.SGE or Job.SCH or Job.AST => CombatRole.Healer,
@@ -151,8 +153,8 @@ namespace AutoDuty.Helpers
                     Job.THM or Job.BLM or Job.ACN or Job.SMN or Job.RDM or Job.PCT or Job.BLU => CombatRole.DPS,
                 _ => CombatRole.NonCombat,
             };
-        }
 
-        internal static bool HasStatus(uint statusID, float minTime = 0) => Svc.ClientState.LocalPlayer != null && Player.Object.StatusList.Any(x => x.StatusId == statusID && (minTime <= 0 || x.RemainingTime > minTime));
+        internal static bool HasStatus(uint      statusID,  float minTime = 0) => Player.Available && Player.Status.Any(x => x.StatusId == statusID         && (minTime <= 0 || x.RemainingTime > minTime));
+        internal static bool HasStatusAny(uint[] statusIDs, float minTime = 0) => Player.Available && Player.Status.Any(x => statusIDs.Contains(x.StatusId) && (minTime <= 0 || x.RemainingTime > minTime));
     }
 }

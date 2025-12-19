@@ -2,20 +2,21 @@
 using ECommons;
 using ECommons.Automation;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using System.Collections.Generic;
 using ECommons.UIHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Objects.Enums;
 using ECommons.Throttlers;
 using ECommons.DalamudServices;
-using System.Linq;
 using System.Numerics;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using System;
 
 namespace AutoDuty.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal static unsafe class TeleportHelper
     {
         internal static bool TeleportFCEstate() => TeleportHousing(FCEstateTeleportId, 0);
@@ -44,7 +45,7 @@ namespace AutoDuty.Helpers
 
         internal static uint FCEstateTeleportId => Svc.AetheryteList.FirstOrDefault(x => x is { IsApartment: false, IsSharedHouse: false } && x.AetheryteId.EqualsAny<uint>(56, 57, 58, 96, 164))?.AetheryteId ?? 0;
 
-        internal static IGameObject? FCEstateEntranceGameObject => FCEstateWardCenterVector3 != Vector3.Zero ? ObjectHelper.GetObjectsByObjectKind(ObjectKind.EventObj)?.OrderBy(x => Vector3.Distance(x.Position, FCEstateWardCenterVector3)).FirstOrDefault(x => x.DataId == 2002737) : null;
+        internal static IGameObject? FCEstateEntranceGameObject => FCEstateWardCenterVector3 != Vector3.Zero ? ObjectHelper.GetObjectsByObjectKind(ObjectKind.EventObj)?.OrderBy(x => Vector3.Distance(x.Position, FCEstateWardCenterVector3)).FirstOrDefault(x => x.BaseId == 2002737) : null;
 
         internal static MapMarkerData PersonalHomeMapMarkerData => AgentHUD.Instance()->MapMarkers.ToList().FirstOrDefault(x => x.IconId.EqualsAny((uint[])Enum.GetValuesAsUnderlyingType<PrivateHousingMarker>()));
 
@@ -52,7 +53,7 @@ namespace AutoDuty.Helpers
 
         internal static uint PersonalHomeTeleportId => Svc.AetheryteList.FirstOrDefault(x => x is { IsApartment: false, IsSharedHouse: false } && x.AetheryteId.EqualsAny<uint>(59, 60, 61, 97, 165))?.AetheryteId ?? 0;
 
-        internal static IGameObject? PersonalHomeEntranceGameObject => PersonalHomeWardCenterVector3 != Vector3.Zero ? ObjectHelper.GetObjectsByObjectKind(ObjectKind.EventObj)?.OrderBy(x => Vector3.Distance(x.Position, PersonalHomeWardCenterVector3)).FirstOrDefault(x => x.DataId == 2002737) : null;
+        internal static IGameObject? PersonalHomeEntranceGameObject => PersonalHomeWardCenterVector3 != Vector3.Zero ? ObjectHelper.GetObjectsByObjectKind(ObjectKind.EventObj)?.OrderBy(x => Vector3.Distance(x.Position, PersonalHomeWardCenterVector3)).FirstOrDefault(x => x.BaseId == 2002737) : null;
 
         internal static MapMarkerData ApartmentMapMarkerData => AgentHUD.Instance()->MapMarkers.ToList().FirstOrDefault(x => x.IconId.EqualsAny((uint[])Enum.GetValuesAsUnderlyingType<ApartmentHousingMarker>()));
 
@@ -60,19 +61,17 @@ namespace AutoDuty.Helpers
 
         internal static uint ApartmentTeleportId => Svc.AetheryteList.FirstOrDefault(x => x is { IsApartment: true, IsSharedHouse: false } && x.AetheryteId.EqualsAny<uint>(59, 60, 61, 97, 165))?.AetheryteId ?? 0;
 
-        internal static IGameObject? ApartmentEntranceGameObject => ApartmentWardCenterVector3 != Vector3.Zero ? ObjectHelper.GetObjectsByObjectKind(ObjectKind.EventObj)?.OrderBy(x => Vector3.Distance(x.Position, ApartmentWardCenterVector3)).FirstOrDefault(x => x.DataId == 2007402) : null;
+        internal static IGameObject? ApartmentEntranceGameObject => ApartmentWardCenterVector3 != Vector3.Zero ? ObjectHelper.GetObjectsByObjectKind(ObjectKind.EventObj)?.OrderBy(x => Vector3.Distance(x.Position, ApartmentWardCenterVector3)).FirstOrDefault(x => x.BaseId == 2007402) : null;
 
-        internal static bool TeleportGCCity()
-        {
+        internal static bool TeleportGCCity() =>
             //Limsa=1,128, Gridania=2,132, Uldah=3,130 -- Goto Limsa if no GC
-            return UIState.Instance()->PlayerState.GrandCompany switch
+            (GrandCompany)PlayerState.Instance()->GrandCompany switch
             {
-                1 => TeleportAetheryte(8, 0),
-                2 => TeleportAetheryte(2, 0),
-                3 => TeleportAetheryte(9, 0),
-                _ => TeleportAetheryte(8, 0),
+                GrandCompany.Maelstrom => TeleportAetheryte(8,      0),
+                GrandCompany.TwinAdder => TeleportAetheryte(2,      0),
+                GrandCompany.ImmortalFlames => TeleportAetheryte(9, 0),
+                _ => TeleportAetheryte(8,                           0)
             };
-        }
 
         internal static bool TeleportAetheryte(uint aetheryteId, byte subindex)
         {
@@ -88,10 +87,8 @@ namespace AutoDuty.Helpers
         internal static bool MoveToClosestAetheryte()
         {
             IGameObject? gameObject;
-            if ((gameObject = ObjectHelper.GetObjectByObjectKind(ObjectKind.Aetheryte)) == null)
-                return false;
-
-            return MovementHelper.Move(gameObject, 0.25f, 7f);
+            return (gameObject = ObjectHelper.GetObjectByObjectKind(ObjectKind.Aetheryte)) != null && 
+                   MovementHelper.Move(gameObject, 0.25f, 7f);
         }
 
         internal static bool TeleportAethernet(string aethernetName, uint toTerritoryType)
@@ -111,7 +108,7 @@ namespace AutoDuty.Helpers
                 Callback.Fire(addon, true, 0);
             }
 
-            if (EzThrottler.Throttle("TeleportAethernet", 250))
+            if (EzThrottler.Throttle($"TeleportAethernet_{toTerritoryType}", 250))
                 Callback.Fire(addon, true, 11, GetAethernetCallback(aethernetName));
 
             return false;
@@ -128,7 +125,7 @@ namespace AutoDuty.Helpers
         {
             if (GenericHelpers.TryGetAddonByName("TelepotTown", out AtkUnitBase* addon) && GenericHelpers.IsAddonReady(addon))
             {
-                ReaderTelepotTown? readerTelepotTown = new ReaderTelepotTown(addon);
+                ReaderTelepotTown? readerTelepotTown = new(addon);
                 for (int i = 0; i < readerTelepotTown.DestinationData.Count; i++)
                 {
                     if (aethernetName == readerTelepotTown.DestinationName[i].Name)

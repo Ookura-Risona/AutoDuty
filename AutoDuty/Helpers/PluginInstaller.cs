@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-
-namespace AutoDuty.Helpers
+﻿namespace AutoDuty.Helpers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
     using Dalamud.Plugin.Services;
     using ECommons.Reflection;
     using ECommons.Throttlers;
-    using global::AutoDuty.IPC;
+    using IPC;
 
     internal class PluginInstaller : ActiveHelperBase<PluginInstaller>
     {

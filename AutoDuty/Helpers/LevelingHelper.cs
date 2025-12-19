@@ -1,12 +1,12 @@
 ﻿using ECommons;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AutoDuty.Helpers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Data;
     using static Data.Classes;
 
@@ -51,7 +51,7 @@ namespace AutoDuty.Helpers
             Content? curContent = null;
             short lvl = PlayerHelper.GetCurrentLevelFromSheet();
             Svc.Log.Debug($"Leveling Mode: Searching for highest relevant leveling duty, Player Level: {lvl}");
-            CombatRole combatRole = Player.Object.GetRole();
+            CombatRole combatRole = Player.Job.GetCombatRole();
 
             bool trust = mode.IsTrustLeveling();
             if (trust)

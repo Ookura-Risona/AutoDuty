@@ -2,11 +2,11 @@
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AutoDuty.Helpers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using FFXIVClientStructs.FFXIV.Client.Game.UI;
     using Lumina.Excel.Sheets;
 
@@ -20,7 +20,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon) this.Stop();
+            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("CardsRegister", 250))
                 return;

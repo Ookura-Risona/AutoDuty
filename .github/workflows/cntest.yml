@@ -1,0 +1,40 @@
+name: CN Compile Test
+
+on:
+#  pull_request: 
+#  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      DALAMUD_HOME: /tmp/dalamud
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Download Dalamud Latest
+        run: |
+          wget https://ottercorp.github.io/dalamud-distrib/latest.7z -O ${{ env.DALAMUD_HOME }}.7z
+          sudo apt-get install p7zip 
+          7z x ${{ env.DALAMUD_HOME }}.7z -o${{ env.DALAMUD_HOME }}
+
+      - name: Restore Project
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build --configuration Release AutoDuty/AutoDuty.csproj -p:AssemblyVersion=${{ github.ref_name }}
+
+      - name: Print Release Body
+        run: |
+          echo "${{ github.event.release.body }} AssemblyVersion=${{ github.ref_name }}"

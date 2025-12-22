@@ -69,7 +69,7 @@ namespace AutoDuty.Managers
                 if (action != null)
                 {
                     Type?       thisType   = this.GetType();
-                    MethodInfo? actionTask = thisType.GetMethod(action.Name);
+                    MethodInfo? actionTask = thisType.GetMethod(action.Name, ReflectionHelper.ALL, [typeof(PathAction)]);
                     taskManager.Enqueue(() => actionTask?.Invoke(this, [action]), $"InvokeAction-{actionTask?.Name}");
                 }
                 else

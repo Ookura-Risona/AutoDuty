@@ -349,7 +349,7 @@ public sealed class MainWindow : Window, IDisposable
                      (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeRotationPlugin);
 
         if (!valid)
-            openTabName = "Info";
+            openTabName = "信息";
 
         foreach ((string name, Action function, Vector4? color, bool child) in tabs)
         {
@@ -358,7 +358,7 @@ public sealed class MainWindow : Window, IDisposable
             if (color != null) 
                 ImGui.PushStyleColor(ImGuiCol.Tab, color.Value);
             
-            if ((valid || name == "Info") && ImGui.BeginTabItem(name, openTabName == name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
+            if ((valid || name == "信息") && ImGui.BeginTabItem(name, openTabName == name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
                 if (color != null) 
                     ImGui.PopStyleColor();
@@ -368,7 +368,7 @@ public sealed class MainWindow : Window, IDisposable
                 if(!valid)
                 {
                     ImGui.NewLine();
-                    ImGui.TextColored(EzColor.Red, "You need to do the basic setup below. Enjoy");
+                    ImGui.TextColored(EzColor.Red, "您需要下载缺少的前置插件");
                 }
 
                 function();

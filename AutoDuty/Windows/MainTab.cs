@@ -460,11 +460,11 @@ namespace AutoDuty.Windows
 
                     if (Player.Job.GetCombatRole() == CombatRole.NonCombat)
                     {
-                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "Please switch to a combat job to use AutoDuty.");
+                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "请切换到一个战斗职业来使用 AutoDuty");
                     }
                     else if (Player.Job == Job.BLU && AutoDuty.Configuration.DutyModeEnum is not (DutyMode.Regular or DutyMode.Trial or DutyMode.Raid))
                     {
-                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "Blue Mage cannot run Trust, Duty Support, Squadron or Variant dungeons. Please switch jobs or select a different category.");
+                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "青魔法师无法使用剧情辅助器、亲信战友、冒险者小队或多变迷宫\n请切换职业，或选择其他模式。");
                     }
                     else if (VNavmesh_IPCSubscriber.IsEnabled && BossMod_IPCSubscriber.IsEnabled)
                     {

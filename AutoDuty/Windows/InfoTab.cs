@@ -69,8 +69,8 @@ namespace AutoDuty.Windows
                 ImGui.NextColumn();
             }
 
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Required Plugins").X) / 2);
-            ImGui.Text("Required Plugins");
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("必须插件").X) / 2);
+            ImGui.Text("必须插件");
 
             ImGui.Columns(3, "PluginInstallerRequired", false);
             ImGui.SetColumnWidth(0, 60);
@@ -81,8 +81,8 @@ namespace AutoDuty.Windows
 
             ImGui.Columns(1);
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Combat Plugins").X) / 2);
-            ImGui.Text("Combat Plugins");
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("战斗插件").X) / 2);
+            ImGui.Text("战斗插件");
 
             ImGui.Indent(65f);
             ImGui.TextColored(EzColor.Cyan, "Hotly debated, pick your favorite. You can configure it in the config");
@@ -98,8 +98,8 @@ namespace AutoDuty.Windows
 
             ImGui.Columns(1);
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Recommended Plugins").X) / 2);
-            ImGui.Text("Recommended Plugins");
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("推荐插件").X) / 2);
+            ImGui.Text("推荐插件");
             ImGui.NewLine();
             ImGui.Columns(3, "PluginInstallerRecommended", false);
             ImGui.SetColumnWidth(0, 60);

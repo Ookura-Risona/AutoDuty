@@ -16,6 +16,7 @@ using Dalamud.Bindings.ImGui;
 namespace AutoDuty.Windows;
 
 using System;
+using ECommons.Reflection;
 
 public sealed class MainWindow : Window, IDisposable
 {
@@ -404,7 +405,7 @@ public sealed class MainWindow : Window, IDisposable
     {
         DrawPopup();
 
-        if(DalamudInfoHelper.IsOnStaging())
+        if(DalamudReflector.IsOnStaging())
         {
             ImGui.TextColored(GradientColor.Get(ImGuiHelper.ExperimentalColor, ImGuiHelper.ExperimentalColor2, 500), "NOT SUPPORTED ON STAGING.");
             ImGui.Text("请输入“/xlbranch”并选择“Release”，然后重新启动游戏。");

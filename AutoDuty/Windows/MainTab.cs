@@ -129,6 +129,16 @@ namespace AutoDuty.Windows
                 }
             }
 
+            static void DrawTerminationNotice()
+            {
+                if (AutoDuty.Configuration.EnableTerminationActions &&
+                    (AutoDuty.Configuration.StopLevel      ||
+                     AutoDuty.Configuration.StopNoRestedXP ||
+                     AutoDuty.Configuration.StopItemQty    ||
+                     AutoDuty.Configuration.TerminationBLUSpellsEnabled))
+                    ImGui.TextColoredWrapped(EzColor.Cyan, "Be aware, you have termination options enabled that might cancel your loops early");
+            }
+
             if (InDungeon)
             {
                 if (Plugin.CurrentTerritoryContent == null)
@@ -191,6 +201,8 @@ namespace AutoDuty.Windows
                         ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Times").X * 1.1f.Scale());
                         MainWindow.LoopsConfig();
                         ImGui.PopItemWidth();
+
+                        DrawTerminationNotice();
 
                         if (!ImGui.BeginListBox("##MainList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) return;
 
@@ -454,9 +466,12 @@ namespace AutoDuty.Windows
                             AutoDuty.Configuration.AutoDutyModeEnum = AutoDutyMode.Looping;
                             break;
                     }
-                    
+
+                    DrawTerminationNotice();
+
                     ushort ilvl = InventoryHelper.CurrentItemLevel;
-                    if (!ImGui.BeginListBox("##DutyList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) return;
+                    if (!ImGui.BeginListBox("##DutyList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) 
+                        return;
 
                     if (Player.Job.GetCombatRole() == CombatRole.NonCombat)
                     {

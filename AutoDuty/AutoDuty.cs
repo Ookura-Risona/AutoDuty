@@ -267,7 +267,7 @@ public sealed class AutoDuty : IDalamudPlugin
             this.assemblyDirectoryInfo = this.assemblyFileInfo.Directory;
 
             this.Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 280) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 281) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!this.configDirectory.Exists)
@@ -316,7 +316,7 @@ public sealed class AutoDuty : IDalamudPlugin
                                                                                  else
                                                                                      ConfigHelper.ModifyConfig(argsArray[1], argsArray[2..]);
                                                                              }),
-                (["start"], "starts autoduty when in a Duty", _ => this.StartNavigation()),
+                (["start"], "starts autoduty when in a Duty", _ => this.Run(Svc.ClientState.TerritoryType, 1)),
                 (["stop"], "stops everything", _ => Plugin.Stage = Stage.Stopped),
                 (["pause"], "pause route", _ => Plugin.Stage     = Stage.Paused),
                 (["resume"], "resume route", _ =>
@@ -766,11 +766,13 @@ public sealed class AutoDuty : IDalamudPlugin
 
         Svc.Log.Debug($"ClientState_TerritoryChanged: t={t}");
 
-        this.currentTerritoryType    = t;
-        this.mainListClicked            = false;
+        this.currentTerritoryType  = t;
+        this.mainListClicked       = false;
         this.FrameworkUpdateInDuty = _ => { };
+
         if (t == 0)
             return;
+
         this.currentPath = -1;
 
         this.LoadPath();
@@ -896,7 +898,8 @@ public sealed class AutoDuty : IDalamudPlugin
         if (this.CurrentTerritoryContent == null)
             return;
 
-        if (loops > 0) Configuration.LoopTimes = loops;
+        if (loops > 0) 
+            Configuration.LoopTimes = loops;
 
         if (bareMode)
         {
@@ -964,12 +967,21 @@ public sealed class AutoDuty : IDalamudPlugin
                 if (Configuration.DutyModeEnum != DutyMode.Squadron && Configuration.RetireMode)
                 {
                     this.taskManager.Enqueue(() => Svc.Log.Debug($"Retire PreLoop Action"));
-                    if (Configuration.RetireLocationEnum == RetireLocation.GC_Barracks)
-                        this.taskManager.Enqueue(GotoBarracksHelper.Invoke, "Run-GotoBarracksInvoke");
-                    else if (Configuration.RetireLocationEnum == RetireLocation.Inn)
-                        this.taskManager.Enqueue(() => GotoInnHelper.Invoke(), "Run-GotoInnInvoke");
-                    else
-                        this.taskManager.Enqueue(() => GotoHousingHelper.Invoke((Housing)Configuration.RetireLocationEnum), "Run-GotoHousingInvoke");
+                    switch (Configuration.RetireLocationEnum)
+                    {
+                        case RetireLocation.GC_Barracks:
+                            this.taskManager.Enqueue(GotoBarracksHelper.Invoke, "Run-GotoBarracksInvoke");
+                            break;
+                        case RetireLocation.Inn:
+                            this.taskManager.Enqueue(() => GotoInnHelper.Invoke(), "Run-GotoInnInvoke");
+                            break;
+                        case RetireLocation.Apartment:
+                        case RetireLocation.Personal_Home:
+                        case RetireLocation.FC_Estate:
+                        default:
+                            this.taskManager.Enqueue(() => GotoHousingHelper.Invoke((Housing)Configuration.RetireLocationEnum), "Run-GotoHousingInvoke");
+                            break;
+                    }
                     this.taskManager.EnqueueDelay(50);
                     this.taskManager.Enqueue(() => GotoHousingHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running, "Run-WaitGotoComplete",
                                              new TaskManagerConfiguration(int.MaxValue));
@@ -1744,13 +1756,15 @@ public sealed class AutoDuty : IDalamudPlugin
         //we finished lets exit the duty or stop
         if ((Configuration.AutoExitDuty || this.currentLoop < Configuration.LoopTimes))
         {
-            if (!this.Stage.EqualsAny(Stage.Stopped, Stage.Paused)                                  &&
+            if (!this.Stage.EqualsAny(Stage.Stopped, Stage.Paused) &&
                 (!Configuration.OnlyExitWhenDutyDone || this.dutyState == DutyState.DutyComplete) &&
                 !this.states.HasFlag(PluginState.Navigating))
             {
-                if (ExitDutyHelper.State != ActionState.Running) this.ExitDuty();
-                if (Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false }) this.SetRotationPluginSettings(false);
-                if (Configuration.AutoManageBossModAISettings) 
+                if (ExitDutyHelper.State != ActionState.Running)
+                    this.ExitDuty();
+                if (Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false })
+                    this.SetRotationPluginSettings(false);
+                if (Configuration.AutoManageBossModAISettings)
                     BossMod_IPCSubscriber.DisablePresets();
             }
         }
@@ -2141,15 +2155,15 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         GitHubHelper.Dispose();
         this.StopAndResetAll();
-        ConfigurationMain.Instance.MultiBox =  false;
-        Svc.Framework.Update                -= this.Framework_Update;
-        Svc.Framework.Update                -= SchedulerHelper.ScheduleInvoker;
-        FileHelper.FileSystemWatcher.Dispose();
-        FileHelper.fileWatcher.Dispose();
-        this.windowSystem.RemoveAllWindows();
+        ConfigurationMain.Instance?.MultiBox =  false;
+        Svc.Framework.Update                 -= this.Framework_Update;
+        Svc.Framework.Update                 -= SchedulerHelper.ScheduleInvoker;
+        FileHelper.FileSystemWatcher?.Dispose();
+        FileHelper.fileWatcher?.Dispose();
+        this.windowSystem?.RemoveAllWindows();
         ECommonsMain.Dispose();
-        this.MainWindow.Dispose();
-        this.overrideCamera.Dispose();
+        this.MainWindow?.Dispose();
+        this.overrideCamera?.Dispose();
         Svc.ClientState.TerritoryChanged -= this.ClientState_TerritoryChanged;
         Svc.Condition.ConditionChange    -= this.Condition_ConditionChange;
         PictoService.Dispose();

@@ -269,11 +269,21 @@ namespace AutoDuty.Managers
 
             bool boolTrueFalse = action.Arguments[0].Equals("true", StringComparison.InvariantCultureIgnoreCase);
             Plugin.action = $"StopForCombat: {action.Arguments[0]}";
-            Plugin.stopForCombat = boolTrueFalse;
-            taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(boolTrueFalse), "StopForCombat");
-            if(boolTrueFalse && (action.Arguments.Count <= 1 || action.Arguments[1] != "noWait"))
+
+            this.StopForCombat(boolTrueFalse, action.Arguments.Count <= 1 || action.Arguments[1] != "noWait");
+        }
+
+        public void StopForCombat(bool stop, bool waitAfter = true)
+        {
+            if (!Player.Available)
+                return;
+
+            Plugin.stopForCombat = stop;
+            taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(stop), "StopForCombat");
+            if (stop && waitAfter)
                 this.Wait(500);
         }
+
 
         public unsafe void ForceAttack(PathAction action)
         {
@@ -671,14 +681,14 @@ namespace AutoDuty.Managers
             int index = 0;
             List<IGameObject>? treasureCofferObjects = null;
             Plugin.skipTreasureCoffer = false;
-            this.StopForCombat(new PathAction() { Arguments = ["true", "noWait"] });
-            taskManager.Enqueue(() => BossMoveCheck(action.Position),                           "Boss-MoveCheck");
+            this.StopForCombat(true, false);
+            taskManager.Enqueue(() => BossMoveCheck(action.Position), "Boss-MoveCheck");
             if (Plugin.bossObject == null)
                 taskManager.Enqueue(() => (Plugin.bossObject = GetBossObject()) != null, "Boss-GetBossObject");
             taskManager.Enqueue(() => Plugin.action      = $"Boss: {Plugin.bossObject?.Name.TextValue ?? ""}", "Boss-SetActionVar");
             taskManager.Enqueue(() => Svc.Targets.Target = Plugin.bossObject,                                  "Boss-SetTarget");
             taskManager.Enqueue(() => Svc.Condition[ConditionFlag.InCombat],                                   "Boss-WaitInCombat");
-            taskManager.Enqueue(() => BossCheck(),                                                           "Boss-BossCheck", new TaskManagerConfiguration(int.MaxValue));
+            taskManager.Enqueue(() => BossCheck(),                                                             "Boss-BossCheck", new TaskManagerConfiguration(int.MaxValue));
             taskManager.Enqueue(() => { Plugin.bossObject = null; },                                           "Boss-ClearBossObject");
 
             if (Configuration.LootTreasure)

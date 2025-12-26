@@ -182,6 +182,9 @@ public unsafe class Overlay : Window
                                 });
             }
 
+        if(Plugin.isDev)
+            lineActions.Add(() => ImGui.Text(Plugin.Stage.ToString()));
+
         if(AutoDuty.Configuration.OverlayAnchorBottom)
             for (int i = lineActions.Count - 1; i >= 0; i--)
                 lineActions[i]();

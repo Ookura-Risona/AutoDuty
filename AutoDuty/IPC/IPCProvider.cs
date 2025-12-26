@@ -41,7 +41,7 @@ namespace AutoDuty.IPC
         }
 
         [EzIPC] public void Run(uint   territoryType, int loops = 0, bool bareMode = false) => Plugin.Run(territoryType, loops, startFromZero: true, bareMode: bareMode);
-        [EzIPC] public void Start(bool startFromZero = true)   => Plugin.StartNavigation(startFromZero);
+        [EzIPC] public void Start(bool startFromZero = true)   => Plugin.Run(Svc.ClientState.TerritoryType, 1, startFromZero);
         [EzIPC] public void Stop()                             => Plugin.Stage = Stage.Stopped;
         [EzIPC] public bool IsNavigating()                     => Plugin.states.HasFlag(PluginState.Navigating);
         [EzIPC] public bool IsLooping()                        => Plugin.states.HasFlag(PluginState.Looping);

@@ -1841,6 +1841,27 @@ public sealed class AutoDuty : IDalamudPlugin
             return null;
         }
 
+        bool? EnableAEAssist(bool active)
+        {
+            if (AEAssist_IPCSubscriber.IsEnabled)
+            {
+                Svc.Log.Debug("AEAssist: " + active);
+                if (active)
+                {
+                    Chat.ExecuteCommand("/aeTargetSelector off");
+                    Chat.ExecuteCommand("/aestop off");
+                    Chat.ExecuteCommand("/aepull on");
+                }
+                else
+                {
+                    Chat.ExecuteCommand("/aepull off");
+                    Chat.ExecuteCommand("/aestop on");
+                }
+                return true;
+            }
+            return null;
+        }
+
         bool? EnableBM(bool active, bool rotation)
         {
             if (BossMod_IPCSubscriber.IsEnabled)
@@ -1875,6 +1896,11 @@ public sealed class AutoDuty : IDalamudPlugin
         bool? rsr        = EnableRSR(act && on && rsrEnabled);
         if (on && rsrEnabled && rsr.HasValue) 
             act = !rsr.Value;
+
+        bool aeAssistEnabled = Configuration.rotationPlugin is RotationPlugin.AEAssist or RotationPlugin.All;
+        bool? aeAssist        = EnableAEAssist(act && on && aeAssistEnabled);
+        if (on && aeAssistEnabled && aeAssist.HasValue)
+            act = !aeAssist.Value;
 
         EnableBM(on, act && Configuration.rotationPlugin is RotationPlugin.BossMod or RotationPlugin.All);
     }

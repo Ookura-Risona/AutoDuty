@@ -135,7 +135,10 @@ namespace AutoDuty.Helpers
             if (plugin == ExternalPlugin.None)
                 return new EndUnconditionally();
 
-            if (IPCSubscriber_Common.IsReady(plugin.GetExternalPluginData().name))
+            (string url, string name) = plugin.GetExternalPluginData();
+            bool canInstall = !string.IsNullOrWhiteSpace(url);
+
+            if (IPCSubscriber_Common.IsReady(name))
             {
                 return new EndUnconditionally(() =>
                                               {
@@ -168,9 +171,17 @@ namespace AutoDuty.Helpers
                                                   ImGui.SameLine(0,1);
                                                   ImGui.TextColored(LinkColor, plugin.GetExternalPluginName());
 
-                                                  ImGui.SameLine(0, 5);
-                                                  if (ImGui.Button($"Install##InstallExternalPlugin_{plugin}_{id}"))
-                                                      PluginInstaller.InstallPlugin(plugin);
+                                                  if (canInstall)
+                                                  {
+                                                      ImGui.SameLine(0, 5);
+                                                      if (ImGui.Button($"Install##InstallExternalPlugin_{plugin}_{id}"))
+                                                          PluginInstaller.InstallPlugin(plugin);
+                                                  }
+                                                  else
+                                                  {
+                                                      ImGui.SameLine(0, 5);
+                                                      ImGui.TextDisabled("(manual install)");
+                                                  }
                                               }, true);
             }
         }

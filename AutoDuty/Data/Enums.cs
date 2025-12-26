@@ -28,7 +28,8 @@
             BossMod              = 0,
             RotationSolverReborn = 1,
             WrathCombo           = 2,
-            All                  = 3
+            AEAssist             = 3,
+            All                  = 4
         }
 
         public enum ClassJobType
@@ -400,6 +401,7 @@
             Avarice,
             RotationSolverReborn,
             WrathCombo,
+            AEAssist,
             AutoRetainer,
             Gearsetter,
             Stylist,

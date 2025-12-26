@@ -196,7 +196,7 @@ namespace AutoDuty.Windows
 
                         if ((VNavmesh_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeMovementPlugin) &&
                             (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeBossPlugin)     &&
-                            (RSR_IPCSubscriber.IsEnabled      || BossMod_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeRotationPlugin))
+                            (RSR_IPCSubscriber.IsEnabled      || Wrath_IPCSubscriber.IsEnabled  || AEAssist_IPCSubscriber.IsEnabled || BossMod_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeRotationPlugin))
                         {
                             foreach ((PathAction Value, int Index) item in Plugin.Actions.Select((Value, Index) => (Value, Index))) item.Value.DrawCustomText(item.Index, () => ItemClicked(item));
                             //var text = item.Value.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? item.Value.Note : $"{item.Value.ToCustomString()}";
@@ -224,8 +224,8 @@ namespace AutoDuty.Windows
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 VNavmesh 插件\\n请添加第三方仓库：\\nhttps://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json");
                             if (!BossMod_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeBossPlugin)
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 BossMod 插件以正确处理机制。请添加第三方仓库：\\nhttps://raw.githubusercontent.com/44451516/ffxiv_bossmod/CN/pluginmaster.json");
-                            if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeRotationPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载一个循环插件（Wrath Combo 、 Rotation Solver Reborn 或 BossMod AutoRotation 均可)");
+                            if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !AEAssist_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeRotationPlugin)
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载一个循环插件（Wrath Combo 、 Rotation Solver Reborn、AEAssist 或 BossMod AutoRotation 均可)");
                         }
                         ImGui.EndListBox();
                     }

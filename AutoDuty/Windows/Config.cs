@@ -2202,6 +2202,7 @@ public static class ConfigTab
                                    RotationPlugin.BossMod => ExternalPlugin.BossMod,
                                    RotationPlugin.RotationSolverReborn => ExternalPlugin.RotationSolverReborn,
                                    RotationPlugin.WrathCombo => ExternalPlugin.WrathCombo,
+                                   RotationPlugin.AEAssist => ExternalPlugin.AEAssist,
                                    _ => throw new ArgumentOutOfRangeException()
                                }, "RotationPluginSelection", inline: true))
                         {
@@ -2581,7 +2582,7 @@ public static class ConfigTab
             {
                 if (ImGui.Checkbox("使用替代的循环插件", ref Configuration.UsingAlternativeRotationPlugin))
                     Configuration.Save();
-                ImGuiComponents.HelpMarker("使用 Wrath Combo, Rotation Solver 或 BossMod AutoRotation以外的循环插件时勾选");
+                ImGuiComponents.HelpMarker("使用 Wrath Combo, Rotation Solver Reborn, AEAssist 或 BossMod AutoRotation以外的循环插件时勾选");
 
                 if (ImGui.Checkbox("使用替代的移动插件", ref Configuration.UsingAlternativeMovementPlugin))
                     Configuration.Save();

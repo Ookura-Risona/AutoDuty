@@ -159,6 +159,7 @@ namespace AutoDuty.Data
                 ExternalPlugin.Avarice => (@"https://love.puni.sh/ment.json", "Avarice"),
                 ExternalPlugin.RotationSolverReborn => (@"https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json", "RotationSolver"),
                 ExternalPlugin.WrathCombo => (@"https://love.puni.sh/ment.json", "WrathCombo"),
+                ExternalPlugin.AEAssist => (string.Empty, "AEAssistV3"),
                 ExternalPlugin.AutoRetainer => (@"https://love.puni.sh/ment.json", "AutoRetainer"),
                 ExternalPlugin.Gearsetter => (@"https://puni.sh/api/repository/vera", "Gearsetter"),
                 ExternalPlugin.Stylist => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "Stylist"),
@@ -176,6 +177,7 @@ namespace AutoDuty.Data
                 ExternalPlugin.Avarice => "Avarice",
                 ExternalPlugin.RotationSolverReborn => "Rotation Solver Reborn",
                 ExternalPlugin.WrathCombo => "Wrath Combo",
+                ExternalPlugin.AEAssist => "AEAssist",
                 ExternalPlugin.AutoRetainer => "AutoRetainer",
                 ExternalPlugin.Gearsetter => "Gearsetter",
                 ExternalPlugin.Stylist => "Stylist",
@@ -184,6 +186,15 @@ namespace AutoDuty.Data
                 ExternalPlugin.Pandora => "Pandora's Box",
                 _ => throw new ArgumentOutOfRangeException(nameof(plugin), plugin, null)
             };
+
+        public static bool HasInstaller(this ExternalPlugin plugin)
+        {
+            if (plugin == ExternalPlugin.None)
+                return false;
+
+            (string url, _) = plugin.GetExternalPluginData();
+            return !string.IsNullOrWhiteSpace(url);
+        }
 
         public static bool IsFulfilled(this ConditionType conditionType, params string[] conditionArray)
         {

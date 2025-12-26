@@ -56,8 +56,18 @@ namespace AutoDuty.Windows
                                    IPCSubscriber_Common.IsReady(plugin.GetExternalPluginData().name);
                 
                 if(!isReady)
-                    if (ImGui.Button($"Install##InstallExternalPlugin_{plugin}_{id++}"))
-                        PluginInstaller.InstallPlugin(plugin);
+                {
+                    if (plugin.HasInstaller())
+                    {
+                        if (ImGui.Button($"安装##InstallExternalPlugin_{plugin}_{id++}"))
+                            PluginInstaller.InstallPlugin(plugin);
+                    }
+                    else
+                    {
+                        ImGui.TextDisabled("手动");
+                        id++;
+                    }
+                }
 
                 ImGui.NextColumn();
                 ImGui.AlignTextToFramePadding();
@@ -95,6 +105,7 @@ namespace AutoDuty.Windows
             PluginInstallLine(ExternalPlugin.BossMod,              "has integrated rotations");
             PluginInstallLine(ExternalPlugin.WrathCombo,           "Puni.sh's dedicated rotation plugin");
             PluginInstallLine(ExternalPlugin.RotationSolverReborn, "Reborn's rotation plugin");
+            PluginInstallLine(ExternalPlugin.AEAssist,             "AEAssist auto rotation plugin (manual install)");
 
             ImGui.Columns(1);
             ImGui.NewLine();

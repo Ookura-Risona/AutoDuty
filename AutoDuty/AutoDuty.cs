@@ -1862,7 +1862,6 @@ public sealed class AutoDuty : IDalamudPlugin
                 Svc.Log.Debug("AEAssist: " + active);
                 if (active)
                 {
-                    Chat.ExecuteCommand("/aeTargetSelector off");
                     Chat.ExecuteCommand("/aestop off");
                     Chat.ExecuteCommand("/aepull on");
                 }

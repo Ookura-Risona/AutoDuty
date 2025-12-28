@@ -2,6 +2,7 @@
 using AutoDuty.Helpers;
 using AutoDuty.IPC;
 using Dalamud.Interface;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using ECommons;
@@ -27,6 +28,25 @@ public sealed class MainWindow : Window, IDisposable
     private static string _popupText = "";
     private static string _popupTitle = "";
     private static string openTabName = "";
+    private static bool UseNewUi => AutoDuty.Configuration.UseNewUi;
+    private const int MainTabIndex = 0;
+    private const int BuildTabIndex = 1;
+    private const int SettingsTabIndex = 3;
+    private const int InfoTabIndex = 4;
+    private static readonly Vector4 UiBackgroundTop = new(1f, 0.95f, 0.97f, 1f);
+    private static readonly Vector4 UiBackgroundBottom = new(1f, 0.99f, 1f, 1f);
+    private static readonly Vector4 UiCardTop = new(1f, 0.97f, 0.99f, 1f);
+    private static readonly Vector4 UiCardBottom = new(1f, 0.93f, 0.96f, 1f);
+    private static readonly Vector4 UiCardBorder = new(1f, 0.84f, 0.91f, 1f);
+    private static readonly Vector4 UiNavTop = new(1f, 0.92f, 0.96f, 1f);
+    private static readonly Vector4 UiNavBottom = new(0.98f, 0.84f, 0.91f, 1f);
+    private static readonly Vector4 UiContentTop = new(1f, 0.99f, 1f, 1f);
+    private static readonly Vector4 UiContentBottom = new(0.99f, 0.94f, 0.98f, 1f);
+    private static readonly Vector4 UiAccent = new(0.95f, 0.43f, 0.62f, 1f);
+    private static readonly Vector4 UiAccentSoft = new(0.99f, 0.84f, 0.9f, 1f);
+    private static readonly Vector4 UiShadow = new(0f, 0f, 0f, 0.15f);
+    private static readonly Vector4 UiShadowSoft = new(0f, 0f, 0f, 0.08f);
+    private static readonly Vector4 UiHighlight = new(1f, 1f, 1f, 0.85f);
 
     public MainWindow() : base(
         $"AutoDuty v0.0.0.{Plugin.Version}###Autoduty")
@@ -49,7 +69,7 @@ public sealed class MainWindow : Window, IDisposable
 
     internal static void OpenTab(string tabName)
     {
-        openTabName = tabName;
+        openTabName = NormalizeTabName(tabName);
         _ = new TickScheduler(delegate
         {
             openTabName = "";
@@ -414,6 +434,338 @@ public sealed class MainWindow : Window, IDisposable
                 return;
         }
 
-        EzTabBar("MainTab", null, openTabName, ImGuiTabBarFlags.None, tabList);
+        this.Flags = UseNewUi ? ImGuiWindowFlags.NoTitleBar : ImGuiWindowFlags.None;
+
+        if (UseNewUi)
+            DrawNewUi();
+        else
+            EzTabBar("MainTab", null, openTabName, ImGuiTabBarFlags.None, tabList);
+    }
+
+    private static string NormalizeTabName(string tabName)
+    {
+        if (tabName == "MainTab" && tabList.Length > MainTabIndex)
+            return tabList[MainTabIndex].Item1;
+        if (tabName == "BuildTab" && tabList.Length > BuildTabIndex)
+            return tabList[BuildTabIndex].Item1;
+        if (tabName == "Config" && tabList.Length > SettingsTabIndex)
+            return tabList[SettingsTabIndex].Item1;
+
+        return tabName;
+    }
+
+    private static void DrawNewUi()
+    {
+        int colorCount = 0;
+        int varCount = 0;
+        ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0f, 0f, 0f, 0f));
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0f, 0f, 0f, 0f));
+        ImGui.PushStyleColor(ImGuiCol.PopupBg, new Vector4(1f, 0.96f, 0.98f, 0.98f));
+        ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f, 0.84f, 0.91f, 0.9f));
+        ImGui.PushStyleColor(ImGuiCol.FrameBg, new Vector4(1f, 0.92f, 0.96f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, new Vector4(1f, 0.88f, 0.94f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.FrameBgActive, new Vector4(1f, 0.85f, 0.92f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.98f, 0.86f, 0.91f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.98f, 0.8f, 0.88f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0.96f, 0.72f, 0.84f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.28f, 0.18f, 0.23f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TextDisabled, new Vector4(0.5f, 0.4f, 0.44f, 1f));
+        colorCount += 12;
+
+        ImGui.PushStyleColor(ImGuiCol.CheckMark, UiAccent);
+        ImGui.PushStyleColor(ImGuiCol.Header, new Vector4(1f, 0.9f, 0.95f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, new Vector4(1f, 0.84f, 0.92f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.HeaderActive, new Vector4(0.98f, 0.7f, 0.84f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.Separator, new Vector4(1f, 0.86f, 0.92f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.SeparatorHovered, new Vector4(0.98f, 0.76f, 0.86f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.SeparatorActive, UiAccent);
+        ImGui.PushStyleColor(ImGuiCol.ScrollbarBg, new Vector4(1f, 0.95f, 0.97f, 0.8f));
+        ImGui.PushStyleColor(ImGuiCol.ScrollbarGrab, new Vector4(0.97f, 0.78f, 0.87f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ScrollbarGrabHovered, new Vector4(0.97f, 0.7f, 0.84f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ScrollbarGrabActive, new Vector4(0.95f, 0.58f, 0.77f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.SliderGrab, new Vector4(0.97f, 0.74f, 0.86f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.SliderGrabActive, new Vector4(0.95f, 0.58f, 0.77f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ResizeGrip, new Vector4(0.99f, 0.85f, 0.92f, 0.6f));
+        ImGui.PushStyleColor(ImGuiCol.ResizeGripHovered, new Vector4(0.97f, 0.74f, 0.86f, 0.8f));
+        ImGui.PushStyleColor(ImGuiCol.ResizeGripActive, new Vector4(0.95f, 0.58f, 0.77f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TableHeaderBg, new Vector4(1f, 0.9f, 0.95f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TableBorderStrong, new Vector4(0.98f, 0.76f, 0.86f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TableBorderLight, new Vector4(1f, 0.88f, 0.93f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TableRowBg, new Vector4(1f, 0.98f, 0.99f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TableRowBgAlt, new Vector4(1f, 0.94f, 0.98f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TextSelectedBg, new Vector4(0.98f, 0.7f, 0.84f, 0.35f));
+        ImGui.PushStyleColor(ImGuiCol.NavHighlight, new Vector4(0.95f, 0.58f, 0.77f, 0.7f));
+        ImGui.PushStyleColor(ImGuiCol.BorderShadow, new Vector4(0f, 0f, 0f, 0f));
+        ImGui.PushStyleColor(ImGuiCol.Tab, new Vector4(1f, 0.93f, 0.97f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TabHovered, new Vector4(1f, 0.86f, 0.93f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.TabActive, new Vector4(1f, 0.82f, 0.9f, 1f));
+        ImGui.PushStyleColor(ImGuiCol.ModalWindowDimBg, new Vector4(0.55f, 0.4f, 0.48f, 0.35f));
+        colorCount += 28;
+
+        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(8f, 8f) * ImGuiHelpers.GlobalScale);
+        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8f, 6f) * ImGuiHelpers.GlobalScale);
+        ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 8f * ImGuiHelpers.GlobalScale);
+        varCount += 3;
+
+        try
+        {
+            string normalizedOpenTab = NormalizeTabName(openTabName);
+            if (!normalizedOpenTab.IsNullOrEmpty())
+                CurrentTabName = normalizedOpenTab;
+
+            if (CurrentTabName.IsNullOrEmpty() && tabList.Length > 0)
+                CurrentTabName = tabList[0].Item1;
+
+            CurrentTabName = NormalizeTabName(CurrentTabName);
+            if (tabList.Length > 0)
+            {
+                bool hasTab = false;
+                foreach ((string name, Action _, Vector4? _, bool _) in tabList)
+                {
+                    if (name == CurrentTabName)
+                    {
+                        hasTab = true;
+                        break;
+                    }
+                }
+
+                if (!hasTab)
+                    CurrentTabName = tabList[0].Item1;
+            }
+
+            bool valid = (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeBossPlugin)     &&
+                         (VNavmesh_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeMovementPlugin) &&
+                         (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeRotationPlugin);
+
+            string infoTabName = tabList.Length > InfoTabIndex ? tabList[InfoTabIndex].Item1 : "信息";
+            if (!valid && CurrentTabName != infoTabName)
+                CurrentTabName = infoTabName;
+
+            ImDrawListPtr drawList = ImGui.GetWindowDrawList();
+            Vector2 windowPos = ImGui.GetWindowPos();
+            Vector2 windowSize = ImGui.GetWindowSize();
+
+            DrawBackground(drawList, windowPos, windowSize);
+
+            float scale = ImGuiHelpers.GlobalScale;
+            float padding = 16f * scale;
+            float gap = 12f * scale;
+            float topBarHeight = 44f * scale;
+            float navWidth = MathF.Min(240f * scale, MathF.Max(170f * scale, windowSize.X * 0.28f));
+            float cardRounding = 16f * scale;
+
+            Vector2 topBarMin = windowPos + new Vector2(padding, padding);
+            Vector2 topBarMax = new Vector2(windowPos.X + windowSize.X - padding, topBarMin.Y + topBarHeight);
+            DrawCard(drawList, topBarMin, topBarMax, cardRounding);
+
+            ImGui.SetCursorScreenPos(topBarMin);
+            ImGui.InvisibleButton("##NewUiDrag", topBarMax - topBarMin);
+            ImGui.SetItemAllowOverlap();
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                ImGui.SetWindowPos(ImGui.GetWindowPos() + ImGui.GetIO().MouseDelta);
+
+            Vector2 titlePos = new(topBarMin.X + 16f * scale, topBarMin.Y + (topBarHeight - ImGui.GetFontSize()) / 2f);
+            drawList.AddText(titlePos, ImGui.GetColorU32(ImGuiCol.Text), $"AutoDuty v{Plugin.Version}");
+
+            float closeSize = 26f * scale;
+            Vector2 closePos = new(topBarMax.X - closeSize - 12f * scale, topBarMin.Y + (topBarHeight - closeSize) / 2f);
+            if (DrawCloseButton(drawList, closePos, closeSize))
+                Plugin.MainWindow.IsOpen = false;
+
+            float contentTop = topBarMax.Y + gap;
+            Vector2 navMin = new(windowPos.X + padding, contentTop);
+            Vector2 navMax = new(navMin.X + navWidth, windowPos.Y + windowSize.Y - padding);
+            Vector2 contentMin = new(navMax.X + gap, contentTop);
+            Vector2 contentMax = new(windowPos.X + windowSize.X - padding, navMax.Y);
+
+            DrawCard(drawList, navMin, navMax, cardRounding, UiNavTop, UiNavBottom);
+            DrawCard(drawList, contentMin, contentMax, cardRounding, UiContentTop, UiContentBottom);
+
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
+            ImGui.SetCursorScreenPos(navMin);
+            ImGui.BeginChild("##NewUiNav", navMax - navMin, false, ImGuiWindowFlags.NoBackground);
+            float navPadding = 12f * scale;
+            float tabHeight = 42f * scale;
+            ImGui.SetCursorPos(new Vector2(navPadding, navPadding));
+
+            foreach ((string name, Action function, Vector4? _, bool _) in tabList)
+            {
+                if (name.IsNullOrEmpty())
+                    continue;
+
+                bool isSupport = function == KofiLink;
+                bool isInfo = name == infoTabName;
+                bool isDisabled = !valid && !isInfo && !isSupport;
+                bool isActive = name == CurrentTabName && !isSupport;
+
+                ImGui.SetCursorPosX(navPadding);
+                bool clicked = DrawNavButton($"##NewUiTab_{name}", name, new Vector2(navWidth - navPadding * 2f, tabHeight), isActive, isDisabled);
+                if (clicked && !isDisabled)
+                {
+                    if (isSupport)
+                        KofiLink();
+                    else
+                        CurrentTabName = name;
+                }
+            }
+
+            ImGui.EndChild();
+            ImGui.PopStyleVar();
+
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(16f, 16f) * scale);
+            ImGui.SetCursorScreenPos(contentMin);
+            ImGui.BeginChild("##NewUiContent", contentMax - contentMin, false, ImGuiWindowFlags.NoBackground);
+
+            if (!valid)
+            {
+                ImGui.NewLine();
+                ImGui.TextColored(EzColor.Red, "您需要下载缺少的前置插件");
+                ImGui.Spacing();
+            }
+
+            foreach ((string name, Action function, Vector4? _, bool _) in tabList)
+            {
+                if (name == CurrentTabName)
+                {
+                    function();
+                    break;
+                }
+            }
+
+            ImGui.EndChild();
+            ImGui.PopStyleVar();
+        }
+        finally
+        {
+            ImGui.PopStyleVar(varCount);
+            ImGui.PopStyleColor(colorCount);
+        }
+    }
+
+    private static void DrawBackground(ImDrawListPtr drawList, Vector2 windowPos, Vector2 windowSize)
+    {
+        uint topLeft = ImGui.GetColorU32(UiBackgroundTop);
+        uint topRight = ImGui.GetColorU32(new Vector4(1f, 0.96f, 0.98f, 1f));
+        uint bottomRight = ImGui.GetColorU32(UiBackgroundBottom);
+        uint bottomLeft = ImGui.GetColorU32(new Vector4(1f, 0.98f, 0.99f, 1f));
+        drawList.AddRectFilledMultiColor(windowPos, windowPos + windowSize, topLeft, topRight, bottomRight, bottomLeft);
+
+        float radius = MathF.Min(windowSize.X, windowSize.Y) * 0.45f;
+        Vector2 glowA = windowPos + new Vector2(windowSize.X * 0.2f, windowSize.Y * 0.2f);
+        Vector2 glowB = windowPos + new Vector2(windowSize.X * 0.85f, windowSize.Y * 0.7f);
+        drawList.AddCircleFilled(glowA, radius, ImGui.GetColorU32(new Vector4(1f, 0.88f, 0.94f, 0.35f)), 64);
+        drawList.AddCircleFilled(glowB, radius * 0.7f, ImGui.GetColorU32(new Vector4(1f, 0.95f, 0.99f, 0.4f)), 64);
+    }
+
+    private static void DrawCard(ImDrawListPtr drawList, Vector2 min, Vector2 max, float rounding)
+    {
+        DrawCard(drawList, min, max, rounding, UiCardTop, UiCardBottom);
+    }
+
+    private static void DrawCard(ImDrawListPtr drawList, Vector2 min, Vector2 max, float rounding, Vector4 topColor, Vector4 bottomColor)
+    {
+        float scale = ImGuiHelpers.GlobalScale;
+        float shadowSpread = 12f * scale;
+        DrawRingShadow(drawList, min, max, rounding, shadowSpread);
+
+        uint cardTop = ImGui.GetColorU32(topColor);
+        uint cardBottom = ImGui.GetColorU32(bottomColor);
+        drawList.AddRectFilledMultiColor(min, max, cardTop, cardTop, cardBottom, cardBottom);
+
+        float highlightHeight = MathF.Min(12f * scale, (max.Y - min.Y) * 0.25f);
+        drawList.AddRectFilledMultiColor(
+            new Vector2(min.X + 1f, min.Y + 1f),
+            new Vector2(max.X - 1f, min.Y + highlightHeight),
+            ImGui.GetColorU32(UiHighlight),
+            ImGui.GetColorU32(UiHighlight),
+            ImGui.GetColorU32(new Vector4(1f, 1f, 1f, 0f)),
+            ImGui.GetColorU32(new Vector4(1f, 1f, 1f, 0f)));
+
+        drawList.AddRect(min, max, ImGui.GetColorU32(UiCardBorder), rounding, ImDrawFlags.RoundCornersAll, 1f);
+    }
+
+    private static void DrawRingShadow(ImDrawListPtr drawList, Vector2 min, Vector2 max, float rounding, float spread)
+    {
+        uint shadow = ImGui.GetColorU32(UiShadow);
+        uint shadowSoft = ImGui.GetColorU32(UiShadowSoft);
+        uint transparent = ImGui.GetColorU32(new Vector4(0f, 0f, 0f, 0f));
+
+        Vector2 leftMin = new(min.X - spread, min.Y + rounding);
+        Vector2 leftMax = new(min.X, max.Y + spread);
+        drawList.AddRectFilledMultiColor(leftMin, leftMax, shadowSoft, transparent, transparent, shadowSoft);
+
+        Vector2 rightMin = new(max.X, min.Y + rounding);
+        Vector2 rightMax = new(max.X + spread, max.Y + spread);
+        drawList.AddRectFilledMultiColor(rightMin, rightMax, transparent, shadowSoft, shadowSoft, transparent);
+
+        Vector2 bottomMin = new(min.X + rounding, max.Y);
+        Vector2 bottomMax = new(max.X - rounding, max.Y + spread);
+        drawList.AddRectFilledMultiColor(bottomMin, bottomMax, transparent, transparent, shadow, shadow);
+    }
+
+    private static bool DrawNavButton(string id, string label, Vector2 size, bool active, bool disabled)
+    {
+        ImGui.InvisibleButton(id, size);
+        bool hovered = ImGui.IsItemHovered();
+        bool clicked = ImGui.IsItemClicked();
+        ImDrawListPtr drawList = ImGui.GetWindowDrawList();
+        Vector2 min = ImGui.GetItemRectMin();
+        Vector2 max = ImGui.GetItemRectMax();
+        float rounding = 12f * ImGuiHelpers.GlobalScale;
+
+        Vector4 baseColor = active ? UiAccentSoft : new Vector4(1f, 0.95f, 0.97f, 1f);
+        Vector4 borderColor = active ? UiAccent : UiCardBorder;
+        if (hovered && !disabled)
+            baseColor = new Vector4(1f, 0.91f, 0.95f, 1f);
+        if (disabled)
+            baseColor = new Vector4(1f, 0.96f, 0.98f, 0.6f);
+
+        drawList.AddRectFilled(min, max, ImGui.GetColorU32(baseColor), rounding);
+        drawList.AddRect(min, max, ImGui.GetColorU32(borderColor), rounding, ImDrawFlags.RoundCornersAll, 1f);
+
+        if (active && !disabled)
+        {
+            float accentWidth = 4f * ImGuiHelpers.GlobalScale;
+            Vector2 accentMin = new(min.X + 6f * ImGuiHelpers.GlobalScale, min.Y + 6f * ImGuiHelpers.GlobalScale);
+            Vector2 accentMax = new(accentMin.X + accentWidth, max.Y - 6f * ImGuiHelpers.GlobalScale);
+            drawList.AddRectFilled(accentMin, accentMax, ImGui.GetColorU32(UiAccent), accentWidth * 0.5f);
+        }
+
+        Vector2 textSize = ImGui.CalcTextSize(label);
+        Vector2 textPos = new(min.X + 16f * ImGuiHelpers.GlobalScale, min.Y + (size.Y - textSize.Y) * 0.5f);
+        uint textColor = ImGui.GetColorU32(disabled ? ImGuiCol.TextDisabled : ImGuiCol.Text);
+        drawList.AddText(textPos, textColor, label);
+
+        if (hovered && !disabled)
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+
+        return clicked && !disabled;
+    }
+
+    private static bool DrawCloseButton(ImDrawListPtr drawList, Vector2 pos, float size)
+    {
+        ImGui.SetCursorScreenPos(pos);
+        ImGui.InvisibleButton("##NewUiClose", new Vector2(size, size));
+        bool hovered = ImGui.IsItemHovered();
+        bool clicked = ImGui.IsItemClicked();
+
+        Vector2 min = ImGui.GetItemRectMin();
+        Vector2 max = ImGui.GetItemRectMax();
+        float rounding = size * 0.35f;
+
+        Vector4 baseColor = hovered ? new Vector4(0.98f, 0.76f, 0.85f, 1f) : new Vector4(0.99f, 0.86f, 0.92f, 1f);
+        Vector4 borderColor = hovered ? UiAccent : UiCardBorder;
+        drawList.AddRectFilled(min, max, ImGui.GetColorU32(baseColor), rounding);
+        drawList.AddRect(min, max, ImGui.GetColorU32(borderColor), rounding, ImDrawFlags.RoundCornersAll, 1f);
+
+        float pad = size * 0.3f;
+        uint xColor = ImGui.GetColorU32(new Vector4(0.5f, 0.2f, 0.3f, 1f));
+        drawList.AddLine(new Vector2(min.X + pad, min.Y + pad), new Vector2(max.X - pad, max.Y - pad), xColor, 2f);
+        drawList.AddLine(new Vector2(min.X + pad, max.Y - pad), new Vector2(max.X - pad, min.Y + pad), xColor, 2f);
+
+        if (hovered)
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+
+        return clicked;
     }
 }

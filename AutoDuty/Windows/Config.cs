@@ -1142,6 +1142,7 @@ public class Configuration
     public bool SquadronAssignLowestMembers    = true;
 
     public bool ShowMainWindowOnStartup = false;
+    public bool UseNewUi = true;
 
     
     #region OverlayConfig
@@ -1753,6 +1754,8 @@ public static class ConfigTab
                 Configuration.Save();
             ImGui.SameLine();
             if (ImGui.Checkbox("滑块输入", ref Configuration.UseSliderInputs))
+                Configuration.Save();
+            if (ImGui.Checkbox("使用新UI", ref Configuration.UseNewUi))
                 Configuration.Save();
             
         }

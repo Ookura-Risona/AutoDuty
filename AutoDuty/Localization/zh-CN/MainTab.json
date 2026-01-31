@@ -11,22 +11,24 @@
                     "UseLowestMembers":  "优先使用等级最低的 NPC（练 NPC 等级用）",
                     "LevelingModeStatus":  "当前练级状态：等级 {0} (装等 {1})",
                     "Modes":  {
-                                  "Looping":  "单副本挂机 (Looping)",
-                                  "Playlist":  "任务列表模式 (Playlist)"
+                                  "Looping":  "循环",
+                                  "Playlist":  "自定义队列"
                               },
                     "DutyModes":  {
-                                      "Support":  "副本协助 (剧情 NPC)",
-                                      "Trust":  "亲信战友 (7.0 之前 NPC)",
-                                      "Squadron":  "冒险者分队 (军衔)",
-                                      "Regular":  "常规副本 (匹配/组队)",
-                                      "Trial":  "讨伐/歼灭战",
-                                      "Raid":  "大型任务 (Raid)",
-                                      "Variant":  "异闻/多变副本",
-                                      "None":  "关闭"
+                                      "Support":  "剧情辅助器",
+                                      "Trust":  "亲信战友",
+                                      "Squadron":  "冒险者小队",
+                                      "Regular":  "迷宫挑战（排本）",
+                                      "Trial":  "讨伐歼灭战（排本）",
+                                      "Raid":  "大型任务（排本）",
+                                      "Variant":  "多变迷宫",
+                                      "None":  "无"
                                   },
                     "LevelingModes":  {
-                                          "Auto":  "自动排队",
-                                          "None":  "关闭"
+                                          "None":  "无",
+                                          "Support":  "剧情辅助器",
+                                          "Trust_Group":  "亲信练级",
+                                          "Trust_Solo":  "玩家练级"
                                       },
                     "SearchDuties":  "搜索副本...",
                     "ClearSavedPath":  "清除已保存的路径",

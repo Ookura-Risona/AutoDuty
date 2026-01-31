@@ -63,7 +63,7 @@ public class ConfigurationMain
     public string DefaultConfigName { get; set; } = CONFIGNAME_BARE;
 
     [JsonProperty]
-    internal string Language { get; set; } = LocalizationManager.BASE_LANGUAGE;
+    internal string Language { get; set; } = "zh-CN";
 
     [JsonProperty]
     private string activeProfileName = CONFIGNAME_BARE;

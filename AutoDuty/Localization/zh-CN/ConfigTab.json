@@ -233,13 +233,13 @@
                                           "ResynchronizeStep":  "重新同步步骤"
                                       },
                       "Enums":  {
-                                    "RetireLocation":  {
-                                                           "GC_Barracks":  "冒险者分队兵营",
-                                                           "Inn":  "旅馆",
-                                                           "Apartment":  "公寓",
-                                                           "Personal_Home":  "个人房屋",
-                                                           "FC_Estate":  "部队房屋"
-                                                       },
+                                     "RetireLocation":  {
+                                                            "GC_Barracks":  "冒险者分队军营",
+                                                            "Inn":  "旅馆",
+                                                            "Apartment":  "公寓",
+                                                            "Personal_Home":  "个人房屋",
+                                                            "FC_Estate":  "部队房屋"
+                                                        },
                                     "SummoningBellLocations":  {
                                                                    "Limsa_Lominsa_Lower_Decks":  "利姆萨·罗敏萨下层甲板",
                                                                    "Old_Gridania":  "格里达尼亚旧街",
@@ -269,14 +269,14 @@
                                                             "Armoury_Wrists_Rings":  "兵装库: 手镯/戒指",
                                                             "Equipped":  "装备中"
                                                         },
-                                    "TerminationMode":  {
-                                                            "Do_Nothing":  "无操作",
-                                                            "Logout":  "下线/注销",
-                                                            "Start_AR_Multi_Mode":  "启动 AutoRetainer 多开模式",
-                                                            "Kill_Client":  "关闭游戏客户端",
-                                                            "Kill_PC":  "关闭电脑",
-                                                            "Start_AR_Night_Mode":  "启动 AutoRetainer 夜间模式"
-                                                        },
+                                     "TerminationMode":  {
+                                                             "Do_Nothing":  "什么都不做",
+                                                             "Logout":  "返回标题画面",
+                                                             "Start_AR_Multi_Mode":  "开启AutoRetainer",
+                                                             "Kill_Client":  "关闭游戏",
+                                                             "Kill_PC":  "关闭电脑",
+                                                             "Start_AR_Night_Mode":  "开启AR夜间模式"
+                                                         },
                                     "Jobs":  {
                                                  "All":  "所有职业 (All)",
                                                  "Tanks":  "防护职业 (T)",

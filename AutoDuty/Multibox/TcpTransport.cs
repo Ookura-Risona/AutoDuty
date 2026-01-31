@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace AutoDuty.Managers
+namespace AutoDuty.Multibox
 {
     using System;
     using System.IO;
@@ -80,18 +80,13 @@ namespace AutoDuty.Managers
             return client.GetStream();
         }
 
-        public void Dispose()
-        {
+        public void Dispose() => 
             this.StopServer();
-        }
 
-        private static void DebugLog(string message)
-        {
+        private static void DebugLog(string message) => 
             Svc.Log.Debug($"TCP Connection: {message}");
-        }
-        private static void ErrorLog(string message)
-        {
+
+        private static void ErrorLog(string message) => 
             Svc.Log.Error($"TCP Connection: {message}");
-        }
     }
 }

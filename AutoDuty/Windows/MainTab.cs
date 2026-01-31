@@ -1,5 +1,6 @@
 ﻿using AutoDuty.Helpers;
 using AutoDuty.IPC;
+using AutoDuty.Managers;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using ECommons;
@@ -35,7 +36,7 @@ namespace AutoDuty.Windows
 
         internal static void Draw()
         {
-            MainWindow.CurrentTabName = "主界面";
+            MainWindow.CurrentTabName = "Main";
             
             DutyMode     dutyMode     = AutoDuty.Configuration.DutyModeEnum;
             LevelingMode levelingMode = Plugin.LevelingModeEnum;
@@ -51,7 +52,7 @@ namespace AutoDuty.Windows
                 // Set the width of the search box to the calculated width
                 ImGui.SetNextItemWidth(inputMaxWidth);
                 
-                ImGui.InputTextWithHint("##search", "搜索副本...", ref _searchText, inputMaxLength);
+                ImGui.InputTextWithHint("##search", Loc.Get("MainTab.SearchDuties"), ref _searchText, inputMaxLength);
 
                 // Apply filtering based on the search text
                 if (_searchText.Length > 0)
@@ -79,7 +80,7 @@ namespace AutoDuty.Windows
                                                !AutoDuty.Configuration.PathSelectionsByPath.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ||
                                                !(pathSelection = AutoDuty.Configuration.PathSelectionsByPath[Plugin.CurrentTerritoryContent.TerritoryType])!.Any(kvp => kvp.Value.HasJob(Player.Job))))
                         {
-                            if (ImGui.Button("清除已保存的路径"))
+                            if (ImGui.Button(Loc.Get("MainTab.ClearSavedPath")))
                             {
                                 foreach (KeyValuePair<string, JobWithRole> keyValuePair in pathSelection!)
                                     pathSelection[keyValuePair.Key] &= ~curJob;
@@ -136,7 +137,7 @@ namespace AutoDuty.Windows
                      AutoDuty.Configuration.StopNoRestedXP ||
                      AutoDuty.Configuration.StopItemQty    ||
                      AutoDuty.Configuration.TerminationBLUSpellsEnabled))
-                    ImGui.TextColoredWrapped(EzColor.Cyan, "Be aware, you have termination options enabled that might cancel your loops early");
+                    ImGui.TextColoredWrapped(EzColor.Cyan, Loc.Get("MainTab.TerminationNotice"));
             }
 
             if (InDungeon)
@@ -148,16 +149,16 @@ namespace AutoDuty.Windows
                 else
                 {
                     ImGui.AlignTextToFramePadding();
-                    float progress = VNavmesh_IPCSubscriber.IsEnabled ? VNavmesh_IPCSubscriber.Nav_BuildProgress() : 0;
+                    float progress = VNavmesh_IPCSubscriber.IsEnabled ? VNavmesh_IPCSubscriber.Nav_BuildProgress : 0;
                     if (progress >= 0)
                     {
-                        ImGui.Text($"{Plugin.CurrentTerritoryContent.Name} Mesh: Loading: ");
+                        ImGui.Text(Loc.Get("MainTab.MeshLoading", Plugin.CurrentTerritoryContent.Name));
                         ImGui.SameLine();
                         ImGui.ProgressBar(progress, new Vector2(200, 0));
                     }
                     else
                     {
-                        ImGui.Text($"{Plugin.CurrentTerritoryContent.Name} Mesh: Loaded Path: {(ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ? "Loaded" : "None")}");
+                        ImGui.Text(Loc.Get("MainTab.MeshLoadedPath", Plugin.CurrentTerritoryContent.Name, ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ? Loc.Get("MainTab.Loaded") : Loc.Get("MainTab.None")));
                     }
 
                     ImGui.Separator();
@@ -175,13 +176,13 @@ namespace AutoDuty.Windows
                     DrawPathSelection();
                     if (!Plugin.states.HasFlag(PluginState.Looping) && !Plugin.Overlay.IsOpen)
                         MainWindow.GotoAndActions();
-                    using (ImRaii.Disabled(!VNavmesh_IPCSubscriber.IsEnabled || !InDungeon || !VNavmesh_IPCSubscriber.Nav_IsReady() || !BossMod_IPCSubscriber.IsEnabled))
+                    using (ImRaii.Disabled(!VNavmesh_IPCSubscriber.IsEnabled || !InDungeon || !VNavmesh_IPCSubscriber.Nav_IsReady || !BossMod_IPCSubscriber.IsEnabled))
                     {
                         using (ImRaii.Disabled(!InDungeon || !ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType)))
                         {
                             if (Plugin.Stage == 0)
                             {
-                                if (ImGui.Button("启动"))
+                                if (ImGui.Button(Loc.Get("MainTab.Start")))
                                 {
                                     Plugin.LoadPath();
                                     _currentStepIndex = -1;
@@ -198,7 +199,7 @@ namespace AutoDuty.Windows
 
                             ImGui.SameLine(0, 15);
                         }
-                        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Times").X * 1.1f.Scale());
+                        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(Loc.Get("MainTab.Times")).X * 1.1f.Scale());
                         MainWindow.LoopsConfig();
                         ImGui.PopItemWidth();
 
@@ -208,7 +209,7 @@ namespace AutoDuty.Windows
 
                         if ((VNavmesh_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeMovementPlugin) &&
                             (BossMod_IPCSubscriber.IsEnabled  || AutoDuty.Configuration.UsingAlternativeBossPlugin)     &&
-                            (RSR_IPCSubscriber.IsEnabled      || Wrath_IPCSubscriber.IsEnabled  || AEAssist_IPCSubscriber.IsEnabled || BossMod_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeRotationPlugin))
+                            (RSR_IPCSubscriber.IsEnabled      || BossMod_IPCSubscriber.IsEnabled || AutoDuty.Configuration.UsingAlternativeRotationPlugin))
                         {
                             foreach ((PathAction Value, int Index) item in Plugin.Actions.Select((Value, Index) => (Value, Index))) item.Value.DrawCustomText(item.Index, () => ItemClicked(item));
                             //var text = item.Value.Name.StartsWith("<--", StringComparison.InvariantCultureIgnoreCase) ? item.Value.Note : $"{item.Value.ToCustomString()}";
@@ -228,16 +229,16 @@ namespace AutoDuty.Windows
 
                             if (InDungeon && Plugin is { Actions.Count: < 1 } && !ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType))
                                 ImGui.TextColored(new Vector4(0, 255, 0, 1),
-                                                  $"未找到副本配置文件:\n{TerritoryName.GetTerritoryName(Plugin.CurrentTerritoryContent.TerritoryType).Split('|')[1].Trim()}\n({Plugin.CurrentTerritoryContent.TerritoryType}.json)\n于路径文件夹:\n{Plugin.pathsDirectory.FullName.Replace('\\', '/')}\n请从以下链接下载:\n{_pathsURL}\n或自行创建配置文件");
+                                                  Loc.Get("MainTab.NoPathFound", TerritoryName.GetTerritoryName(Plugin.CurrentTerritoryContent.TerritoryType).Split('|')[1].Trim(), Plugin.CurrentTerritoryContent.TerritoryType.ToString(), Plugin.pathsDirectory.FullName.Replace('\\', '/'), _pathsURL));
                         }
                         else
                         {
                             if (!VNavmesh_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeMovementPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 VNavmesh 插件\\n请添加第三方仓库：\\nhttps://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json");
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), Loc.Get("MainTab.RequiresVNavmesh"));
                             if (!BossMod_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeBossPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 BossMod 插件以正确处理机制。请添加第三方仓库：\\nhttps://raw.githubusercontent.com/44451516/ffxiv_bossmod/CN/pluginmaster.json");
-                            if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !AEAssist_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeRotationPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载一个循环插件（Wrath Combo 、 Rotation Solver Reborn、AEAssist 或 BossMod AutoRotation 均可)");
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), Loc.Get("MainTab.RequiresBossMod"));
+                            if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !AutoDuty.Configuration.UsingAlternativeRotationPlugin)
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), Loc.Get("MainTab.RequiresRotation"));
                         }
                         ImGui.EndListBox();
                     }
@@ -252,13 +253,13 @@ namespace AutoDuty.Windows
                 using (ImRaii.Disabled(Plugin.states.HasFlag(PluginState.Looping)))
                 {
                     ImGui.AlignTextToFramePadding();
-                    ImGui.TextColored(ImGuiHelper.StateGoodColor, "选择模式: ");
+                    ImGui.TextColored(ImGuiHelper.StateGoodColor, Loc.Get("MainTab.SelectMode"));
                     ImGui.SameLine(0);
                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                    if (ImGui.BeginCombo("##AutoDutyModeEnum", AutoDuty.Configuration.AutoDutyModeEnum.GetDescription()))
+                    if (ImGui.BeginCombo("##AutoDutyModeEnum", Loc.Get($"MainTab.Modes.{AutoDuty.Configuration.AutoDutyModeEnum}")))
                     {
                         foreach (AutoDutyMode mode in Enum.GetValues(typeof(AutoDutyMode)))
-                            if (ImGui.Selectable(mode.GetDescription(), AutoDuty.Configuration.AutoDutyModeEnum == mode))
+                            if (ImGui.Selectable(Loc.Get($"MainTab.Modes.{mode}"), AutoDuty.Configuration.AutoDutyModeEnum == mode))
                             {
                                 AutoDuty.Configuration.AutoDutyModeEnum = mode;
                                 Configuration.Save();
@@ -273,21 +274,21 @@ namespace AutoDuty.Windows
                 {
                     if (!Plugin.states.HasFlag(PluginState.Looping))
                     {
-                        if (ImGui.Button("运行"))
+                        if (ImGui.Button(Loc.Get("MainTab.Run")))
                         {
                             bool synced = !QueueHelper.ShouldBeUnSynced();
                             if (AutoDuty.Configuration.DutyModeEnum == DutyMode.None)
-                                MainWindow.ShowPopup("Error", "你需要选择一个运行模式");
+                                MainWindow.ShowPopup(Loc.Get("MainTab.Error"), Loc.Get("MainTab.ErrorSelectVersion"));
                             else if (Svc.Party.PartyId > 0 && AutoDuty.Configuration.DutyModeEnum is DutyMode.Support or DutyMode.Squadron or DutyMode.Trust)
-                                MainWindow.ShowPopup("Error", "组队状态中无法使用剧情辅助器、冒险者小队与亲信战友模式");
+                                MainWindow.ShowPopup(Loc.Get("MainTab.Error"), Loc.Get("MainTab.ErrorNotInParty"));
                             else if (AutoDuty.Configuration is { DutyModeEnum: DutyMode.Regular, OverridePartyValidation: false } && synced && UniversalParty.Length < 4)
-                                MainWindow.ShowPopup("Error", "你需要组成四人小队");
+                                MainWindow.ShowPopup(Loc.Get("MainTab.Error"), Loc.Get("MainTab.ErrorGroupOf4"));
                             else if (AutoDuty.Configuration is { DutyModeEnum: DutyMode.Regular, OverridePartyValidation: false } && synced && !ObjectHelper.PartyValidation())
-                                MainWindow.ShowPopup("Error", "你需要拥有正确的小队配置");
+                                MainWindow.ShowPopup(Loc.Get("MainTab.Error"), Loc.Get("MainTab.ErrorPartyMakeup"));
                             else if (ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent?.TerritoryType ?? 0))
                                 Plugin.Run();
                             else
-                                MainWindow.ShowPopup("Error", $"No path was found for {Plugin.CurrentTerritoryContent?.TerritoryType} {Plugin.CurrentTerritoryContent?.Name}");
+                                MainWindow.ShowPopup(Loc.Get("MainTab.Error"), Loc.Get("MainTab.ErrorNoPath", Plugin.CurrentTerritoryContent?.TerritoryType.ToString() ?? "", Plugin.CurrentTerritoryContent?.Name ?? ""));
                         }
                     }
                     else
@@ -307,19 +308,19 @@ namespace AutoDuty.Windows
                             using (ImRaii.Disabled(Plugin.CurrentTerritoryContent == null))
                             {
                                 ImGui.SameLine(0, 15);
-                                ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Times").X * 1.1f.Scale());
+                                ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(Loc.Get("MainTab.Times")).X * 1.1f.Scale());
                                 MainWindow.LoopsConfig();
                                 ImGui.PopItemWidth();
                             }
 
                             ImGui.AlignTextToFramePadding();
-                            ImGui.TextColored(AutoDuty.Configuration.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "选择运行模式: ");
+                            ImGui.TextColored(AutoDuty.Configuration.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, Loc.Get("MainTab.SelectDutyMode"));
                             ImGui.SameLine(0);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                            if (ImGui.BeginCombo("##DutyModeEnum", AutoDuty.Configuration.DutyModeEnum.GetDescription()))
+                            if (ImGui.BeginCombo("##DutyModeEnum", Loc.Get($"MainTab.DutyModes.{AutoDuty.Configuration.DutyModeEnum}")))
                             {
                                 foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
-                                    if (ImGui.Selectable(mode.GetDescription(), AutoDuty.Configuration.DutyModeEnum == mode))
+                                    if (ImGui.Selectable(Loc.Get($"MainTab.DutyModes.{mode}"), AutoDuty.Configuration.DutyModeEnum == mode))
                                     {
                                         AutoDuty.Configuration.DutyModeEnum = mode;
                                             Configuration.Save();
@@ -334,30 +335,27 @@ namespace AutoDuty.Windows
                                 if (AutoDuty.Configuration.DutyModeEnum is DutyMode.Support or DutyMode.Trust)
                                 {
                                     ImGui.AlignTextToFramePadding();
-                                    ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "选择练级模式: ");
+                                    ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, Loc.Get("MainTab.SelectLevelingMode"));
                                     ImGui.SameLine(0);
 
-                                    ImGuiComponents.HelpMarker("练级模式将根据您的等级和装等，为您匹配最适合的副本。\n" +
-                                                               (AutoDuty.Configuration.DutyModeEnum != DutyMode.Trust ?
-                                                                    string.Empty :
-                                                                    "亲信练级模式会均衡提升您的亲信战友等级\n玩家练级模式仅会提升必要的亲信战友等级") +
-                                                               "\n\n该模式不会始终匹配最高等级副本，而是遵循我们设定的稳定副本列表");
+                                    ImGuiComponents.HelpMarker(Loc.Get("MainTab.LevelingModeHelp", AutoDuty.Configuration.DutyModeEnum != DutyMode.Trust ?
+                                                                                                       string.Empty : Loc.Get("MainTab.LevelingModeHelpTrust")));
                                     ImGui.SameLine(0);
                                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                                     if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
                                         {
-                                            LevelingMode.None => "关闭",
-                                            _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(AutoDuty.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
+                                            LevelingMode.None => Loc.Get("MainTab.LevelingModes.None"),
+                                            _ => Loc.Get("MainTab.LevelingModes."+Plugin.LevelingModeEnum)
                                         }))
                                     {
-                                        if (ImGui.Selectable("关闭", Plugin.LevelingModeEnum == LevelingMode.None))
+                                        if (ImGui.Selectable(Loc.Get("MainTab.LevelingModes.None"), Plugin.LevelingModeEnum == LevelingMode.None))
                                         {
                                             Plugin.LevelingModeEnum = LevelingMode.None;
                                                 Configuration.Save();
                                         }
 
                                         LevelingMode autoLevelMode = (AutoDuty.Configuration.DutyModeEnum == DutyMode.Support ? LevelingMode.Support : LevelingMode.Trust_Group);
-                                        if (ImGui.Selectable($"{autoLevelMode.ToCustomString().Replace(AutoDuty.Configuration.DutyModeEnum.ToString(), null)} 自动".Trim(), Plugin.LevelingModeEnum == autoLevelMode))
+                                        if (ImGui.Selectable(Loc.Get("MainTab.LevelingModes."+autoLevelMode)+"##LevelingModeComboAuto", Plugin.LevelingModeEnum == autoLevelMode))
                                         {
                                             Plugin.LevelingModeEnum = autoLevelMode;
                                                 Configuration.Save();
@@ -366,7 +364,7 @@ namespace AutoDuty.Windows
                                         }
 
                                         if (AutoDuty.Configuration.DutyModeEnum == DutyMode.Trust)
-                                            if (ImGui.Selectable($"{LevelingMode.Trust_Solo.GetDescription().Replace(AutoDuty.Configuration.DutyModeEnum.ToString(), null)}".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
+                                            if (ImGui.Selectable(Loc.Get("MainTab.LevelingModes."+"Trust_Solo")+"##LevelingModeComboTrustGroup", Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
                                             {
                                                 Plugin.LevelingModeEnum = LevelingMode.Trust_Solo;
                                                     Configuration.Save();
@@ -382,11 +380,23 @@ namespace AutoDuty.Windows
                                 }
 
                                 if (AutoDuty.Configuration.DutyModeEnum == DutyMode.Support && levelingMode == LevelingMode.Support)
-                                    if (ImGui.Checkbox("到达等级后切换为亲信战友", ref AutoDuty.Configuration.PreferTrustOverSupportLeveling))
+                                    if (ImGui.Checkbox(Loc.Get("MainTab.PreferTrust"), ref AutoDuty.Configuration.PreferTrustOverSupportLeveling))
                                             Configuration.Save();
 
+                                if (Plugin.LevelingEnabled)
+                                {
+                                    bool experimentalEntries = AutoDuty.Configuration.LevelingListExperimentalEntries;
+                                    if (ImGui.Checkbox("Include Testing/Unstable Dungeons", ref experimentalEntries))
+                                    {
+                                        AutoDuty.Configuration.LevelingListExperimentalEntries = experimentalEntries;
+                                        Configuration.Save();
+                                    }
+
+                                    ImGuiEx.HelpMarker($"Adds more dungeons into the leveling list\nThese dungeons are currently in testing for reliability\nPlease report if you have issues with them");
+                                }
+
                                 if (AutoDuty.Configuration.DutyModeEnum == DutyMode.Squadron)
-                                    if (ImGui.Checkbox("Use lowest members", ref AutoDuty.Configuration.SquadronAssignLowestMembers))
+                                    if (ImGui.Checkbox(Loc.Get("MainTab.UseLowestMembers"), ref AutoDuty.Configuration.SquadronAssignLowestMembers))
                                             Configuration.Save();
 
                                 if (AutoDuty.Configuration.DutyModeEnum == DutyMode.Trust && Player.Available)
@@ -394,7 +404,7 @@ namespace AutoDuty.Windows
                                     ImGui.Separator();
                                     if (DutySelected is { Content.TrustMembers.Count: > 0 })
                                     {
-                                        ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined("选择你的亲信战友"));
+                                        ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined(Loc.Get("MainTab.SelectTrustParty")));
 
 
                                         TrustHelper.ResetTrustIfInvalid();
@@ -419,7 +429,7 @@ namespace AutoDuty.Windows
                                         if (DutySelected.Content.TrustMembers.Count == 7)
                                             ImGui.NextColumn();
 
-                                        if (ImGui.Button("刷新", new Vector2(ImGui.GetContentRegionAvail().X, 0)))
+                                        if (ImGui.Button(Loc.Get("MainTab.Refresh"), new Vector2(ImGui.GetContentRegionAvail().X, 0)))
                                         {
                                             if (InventoryHelper.CurrentItemLevel < 370)
                                                 Plugin.LevelingModeEnum = LevelingMode.None;
@@ -433,7 +443,7 @@ namespace AutoDuty.Windows
                                         ImGui.NextColumn();
                                         ImGui.Columns(1);
                                     }
-                                    else if (ImGui.Button("刷新亲信战友等级"))
+                                    else if (ImGui.Button(Loc.Get("MainTab.RefreshTrustLevels")))
                                     {
                                         if (InventoryHelper.CurrentItemLevel < 370)
                                             Plugin.LevelingModeEnum = LevelingMode.None;
@@ -450,10 +460,10 @@ namespace AutoDuty.Windows
 
                                 DrawSearchBar();
                                 ImGui.SameLine();
-                                if (ImGui.Checkbox("隐藏不可用副本", ref AutoDuty.Configuration.HideUnavailableDuties))
+                                if (ImGui.Checkbox(Loc.Get("MainTab.HideUnavailable"), ref AutoDuty.Configuration.HideUnavailableDuties))
                                         Configuration.Save();
                                 if (AutoDuty.Configuration.DutyModeEnum is DutyMode.Regular or DutyMode.Trial or DutyMode.Raid)
-                                    if (ImGuiEx.CheckboxWrapped("解除限制", ref AutoDuty.Configuration.Unsynced))
+                                    if (ImGuiEx.CheckboxWrapped(Loc.Get("MainTab.Unsynced"), ref AutoDuty.Configuration.Unsynced))
                                             Configuration.Save();
                             }
 
@@ -475,11 +485,11 @@ namespace AutoDuty.Windows
 
                     if (Player.Job.GetCombatRole() == CombatRole.NonCombat)
                     {
-                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "请切换到一个战斗职业来使用 AutoDuty");
+                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), Loc.Get("MainTab.SwitchCombatJob"));
                     }
                     else if (Player.Job == Job.BLU && AutoDuty.Configuration.DutyModeEnum is not (DutyMode.Regular or DutyMode.Trial or DutyMode.Raid))
                     {
-                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "青魔法师无法使用剧情辅助器、亲信战友、冒险者小队或多变迷宫\n请切换职业，或选择其他模式。");
+                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), Loc.Get("MainTab.BlueMageRestriction"));
                     }
                     else if (VNavmesh_IPCSubscriber.IsEnabled && BossMod_IPCSubscriber.IsEnabled)
                     {
@@ -493,17 +503,17 @@ namespace AutoDuty.Windows
                                             (Plugin.LevelingModeEnum.IsTrustLeveling() &&
                                              (ilvl < 370 || Plugin.currentPlayerItemLevelAndClassJob.Value != null && Plugin.currentPlayerItemLevelAndClassJob.Value != Player.Job)))
                                         {
-                                            Svc.Log.Debug($"您正处于一个不兼容的职业: {Player.Job.GetCombatRole()}, 或者您正处于亲信模式但装等({ilvl}) 小于 370, 或您的装等已变更, 正在禁用升级模式");
+                                            Svc.Log.Debug($"You are on a non-compatible job: {Player.Job.GetCombatRole()}, or your doing trust and your iLvl({ilvl}) is below 370, or your iLvl has changed, Disabling Leveling Mode");
                                             Plugin.LevelingModeEnum = LevelingMode.None;
                                         }
                                         else if (ilvl > 0 && ilvl != Plugin.currentPlayerItemLevelAndClassJob.Key)
                                         {
-                                            Svc.Log.Debug($"您的装等已更改，正在选择新任务。");
+                                            Svc.Log.Debug($"Your iLvl has changed, Selecting new Duty.");
                                             Plugin.CurrentTerritoryContent = LevelingHelper.SelectHighestLevelingRelevantDuty(Plugin.LevelingModeEnum);
                                         }
                                         else
                                         {
-                                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), $"Leveling Mode: 等级{Player.Level} (装等{ilvl})");
+                                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), Loc.Get("MainTab.LevelingModeStatus", Player.Level.ToString(), ilvl.ToString()));
                                             foreach ((Content Value, int Index) item in LevelingHelper.LevelingDuties.Select((value, index) => (Value: value, Index: index)))
                                             {
                                                 if (AutoDuty.Configuration.DutyModeEnum == DutyMode.Trust && !item.Value.DutyModes.HasFlag(DutyMode.Trust))
@@ -514,6 +524,13 @@ namespace AutoDuty.Windows
                                                     {
                                                         ImGuiEx.TextWrapped(item.Value == Plugin.CurrentTerritoryContent ? new Vector4(0, 1, 1, 1) : new Vector4(1, 1, 1, 1),
                                                                             $"L{item.Value.ClassJobLevelRequired} (i{item.Value.ItemLevelRequired}): {item.Value.EnglishName}");
+                                                        using (ImRaii.Enabled())
+                                                        {
+                                                            if (LevelingHelper.levelingListExperimental.Contains(item.Value.TerritoryType))
+                                                                ImGuiEx.HelpMarker("This dungeon is currently in testing for reliability.\nDo report any issues with it", symbolOverride: FontAwesomeIcon.ExclamationTriangle.ToIconString(), color: EzColor.Yellow);
+                                                            if (item.Value.TerritoryType == 1048u)
+                                                                ImGuiEx.HelpMarker("CutsceneSkip detected. Please keep it actually on.", symbolOverride: FontAwesomeIcon.ExclamationTriangle.ToIconString(), color: EzColor.Blue);
+                                                        }
                                                     }
                                             }
                                         }
@@ -548,7 +565,7 @@ namespace AutoDuty.Windows
                                         else
                                         {
                                             if (PlayerHelper.IsReady)
-                                                ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "请选择剧情辅助器、亲信战友、冒险者小队或常规模式中的一项\n以填充任务列表");
+                                                ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), Loc.Get("MainTab.SelectSupportTrust"));
                                         }
                                     }
 
@@ -582,9 +599,9 @@ namespace AutoDuty.Windows
                                             ImGui.PopItemWidth();
                                             ImGui.SameLine();
                                             ImGui.PushItemWidth(115f.Scale());
-                                            if (ImGui.BeginCombo($"##Playlist{i}GearsetSelection", entry.gearset != null ? gearsetModule->GetGearset(entry.gearset.Value)->NameString : "Current Gearset"))
+                                            if (ImGui.BeginCombo($"##Playlist{i}GearsetSelection", entry.gearset != null ? gearsetModule->GetGearset(entry.gearset.Value)->NameString : Loc.Get("MainTab.CurrentGearset")))
                                             {
-                                                if (ImGui.Selectable("Current Gearset", entry.gearset == null)) 
+                                                if (ImGui.Selectable(Loc.Get("MainTab.CurrentGearset"), entry.gearset == null)) 
                                                     entry.gearset = null;
 
                                                 for (int g = 0; g < gearsetModule->NumGearsets; g++)
@@ -593,7 +610,8 @@ namespace AutoDuty.Windows
                                                     if (((Job)gearset->ClassJob).GetCombatRole() == CombatRole.NonCombat)
                                                         continue;
 
-                                                    if (ImGui.Selectable(gearset->NameString, entry.gearset == gearset->Id)) entry.gearset = gearset->Id;
+                                                    if (ImGui.Selectable(gearset->NameString, entry.gearset == gearset->Id)) 
+                                                        entry.gearset = gearset->Id;
                                                 }
 
                                                 ImGui.EndCombo();
@@ -602,7 +620,7 @@ namespace AutoDuty.Windows
                                             ImGui.SameLine();
 
                                             ImGui.PushItemWidth(80f.Scale());
-                                            if (ImGui.BeginCombo($"##Playlist{i}DutyModeEnum", entry.DutyMode.GetDescription()))
+                                            if (ImGui.BeginCombo($"##Playlist{i}DutyModeEnum", Loc.Get($"MainTab.DutyModes.{entry.DutyMode}")))
                                             {
                                                 foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
                                                 {
@@ -611,7 +629,7 @@ namespace AutoDuty.Windows
 
                                                     using (ImRaii.PushColor(ImGuiCol.Text, ImGuiHelper.StateGoodColor, entryContent.DutyModes.HasFlag(mode)))
                                                     {
-                                                        if (ImGui.Selectable(mode.GetDescription(), entry.DutyMode == mode)) 
+                                                        if (ImGui.Selectable(Loc.Get($"MainTab.DutyModes.{mode}"), entry.DutyMode == mode)) 
                                                             entry.DutyMode = mode;
                                                     }
                                                 }
@@ -624,7 +642,18 @@ namespace AutoDuty.Windows
                                             ImGui.PushItemWidth((entryContainer.Paths.Count > 1 ? (ImGui.GetContentRegionAvail().X - 107f.Scale()) / 2f : ImGui.GetContentRegionAvail().X - 200f.Scale()));
                                             if (ImGui.BeginCombo($"##Playlist{i}DutySelection", $"({entry.Id}) {entryContent.Name}"))
                                             {
-                                                short level = PlayerHelper.GetCurrentLevelFromSheet();
+                                                Job?    entryJob  = null;
+                                                ushort? entryIlvl = null;
+                                                if(entry.gearset.HasValue)
+                                                {
+                                                    RaptureGearsetModule.GearsetEntry* gearset = gearsetModule->GetGearset((int)entry.gearset);
+                                                    entryJob = (Job)gearset->ClassJob;
+                                                    entryIlvl = (ushort) gearset->ItemLevel;
+                                                }
+
+
+                                                short level = PlayerHelper.GetCurrentLevelFromSheet(entryJob);
+                                                entryIlvl ??= InventoryHelper.CurrentItemLevel;
                                                 DrawSearchBar();
 
                                                 foreach (uint key in ContentPathsManager.DictionaryPaths.Keys)
@@ -634,7 +663,7 @@ namespace AutoDuty.Windows
                                                     if (!string.IsNullOrWhiteSpace(_searchText) && !(content.Name?.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ?? false))
                                                         continue;
 
-                                                    if (content.DutyModes.HasFlag(entry.DutyMode) && content.CanRun(level, entry.DutyMode))
+                                                    if (content.DutyModes.HasFlag(entry.DutyMode) && content.CanRun(level, entry.DutyMode, ilvl: entryIlvl))
                                                         if (ImGui.Selectable($"({key}) {content.Name}", entry.Id == key))
                                                             entry.Id = key;
                                                 }
@@ -699,14 +728,14 @@ namespace AutoDuty.Windows
                                     }
                             }
                         else
-                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "忙碌中...");
+                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), Loc.Get("MainTab.Busy"));
                     }
                     else
                     {
                         if (!VNavmesh_IPCSubscriber.IsEnabled)
-                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 vnavmesh 插件以实现正确的导航和移动。请添加第三方仓库：\nhttps://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json");
+                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), Loc.Get("MainTab.RequiresVNavmeshAlt"));
                         if (!BossMod_IPCSubscriber.IsEnabled)
-                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), "AutoDuty 需要安装并加载 BossMod 插件以正确处理机制。请添加第三方仓库：\nhttps://raw.githubusercontent.com/44451516/ffxiv_bossmod/CN/pluginmaster.json");
+                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), Loc.Get("MainTab.RequiresBossModAlt"));
                     }
                     ImGui.EndListBox();
                 }

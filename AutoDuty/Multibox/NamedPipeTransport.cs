@@ -2,7 +2,7 @@ using ECommons;
 using ECommons.DalamudServices;
 using System.IO.Pipes;
 
-namespace AutoDuty.Managers
+namespace AutoDuty.Multibox
 {
     using System;
     using System.Collections.Generic;
@@ -66,7 +66,8 @@ namespace AutoDuty.Managers
                                    }
                                }, cancellationToken: ct);
                 ct.ThrowIfCancellationRequested();
-                List<NamedPipeServerStream> closedPipes = this.usedPipes.Where(pipe => !pipe.IsConnected).ToList();
+                List<NamedPipeServerStream> closedPipes = [..this.usedPipes.Where(pipe => !pipe.IsConnected)];
+
                 closedPipes.Each(pipe =>
                                  {
                                      pipe.Dispose();
@@ -114,18 +115,13 @@ namespace AutoDuty.Managers
             return client;
         }
 
-        public void Dispose()
-        {
+        public void Dispose() => 
             this.StopServer();
-        }
 
-        private static void DebugLog(string message)
-        {
+        private static void DebugLog(string message) => 
             Svc.Log.Debug($"Pipe: {message}");
-        }
-        private static void ErrorLog(string message)
-        {
+
+        private static void ErrorLog(string message) => 
             Svc.Log.Error($"Pipe: {message}");
-        }
     }
 }

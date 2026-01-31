@@ -132,16 +132,19 @@ namespace AutoDuty.Helpers
 
             if (flagMapMarker != null && Svc.ClientState.TerritoryType == flagMapMarker.Value.TerritoryId && flagMapMarkerVector3 is { Y: 0 })
             {
-                flagMapMarkerVector3 = VNavmesh_IPCSubscriber.Query_Mesh_PointOnFloor(new Vector3(flagMapMarker.Value.XFloat, 1024, flagMapMarker.Value.YFloat), false, 5);
-                GotoHelper.ForceStop();
-                GotoHelper.Invoke(flagMapMarker.Value.TerritoryId, [flagMapMarkerVector3.Value], 0.25f, 0.25f, false, MovementHelper.IsFlyingSupported);
+                flagMapMarkerVector3 = VNavmesh_IPCSubscriber.Query_Mesh_PointOnFloor(new Vector3(flagMapMarker.Value.XFloat, 1024, flagMapMarker.Value.YFloat), false, 5f);
+                if (flagMapMarkerVector3 != null)
+                {
+                    GotoHelper.ForceStop();
+                    GotoHelper.Invoke(flagMapMarker.Value.TerritoryId, [flagMapMarkerVector3.Value], 0.25f, 0.25f, false, MovementHelper.IsFlyingSupported);
+                }
                 return;
             }
 
             if (GotoHelper.State == ActionState.Running)
                 return;
 
-            if (VNavmesh_IPCSubscriber.Path_IsRunning())
+            if (VNavmesh_IPCSubscriber.Path_IsRunning)
                 return;
 
             if (GenericHelpers.TryGetAddonByName("AreaMap", out AtkUnitBase* addonAreaMap) && GenericHelpers.IsAddonReady(addonAreaMap))

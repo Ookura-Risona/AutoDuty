@@ -11,6 +11,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -22,6 +23,7 @@
         "Z": 240.83484
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -35,6 +37,7 @@
       "Arguments": [
         "200"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -48,6 +51,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -61,6 +65,7 @@
       "Arguments": [
         "200"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -74,6 +79,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -87,6 +93,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -100,6 +107,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -111,6 +119,7 @@
         "Z": 109.65752
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -124,6 +133,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -137,10 +147,11 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "W2W",
+      "Tag": "None",
       "Name": "Wait",
       "Position": {
         "X": -86.571754,
@@ -150,6 +161,7 @@
       "Arguments": [
         "1500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -163,6 +175,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -176,6 +189,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -187,6 +201,7 @@
         "Z": 85.00366
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -200,6 +215,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -213,6 +229,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -224,6 +241,7 @@
         "Z": 6.986266
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -237,6 +255,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -250,6 +269,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -263,6 +283,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -276,6 +297,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -289,6 +311,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -302,6 +325,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -315,6 +339,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -328,6 +353,7 @@
       "Arguments": [
         "5000"
       ],
+      "Conditions": [],
       "Note": "Set agro before long run"
     },
     {
@@ -341,6 +367,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -354,6 +381,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -367,6 +395,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -378,6 +407,7 @@
         "Z": 81.31386
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -391,6 +421,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -402,6 +433,7 @@
         "Z": -2.5295131
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -415,6 +447,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -428,6 +461,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -441,6 +475,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -454,6 +489,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -467,6 +503,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -480,6 +517,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -493,6 +531,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -506,6 +545,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -519,6 +559,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -532,6 +573,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -545,6 +587,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -558,6 +601,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -571,6 +615,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -584,6 +629,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -597,6 +643,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -610,6 +657,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -623,6 +671,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -652,6 +701,10 @@
       {
         "Version": 239,
         "Change": "Moved the 5s delay slightly for the leg 2 pull 2"
+      },
+      {
+        "Version": 284,
+        "Change": "Adjusted arm 1 wait to happen on non W2W"
       }
     ],
     "Notes": []

@@ -1,0 +1,29 @@
+{
+  "MainWindow": {
+    "Tabs": {
+      "Main": "Main",
+      "Build": "Build",
+      "Paths": "Paths",
+      "Config": "Config",
+      "Info": "Info",
+      "Logs": "Logs",
+      "Stats": "Stats",
+      "Support": "Support AutoDuty"
+    },
+    "Goto": {
+      "Barracks": "Barracks",
+      "Inn": "Inn",
+      "GCSupply": "GCSupply",
+      "FlagMarker": "Flag Marker",
+      "SummoningBell": "Summoning Bell",
+      "Apartment": "Apartment",
+      "PersonalHome": "Personal Home",
+      "FCEstate": "FC Estate",
+      "TripleTriadTrader": "Triple Triad Trader"
+    },
+    "TT": {
+      "RegisterCards": "Register TT Cards",
+      "SellCards": "Sell TT Cards"
+    }
+  }
+}

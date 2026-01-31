@@ -1,0 +1,42 @@
+{
+  "LogTab": {
+    "AutoScroll": "Auto Scroll",
+    "ClearLog": "Clear log",
+    "CopyLog": "Copy entire log to clipboard",
+    "CreateIssue": "Create Issue",
+    "CreateIssueTooltip": "Click to open the Create Issue popup (after authenticating with github) to fill in the form and submit and issue to the Repo",
+    "FilterLogLevel": "Filter log event level",
+    "DebugLevelWarning": "AutoDuty can't change the log level dalamud uses. To see debug related things, you have to go in the dalamud log \"/xllog\" and set the appropriate level in the top left.",
+
+    "Auth": {
+      "PollingGithub": "Polling Github for User Authorization: {0}",
+      "WaitingResponse": "Waiting for Response from GitHub",
+      "ClickHere": "Click Here",
+      "ToCopy": " to Copy ",
+      "ToClipboard": " to the ClipBoard and:",
+      "OpenGithub": "Open GitHub",
+      "InBrowserPaste": " in your browser and Paste it"
+    },
+
+    "IssueForm": {
+      "Submitting": "Submitting Issue",
+      "Title": "Issue: Bug Report",
+      "AddTitle": "Add a title",
+      "DuplicateWarning": "Please make sure someone else hasn't reported the same bug by going to the issues page and searching for a similar issue. If you find a similar issue, please react to the initial post with a thumbs up to increase its priority.",
+      "WhatHappened": "What Happened?",
+      "WhatHappenedHelp": "Also, what did you expect to happen? Please put any screenshots you can share here as well.",
+      "ReproSteps": "Steps to reproduce the error",
+      "ReproStepsHelp": "List all of the steps we can take to reproduce this error.",
+      "Submit": "Submit Issue"
+    },
+
+    "LogLevels": {
+      "Verbose": "Verbose",
+      "Debug": "Debug",
+      "Information": "Information",
+      "Warning": "Warning",
+      "Error": "Error",
+      "Fatal": "Fatal"
+    }
+  }
+}

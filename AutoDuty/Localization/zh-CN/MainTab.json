@@ -1,0 +1,62 @@
+{
+    "MainTab":  {
+                    "TerminationNotice":  "注意：您已启用自动终止选项，可能会在未跑完时提前结束循环",
+                    "MeshLoading":  "{0} 网格导航：加载中...",
+                    "MeshLoadedPath":  "{0} 网格导航：已加载路径：{1}",
+                    "Loaded":  "已就绪",
+                    "NoPathFound":  "未找到脚本文件：\n{0}\n({1}.json)\n路径目录：\n{2}\n请从以下地址下载官方脚本库：\n{3}\n或在 Build 标签页中自行录制",
+                    "Error":  "错误",
+                    "ErrorNoPath":  "未找到 {0} {1} 的脚本路径",
+                    "LevelingModeHelp":  "练级模式会自动根据您的等级和装等，排队效率最高且最稳定的副本。\n{0}\n\n注意：为了求稳，它不一定会排当前能进的最高级副本。",
+                    "UseLowestMembers":  "优先使用等级最低的 NPC（练 NPC 等级用）",
+                    "LevelingModeStatus":  "当前练级状态：等级 {0} (装等 {1})",
+                    "Modes":  {
+                                  "Looping":  "单副本挂机 (Looping)",
+                                  "Playlist":  "任务列表模式 (Playlist)"
+                              },
+                    "DutyModes":  {
+                                      "Support":  "副本协助 (剧情 NPC)",
+                                      "Trust":  "亲信战友 (7.0 之前 NPC)",
+                                      "Squadron":  "冒险者分队 (军衔)",
+                                      "Regular":  "常规副本 (匹配/组队)",
+                                      "Trial":  "讨伐/歼灭战",
+                                      "Raid":  "大型任务 (Raid)",
+                                      "Variant":  "异闻/多变副本",
+                                      "None":  "关闭"
+                                  },
+                    "LevelingModes":  {
+                                          "Auto":  "自动排队",
+                                          "None":  "关闭"
+                                      },
+                    "SearchDuties":  "搜索副本...",
+                    "ClearSavedPath":  "清除已保存的路径",
+                    "None":  "关闭",
+                    "Start":  "启动",
+                    "Times":  "次",
+                    "RequiresVNavmesh":  "AutoDuty 需要安装并加载 VNavmesh 插件\\n请添加第三方仓库：\\nhttps://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json",
+                    "RequiresBossMod":  "AutoDuty 需要安装并加载 BossMod 插件以正确处理机制。请添加第三方仓库：\\nhttps://raw.githubusercontent.com/44451516/ffxiv_bossmod/CN/pluginmaster.json",
+                    "RequiresRotation":  "AutoDuty 需要安装并加载一个循环插件（Wrath Combo 、 Rotation Solver Reborn、AEAssist 或 BossMod AutoRotation 均可)",
+                    "SelectMode":  "选择模式: ",
+                    "Run":  "运行",
+                    "ErrorSelectVersion":  "你需要选择一个运行模式",
+                    "ErrorNotInParty":  "组队状态中无法使用剧情辅助器、冒险者小队与亲信战友模式",
+                    "ErrorGroupOf4":  "你需要组成四人小队",
+                    "ErrorPartyMakeup":  "你需要拥有正确的小队配置",
+                    "SelectDutyMode":  "选择运行模式: ",
+                    "SelectLevelingMode":  "选择练级模式: ",
+                    "LevelingModeHelpTrust":  "亲信练级模式会均衡提升您的亲信战友等级\n玩家练级模式仅会提升必要的亲信战友等级",
+                    "PreferTrust":  "到达等级后切换为亲信战友",
+                    "SelectTrustParty":  "选择你的亲信战友",
+                    "Refresh":  "刷新",
+                    "RefreshTrustLevels":  "刷新亲信战友等级",
+                    "HideUnavailable":  "隐藏不可用副本",
+                    "Unsynced":  "解除限制",
+                    "SwitchCombatJob":  "请切换到一个战斗职业来使用 AutoDuty",
+                    "BlueMageRestriction":  "青魔法师无法使用剧情辅助器、亲信战友、冒险者小队或多变迷宫\n请切换职业，或选择其他模式。",
+                    "SelectSupportTrust":  "请选择剧情辅助器、亲信战友、冒险者小队或常规模式中的一项\n以填充任务列表",
+                    "CurrentGearset":  "当前套装",
+                    "Busy":  "忙碌中...",
+                    "RequiresVNavmeshAlt":  "AutoDuty 需要安装并加载 vnavmesh 插件以实现正确的导航和移动。请添加第三方仓库：\nhttps://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json",
+                    "RequiresBossModAlt":  "AutoDuty 需要安装并加载 BossMod 插件以正确处理机制。请添加第三方仓库：\nhttps://raw.githubusercontent.com/44451516/ffxiv_bossmod/CN/pluginmaster.json"
+                }
+}

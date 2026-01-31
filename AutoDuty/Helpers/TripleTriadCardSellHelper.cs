@@ -67,25 +67,25 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) > 4 && PlayerHelper.IsReady && VNavmesh_IPCSubscriber.Nav_IsReady() && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() &&
-                VNavmesh_IPCSubscriber.Path_NumWaypoints()         == 0)
+            if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) > 4 && PlayerHelper.IsReady && VNavmesh_IPCSubscriber.Nav_IsReady && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress &&
+                VNavmesh_IPCSubscriber.Path_NumWaypoints == 0)
             {
                 Svc.Log.Debug("Setting Move to Triple Triad Card Trader");
                 MovementHelper.Move(TripleTriadCardVendorLocation, 0.25f, 4f);
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) > 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
+            else if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) > 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints > 0)
             {
                 Svc.Log.Debug("Moving to Triple Triad Card Trader");
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
+            else if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints > 0)
             {
                 Svc.Log.Debug("Stopping Path");
                 VNavmesh_IPCSubscriber.Path_Stop();
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0)
+            else if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints == 0)
             {
                 if (addonExchange == null || !GenericHelpers.IsAddonReady(addonExchange))
                 {

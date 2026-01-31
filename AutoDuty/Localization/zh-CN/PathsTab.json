@@ -1,0 +1,15 @@
+{
+    "PathsTab":  {
+                     "BrokenStatus":  "已损坏",
+                     "Separator":  " =\u003e ",
+                     "ClearJobSelection":  "清除此副本的职业选择",
+                     "Title":  "副本配置文件",
+                     "OpenFolder":  "打开文件夹",
+                     "OpenFile":  "打开文件",
+                     "DoNotOverwrite":  "禁用更新时覆盖",
+                     "ClearCachedJobs":  "清除所有缓存的类",
+                     "CollapseAll":  "折叠所有",
+                     "RevealAll":  "展开所有",
+                     "DownloadPaths":  "下载配置"
+                 }
+}

@@ -1,0 +1,28 @@
+{
+  "Overlay": {
+    "Button": {
+      "Goto": "Goto",
+      "TurnIn": "TurnIn",
+      "Desynth": "Desynth",
+      "Extract": "Extract",
+      "Repair": "Repair",
+      "Equip": "Equip",
+      "Coffers": "Coffers",
+      "TripleTriad": "Triple Triad"
+    },
+    "Tooltip": {
+      "TurnIn": "Click to Goto GC Turnin and Invoke AutoRetainer's GC Turnin",
+      "TurnInMissing": "GC Turnin Requires AutoRetainer plugin. Get @ https://love.puni.sh/ment.json",
+      "Desynth": "Click to Desynth all Items in Inventory",
+      "Extract": "Click to Extract Materia",
+      "ExtractMissing": "Materia Extraction requires having completed quest: Forging the Spirit",
+      "Repair": "Click to Repair",
+      "Equip": "Click to Equip Gear",
+      "Coffers": "Click to open coffers"
+    },
+    "Popup": {
+      "MissingPlugin": "Missing Plugin",
+      "MissingQuestCompletion": "Missing Quest Completion"
+    }
+  }
+}

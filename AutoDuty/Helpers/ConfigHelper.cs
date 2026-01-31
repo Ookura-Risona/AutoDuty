@@ -58,6 +58,37 @@ namespace AutoDuty.Helpers
 
         internal static bool ModifyConfig(string configName, params string[] configValues)
         {
+            switch (configName)
+            {
+                case "leveling" when configValues.Length < 1:
+                    Svc.Log.Info("Leveling Mode not set, correct usage: /autoduty cfg leveling LevelingModeEnum");
+                    return false;
+                case "leveling":
+                {
+                    if (!Enum.TryParse(configValues[0], true, out LevelingMode levelingMode))
+                    {
+                        Svc.Log.Info($"Argument must be a LevelingMode Type, you inputted {configValues[0]}. Valid values are {string.Join("|", Enum.GetValues<LevelingMode>().Select(lm => lm.ToString()))}");
+                        return false;
+                    }
+
+                    switch (levelingMode)
+                    {
+                        case LevelingMode.Support:
+                            Configuration.DutyModeEnum = DutyMode.Support;
+                            break;
+                        case LevelingMode.Trust_Group:
+                        case LevelingMode.Trust_Solo:
+                            Configuration.DutyModeEnum = DutyMode.Trust;
+                            break;
+                        case LevelingMode.None:
+                        default:
+                            break;
+                    }
+
+                    Plugin.LevelingModeEnum = levelingMode;
+                    return true;
+                }
+            }
 
             FieldInfo? field;
             if ((field = FindConfig(configName)) == null)

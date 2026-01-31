@@ -191,7 +191,7 @@
       },
       "arguments": [
         "ObjectDistanceToPoint;14619;-213.157,-28.100,34.952;\u003C;3",
-        "ModifyIndex;23"
+        "ModifyIndex;+9"
       ],
       "note": "Nanamo Ul Namo went forward"
     },
@@ -205,7 +205,7 @@
       },
       "arguments": [
         "ObjectDistanceToPoint;14619;-221.960,-29.000,48.698;\u003C;3",
-        "ModifyIndex;19"
+        "ModifyIndex;+4"
       ],
       "note": "Nanamo Ul Namo turned"
     },
@@ -231,7 +231,7 @@
         "Z": 0
       },
       "arguments": [
-        "15"
+        "-3"
       ],
       "note": ""
     },
@@ -281,7 +281,7 @@
         "Z": 0
       },
       "arguments": [
-        "26"
+        "+5"
       ],
       "note": ""
     },
@@ -347,15 +347,18 @@
       "note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
         "X": -293.30014,
-        "Y": -35,
+        "Y": -35.0,
         "Z": -8.484629
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [
+        "Combat"
+      ],
+      "Conditions": [],
+      "Note": ""
     },
     {
       "tag": "Treasure",
@@ -391,7 +394,7 @@
       },
       "arguments": [
         "ObjectData;2013130;IsTargetable;false",
-        "ModifyIndex;30"
+        "ModifyIndex;-1"
       ],
       "note": "Is Ore Sack targetable yet"
     },
@@ -479,22 +482,20 @@
       },
       "arguments": [],
       "note": ""
-    },
-    {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
-        "X": -335.1584,
-        "Y": -29.00006,
-        "Z": -172.51382
-      },
-      "arguments": [],
-      "note": ""
     }
   ],
   "meta": {
     "createdAt": 224,
-    "changelog": [],
+    "changelog": [
+      {
+        "Version": 285,
+        "Change": "Take out unneeded treasure step, add wait for combat at rejoin point."
+      },
+      {
+        "Version": 285,
+        "Change": "Change to relative indexes, I think there were some incorrect absolute because of added steps."
+      }
+    ],
     "notes": [ ]
   }
 }

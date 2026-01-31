@@ -88,6 +88,9 @@ namespace AutoDuty.Data
             return value.ToString().Replace("_", " ");
         }
 
+        public static string ToLocalizedString<T>(this T @enum) where T : Enum => 
+            string.Join(", ", @enum.ToString().Split(",").Select(flag => Managers.Loc.Get($"ConfigTab.Enums.{typeof(T).Name}.{flag.Trim()}")));
+
         public static bool StartsWithIgnoreCase(this string str, string strsw) => str.StartsWith(strsw, StringComparison.OrdinalIgnoreCase);
 
         public static string ToCustomString(this List<string> strings, string delimiter = ",")

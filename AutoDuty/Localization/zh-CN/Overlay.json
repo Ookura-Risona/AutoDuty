@@ -1,0 +1,28 @@
+{
+    "Overlay":  {
+                    "Button":  {
+                                   "Goto":  "前往",
+                                   "TurnIn":  "军票",
+                                   "Desynth":  "分解",
+                                   "Extract":  "精炼",
+                                   "Repair":  "修理",
+                                   "Equip":  "装备",
+                                   "Coffers":  "装备箱",
+                                   "TripleTriad":  "幻卡"
+                               },
+                    "Tooltip":  {
+                                    "Desynth":  "点击分解背包中的所有可分解物品",
+                                    "TurnIn":  "点击前往调用 AutoRetainer 进行军队筹备",
+                                    "TurnInMissing":  "军队筹备需要 AutoRetainer 插件。获取 @ https://raw.githubusercontent.com/Ookura-Risona/DalamudPlugins/main/pluginmaster.json",
+                                    "Extract":  "点击进行精炼",
+                                    "ExtractMissing":  "精炼需要完成任务: 情感培育之力",
+                                    "Repair":  "点击修理装备",
+                                    "Equip":  "点击装备装备",
+                                    "Coffers":  "点击开启装备箱"
+                                },
+                    "Popup":  {
+                                  "MissingPlugin":  "缺少插件",
+                                  "MissingQuestCompletion":  "缺少前置任务"
+                              }
+                }
+}

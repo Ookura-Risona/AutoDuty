@@ -1,4 +1,5 @@
 using AutoDuty.Helpers;
+using AutoDuty.Managers;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
@@ -105,7 +106,7 @@ public unsafe class Overlay : Window
                                     if (Plugin.Stage == 0)
                                     {
                                         if (!Plugin.states.HasFlag(PluginState.Navigating) && !Plugin.states.HasFlag(PluginState.Looping))
-                                            if (ImGui.Button("Start"))
+                                            if (ImGui.Button($"{Loc.Get("Common.Start")}###OverlayStart"))
                                             {
                                                 Plugin.LoadPath();
                                                 Plugin.Run(Svc.ClientState.TerritoryType);
@@ -147,7 +148,7 @@ public unsafe class Overlay : Window
                                         Configuration.Save();
                                     }
 
-                                    hideText = ImGui.IsItemHovered() ? "隐藏" : string.Empty;
+                                    hideText = ImGui.IsItemHovered() ? Loc.Get("Common.Hide") : string.Empty;
 
                                     ImGui.SameLine(0, 5);
 
@@ -175,7 +176,7 @@ public unsafe class Overlay : Window
                                         Configuration.Save();
                                     }
 
-                                    hideTextAction = ImGui.IsItemHovered() ? "隐藏" : "";
+                                    hideTextAction = ImGui.IsItemHovered() ? Loc.Get("Common.Hide") : "";
 
                                     ImGui.SameLine(0, 5);
                                     ImGui.TextColored(new Vector4(0, 255f, 0, 1), Plugin.action.Length > 40 ? Plugin.action[..37] + "..." : Plugin.action);

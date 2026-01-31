@@ -24,7 +24,7 @@ namespace AutoDuty.Helpers
             if (!Player.Available) 
                 return false;
 
-            if (!VNavmesh_IPCSubscriber.Path_IsRunning())
+            if (!VNavmesh_IPCSubscriber.Path_IsRunning)
             {
                 LastPositionUpdate = Environment.TickCount64;
             }

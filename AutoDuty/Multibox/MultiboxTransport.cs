@@ -1,4 +1,4 @@
-namespace AutoDuty.Managers
+namespace AutoDuty.Multibox
 {
     using System;
     using System.IO;

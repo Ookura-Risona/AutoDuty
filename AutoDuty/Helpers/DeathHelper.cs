@@ -12,9 +12,11 @@ namespace AutoDuty.Helpers
     using System;
     using Windows;
     using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+    using Multibox;
 
     internal static class DeathHelper
     {
+        public static  int             deathCount = 0;
         private static PlayerLifeState deathState = PlayerLifeState.Alive;
         internal static PlayerLifeState DeathState
         {
@@ -25,7 +27,7 @@ namespace AutoDuty.Helpers
                     return;
 
                 if(deathState != value)
-                    ConfigurationMain.MultiboxUtility.IsDead(value == PlayerLifeState.Dead);
+                    MultiboxUtility.IsDead(value == PlayerLifeState.Dead);
 
                 switch (value)
                 {
@@ -34,7 +36,8 @@ namespace AutoDuty.Helpers
                         if (value != deathState)
                         {
                             DebugLog("Player is Dead changing state to Dead");
-                            SchedulerHelper.ScheduleAction(nameof(OnDeath), OnDeath, 500, false); 
+                            SchedulerHelper.ScheduleAction(nameof(OnDeath), OnDeath, 500, false);
+                            deathCount++;
                         }
 
                         break;
@@ -65,7 +68,7 @@ namespace AutoDuty.Helpers
             Plugin.stopForCombat = true;
             Plugin.skipTreasureCoffer = true;
 
-            if (VNavmesh_IPCSubscriber.Path_IsRunning())
+            if (VNavmesh_IPCSubscriber.Path_IsRunning)
                 VNavmesh_IPCSubscriber.Path_Stop();
 
             if (Plugin.taskManager.IsBusy)
@@ -186,7 +189,7 @@ namespace AutoDuty.Helpers
         internal static void Stop()
         {
             Svc.Framework.Update -= OnRevive;
-            if (VNavmesh_IPCSubscriber.Path_IsRunning())
+            if (VNavmesh_IPCSubscriber.Path_IsRunning)
                 VNavmesh_IPCSubscriber.Path_Stop();
             BossMod_IPCSubscriber.SetMovement(true);
             Plugin.Stage = Stage.Idle;

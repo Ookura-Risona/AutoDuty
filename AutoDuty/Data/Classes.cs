@@ -12,6 +12,7 @@ namespace AutoDuty.Data
     using System.Linq;
     using Dalamud.Bindings.ImGui;
     using Dalamud.Game.ClientState.Objects.Types;
+    using ECommons.ExcelServices;
     using ECommons.ImGuiMethods;
     using FFXIVClientStructs.FFXIV.Client.Game.Object;
     using Helpers;
@@ -23,13 +24,13 @@ namespace AutoDuty.Data
     {
         public class LogMessage
         {
-            public string Message { get; set; } = string.Empty;
+            public string        Message       { get; set; } = string.Empty;
             public LogEventLevel LogEventLevel { get; set; }
         }
 
         public class Message
         {
-            public string Sender { get; set; } = string.Empty;
+            public string           Sender { get; set; } = string.Empty;
             public List<PathAction> Action { get; set; } = [];
         }
 
@@ -50,7 +51,7 @@ namespace AutoDuty.Data
             public uint              ContentType            { get; set; }
             public uint              ContentMemberType      { get; set; }
             public int               TrustIndex             { get; init; } = -1;
-            public bool              VariantContent         { get; set; } = false;
+            public bool              VariantContent         { get; set; }  = false;
             public int               VVDIndex               { get; init; } = -1;
             public int               GCArmyIndex            { get; init; } = -1;
             public bool              GCArmyContent          => this.GCArmyIndex >= 0;
@@ -68,10 +69,10 @@ namespace AutoDuty.Data
             public string          Name       { get; set; } = string.Empty;
             public TrustMemberName MemberName { get; set; }
 
-            public uint Level { get; set; }
-            public uint LevelCap { get; set; }
-            public uint LevelInit { get; set; }
-            public bool LevelIsSet { get; set; }
+            public uint Level       { get; set; }
+            public uint LevelCap    { get; set; }
+            public uint LevelInit   { get; set; }
+            public bool LevelIsSet  { get; set; }
             public uint UnlockQuest { get; init; }
 
             public bool Available => this.UnlockQuest <= 0 || QuestManager.IsQuestComplete(this.UnlockQuest);
@@ -84,61 +85,56 @@ namespace AutoDuty.Data
 
             public void SetLevel(uint level)
             {
-                if (level >= this.LevelInit-1)
+                if (level >= this.LevelInit - 1)
                 {
                     this.LevelIsSet = true;
-                    this.Level         = level;
+                    this.Level      = level;
                 }
             }
         }
 
+    #region PathFile
+
         public class PathFile
         {
-            [JsonPropertyName("actions")]
             public List<PathAction> Actions { get; set; } = [];
 
-            [JsonPropertyName("meta")]
             public PathFileMetaData Meta { get; set; } = new()
-            {
-                CreatedAt = Plugin.Version,
-                Changelog = [],
-                Notes = []
-            };
+                                                         {
+                                                             CreatedAt = Plugin.Version,
+                                                             Changelog = [],
+                                                             Notes     = []
+                                                         };
         }
 
         public class PathAction
         {
-            [JsonPropertyName("tag")]
             public ActionTag Tag { get; set; } = ActionTag.None;
 
-            [JsonPropertyName("name")]
             public string Name { get; set; } = string.Empty;
 
-            [JsonPropertyName("position")]
             public Vector3 Position { get; set; } = Vector3.Zero;
 
-            [JsonPropertyName("arguments")]
             public List<string> Arguments { get; set; } = [];
 
-            [JsonPropertyName("")]
             public List<PathActionCondition> Conditions { get; set; } = [];
 
-            [JsonPropertyName("note")]
             public string Note { get; set; } = string.Empty;
         }
 
-        #region PathActionConditions
+    #region PathActionConditions
+
         public abstract class PathActionCondition
         {
             public static readonly Dictionary<string, Func<object, object, bool>> operations = new()
-                                                                                                   {
-                                                                                                       { ">", (x,  y) => Convert.ToSingle(x) > Convert.ToSingle(y) },
-                                                                                                       { ">=", (x, y) => Convert.ToSingle(x) >= Convert.ToSingle(y) },
-                                                                                                       { "<", (x,  y) => Convert.ToSingle(x) < Convert.ToSingle(y) },
-                                                                                                       { "<=", (x, y) => Convert.ToSingle(x) <= Convert.ToSingle(y) },
-                                                                                                       { "==", (x, y) => x                   == y },
-                                                                                                       { "!=", (x, y) => x                   != y }
-                                                                                                   };
+                                                                                               {
+                                                                                                   { ">", (x,  y) => Convert.ToSingle(x) > Convert.ToSingle(y) },
+                                                                                                   { ">=", (x, y) => Convert.ToSingle(x) >= Convert.ToSingle(y) },
+                                                                                                   { "<", (x,  y) => Convert.ToSingle(x) < Convert.ToSingle(y) },
+                                                                                                   { "<=", (x, y) => Convert.ToSingle(x) <= Convert.ToSingle(y) },
+                                                                                                   { "==", (x, y) => x                   == y },
+                                                                                                   { "!=", (x, y) => x                   != y }
+                                                                                               };
 
             public abstract bool IsFulfilled();
             public abstract void DrawConfig();
@@ -146,7 +142,6 @@ namespace AutoDuty.Data
 
         public class PathActionConditionNot(PathActionCondition condition) : PathActionCondition
         {
-
             public required PathActionCondition condition = condition;
 
             public override bool IsFulfilled() => !this.condition.IsFulfilled();
@@ -158,11 +153,12 @@ namespace AutoDuty.Data
         {
             public const ConditionType TYPE = ConditionType.None;
 
-            public          JobWithRole job = JobWithRole.All;
-            public override bool        IsFulfilled() => 
+            public JobWithRole job = JobWithRole.All;
+
+            public override bool IsFulfilled() =>
                 this.job.HasJob(PlayerHelper.GetJob());
 
-            public override void        DrawConfig()  => 
+            public override void DrawConfig() =>
                 JobWithRoleHelper.DrawCategory(JobWithRole.All, ref this.job);
         }
 
@@ -238,6 +234,7 @@ namespace AutoDuty.Data
                         };
                     }
                 }
+
                 return false;
             }
 
@@ -288,7 +285,7 @@ namespace AutoDuty.Data
 
                     float offset = Vector3.Distance(originVec, targetVec);
 
-                    return operations.TryGetValue(this.operatorValue, out Func<object, object, bool>? operationFunc) && 
+                    return operations.TryGetValue(this.operatorValue, out Func<object, object, bool>? operationFunc) &&
                            operationFunc(offset, this.distance);
                 }
             }
@@ -296,7 +293,7 @@ namespace AutoDuty.Data
             public override void DrawConfig()
             {
                 ImGuiEx.EnumCombo("origin", ref this.origin);
-                
+
                 switch (this.origin)
                 {
                     case DistanceLocationTypes.Object:
@@ -321,10 +318,10 @@ namespace AutoDuty.Data
                     default:
                         break;
                 }
-                
+
 
                 ImGuiEx.EnumCombo("target", ref this.target);
-                
+
                 switch (this.target)
                 {
                     case DistanceLocationTypes.Object:
@@ -349,37 +346,37 @@ namespace AutoDuty.Data
                     default:
                         break;
                 }
-                
+
                 ImGuiEx.Combo("Operation", ref this.operatorValue, operations.Keys);
                 ImGui.SameLine();
                 ImGui.InputFloat("Distance", ref this.distance);
             }
         }
+
     #endregion
 
         public class PathFileMetaData
         {
-            [JsonPropertyName("createdAt")]
             public int CreatedAt { get; set; }
 
-            [JsonPropertyName("changelog")]
             public List<PathFileChangelogEntry> Changelog { get; set; } = [];
 
             [JsonIgnore]
             public int LastUpdatedVersion => this.Changelog.Count > 0 ? this.Changelog.Last().Version : this.CreatedAt;
 
-            [JsonPropertyName("notes")]
             public List<string> Notes { get; set; } = [];
         }
 
         public class PathFileChangelogEntry
         {
-            [JsonPropertyName("version")]
             public int Version { get; set; }
 
-            [JsonPropertyName("change")]
             public string Change { get; set; } = string.Empty;
         }
+
+    #endregion
+
+    #region github
 
         public class PollResponseClass
         {
@@ -453,19 +450,21 @@ namespace AutoDuty.Data
 
             private static List<string> ReadConfigFile()
             {
-                using FileStream fs = new(Plugin.configFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using FileStream   fs = new(Plugin.configFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 using StreamReader sr = new(fs);
-                string? x;
-                List<string> strings = [];
+                string?            x;
+                List<string>       strings = [];
                 while ((x = sr.ReadLine()) != null) strings.Add(x);
                 return strings;
             }
         }
 
+    #endregion
+
         [JsonObject(MemberSerialization.OptOut)]
         public class PlaylistEntry
         {
-            private uint id = 0;
+            private uint id;
 
             public uint Id
             {
@@ -485,19 +484,17 @@ namespace AutoDuty.Data
             [JsonIgnore]
             private Content? content;
 
-            public Content? Content => 
+            public Content? Content =>
                 this.content ??= this.id == 0 ? null : ContentHelper.DictionaryContent[this.id];
-
-            private DutyMode dutyMode;
 
             public DutyMode DutyMode
             {
-                get => this.dutyMode;
+                get;
                 set
                 {
-                    if (value != this.dutyMode && !(this.Content?.DutyModes.HasFlag(value) ?? false))
+                    if (value != field && !(this.Content?.DutyModes.HasFlag(value) ?? false))
                         this.Id = ContentPathsManager.DictionaryPaths.Keys.FirstOrDefault(key => ContentHelper.DictionaryContent[key].DutyModes.HasFlag(value));
-                    this.dutyMode = value;
+                    field = value;
                 }
             }
 
@@ -510,5 +507,7 @@ namespace AutoDuty.Data
 
             public bool unsynced;
         }
+
+        public readonly record struct DutyDataRecord(DateTime CompletionTime, TimeSpan Duration, uint TerritoryId, ulong CID, int ilvl, Job Job, int? Deaths);
     }
 }

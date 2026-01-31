@@ -1,0 +1,604 @@
+{
+  "Actions": [
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [],
+      "Note": "Wait for RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -3.832395,
+        "Y": -4.001427,
+        "Z": 235.11568
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -80.046,
+        "Y": -9.998411,
+        "Z": 212.97565
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -96.737564,
+        "Y": -10.2459345,
+        "Z": 214.3834
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -99.86,
+        "Y": -10.245935,
+        "Z": 189.25768
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -135.15195,
+        "Y": -9.643027,
+        "Z": 187.67593
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -137.27261,
+        "Y": -9.7061205,
+        "Z": 189.54294
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": -142.43811,
+        "Y": -10.494109,
+        "Z": 204.61743
+      },
+      "Arguments": [
+        "Combat"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -192.37419,
+        "Y": -10.99247,
+        "Z": 234.22612
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -191.6487,
+        "Y": -14.235626,
+        "Z": 204.54617
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -188.81757,
+        "Y": -14.958614,
+        "Z": 178.8203
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -212.73433,
+        "Y": -32.00006,
+        "Z": 92.49706
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -212.95665,
+        "Y": -29.000004,
+        "Z": 49.45182
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectDistanceToPoint;14619;-213.157,-28.100,34.952;<;3",
+        "ModifyIndex;+9"
+      ],
+      "Conditions": [],
+      "Note": "Nanamo Ul Namo went forward"
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectDistanceToPoint;14619;-221.960,-29.000,48.698;<;3",
+        "ModifyIndex;+4"
+      ],
+      "Conditions": [],
+      "Note": "Nanamo Ul Namo turned"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-3"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Split based on nanamo! -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -264.1557,
+        "Y": -35.00001,
+        "Z": 30.957745
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "Combat"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "+5"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Straight path -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -244.47842,
+        "Y": -35.0,
+        "Z": -12.598689
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "Combat"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": "<-- Paths rejoin -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -271.49033,
+        "Y": -35.0,
+        "Z": -9.258928
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": -293.30014,
+        "Y": -35.0,
+        "Z": -8.484629
+      },
+      "Arguments": [
+        "Combat"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -282.6113,
+        "Y": -29.0,
+        "Z": -33.746384
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -294.29532,
+        "Y": -29.0,
+        "Z": -45.109776
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;2013130;IsTargetable;false",
+        "ModifyIndex;-1"
+      ],
+      "Conditions": [],
+      "Note": "Is Ore Sack targetable yet"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -293.7991,
+        "Y": -29.0,
+        "Z": -34.571575
+      },
+      "Arguments": [
+        "2013130"
+      ],
+      "Conditions": [],
+      "Note": "Ore Sack"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -288.1328,
+        "Y": -28.99998,
+        "Z": -25.604975
+      },
+      "Arguments": [
+        "2013129"
+      ],
+      "Conditions": [],
+      "Note": "Ore Sack"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -289.0445,
+        "Y": -29.0,
+        "Z": -35.952015
+      },
+      "Arguments": [
+        "2013085"
+      ],
+      "Conditions": [],
+      "Note": "Stone Plinth"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -300.60208,
+        "Y": -29.0,
+        "Z": -36.07515
+      },
+      "Arguments": [
+        "2013086"
+      ],
+      "Conditions": [],
+      "Note": "Stone Plinth"
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": "Step on all the puffs"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -305.76016,
+        "Y": -28.99998,
+        "Z": -72.953
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -311.20447,
+        "Y": -28.99998,
+        "Z": -79.59083
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -307.3945,
+        "Y": -28.99998,
+        "Z": -86.87418
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -297.1045,
+        "Y": -28.99998,
+        "Z": -78.976006
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -293.2776,
+        "Y": -28.99998,
+        "Z": -70.81215
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -301.91345,
+        "Y": -28.99998,
+        "Z": -77.28339
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -334.9924,
+        "Y": -29.00006,
+        "Z": -129.95512
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -334.9924,
+        "Y": -29.00006,
+        "Z": -164.95512
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 285,
+    "Changelog": [],
+    "Notes": []
+  }
+}

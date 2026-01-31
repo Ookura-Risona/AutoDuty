@@ -138,7 +138,7 @@ namespace AutoDuty.Helpers
                 if (Svc.Condition[ConditionFlag.OccupiedSummoningBell])
                 {
                     this.DebugLog("Occupied");
-                    if (VNavmesh_IPCSubscriber.Path_IsRunning())
+                    if (VNavmesh_IPCSubscriber.Path_IsRunning)
                         VNavmesh_IPCSubscriber.Path_Stop();
                 }
                 else

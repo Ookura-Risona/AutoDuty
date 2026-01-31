@@ -1,0 +1,328 @@
+{
+  "Actions": [
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [],
+      "Note": "Wait for RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 14.657002,
+        "Y": -4.001427,
+        "Z": 235.13426
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 49.606167,
+        "Y": -18.390368,
+        "Z": 261.9526
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": "RP then mobs"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 76.07,
+        "Y": -20.9,
+        "Z": 295.76
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 90.57089,
+        "Y": -20.89223,
+        "Z": 292.21292
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 90.902245,
+        "Y": -20.89223,
+        "Z": 290.60065
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Bonus Coffer for nanamo path"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 142.48,
+        "Y": -18.0,
+        "Z": 254.17
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": "RP then mobs"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 183.14119,
+        "Y": -20.99999,
+        "Z": 163.01788
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 198.64122,
+        "Y": -0.83649063,
+        "Z": 89.779236
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 199.23715,
+        "Y": -0.83649075,
+        "Z": 93.99956
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [],
+      "Note": "Waiting for RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013133"
+      ],
+      "Conditions": [],
+      "Note": "Rusty Winch"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1"
+      ],
+      "Conditions": [],
+      "Note": "Right"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;2013133;IsTargetable;true",
+        "ModifyIndex;-3"
+      ],
+      "Conditions": [],
+      "Note": "BM doesnt like standing directly on the switch, so if it interrupted the selection try again"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 251.97,
+        "Y": -0.83,
+        "Z": 100.43
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 276.57,
+        "Y": 5.39,
+        "Z": 55.3
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 311.54,
+        "Y": 18.39,
+        "Z": -11.32
+      },
+      "Arguments": [
+        "25000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 318.40204,
+        "Y": 18.385698,
+        "Z": -17.205706
+      },
+      "Arguments": [
+        "2013135"
+      ],
+      "Conditions": [],
+      "Note": "Myrrh Incense Burner"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 289.05,
+        "Y": 32.999996,
+        "Z": -95.77
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013136"
+      ],
+      "Conditions": [],
+      "Note": "Fallen Hero's Sarcophagus"
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 288.87482,
+        "Y": 32.999996,
+        "Z": -114.85513
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 285,
+    "Changelog": [],
+    "Notes": [
+      "Requires BMR Rotation to solve drake puzzle"
+    ]
+  }
+}

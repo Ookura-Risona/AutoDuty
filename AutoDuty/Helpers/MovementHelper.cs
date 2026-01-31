@@ -66,12 +66,12 @@ namespace AutoDuty.Helpers
                     ActionManager.Instance()->UseAction(ActionType.Action, 7557);
             }
 
-            if (VNavmesh_IPCSubscriber.Path_NumWaypoints() == 1)
+            if (VNavmesh_IPCSubscriber.Path_NumWaypoints == 1)
                 VNavmesh_IPCSubscriber.Path_SetTolerance(lastPointTollerance);
 
             if (!useMesh)
             {
-                if (!VNavmesh_IPCSubscriber.Path_IsRunning())
+                if (!VNavmesh_IPCSubscriber.Path_IsRunning)
                 {
                     Chat.ExecuteCommand("/automove off");
                     VNavmesh_IPCSubscriber.Path_MoveTo([position], fly);
@@ -80,10 +80,10 @@ namespace AutoDuty.Helpers
                 return false;
             }
 
-            if (!PlayerHelper.IsReady || !VNavmesh_IPCSubscriber.Nav_IsReady() || VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() || VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
+            if (!PlayerHelper.IsReady || !VNavmesh_IPCSubscriber.Nav_IsReady || VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress || VNavmesh_IPCSubscriber.Path_NumWaypoints > 0)
                 return false;
 
-            if (!VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() || VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0)
+            if (!VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress || VNavmesh_IPCSubscriber.Path_NumWaypoints == 0)
             {
                 Chat.ExecuteCommand("/automove off");
                 VNavmesh_IPCSubscriber.Path_SetTolerance(tollerance);

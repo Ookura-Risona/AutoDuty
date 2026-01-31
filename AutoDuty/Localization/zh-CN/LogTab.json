@@ -1,0 +1,39 @@
+{
+    "LogTab":  {
+                   "DebugLevelWarning":  "AutoDuty 无法更改 Dalamud 的日志级别。若要查看调试相关信息，请输入 \"/xllog\" 打开 Dalamud 日志窗口，并在左上角设置相应的级别。",
+                   "Auth":  {
+                                "PollingGithub":  "正在轮询 GitHub 用户授权：{0}",
+                                "WaitingResponse":  "等待 GitHub 响应",
+                                "ClickHere":  "点击此处",
+                                "ToCopy":  " 复制 ",
+                                "ToClipboard":  " 到剪贴板，然后：",
+                                "OpenGithub":  "打开 GitHub",
+                                "InBrowserPaste":  " 在浏览器中粘贴"
+                            },
+                   "IssueForm":  {
+                                     "Submitting":  "正在提交 Issue",
+                                     "Title":  "Issue：Bug 报告",
+                                     "AddTitle":  "添加标题",
+                                     "DuplicateWarning":  "请先前往 Issues 页面搜索，确保没有人报告过相同的 Bug。如果找到类似的 Issue，请在初始帖子上点赞以提高其优先级。",
+                                     "WhatHappened":  "发生了什么？",
+                                     "WhatHappenedHelp":  "另外，您期望发生什么？请在此处附上您可以分享的任何截图。",
+                                     "ReproSteps":  "重现错误的步骤",
+                                     "ReproStepsHelp":  "列出我们可以重现此错误的所有步骤。",
+                                     "Submit":  "提交 Issue"
+                                 },
+                   "LogLevels":  {
+                                     "Verbose":  "详细 (Verbose)",
+                                     "Debug":  "调试 (Debug)",
+                                     "Information":  "信息 (Info)",
+                                     "Warning":  "警告 (Warn)",
+                                     "Error":  "错误 (Error)",
+                                     "Fatal":  "致命 (Fatal)"
+                                 },
+                   "AutoScroll":  "自动滚动",
+                   "ClearLog":  "清除日志",
+                   "CopyLog":  "复制完整日志",
+                   "CreateIssue":  "创建问题",
+                   "CreateIssueTooltip":  "点击以打开创建问题的弹出窗口（在 GitHub 认证后），填写表单并提交问题至仓库",
+                   "FilterLogLevel":  "筛选日志事件级别"
+               }
+}

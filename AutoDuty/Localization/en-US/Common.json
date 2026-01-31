@@ -1,0 +1,22 @@
+{
+  "Common": {
+    "Start": "Start",
+    "Stop": "Stop",
+    "Pause": "Pause",
+    "Resume": "Resume",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Close": "Close",
+    "Hide": "Hide",
+    "Refresh": "Refresh",
+    "Add": "Add",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "Copy": "Copy",
+    "Clear": "Clear",
+    "Open": "Open",
+    "Load": "Load",
+    "Run": "Run",
+    "Build": "Build"
+  }
+}

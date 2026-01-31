@@ -125,24 +125,24 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) > 4 && PlayerHelper.IsReady && VNavmesh_IPCSubscriber.Nav_IsReady() && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() && VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0)
+            if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) > 4 && PlayerHelper.IsReady && VNavmesh_IPCSubscriber.Nav_IsReady && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress && VNavmesh_IPCSubscriber.Path_NumWaypoints == 0)
             {
                 this.DebugLog("Setting Move to Personnel Officer");
                 MovementHelper.Move(GCSupplyLocation, 0.25f, 4f);
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) > 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
+            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) > 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints > 0)
             {
                 this.DebugLog("Moving to Personnel Officer");
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() > 0)
+            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints > 0)
             {
                 this.DebugLog("Stopping Path");
                 VNavmesh_IPCSubscriber.Path_Stop();
                 return;
             }
-            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0 && !this.turninStarted)
+            else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints == 0 && !this.turninStarted)
             {
                 /*
                 if (_personnelOfficerGameObject == null)

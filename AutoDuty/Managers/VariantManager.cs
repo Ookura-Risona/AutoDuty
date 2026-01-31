@@ -29,9 +29,11 @@ namespace AutoDuty.Managers
             _taskManager.Enqueue((Action) (() => GenericHelpers.TryGetAddonByName("VVDFinder", out addon)),                            "RegisterVariantDuty");
             _taskManager.Enqueue(() => { if (addon == null) OpenVVD(); },                                                            "RegisterVariantDuty");
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("VVDFinder", out addon) && GenericHelpers.IsAddonReady(addon), "RegisterVariantDuty");
-            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 12, content.VVDIndex+1),                                  "RegisterVariantDuty");
+            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 13, content.VVDIndex+1),                                  "RegisterVariantDuty");
             _taskManager.EnqueueDelay(500);
-            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 11, 1), "RegisterVariantDuty");
+            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 12, 1), "RegisterVariantDuty");
+            _taskManager.EnqueueDelay(500);
+            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 4, 0), "RegisterVariantDuty");
             _taskManager.EnqueueDelay(500);
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("SelectYesno", out yesno) && GenericHelpers.IsAddonReady(yesno), "RegisterVariantDuty");
             _taskManager.Enqueue(() => AddonHelper.FireCallBack(yesno, true, 0, 1), "RegisterVariantDuty");

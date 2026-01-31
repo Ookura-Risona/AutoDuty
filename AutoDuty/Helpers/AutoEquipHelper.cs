@@ -238,7 +238,7 @@ namespace AutoDuty.Helpers
                     this._statesExecuted = AutoEquipState.Updating_Gearset;
                     break;
                 case AutoEquipState.Updating_Gearset:
-                    if(!Stylist_IPCSubscriber.IsBusy())
+                    if(!Stylist_IPCSubscriber.IsBusy)
                         this.Stop();
                     break;
                 case AutoEquipState.Getting_Recommended_Gear:

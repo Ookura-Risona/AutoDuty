@@ -69,11 +69,12 @@ namespace AutoDuty.Helpers
             else if (GenericHelpers.TryGetAddonByName("SalvageDialog", out AtkUnitBase* addonSalvageDialog) && GenericHelpers.IsAddonReady(addonSalvageDialog))
             {
                 this.DebugLog("Confirming SalvageDialog");
+                AddonHelper.FireCallBack(addonSalvageDialog, true, 15, Configuration.AutoDesynthNQOnly);
                 AddonHelper.FireCallBack(addonSalvageDialog, true, 0, false);
                 return;
             }
 
-            if (!GenericHelpers.TryGetAddonByName<AddonSalvageItemSelector>("SalvageItemSelector", out AddonSalvageItemSelector* addonSalvageItemSelector))
+            if (!GenericHelpers.TryGetAddonByName("SalvageItemSelector", out AddonSalvageItemSelector* addonSalvageItemSelector))
             {
                 AgentSalvage.Instance()->AgentInterface.Show();
                 EzThrottler.Throttle("Desynth", 2000, true);
@@ -99,13 +100,15 @@ namespace AutoDuty.Helpers
                         InventoryItem* inventoryItem = InventoryManager.Instance()->GetInventorySlot(item.InventoryType, (int)item.InventorySlot);
                         uint            itemId        = inventoryItem->ItemId;
                             
-                        if (itemId == 10146) continue;
+                        if (itemId == 10146) 
+                            continue;
 
                         Item? itemSheetRow = Svc.Data.Excel.GetSheet<Item>()?.GetRow(itemId);
                         uint? itemLevel    = itemSheetRow?.LevelItem.ValueNullable?.RowId;
-                        float   desynthLevel = PlayerHelper.GetDesynthLevel(item.ClassJob);
+                        float desynthLevel = PlayerHelper.GetDesynthLevel(item.ClassJob);
 
-                        if (itemLevel == null || itemSheetRow == null || desynthLevel <= 0) continue;
+                        if (itemLevel == null || itemSheetRow == null || desynthLevel <= 0) 
+                            continue;
 
                         if (!Configuration.AutoDesynthSkillUp || (desynthLevel < itemLevel + Configuration.AutoDesynthSkillUpLimit && desynthLevel < this._maxDesynthLevel))
                         {

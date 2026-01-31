@@ -242,18 +242,22 @@ namespace AutoDuty.Managers
         }
 
         private bool autoManageRotationPluginState = false;
-        public void Rotation(PathAction action)
+        public  void Rotation(PathAction action) => 
+            this.Rotation(action.Arguments[0].Equals("on", StringComparison.InvariantCultureIgnoreCase));
+
+        public void Rotation(bool on)
         {
-            if (action.Arguments[0].Equals("off", StringComparison.InvariantCultureIgnoreCase))
+            if (!on)
             {
                 if (Configuration.AutoManageRotationPluginState)
                 {
-                    this.autoManageRotationPluginState = true;
+                    this.autoManageRotationPluginState          = true;
                     Configuration.AutoManageRotationPluginState = false;
                 }
+
                 Plugin.SetRotationPluginSettings(false, true);
             }
-            else if (action.Arguments[0].Equals("on", StringComparison.InvariantCultureIgnoreCase))
+            else
             {
                 if (this.autoManageRotationPluginState)
                     Configuration.AutoManageRotationPluginState = true;
@@ -477,7 +481,7 @@ namespace AutoDuty.Managers
 
         private bool TargetCheck(IGameObject? gameObject)
         {
-            if (gameObject is not { IsTargetable: not true } || gameObject.IsValid() || Svc.Targets.Target == gameObject)
+            if (gameObject is not { IsTargetable: true } || !gameObject.IsValid() || (Svc.Targets.Target?.Equals(gameObject) ?? false))
                 return true;
 
             if (EzThrottler.Check("TargetCheck"))
@@ -496,7 +500,7 @@ namespace AutoDuty.Managers
             Plugin.action = $"Target: {objectDataId}";
 
             taskManager.Enqueue(() => TryGetObjectByDataId(uint.Parse(objectDataId), out gameObject), "Target-GetGameObject");
-            taskManager.Enqueue(() => this.TargetCheck(gameObject),                                      "Target-Check");
+            taskManager.Enqueue(() => this.TargetCheck(gameObject),                                   "Target-Check");
             taskManager.Enqueue(() => Plugin.action = "");
         }
 
@@ -538,7 +542,7 @@ namespace AutoDuty.Managers
                 else
                 {
                     Svc.Log.Debug($"InteractableCheck: Interacting with {gameObject!.Name} at {gameObject.Position} which is {GetDistanceToPlayer(gameObject)} away, because game object is not null: {gameObject != null} and IsTargetable: {gameObject!.IsTargetable} and IsValid: {gameObject.IsValid()}");
-                    if (VNavmesh_IPCSubscriber.Path_IsRunning())
+                    if (VNavmesh_IPCSubscriber.Path_IsRunning)
                         VNavmesh_IPCSubscriber.Path_Stop();
                     InteractWithObject(gameObject);
                 };

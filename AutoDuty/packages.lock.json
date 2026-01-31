@@ -16,15 +16,21 @@
       },
       "Pictomancy": {
         "type": "Direct",
-        "requested": "[0.0.2, )",
-        "resolved": "0.0.2",
-        "contentHash": "th7LcwtMgGWbhfZu7cyKYQKIOpRHzC/O9YvbWy5FSEs0zs1rgC/jgFg1MuX6F4XireR3XJgmg+RcHY+TCKBpsw==",
+        "requested": "[0.0.*, )",
+        "resolved": "0.0.5",
+        "contentHash": "7ZcXLnw8oD6Crw4AqwXpoE7CE5w1zMjz8ok7gvq+lRqo2ehPoTP9qnImzcjI4cHRNOMNaeAuq2LFUuP6ty837g==",
         "dependencies": {
           "SharpDX.D3DCompiler": "4.2.0",
           "SharpDX.Direct2D1": "4.2.0",
           "SharpDX.Direct3D11": "4.2.0",
           "SharpDX.Mathematics": "4.2.0"
         }
+      },
+      "WrathCombo.API": {
+        "type": "Direct",
+        "requested": "[0.5.2, )",
+        "resolved": "0.5.2",
+        "contentHash": "O8nlZah+j8v0IGPkZbpdzP/YDG3tjySby+Lo7HvDQPa9G5Vtu/qkonSCdHTqYwTDXxnH3ZseVJbDr8ZAOsA4zw=="
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
@@ -96,6 +102,18 @@
       },
       "ecommons": {
         "type": "Project"
+      },
+      "ecommons.ipc": {
+        "type": "Project",
+        "dependencies": {
+          "ECommons": "[3.1.0.1, )"
+        }
+      },
+      "nightmareui": {
+        "type": "Project",
+        "dependencies": {
+          "ECommons": "[3.1.0.20, )"
+        }
       }
     }
   }

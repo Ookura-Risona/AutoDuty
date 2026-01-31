@@ -161,7 +161,7 @@ namespace AutoDuty.Helpers
                                                   ThenBy(content => content.Value.TerritoryType).ToDictionary();
         }
 
-        public static bool CanRun(this Content content, short level = -1, DutyMode mode = DutyMode.None, bool trustCheckLevels = true, bool? unsync = null)
+        public static bool CanRun(this Content content, short level = -1, DutyMode mode = DutyMode.None, bool trustCheckLevels = true, bool? unsync = null, uint? ilvl = null)
         {
             if ((Player.Available ? Player.Job.GetCombatRole() : CombatRole.NonCombat) == CombatRole.NonCombat)
                 return false;
@@ -185,7 +185,8 @@ namespace AutoDuty.Helpers
                 !ContentPathsManager.DictionaryPaths.ContainsKey(content.TerritoryType))
                 return false;
             
-            if (!unsync.Value && content.ItemLevelRequired > InventoryHelper.CurrentItemLevel)
+            ilvl ??= InventoryHelper.CurrentItemLevel;
+            if (!unsync.Value && content.ItemLevelRequired > ilvl)
                 return false;
 
             if (mode.HasFlag(DutyMode.Trust))

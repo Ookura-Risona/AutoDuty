@@ -1,0 +1,30 @@
+{
+  "InfoTab": {
+    "Title": "Info",
+    "SetupGuideIntro": "For assistance with general setup for both AutoDuty and it's dependencies, be sure to check out the setup guide below for more information:",
+    "InformationAndSetup": "Information and Setup",
+    "PathStatusInfo": "The above guide also has information on the status of each path, such as Path maturity, module maturity, and general consistency of each path. You can also review additional notes or considerations, that may need to be made on your part for successful looping. For requests, issues, or contributions to AD, please use the AutoDuty Github to open an issue:",
+    "GitHubIssues": "GitHub Issues",
+    "DiscordInvite": "For everything else, join the discord!",
+    "PunishDiscord": "Punish Discord",
+    "Install": "Install",
+    "RequiredPlugins": "Required Plugins",
+    "CombatPlugins": "Combat Plugins",
+    "CombatPluginsNote": "Hotly debated, pick your favorite. You can configure it in the config",
+    "RecommendedPlugins": "Recommended Plugins",
+    "PluginDesc": {
+      "BossModFights": "handles boss fights for you",
+      "VNavMovement": "can move you around",
+      "BossModRotations": "has integrated rotations",
+      "WrathCombo": "Puni.sh's dedicated rotation plugin",
+      "RotationSolverReborn": "Reborn's rotation plugin",
+      "AntiAFK": "keeps you from being marked as afk",
+      "AutoRetainer": "can be triggered, does GC delivery and discarding",
+      "Avarice": "is read for positionals",
+      "Lifestream": "incredibly extensive teleporting",
+      "Pandora": "chest looting + tankstance",
+      "Gearsetter": "recommend items to equip",
+      "Stylist": "recommend items to equip"
+    }
+  }
+}

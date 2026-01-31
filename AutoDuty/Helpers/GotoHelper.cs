@@ -81,7 +81,7 @@ namespace AutoDuty.Helpers
 
             if (GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno))
                 addonSelectYesno->Close(true);
-            if (VNavmesh_IPCSubscriber.IsEnabled && VNavmesh_IPCSubscriber.Path_IsRunning())
+            if (VNavmesh_IPCSubscriber.IsEnabled && VNavmesh_IPCSubscriber.Path_IsRunning)
                 VNavmesh_IPCSubscriber.Path_Stop();
         }
 
@@ -111,7 +111,7 @@ namespace AutoDuty.Helpers
             if (!Player.Available)
                 return;
 
-            if (!PlayerHelper.IsValid || PlayerHelper.IsCasting || PlayerHelper.IsJumping || !VNavmesh_IPCSubscriber.Nav_IsReady())
+            if (!PlayerHelper.IsValid || PlayerHelper.IsCasting || PlayerHelper.IsJumping || !VNavmesh_IPCSubscriber.Nav_IsReady)
                 return;
 
             if (InDungeon)

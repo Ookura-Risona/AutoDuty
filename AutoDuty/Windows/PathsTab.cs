@@ -43,31 +43,31 @@ namespace AutoDuty.Windows
 
         internal static void Draw()
         {
-            if (MainWindow.CurrentTabName != "配置")
-                MainWindow.CurrentTabName = "配置";
-            ImGui.Text($"副本配置文件");
+            if (MainWindow.CurrentTabName != "Paths")
+                MainWindow.CurrentTabName = "Paths";
+            ImGui.Text(Loc.Get("PathsTab.Title"));
             ImGui.Spacing();
             ImGui.Separator();
             ImGui.Spacing();
-            if (ImGui.Button("打开文件夹"))
+            if (ImGui.Button(Loc.Get("PathsTab.OpenFolder")))
                 Process.Start("explorer.exe", Plugin.pathsDirectory.FullName);
 
             ImGui.SameLine();
             using (ImRaii.IEndObject? d = ImRaii.Disabled(_selectedDutyPath == null))
             {
-                if (ImGuiEx.ButtonWrapped("打开文件"))
+                if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.OpenFile")))
                     Process.Start("explorer", _selectedDutyPath?.FilePath ?? string.Empty);
             }
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0, 1, 1, 1));
-            if (ImGuiEx.CheckboxWrapped($"禁用更新时覆盖", ref _checked))
+            if (ImGuiEx.CheckboxWrapped(Loc.Get("PathsTab.DoNotOverwrite"), ref _checked))
                 CheckBoxOnChange();
 
             ImGui.PopStyleColor();
             ImGui.SameLine();
             using (ImRaii.Disabled(AutoDuty.Configuration.PathSelectionsByPath.All(kvp => kvp.Value?.Count != 0)))
             {
-                if (ImGuiEx.ButtonWrapped("清除所有缓存的类"))
+                if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.ClearCachedJobs")))
                 {
                     _selectedDutyPath = null;
                     AutoDuty.Configuration.PathSelectionsByPath.Clear();
@@ -76,13 +76,13 @@ namespace AutoDuty.Windows
             }
 
             bool anyHeaderOpen = headers.Values.Any(b => b);
-            if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "折叠所有" : "展开所有"))
+            if (ImGuiEx.ButtonWrapped(Loc.Get(anyHeaderOpen ? "PathsTab.CollapseAll" : "PathsTab.RevealAll")))
                 foreach (uint key in headers.Keys) 
                     headers[key] = !anyHeaderOpen;
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
-                if (ImGuiEx.ButtonWrapped("下载配置")) 
+                if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.DownloadPaths"))) 
                     Patcher.Patch(ImGui.IsMouseClicked(ImGuiMouseButton.Right));
             }
             bool showJobSelection = _selectedDutyPath is { container.Paths.Count: > 1 };
@@ -125,12 +125,12 @@ namespace AutoDuty.Windows
                             ImGui.BeginGroup();
                             ImGui.Indent(20);
 
-                            /*
-                            if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(container.id, out pathSelections))
+                            
+                            if (AutoDuty.Configuration.PathSelectionsByPath.TryGetValue(container.ID, out pathSelections))
                                 if (pathSelections != null)
                                     foreach ((string? path, JobWithRole jobs) in pathSelections)
-                                        ; //pathJobs[container.Paths.IndexOf(dp => dp.FileName.Equals(jobs))].Add(new Tuple<CombatRole, Job>(path.GetCombatRole(), path));
-                            */
+                                        ;//pathJobs[container.Paths.FindIndex(dp => dp.FileName.Equals(jobs))].Add(new Tuple<CombatRole, Job>(path.GetCombatRole(), path));
+                            
                         }
 
                         foreach (ContentPathsManager.DutyPath path in container.Paths)
@@ -153,7 +153,7 @@ namespace AutoDuty.Windows
                             if (path.PathFile == null)
                             {
                                 ImGui.SameLine(20);
-                                ImGui.TextColored(ImGuiHelper.StateBadColor, "BROKEN");
+                                ImGui.TextColored(ImGuiHelper.StateBadColor, Loc.Get("PathsTab.BrokenStatus"));
                                 return;
                             }
 
@@ -166,7 +166,7 @@ namespace AutoDuty.Windows
                             {
                                 ImGuiHelper.ColoredText(container.ColoredNameRegex, container.Content.Name!);
                                 ImGui.SameLine(0, 0);
-                                ImGui.Text(" => ");
+                                ImGui.Text(Loc.Get("PathsTab.Separator"));
                                 ImGui.SameLine(0, 0);
                             }
 
@@ -223,7 +223,7 @@ namespace AutoDuty.Windows
 
                 ImGui.Text(_selectedDutyPath.Name);
 
-                if (ImGui.Button("Clear job selection for this Duty"))
+                if (ImGui.Button(Loc.Get("PathsTab.ClearJobSelection")))
                 {
                     ImGui.EndChild();
                     ImGui.EndTable();

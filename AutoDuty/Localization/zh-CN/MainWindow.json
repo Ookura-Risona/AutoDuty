@@ -1,0 +1,29 @@
+{
+    "MainWindow":  {
+                       "Tabs":  {
+                                    "Stats":  "统计",
+                                    "Main":  "主界面",
+                                    "Build":  "创建",
+                                    "Paths":  "配置",
+                                    "Config":  "设置",
+                                    "Info":  "信息",
+                                    "Logs":  "日志",
+                                    "Support":  "支持AutoDuty"
+                                },
+                       "Goto":  {
+                                    "Barracks":  "军营",
+                                    "Inn":  "旅馆",
+                                    "GCSupply":  "军票提交",
+                                    "FlagMarker":  "旗标",
+                                    "SummoningBell":  "传唤铃",
+                                    "Apartment":  "公寓",
+                                    "PersonalHome":  "个人房屋",
+                                    "FCEstate":  "部队房屋",
+                                    "TripleTriadTrader":  "幻卡回收"
+                                },
+                       "TT":  {
+                                  "RegisterCards":  "使用幻卡",
+                                  "SellCards":  "出售幻卡"
+                              }
+                   }
+}

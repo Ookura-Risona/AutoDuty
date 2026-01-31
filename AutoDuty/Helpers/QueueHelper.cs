@@ -16,6 +16,7 @@ namespace AutoDuty.Helpers
     using Windows;
     using FFXIVClientStructs.Interop;
     using FFXIVClientStructs.STD;
+    using Multibox;
     using static Data.Classes;
 
     internal unsafe class QueueHelper : ActiveHelperBase<QueueHelper>
@@ -259,8 +260,8 @@ namespace AutoDuty.Helpers
                 Svc.Log.Debug("Queue Helper - All Conditions Met, Clicking Join");
                 AddonHelper.FireCallBack((AtkUnitBase*)this._addonContentsFinder, true, 12, 0);
 
-                if(ConfigurationMain.Instance is { MultiBox: true, host: true })
-                    ConfigurationMain.MultiboxUtility.Server.Queue();
+                if(MultiboxUtility.Config is { MultiBox: true, Host: true })
+                    MultiboxUtility.Server.Queue();
                 return;
             }
             Svc.Log.Debug("end");

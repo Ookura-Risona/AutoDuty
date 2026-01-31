@@ -1,0 +1,15 @@
+{
+  "PathsTab": {
+    "Title": "Path Files",
+    "OpenFolder": "Open Folder",
+    "OpenFile": "Open File",
+    "DoNotOverwrite": "Do not overwrite on update",
+    "ClearCachedJobs": "Clear all cached jobs",
+    "CollapseAll": "Collapse All",
+    "RevealAll": "Reveal All",
+    "DownloadPaths": "Download Paths",
+    "BrokenStatus": "BROKEN",
+    "Separator": " => ",
+    "ClearJobSelection": "Clear job selection for this Duty"
+  }
+}

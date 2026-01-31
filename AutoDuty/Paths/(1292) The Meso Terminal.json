@@ -11,6 +11,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -50,6 +53,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -63,6 +67,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -76,6 +81,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -89,6 +95,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -102,6 +109,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -113,6 +121,7 @@
         "Z": 0.0
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -124,6 +133,7 @@
         "Z": 40.84859
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -135,6 +145,7 @@
         "Z": 5.9204926
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": "Chirurgeon General"
     },
     {
@@ -146,6 +157,7 @@
         "Z": -25.19606
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -159,6 +171,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -170,6 +183,7 @@
         "Z": -40.984848
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -183,6 +197,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -196,6 +211,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -209,6 +225,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -222,6 +239,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -233,6 +251,7 @@
         "Z": -129.10977
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -246,6 +265,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -259,19 +279,7 @@
       "Arguments": [
         "true"
       ],
-      "Note": ""
-    },
-    {
-      "Tag": "W2W",
-      "Name": "Wait",
-      "Position": {
-        "X": 120.51746,
-        "Y": -490.94412,
-        "Z": -181.58107
-      },
-      "Arguments": [
-        "2500"
-      ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -285,6 +293,21 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "W2W",
+      "Name": "Wait",
+      "Position": {
+        "X": 120.51746,
+        "Y": -490.94412,
+        "Z": -181.58107
+      },
+      "Arguments": [
+        "2500"
+      ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -296,6 +319,7 @@
         "Z": -199.03227
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -307,6 +331,7 @@
         "Z": -194.35382
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -320,6 +345,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -331,6 +357,7 @@
         "Z": 0.0
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -342,6 +369,7 @@
         "Z": -228.66226
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -353,6 +381,7 @@
         "Z": -257.8255
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": "Headsman"
     },
     {
@@ -366,6 +395,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -379,6 +409,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -390,6 +421,7 @@
         "Z": -174.37683
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -403,6 +435,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -416,6 +449,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -427,6 +461,7 @@
         "Z": -151.62737
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -440,6 +475,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -453,6 +489,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -466,6 +503,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -479,6 +517,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -490,6 +529,7 @@
         "Z": 188.40088
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -501,6 +541,7 @@
         "Z": 193.27481
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -514,6 +555,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -525,6 +567,7 @@
         "Z": 181.98979
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -538,6 +581,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -549,6 +593,7 @@
         "Z": 0.0
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -560,6 +605,7 @@
         "Z": 133.51065
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -573,6 +619,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -586,6 +633,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -597,6 +645,7 @@
         "Z": -4.7156987
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": "Immortal Remains"
     }
   ],
@@ -606,6 +655,10 @@
       {
         "Version": 230,
         "Change": "Adjusted Wait in W2W pulls, and Revival points before b1 and b2"
+      },
+      {
+        "Version": 284,
+        "Change": "Adjusted 2nd pull in 2nd arm"
       }
     ],
     "Notes": []

@@ -1,0 +1,556 @@
+{
+  "Actions": [
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [],
+      "Note": "Wait for RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 5.2614465,
+        "Y": -4.001427,
+        "Z": 235.27774
+      },
+      "Arguments": [
+        "2000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 42.2387,
+        "Y": -3.9683437,
+        "Z": 169.68373
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 78.2508,
+        "Y": 4.9986506,
+        "Z": 117.308914
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013138"
+      ],
+      "Conditions": [],
+      "Note": "Cistern Switch"
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 71.66884,
+        "Y": 4.9986515,
+        "Z": 117.631836
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Bonus loot"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 59.182987,
+        "Y": 5.0683374,
+        "Z": 125.59448
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 45.16585,
+        "Y": -0.904763,
+        "Z": 71.12102
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 13.844495,
+        "Y": -0.93935883,
+        "Z": 70.04769
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013139"
+      ],
+      "Conditions": [],
+      "Note": "Bulkhead Handle"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "0"
+      ],
+      "Conditions": [],
+      "Note": "Left"
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -0.015602724,
+        "Y": -5.9604645E-07,
+        "Z": -9.438793
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 0.7411677,
+        "Y": 4.4999914,
+        "Z": -62.73351
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Mystery Fork... seems to be random"
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectDistanceToPoint;14619;<26.6,17.5,-78>;<;3",
+        "ModifyIndex;+5"
+      ],
+      "Conditions": [],
+      "Note": "nanamo went right"
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectDistanceToPoint;14619;<-21.4,4.5,-78.5>;<;3",
+        "ModifyIndex;+7"
+      ],
+      "Conditions": [],
+      "Note": "nanmo went left"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-3"
+      ],
+      "Conditions": [],
+      "Note": "Nanamo Ul Namo"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Right branch -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 38.99289,
+        "Y": 17.5,
+        "Z": -134.49448
+      },
+      "Arguments": [
+        "30000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "+8"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Left branch -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -7.291875,
+        "Y": 4.4999914,
+        "Z": -65.302414
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": "Manual pathing till the main room"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -19.802774,
+        "Y": 4.4999933,
+        "Z": -76.15175
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": "Seems to want to go through the closed route"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -19.071293,
+        "Y": 4.505678,
+        "Z": -93.78716
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -13.233755,
+        "Y": 5.8472214,
+        "Z": -104.85401
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.035683844,
+        "Y": 17.541199,
+        "Z": -129.90779
+      },
+      "Arguments": [
+        "30000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Rejoin -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.50927365,
+        "Y": 17.50003,
+        "Z": -165.97409
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -41.79403,
+        "Y": 17.500008,
+        "Z": -195.34148
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013142"
+      ],
+      "Conditions": [],
+      "Note": "Right Pan"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "3"
+      ],
+      "Conditions": [],
+      "Note": "Fruit"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013141"
+      ],
+      "Conditions": [],
+      "Note": "Left Pan"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "0"
+      ],
+      "Conditions": [],
+      "Note": "Helm"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013140"
+      ],
+      "Conditions": [],
+      "Note": "The Scales of Judgment"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -48.117176,
+        "Y": 18.499916,
+        "Z": -188.00513
+      },
+      "Arguments": [
+        "2013144"
+      ],
+      "Conditions": [],
+      "Note": "Antique Teleporter"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -98.95415,
+        "Y": 16.700033,
+        "Z": -225.94234
+      },
+      "Arguments": [
+        "20000"
+      ],
+      "Conditions": [],
+      "Note": "RP"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2013145"
+      ],
+      "Conditions": [],
+      "Note": "Statue of Nald"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -35.485104,
+        "Y": 21.0,
+        "Z": -251.84691
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -35.485104,
+        "Y": 21.0,
+        "Z": -279.84692
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 285,
+    "Changelog": [
+      {
+        "Version": 286,
+        "Change": "Add delay before scales puzzle"
+      }
+    ],
+    "Notes": []
+  }
+}

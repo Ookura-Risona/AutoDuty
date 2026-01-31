@@ -1544,6 +1544,7 @@ public static class ConfigTab
                                    RotationPlugin.BossMod => ExternalPlugin.BossMod,
                                    RotationPlugin.RotationSolverReborn => ExternalPlugin.RotationSolverReborn,
                                    RotationPlugin.WrathCombo => ExternalPlugin.WrathCombo,
+                                   RotationPlugin.AEAssist => ExternalPlugin.AEAssist,
                                    _ => throw new ArgumentOutOfRangeException()
                                }, "RotationPluginSelection", inline: true))
                         {

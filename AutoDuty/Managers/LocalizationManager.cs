@@ -144,7 +144,8 @@ internal static class LocalizationManager
         if (translation != null)
             return translation;
 
-        Svc.Log.Warning($"Missing translation key in {ConfigurationMain.Instance.Language}: {key}");
+        //缺一个key每帧Warning一次？认真的吗？
+        //Svc.Log.Warning($"Missing translation key in {ConfigurationMain.Instance.Language}: {key}");
 
         translation = BaseTranslation.GetTranslation(key);
 

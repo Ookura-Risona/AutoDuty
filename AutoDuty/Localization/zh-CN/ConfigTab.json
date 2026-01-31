@@ -63,8 +63,6 @@
                                    "UseReturnWhenStuck":  "卡住时使用返回",
                                    "DrawPathSteps":  "绘制 X 步",
                                    "W2W":  {
-                                               "Header":  "\u003e 全程拉怪 (W2W) 配置，可以拉两波小怪*高风险，除了防护职业 (T)容易暴毙* \u003c",
-                                               "TreatUnsyncAsW2W":  "将非同步视为 W2W",
                                                "TreatUnsyncAsW2WHelp":  "仅在路径步骤中带有 W2W 标签时有效"
                                            },
                                    "OverridePartyValidationHelp":  "AutoDuty 将在排队副本时忽略你的队伍配置\n此功能仅用于多开\n*不建议与其他玩家一起使用 AutoDuty，例如在日随中使用。",

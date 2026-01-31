@@ -10,6 +10,8 @@ using ECommons.DalamudServices;
 
 internal static class LocalizationManager
 {
+    private const string FORCED_LANGUAGE = "zh-CN";
+
     private record Translation
     {
         public string Language { get; init; }
@@ -89,7 +91,8 @@ internal static class LocalizationManager
 
     private static readonly Dictionary<string, Translation> translations = new();
 
-    private static Translation ActiveTranslation => translations[ConfigurationMain.Instance.Language];
+    private static Translation ActiveTranslation =>
+        translations.TryGetValue(FORCED_LANGUAGE, out Translation? forced) ? forced : translations[ConfigurationMain.Instance.Language];
     private static Translation BaseTranslation => translations[BASE_LANGUAGE];
 
     public const string BASE_LANGUAGE = "en-US";

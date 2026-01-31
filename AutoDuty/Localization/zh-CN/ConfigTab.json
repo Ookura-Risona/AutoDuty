@@ -195,8 +195,8 @@
                                           "KeepTerminationActive":  "执行后保留终止选项 "
                                       },
                       "Multiboxing":  {
-                                          "Header":  "多开同步 (Multiboxing)",
-                                          "ExperimentalWarning":  "⚠️ 极度实验性功能 (风险自负)",
+                                          "Header":  "多开同步",
+                                          "ExperimentalWarning":  "极度实验性功能",
                                           "Step1":  "准备：同大区启动 4 个客户端，开启 AD，保持无组队状态。",
                                           "Step2":  "主机：选定一个客户端作为“主机 (Host)”，它将指挥其他窗口。",
                                           "Step3":  "连接：选择通讯方式。单机多开推荐 [命名管道]，跨电脑多开请用 [TCP]。",
@@ -283,9 +283,9 @@
                                                  "Healers":  "治疗职业 (H)",
                                                  "DPS":  "输出职业 (DPS)",
                                                  "Melee":  "近战",
-                                                 "Striking":  "物理进攻/击打 (Striking)",
-                                                 "Maiming":  "物理进攻/斩击 (Maiming)",
-                                                 "Scouting":  "物理进攻/侦查 (Scouting)",
+                                                 "Striking":  "强袭",
+                                                 "Maiming":  "制敌",
+                                                 "Scouting":  "游击",
                                                  "Aiming":  "远敏",
                                                  "Casters":  "法系",
                                                  "Paladin":  "骑士",

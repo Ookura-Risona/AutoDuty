@@ -1,15 +1,15 @@
 {
     "MainTab":  {
-                    "TerminationNotice":  "注意：您已启用自动终止选项，可能会在未跑完时提前结束循环",
-                    "MeshLoading":  "{0} 网格导航：加载中...",
-                    "MeshLoadedPath":  "{0} 网格导航：已加载路径：{1}",
+                    "TerminationNotice":  "注意：您已启用自动终止选项，可能会提前结束循环",
+                    "MeshLoading":  "{0} 导航：加载中...",
+                    "MeshLoadedPath":  "{0} 导航：已加载路径：{1}",
                     "Loaded":  "已就绪",
                     "NoPathFound":  "未找到脚本文件：\n{0}\n({1}.json)\n路径目录：\n{2}\n请从以下地址下载官方脚本库：\n{3}\n或在 Build 标签页中自行录制",
                     "Error":  "错误",
                     "ErrorNoPath":  "未找到 {0} {1} 的脚本路径",
-                    "LevelingModeHelp":  "练级模式会自动根据您的等级和装等，排队效率最高且最稳定的副本。\n{0}\n\n注意：为了求稳，它不一定会排当前能进的最高级副本。",
-                    "UseLowestMembers":  "优先使用等级最低的 NPC（练 NPC 等级用）",
-                    "LevelingModeStatus":  "当前练级状态：等级 {0} (装等 {1})",
+                    "LevelingModeHelp":  "练级模式会自动根据您的等级和装等，排队效率最高且最稳定的副本。\n{0}\n\n注意：它不一定会排当前能进的最高级副本。",
+                    "UseLowestMembers":  "优先使用等级最低的亲信",
+                    "LevelingModeStatus":  "当前状态：等级 {0} (装等 {1})",
                     "Modes":  {
                                   "Looping":  "循环",
                                   "Playlist":  "自定义队列"

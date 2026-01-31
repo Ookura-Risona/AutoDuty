@@ -3,7 +3,7 @@
                      "BuildPath":  "构建路径: ({0}) {1}",
                      "Changelog":  "更新日志:",
                      "JsonExtension":  ".json",
-                     "AddPos":  "添加坐标 (Add POS)",
+                     "AddPos":  "添加坐标",
                      "AddPosTooltip":  "添加一个移动步骤到路径，AutoDuty 将移动到指定位置",
                      "AddAction":  "添加动作 (Add Action)",
                      "AddActionTooltip":  "打开添加动作弹窗菜单，向路径添加动作步骤",

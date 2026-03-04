@@ -21,7 +21,7 @@
     "ErrorGroupOf4": "你需要组成四人小队",
     "ErrorPartyMakeup": "你需要拥有正确的小队配置",
     "ErrorNoPath": "未找到 {0} {1} 的脚本路径",
-    "SelectDutyMode": "副本模式 (任务类型)：",
+    "SelectDutyMode": "副本模式：",
     "SelectLevelingMode": "自动练级模式：",
     "LevelingModeHelp": "练级模式会自动根据您的等级和装等，选择效率最高且最稳定的副本。\n{0}\n\n注意：它不一定会排当前能进的最高级副本。",
     "LevelingModeHelpTrust": "亲信练级模式会均衡提升您的亲信战友等级\n玩家练级模式仅会提升必要的亲信战友等级",

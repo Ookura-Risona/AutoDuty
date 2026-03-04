@@ -1941,26 +1941,6 @@ public sealed class AutoDuty : IDalamudPlugin
             return null;
         }
 
-        bool? EnableAEAssist(bool active)
-        {
-            if (AEAssist_IPCSubscriber.IsEnabled)
-            {
-                Svc.Log.Debug("AEAssist: " + active);
-                if (active)
-                {
-                    Chat.ExecuteCommand("/aestop off");
-                    Chat.ExecuteCommand("/aepull on");
-                }
-                else
-                {
-                    Chat.ExecuteCommand("/aepull off");
-                    Chat.ExecuteCommand("/aestop on");
-                }
-                return true;
-            }
-            return null;
-        }
-
         bool? EnableBM(bool active, bool rotation)
         {
             if (BossMod_IPCSubscriber.IsEnabled)

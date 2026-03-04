@@ -357,11 +357,6 @@ namespace AutoDuty.IPC
         public static void RotationStop() => RotationSolverReborn.ChangeOperatingMode(RotationSolverRebornIPC.StateCommandType.Off);
     }
 
-    internal static class AEAssist_IPCSubscriber
-    {
-        internal static bool IsEnabled => IPCSubscriber_Common.IsReady("AEAssistV3");
-    }
-
     internal class IPCSubscriber_Common
     {
         internal static bool IsReady(string pluginName) => DalamudReflector.TryGetDalamudPlugin(pluginName, out _, false, true);

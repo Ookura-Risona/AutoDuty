@@ -19,9 +19,6 @@
 
         internal static void InstallPlugin(ExternalPlugin plugin)
         {
-            if (!plugin.HasInstaller())
-                return;
-
             pluginToInstall = plugin;
             Invoke();
         }

@@ -1,0 +1,42 @@
+{
+  "LogTab": {
+    "AutoScroll": "自動スクロール",
+    "ClearLog": "ログをクリア",
+    "CopyLog": "全ログをクリップボードへコピー",
+    "CreateIssue": "Issue作成",
+    "CreateIssueTooltip": "クリックでCreate Issueポップアップを開きます（GitHub認証後）。フォーム記入後、リポジトリにIssueを送信します",
+    "FilterLogLevel": "ログレベルで絞り込み",
+    "DebugLevelWarning": "AutoDutyからDalamudのログレベルは変更できません。デバッグ表示はDalamudログ \"/xllog\" を開き、左上で適切なレベルを設定してください。",
+
+    "Auth": {
+      "PollingGithub": "GitHubユーザー認証を確認中: {0}",
+      "WaitingResponse": "GitHubからの応答待ち",
+      "ClickHere": "ここをクリック",
+      "ToCopy": " をコピーして ",
+      "ToClipboard": " クリップボードへ:",
+      "OpenGithub": "GitHubを開く",
+      "InBrowserPaste": " をブラウザで貼り付け"
+    },
+
+    "IssueForm": {
+      "Submitting": "Issue送信中",
+      "Title": "Issue: バグ報告",
+      "AddTitle": "タイトルを入力",
+      "DuplicateWarning": "同じ不具合が未報告か、Issuesページで先に検索してください。類似Issueがあれば最初の投稿に👍して優先度上げに協力してください。",
+      "WhatHappened": "何が起きましたか？",
+      "WhatHappenedHelp": "期待した動作も記載してください。共有できるスクリーンショットも添付してください。",
+      "ReproSteps": "再現手順",
+      "ReproStepsHelp": "こちらで再現できるよう、手順をすべて記載してください。",
+      "Submit": "Issueを送信"
+    },
+
+    "LogLevels": {
+      "Verbose": "Verbose",
+      "Debug": "Debug",
+      "Information": "Information",
+      "Warning": "Warning",
+      "Error": "Error",
+      "Fatal": "Fatal"
+    }
+  }
+}

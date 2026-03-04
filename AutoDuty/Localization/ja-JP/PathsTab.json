@@ -1,0 +1,15 @@
+{
+  "PathsTab": {
+    "Title": "パスファイル",
+    "OpenFolder": "フォルダを開く",
+    "OpenFile": "ファイルを開く",
+    "DoNotOverwrite": "更新時に上書きしない",
+    "ClearCachedJobs": "キャッシュ済みジョブを全削除",
+    "CollapseAll": "すべて折りたたむ",
+    "RevealAll": "すべて展開",
+    "DownloadPaths": "パスをダウンロード",
+    "BrokenStatus": "破損",
+    "Separator": " => ",
+    "ClearJobSelection": "このDutyのジョブ選択をクリア"
+  }
+}

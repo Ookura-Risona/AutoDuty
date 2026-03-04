@@ -28,6 +28,7 @@ namespace AutoDuty.Managers
     using ECommons.ExcelServices;
     using FFXIVClientStructs.FFXIV.Client.Game.Object;
     using System.Reflection;
+    using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
     internal class ActionsManager(AutoDuty plugin, TaskManager taskManager)
     {
@@ -41,11 +42,13 @@ namespace AutoDuty.Managers
             ("TreasureCoffer","false", "Adds a TreasureCoffer flag to the path; AutoDuty will loot any treasure coffers automatically if it gets within interact range of one (while Config Loop Option is on), this is just a flag to mark the positions of Treasure Coffers.\nNote: AutoDuty will ignore this Path entry when Looting is disabled entirely or Boss Loot Only is enabled.\nExample: TreasureCoffer|3.21, 6.06, -97.63|"),
             ("SelectYesno","yes or no?", "Adds a SelectYesNo step to the path; after moving to the position, AutoDuty will click Yes or No on this addon.\nExample: SelectYesno|9.41, 1.94, -311.25|Yes"),
             ("SelectString", "list index", "Adds a SelectString step to the path; after moving to the position, AutoDuty will pick the indexed string.\nExample: SelectYesno|908.24, 327.26, -561.96|1"),
+            ("SelectJournalResult", "accept?", "Accepts (or declines) a JournalResult.\nExample: SelectJournalResult|908.24, 327.26, -561.96|true"),
             ("MoveToObject","Object Name?", "Adds a MoveToObject step to the path; AutoDuty will will move the object specified (recommend input DataId)"),
             ("DutySpecificCode","step #?", "Adds a DutySpecificCode step to the path; after moving to the position, AutoDuty will invoke the Duty Specific Action for this TerritoryType and the step # specified.\nExample: DutySpecificCode|174.68, 102.00, -66.46|1"),
             ("BossMod", "on / off", "Adds a BossMod step to the path; after moving to the position, AutoDuty will turn BossMod on or off.\nExample: BossMod|-132.08, -342.25, 1.98|Off"),
             ("Rotation", "on / off", "Adds a Rotation step to the path; after moving to the position, AutoDuty will turn Rotation Plugin on or off.\nExample: Rotation|-132.08, -342.25, 1.98|Off"),
             ("Target", "Target what?", "Adds a Target step to the path; after moving to the position, AutoDuty will Target the object specified (recommend inputing DataId)."),
+            ("KillInRange","Range","Kills every enemy in range"),
             ("AutoMoveFor", "how long?", "Adds an AutoMoveFor step to the path; AutoDuty will turn on Standard Mode and Auto Move for the time specified in milliseconds (or until player is not ready).\nExample: AutoMoveFor|-18.21, 1.61, 114.16|3000"),
             ("ChatCommand","Command with args?", "Adds a ChatCommand step to the path; after moving to the position, AutoDuty will execute the Command specified.\nExample: ChatCommand|-5.86, 164.00, 501.72|/bmrai follow Alisaie"),
             ("StopForCombat","true/false", "Adds a StopForCombat step to the path; after moving to the position, AutoDuty will turn StopForCombat on or off.\nExample: StopForCombat|-1.36, 5.76, -108.78|False"),
@@ -181,6 +184,10 @@ namespace AutoDuty.Managers
                         invokeAction = true;
                     Svc.Log.Info($"Condition: {itemCount}{operatorValue}{quantity} = {operationResult}");
                     break;
+                case "ObjectSpawned":
+                    if (conditionArray.Length > 2)
+                        invokeAction = GetObjectByDataId(uint.TryParse(conditionArray[1], out uint dataId) ? dataId : 0) != null == (!bool.TryParse(conditionArray[2], out bool it) || it);
+                    break;
                 case "ObjectData":
                     if (conditionArray.Length > 3)
                     {
@@ -198,6 +205,10 @@ namespace AutoDuty.Managers
                                     if (csObj->GetIsTargetable() == (bool.TryParse(conditionArray[3], out bool it) && it))
                                         invokeAction = true;
                                     break;
+                                case "NamePlateIconId":
+                                    if (csObj->NamePlateIconId == (uint.TryParse(conditionArray[3], out uint np) ? np : 0))
+                                        invokeAction = true;
+                                    break; 
                             }
                         }
                     }
@@ -245,7 +256,7 @@ namespace AutoDuty.Managers
         public  void Rotation(PathAction action) => 
             this.Rotation(action.Arguments[0].Equals("on", StringComparison.InvariantCultureIgnoreCase));
 
-        public void Rotation(bool on)
+        public void Rotation(bool on, bool rotationPlugins = true)
         {
             if (!on)
             {
@@ -255,14 +266,16 @@ namespace AutoDuty.Managers
                     Configuration.AutoManageRotationPluginState = false;
                 }
 
-                Plugin.SetRotationPluginSettings(false, true);
+                if(rotationPlugins)
+                    Plugin.SetRotationPluginSettings(false, true);
             }
             else
             {
                 if (this.autoManageRotationPluginState)
                     Configuration.AutoManageRotationPluginState = true;
 
-                Plugin.SetRotationPluginSettings(true, true);
+                if(rotationPlugins)
+                    Plugin.SetRotationPluginSettings(true, true);
             }
         }
 
@@ -455,12 +468,18 @@ namespace AutoDuty.Managers
         }
         public void SelectString(PathAction action)
         {
-
-
             taskManager.Enqueue(() => Plugin.action = $"SelectString: {action.Arguments[0]}, {action.Note}", "SelectString");
             taskManager.Enqueue(() => AddonHelper.ClickSelectString(Convert.ToInt32(action.Arguments[0])), "SelectString");
             taskManager.EnqueueDelay(500);
             taskManager.Enqueue(() => !IsCasting, "SelectString");
+            taskManager.Enqueue(() => Plugin.action = "");
+        }
+        public void SelectJournalResult(PathAction action)
+        {
+            taskManager.Enqueue(() => Plugin.action = $"JournalResult: {action.Arguments[0]}, {action.Note}", "JournalResult");
+            taskManager.Enqueue(() => AddonHelper.SelectJournalResult(Convert.ToBoolean(action.Arguments[0])), "JournalResult");
+            taskManager.EnqueueDelay(500);
+            taskManager.Enqueue(() => !IsCasting, "JournalResult");
             taskManager.Enqueue(() => Plugin.action = "");
         }
 
@@ -501,6 +520,45 @@ namespace AutoDuty.Managers
 
             taskManager.Enqueue(() => TryGetObjectByDataId(uint.Parse(objectDataId), out gameObject), "Target-GetGameObject");
             taskManager.Enqueue(() => this.TargetCheck(gameObject),                                   "Target-Check");
+            taskManager.Enqueue(() => Plugin.action = "");
+        }
+
+        public void KillInRange(PathAction action)
+        {
+            if (action.Arguments.Count < 1)
+                return;
+
+            if (!uint.TryParse(action.Arguments[0], out uint range))
+                return;
+            
+            Plugin.action = $"Killing in {range}y";
+
+            taskManager.Enqueue(() =>
+                                {
+                                    if (!EzThrottler.Throttle("KillInRange"))
+                                        return false;
+
+                                    List<IGameObject> gameObjects = Svc.Objects.Where(igo => igo is { ObjectKind: ObjectKind.BattleNpc, IsTargetable: true } && igo.IsHostile() && BelowDistanceToPoint(igo.Position, action.Position, range, range / 2f))
+                                                                              .ToList();
+                                    if (gameObjects.Count == 0)
+                                        return true;
+
+                                    if (Svc.Targets.Target != null && gameObjects.Contains(Svc.Targets.Target))
+                                    {
+                                        if(GetDistanceToPlayer(Svc.Targets.Target) < 30)
+                                            VNavmesh_IPCSubscriber.Path_Stop();
+                                        return false;
+                                    }
+
+                                    IGameObject target = gameObjects.OrderBy(GetDistanceToPlayer).First();
+
+                                    if (this.TargetCheck(target) && GetDistanceToPlayer(target) < 30)
+                                        VNavmesh_IPCSubscriber.Path_Stop();
+                                    else
+                                        VNavmesh_IPCSubscriber.SimpleMove_PathfindAndMoveTo(target.Position, false);
+
+                                    return false;
+                                }, "KillInRange-Main", new TaskManagerConfiguration(int.MaxValue));
             taskManager.Enqueue(() => Plugin.action = "");
         }
 

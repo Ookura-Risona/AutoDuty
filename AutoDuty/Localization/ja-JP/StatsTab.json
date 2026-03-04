@@ -1,0 +1,22 @@
+{
+  "StatsTab": {
+    "ClearStatistics": "統計をクリア",
+    "ClearStatisticsHelp": "Ctrl長押しで統計を完全削除",
+    "DutiesRun": "実行回数: {0}",
+    "TimeSpent": "経過時間: {0}",
+    "DutiesRunHeader": "実行回数",
+    "ScrambleNames": "名前を匿名化",
+    "SelectedMultiCount": "{0} 件選択",
+    "FilterOnlySelected": "選択のみ",
+    "Unknown": "不明 ({0})",
+    "Columns": {
+      "CompletedAt": "完了日時",
+      "Duration": "所要時間",
+      "Duty": "Duty",
+      "Char": "キャラ",
+      "ilvl": "ilvl",
+      "Job": "ジョブ",
+      "Deaths": "戦闘不能"
+    }
+  }
+}

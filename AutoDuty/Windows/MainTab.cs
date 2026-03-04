@@ -265,6 +265,12 @@ namespace AutoDuty.Windows
                                 Configuration.Save();
                             }
 
+                        if (ImGui.Selectable(Loc.Get("MainTab.Modes.NoviceHall")))
+                        {
+                            AutoDuty.Configuration.AutoDutyModeEnum = AutoDutyMode.Playlist;
+                            Plugin.playlistCurrent.Clear();
+                            Plugin.playlistCurrent.AddRange(NoviceHelper.CreatePlaylist());
+                        }
                         ImGui.EndCombo();
                     }
                     ImGui.PopItemWidth();
@@ -320,10 +326,11 @@ namespace AutoDuty.Windows
                             if (ImGui.BeginCombo("##DutyModeEnum", Loc.Get($"MainTab.DutyModes.{AutoDuty.Configuration.DutyModeEnum}")))
                             {
                                 foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
+                                    //if(mode is not DutyMode.NoviceHall)
                                     if (ImGui.Selectable(Loc.Get($"MainTab.DutyModes.{mode}"), AutoDuty.Configuration.DutyModeEnum == mode))
                                     {
                                         AutoDuty.Configuration.DutyModeEnum = mode;
-                                            Configuration.Save();
+                                        Configuration.Save();
                                     }
 
                                 ImGui.EndCombo();

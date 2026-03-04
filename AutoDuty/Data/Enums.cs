@@ -260,22 +260,15 @@
         [Flags]
         public enum DutyMode : int
         {
-            [Description("无")]
-            None = 0,
-            [Description("剧情辅助器")]
-            Support = 1,
-            [Description("亲信战友")]
-            Trust = 2,
-            [Description("冒险者小队")]
-            Squadron = 4,
-            [Description("迷宫挑战（排本）")]
-            Regular = 8,
-            [Description("讨伐歼灭战（排本）")]
-            Trial = 16,
-            [Description("大型任务（排本）")]
-            Raid = 32,
-            [Description("多变迷宫")]
-            Variant = 64
+            None       = 0 << 0,
+            Support    = 1 << 0,
+            Trust      = 1 << 1,
+            Squadron   = 1 << 2,
+            Regular    = 1 << 3,
+            Trial      = 1 << 4,
+            Raid       = 1 << 5,
+            Variant    = 1 << 6,
+            NoviceHall = 1 << 7
         }
 
         public enum LevelingMode : int

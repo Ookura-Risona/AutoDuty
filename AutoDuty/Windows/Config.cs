@@ -127,6 +127,8 @@ public class ConfigurationMain
         set => this.updatePathsOnStartup = value;
     }
 
+    internal uint noviceQueue = 0;
+
     [JsonProperty]
     public MultiboxUtility.MultiboxConfiguration multibox = new();
 
@@ -1504,6 +1506,19 @@ public static class ConfigTab
                                                         Where(x => x.Item2.Any()).
                                                         Select(x => $"{x.x} references {x.Item2.Select(pi => pi.Name).Print(", ")}").Print("\n")}");
                     ImGui.Unindent();
+                }
+
+                if (ImGui.CollapsingHeader("DevNoviceHeader"))
+                {
+                    if (ImGui.Button("DevNoviceQueue"))
+                        Svc.Log.Warning("Queue: " + QueueHelper.Instance.QueueNoviceTutorial(ConfigurationMain.Instance.noviceQueue));
+                    ImGui.SameLine();
+                    ImGui.InputUInt($"##{nameof(ConfigurationMain.Instance.noviceQueue)}", ref ConfigurationMain.Instance.noviceQueue);
+
+                    ImGuiEx.Text($"{typeof(Achievement).Assembly.GetTypes().Where(x => x.FullName?.StartsWith("Lumina.Excel.Sheets") ?? false).
+                                                        Select(x => (x, x.GetProperties().Where(f => f.PropertyType.Name == "RowRef`1" && f.PropertyType.GenericTypeArguments[0] == typeof(Tutorial)))).
+                                                        Where(x => x.Item2.Any()).
+                                                        Select(x => $"{x.x} references {x.Item2.Select(pi => pi.Name).Print(", ")}").Print("\n")}");
                 }
             }
         }

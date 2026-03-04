@@ -211,16 +211,6 @@ namespace AutoDuty.IPC
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("WrathCombo");
         
         /// <summary>
-        ///     Get the current state of the Auto-Rotation setting in Wrath Combo.
-        /// </summary>
-        /// <returns>Whether Auto-Rotation is enabled or disabled</returns>
-        /// <remarks>
-        ///     This is only the state of Auto-Rotation, not whether any combos are
-        ///     enabled in Auto-Mode.
-        /// </remarks>
-        internal static bool GetAutoRotationState => WrathIPCWrapper.GetAutoRotationState();
-
-        /// <summary>
         ///     Checks if the current job has a Single and Multi-Target combo configured
         ///     that are enabled in Auto-Mode.
         /// </summary>

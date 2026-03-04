@@ -2,145 +2,16 @@
   "Actions": [
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": 262.3238,
-        "Y": -3.877349,
-        "Z": 97.74034
+        "X": 262.324,
+        "Y": -3.877,
+        "Z": 97.74
       },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 260.48566,
-        "Y": -3.2773004,
-        "Z": 120.82767
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 240.00394,
-        "Y": 0.19740486,
-        "Z": 121.001976
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 232.23796,
-        "Y": -0.46770436,
-        "Z": 104.55332
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 232.50401,
-        "Y": 0.08594012,
-        "Z": 87.71773
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 246.62613,
-        "Y": -0.25502157,
-        "Z": 78.507744
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 257.6512,
-        "Y": -0.68717194,
-        "Z": 74.84829
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 271.88013,
-        "Y": -0.03839594,
-        "Z": 74.45197
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 281.5283,
-        "Y": 0.21550202,
-        "Z": 81.54088
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 270.07333,
-        "Y": -1.9196674,
-        "Z": 85.65687
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 283.1796,
-        "Y": -1.0302867,
-        "Z": 95.27032
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 288.75528,
-        "Y": -3.8951075,
-        "Z": 107.95148
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 275.0449,
-        "Y": -2.3672457,
-        "Z": 114.07657
-      },
-      "Arguments": [],
+      "Arguments": [
+        "50"
+      ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -154,6 +25,7 @@
       "Arguments": [
         "2000460"
       ],
+      "Conditions": [],
       "Note": "Shifting Sands"
     },
     {
@@ -167,83 +39,21 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": 94.59323,
-        "Y": -4.9000087,
-        "Z": 167.98488
+        "X": 94.59,
+        "Y": -4.9,
+        "Z": 167.98
       },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 108.00793,
-        "Y": -0.039770246,
-        "Z": 192.24707
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 79.82843,
-        "Y": 0.36503756,
-        "Z": 194.56201
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 69.21125,
-        "Y": -0.1354472,
-        "Z": 178.71301
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 74.11221,
-        "Y": 1.6900713,
-        "Z": 151.0486
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 111.92877,
-        "Y": 0.28742886,
-        "Z": 145.65475
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 117.95951,
-        "Y": 0.009686708,
-        "Z": 183.58286
-      },
-      "Arguments": [],
+      "Arguments": [
+        "50"
+      ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -257,6 +67,7 @@
       "Arguments": [
         "2000461"
       ],
+      "Conditions": [],
       "Note": "Shifting Sands"
     },
     {
@@ -270,6 +81,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -281,6 +93,7 @@
         "Z": 122.0342
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -292,6 +105,7 @@
         "Z": 135.71356
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -303,6 +117,7 @@
         "Z": 147.11903
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -314,6 +129,7 @@
         "Z": 140.27277
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -325,6 +141,7 @@
         "Z": 150.80896
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -336,6 +153,7 @@
         "Z": 168.12364
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -349,6 +167,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -362,6 +181,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -373,6 +193,7 @@
         "Z": 202.95177
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": "Myrmidon Princess"
     },
     {
@@ -386,6 +207,7 @@
       "Arguments": [
         "2000464"
       ],
+      "Conditions": [],
       "Note": "Shifting Sands"
     },
     {
@@ -399,41 +221,33 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": 314.32767,
-        "Y": -2.7567952,
-        "Z": -37.694542
+        "X": 240.68076,
+        "Y": -0.057859123,
+        "Z": -65.18547
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": 343.35587,
-        "Y": -1.8021742,
-        "Z": -56.586197
-      },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 292.03067,
-        "Y": -1.3353313,
-        "Z": -98.50478
+        "X": 292.83588,
+        "Y": -1.3374838,
+        "Z": -97.31757
       },
       "Arguments": [
-        "true"
+        "20"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -447,6 +261,7 @@
       "Arguments": [
         "2000465"
       ],
+      "Conditions": [],
       "Note": "Shifting Sands"
     },
     {
@@ -460,39 +275,35 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": 344.41623,
-        "Y": -1.2898402,
-        "Z": -167.20987
+        "X": 318.90244,
+        "Y": -3.2365692,
+        "Z": -174.40202
       },
-      "Arguments": [],
+      "Arguments": [
+        "45"
+      ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": 298.11945,
-        "Y": -2.9724498,
-        "Z": -180.70879
+        "X": 320.32535,
+        "Y": -1.7890131,
+        "Z": -224.08423
       },
-      "Arguments": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 320.29593,
-        "Y": -1.7199845,
-        "Z": -224.33194
-      },
-      "Arguments": [],
+      "Arguments": [
+        "20"
+      ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -506,6 +317,7 @@
       "Arguments": [
         "2000466"
       ],
+      "Conditions": [],
       "Note": "Shifting Sands"
     },
     {
@@ -519,6 +331,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -530,6 +343,7 @@
         "Z": 186.63612
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -543,6 +357,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -554,6 +369,7 @@
         "Z": 154.4618
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": "Giant Tunnel Worm"
     },
     {
@@ -567,6 +383,7 @@
       "Arguments": [
         "2000469"
       ],
+      "Conditions": [],
       "Note": "Shifting Sands"
     },
     {
@@ -580,6 +397,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -591,6 +409,7 @@
         "Z": -154.41905
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -602,6 +421,7 @@
         "Z": -154.38928
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -613,6 +433,7 @@
         "Z": -164.45644
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -624,23 +445,18 @@
         "Z": -209.0836
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": "Chimera"
-    },
-    {
-      "Tag": "Treasure",
-      "Name": "TreasureCoffer",
-      "Position": {
-        "X": -180.63861,
-        "Y": -4.6792245,
-        "Z": -217.90047
-      },
-      "Arguments": [],
-      "Note": ""
     }
   ],
   "Meta": {
     "CreatedAt": 230,
-    "Changelog": [],
+    "Changelog": [
+      {
+        "Version": 291,
+        "Change": "Modified with KillInRange action"
+      }
+    ],
     "Notes": []
   }
 }

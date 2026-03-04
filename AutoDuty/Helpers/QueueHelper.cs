@@ -10,17 +10,23 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Windows;
+    using Dalamud.Utility.Signatures;
     using FFXIVClientStructs.Interop;
     using FFXIVClientStructs.STD;
     using Multibox;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Lumina.Excel.Sheets;
     using static Data.Classes;
 
     internal unsafe class QueueHelper : ActiveHelperBase<QueueHelper>
     {
+        public QueueHelper()
+        {
+            Svc.Hook.InitializeFromAttributes(this);
+        }
+
         internal static void InvokeAcceptOnly()
         {
             _dutyMode = DutyMode.None;
@@ -223,9 +229,9 @@ namespace AutoDuty.Helpers
 
             if (this._addonContentsFinder->DutyList->Items.LongCount == 0)
                 return;
-            
-            StdVector<Pointer<AtkComponentTreeListItem>>                    vectorDutyListItems           = this._addonContentsFinder->DutyList->Items;
-            List<AtkComponentTreeListItem> listAtkComponentTreeListItems = [];
+
+            StdVector<Pointer<AtkComponentTreeListItem>> vectorDutyListItems           = this._addonContentsFinder->DutyList->Items;
+            List<AtkComponentTreeListItem>               listAtkComponentTreeListItems = [];
             if (vectorDutyListItems.Count == 0)
                 return;
             
@@ -267,6 +273,22 @@ namespace AutoDuty.Helpers
             Svc.Log.Debug("end");
         }
 
+        public delegate bool QueueNoviceTutorialDelegate(uint tutorialRowId);
+
+        [Signature("E8 ?? ?? ?? ?? 48 8B 07 48 8B CF C7 47 ?? ?? ?? ?? ?? FF 50 28 40 B6 01")]
+        public QueueNoviceTutorialDelegate QueueNoviceTutorial;
+
+        private void QueueNovice()
+        {
+            if (_content == null)
+                return;
+            Tutorial? tutorial = NoviceHelper.GetTutorialFromTerritory(_content.TerritoryType);
+            if (!tutorial.HasValue)
+                return;
+            this.DebugLog("Queueing for tutorial " + tutorial.Value.RowId);
+            this.QueueNoviceTutorial(tutorial.Value.RowId);
+        }
+
         protected override void HelperUpdate(IFramework framework)
         {
             if (InDungeon || _dutyMode != DutyMode.None && (_content == null || Svc.ClientState.TerritoryType == _content?.TerritoryType)) 
@@ -287,13 +309,15 @@ namespace AutoDuty.Helpers
                     {
                         Svc.Log.Error(ex.ToString());
                     }
-
                     break;
                 case DutyMode.Support:
                     this.QueueSupport();
                     break;
                 case DutyMode.Trust:
                     this.QueueTrust();
+                    break;
+                case DutyMode.NoviceHall:
+                    this.QueueNovice();
                     break;
             }
         }

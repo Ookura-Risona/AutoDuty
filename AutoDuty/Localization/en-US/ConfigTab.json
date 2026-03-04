@@ -260,14 +260,14 @@
         "Tuliyollal": "Tuliyollal",
         "Nexus_Arcade": "Nexus Arcade"
       },
-      "DesynthCategory": {
-        "Inventory_Equipment": "Inventory: Equipment",
-        "Inventory_Housing": "Inventory: Housing",
-        "Armoury_Main_Off": "Armoury: Main/Off",
-        "Armoury_Head_Body_Hands": "Armoury: Head/Body/Hands",
-        "Armoury_Legs_Feet": "Armoury: Legs/Feet",
-        "Armoury_Neck_Ears": "Armoury: Neck/Ears",
-        "Armoury_Wrists_Rings": "Armoury: Wrists/Rings",
+      "SalvageItemCategory": {
+        "InventoryEquipment": "Inventory: Equipment",
+        "InventoryHousing": "Inventory: Housing",
+        "ArmouryMainOff": "Armoury: Main/Off",
+        "ArmouryHeadBodyHands": "Armoury: Head/Body/Hands",
+        "ArmouryLegsFeet": "Armoury: Legs/Feet",
+        "ArmouryNeckEars": "Armoury: Neck/Ears",
+        "ArmouryWristsRings": "Armoury: Wrists/Rings",
         "Equipped": "Equipped"
       },
       "TerminationMode": {

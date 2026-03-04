@@ -30,7 +30,9 @@ namespace AutoDuty.Helpers
             1144u, // 67 Doma Castle
             1145u, // 69 Castrum Abania
             837u,  // 71 Holminster
+            821u,  // 73 Dohn Mheg
             823u,  // 75 Qitana
+            836u,  // 77 Malikah's Well
             822u,  // 79 Mt. Gulg
             952u,  // 81 Tower of Zot
             969u,  // 83 Tower of Babil
@@ -44,8 +46,8 @@ namespace AutoDuty.Helpers
 
         public static readonly uint[] levelingListExperimental =
         [
-            821u, // 73 Dohn Mheg
-            836u, // 77 Malikah's Well
+            970u, // 85 Vanaspati,
+            978u // 89 Aitiascope
         ];
 
         internal static Content[] LevelingDuties

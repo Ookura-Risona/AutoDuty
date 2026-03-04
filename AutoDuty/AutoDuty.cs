@@ -287,7 +287,7 @@ public sealed class AutoDuty : IDalamudPlugin
             this.assemblyDirectoryInfo = this.assemblyFileInfo.Directory;
 
             this.Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 288) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 291) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!this.configDirectory.Exists)
@@ -684,24 +684,30 @@ public sealed class AutoDuty : IDalamudPlugin
 
                     for (int index = Math.Clamp(this.indexer, 0, this.Actions.Count-1); index < this.Actions.Count; index++)
                     {
-                        PathAction action = this.Actions[index];
-                        if (action.Position.LengthSquared() > 1)
+                        PathAction curAction = this.Actions[index];
+                        if (curAction.Position.LengthSquared() > 1)
                         {
                             float alpha = MathF.Max(0f, 1f - (index - this.indexer) * stepCountFactor);
 
                             if (alpha > 0)
                             {
-                                drawList.AddCircle(action.Position, 3, ImGui.GetColorU32(new Vector4(1f, 0.2f, 0f, alpha)), 0, 3);
+                                uint mainColor = ImGui.GetColorU32(new Vector4(1f, 0.2f, 0f, alpha));
+                                drawList.AddCircle(curAction.Position, 3, mainColor, 0, 3);
 
                                 if (index > 0)
-                                    drawList.AddLine(lastPos, action.Position, 0f, ImGui.GetColorU32(new Vector4(0.8f, 0.8f, 0.8f, alpha)));
+                                    drawList.AddLine(lastPos, curAction.Position, 0f, ImGui.GetColorU32(new Vector4(0.8f, 0.8f, 0.8f, alpha)));
                                 if (index == this.indexer)
-                                    drawList.AddLine(Player.Position, action.Position, 0, 0x00FFFFFF);
+                                    drawList.AddLine(Player.Position, curAction.Position, 0, 0x00FFFFFF);
 
-                                drawList.AddText(action.Position, ImGui.GetColorU32(new Vector4(alpha + 0.25f)), index.ToString(), 2f);
+                                drawList.AddText(curAction.Position, ImGui.GetColorU32(new Vector4(alpha + 0.25f)), index.ToString(), 2f);
+
+                                if (curAction.Name.Equals("KillInRange") && int.TryParse(curAction.Arguments[0], out int radius) && radius > 0)
+                                {
+                                    uint colorU32 = ImGui.GetColorU32(new Vector4(0.4f, 0.2f, 0f, alpha*0.1f));
+                                    drawList.AddCircleFilled(curAction.Position, radius, colorU32, mainColor);
+                                }
                             }
-
-                            lastPos = action.Position;
+                            lastPos = curAction.Position;
                         }
                     }
                 }
@@ -722,6 +728,7 @@ public sealed class AutoDuty : IDalamudPlugin
     private void DutyState_DutyRecommenced(object? sender, ushort e) => this.dutyState = DutyState.DutyRecommenced;
     private void DutyState_DutyCompleted(object? sender, ushort e)
     {
+        Svc.Log.Warning("Duty Done");
         this.dutyState = DutyState.DutyComplete;
         if(this.states is not (PluginState.None or PluginState.Paused))
         {
@@ -1076,8 +1083,11 @@ public sealed class AutoDuty : IDalamudPlugin
         if (this.currentLoop == 0)
         {
             this.currentLoop = 1;
-            if (Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist) 
+            if (Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
+            {
                 Configuration.LoopTimes = Plugin.PlaylistCurrentEntry?.count ?? Configuration.LoopTimes;
+                Plugin.PlaylistCurrentEntry!.curCount = 0;
+            }
         }
     }
 
@@ -1433,7 +1443,7 @@ public sealed class AutoDuty : IDalamudPlugin
         {
             this.variantManager.RegisterVariantDuty(content);
         }
-        else if (Configuration.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Support, DutyMode.Trust))
+        else if (Configuration.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Support, DutyMode.Trust, DutyMode.NoviceHall))
         {
             this.taskManager.Enqueue(() => QueueHelper.Invoke(content, Configuration.DutyModeEnum), "Queue-Invoke");
             this.taskManager.EnqueueDelay(50);
@@ -1448,7 +1458,7 @@ public sealed class AutoDuty : IDalamudPlugin
         }
 
         this.taskManager.Enqueue(() => !PlayerHelper.IsValid, "Queue-WaitNotValid");
-        this.taskManager.Enqueue(() => PlayerHelper.IsValid, "Queue-WaitValid", new TaskManagerConfiguration(int.MaxValue));
+        this.taskManager.Enqueue(() => PlayerHelper.IsValid,  "Queue-WaitValid", new TaskManagerConfiguration(int.MaxValue));
     }
 
     private void StageReadingPath()
@@ -1473,7 +1483,6 @@ public sealed class AutoDuty : IDalamudPlugin
                     this.bossObject = ObjectHelper.GetBossObject(25);
                     if (this.bossObject != null)
                     {
-
                         if (MultiboxUtility.Config.Host)
                             MultiboxUtility.MultiboxBlockingNextStep = false;
                         this.Stage = Stage.Action;
@@ -1538,7 +1547,7 @@ public sealed class AutoDuty : IDalamudPlugin
             return;
         }
 
-        BossMod_IPCSubscriber.InBoss(this.pathAction.Name.Equals("Boss"));
+        BossMod_IPCSubscriber.InBoss(this.pathAction.Name.Equals("Boss") || this.pathAction.Note.Contains("!TankClose")); //extremely hacky and hopefully short-lived
 
         if(MultiboxUtility.Config.Host)
             MultiboxUtility.MultiboxBlockingNextStep = false;
@@ -1977,22 +1986,17 @@ public sealed class AutoDuty : IDalamudPlugin
 
         bool act = on;
 
-        bool wrathEnabled = Configuration.rotationPlugin is RotationPlugin.WrathCombo or RotationPlugin.All;
+        bool  wrathEnabled = Configuration is { rotationPlugin: RotationPlugin.WrathCombo or RotationPlugin.All, DutyModeEnum: not DutyMode.NoviceHall };
         bool? wrath        = EnableWrath(on && wrathEnabled);
         if (on && wrathEnabled && wrath.HasValue)
             act = !wrath.Value;
         
-        bool rsrEnabled = Configuration.rotationPlugin is RotationPlugin.RotationSolverReborn or RotationPlugin.All;
+        bool  rsrEnabled = Configuration is { rotationPlugin: RotationPlugin.RotationSolverReborn or RotationPlugin.All, DutyModeEnum: not DutyMode.NoviceHall };
         bool? rsr        = EnableRSR(act && on && rsrEnabled);
         if (on && rsrEnabled && rsr.HasValue) 
             act = !rsr.Value;
 
-        bool aeAssistEnabled = Configuration.rotationPlugin is RotationPlugin.AEAssist or RotationPlugin.All;
-        bool? aeAssist        = EnableAEAssist(act && on && aeAssistEnabled);
-        if (on && aeAssistEnabled && aeAssist.HasValue)
-            act = !aeAssist.Value;
-
-        EnableBM(on, act && Configuration.rotationPlugin is RotationPlugin.BossMod or RotationPlugin.All);
+        EnableBM(on, act && (Configuration.rotationPlugin is RotationPlugin.BossMod or RotationPlugin.All || Configuration.DutyModeEnum is DutyMode.NoviceHall));
     }
 
     internal static void SetBMSettings(bool defaults = false)
@@ -2201,7 +2205,7 @@ public sealed class AutoDuty : IDalamudPlugin
             BossMod_IPCSubscriber.DisablePresets();
 
         this.stopForCombat = true;
-        this.actions.Rotation(true);
+        this.actions.Rotation(true, false);
 
         this.SetGeneralSettings(true);
         if (Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false }) 

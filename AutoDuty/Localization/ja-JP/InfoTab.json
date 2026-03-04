@@ -1,0 +1,30 @@
+{
+  "InfoTab": {
+    "Title": "情報",
+    "SetupGuideIntro": "AutoDutyと依存プラグインの基本セットアップは、以下のガイドを確認してください:",
+    "InformationAndSetup": "情報とセットアップ",
+    "PathStatusInfo": "上記ガイドには各パスの状態（成熟度・モジュール成熟度・安定性）も記載されています。ループ成功に向けた注意点も確認できます。要望・不具合・貢献はAutoDuty GitHubでIssueを作成してください:",
+    "GitHubIssues": "GitHub Issues",
+    "DiscordInvite": "そのほかの質問はDiscordへどうぞ。",
+    "PunishDiscord": "Punish Discord",
+    "Install": "インストール",
+    "RequiredPlugins": "必須プラグイン",
+    "CombatPlugins": "戦闘プラグイン",
+    "CombatPluginsNote": "好みが分かれるので、好きなものを選んでConfigで設定してください",
+    "RecommendedPlugins": "推奨プラグイン",
+    "PluginDesc": {
+      "BossModFights": "ボス戦処理を担当",
+      "VNavMovement": "移動を担当",
+      "BossModRotations": "ローテーション機能を内蔵",
+      "WrathCombo": "Puni.sh製の専用ローテーション",
+      "RotationSolverReborn": "Reborn製ローテーション",
+      "AntiAFK": "AFK判定を回避",
+      "AutoRetainer": "呼び出し可能。GC納品や破棄に対応",
+      "Avarice": "方向指定判定に使用",
+      "Lifestream": "高機能テレポート",
+      "Pandora": "宝箱回収 + タンクスタンス",
+      "Gearsetter": "装備候補を提案",
+      "Stylist": "装備候補を提案"
+    }
+  }
+}

@@ -9,9 +9,10 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
+    using ECommons.Automation;
+    using FFXIVClientStructs.FFXIV.Client.Game;
     using System;
     using System.Linq;
-    using ECommons.Automation;
 
     internal class AutoRetainerHelper : ActiveHelperBase<AutoRetainerHelper>
     {
@@ -74,7 +75,15 @@ namespace AutoDuty.Helpers
             if (!this.UpdateBase())
                 return;
 
-            if (!PlayerHelper.IsValid) return;
+            if (!PlayerHelper.IsValid) 
+                return;
+
+            if(InventoryManager.Instance()->GetEmptySlotsInBag() <= 1)
+            {
+                this.DebugLog("Not enough inventory space, stopping");
+                this.Stop();
+                return;
+            }
 
             if (this._autoRetainerStopped)
             {

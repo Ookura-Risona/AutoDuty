@@ -1,167 +1,234 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "ConditionAction",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        "ObjectData;2001462;IsTargetable;false\u0026ModifyIndex;4"
+      "Arguments": [
+        "ObjectData;2001462;IsTargetable;false&ModifyIndex;4"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": 21.82,
         "Y": 7.1,
         "Z": 27.4
       },
-      "arguments": [
+      "Arguments": [
         "1004346"
       ],
-      "note": "Goblin Pathfinder"
+      "Conditions": [],
+      "Note": "Goblin Pathfinder"
     },
     {
-      "tag": "None",
-      "name": "ConditionAction",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        "ItemCount;2000521;\u003C;1\u0026ModifyIndex;0"
+      "Arguments": [
+        "ItemCount;2000521;<;1&ModifyIndex;0"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": 105.56,
         "Y": -0.13,
         "Z": 12.14
       },
-      "arguments": [
+      "Arguments": [
         "2001462"
       ],
-      "note": "Runstop Headgate"
+      "Conditions": [],
+      "Note": "Runstop Headgate"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 112.59,
         "Y": -2.44,
         "Z": -12.91
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 38.689632,
         "Y": 5.519903,
         "Z": -103.78054
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 35.10659,
+        "Y": 8.595805,
+        "Z": -144.68
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 40.068916,
+        "Y": 8.595814,
+        "Z": -145.86595
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 42.73,
         "Y": 6.98,
         "Z": -80.07
       },
-      "arguments": [
+      "Arguments": [
         "false"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 23.003115,
+        "Y": 15.71246,
+        "Z": -61.00559
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 19.525162,
+        "Y": 15.790934,
+        "Z": -62.852474
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -5.17,
         "Y": 5.74,
         "Z": -83.51
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -107.99,
         "Y": -2.38,
         "Z": -26.81
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": -90.04,
         "Y": 10.93,
         "Z": -95.78
       },
-      "arguments": [
+      "Arguments": [
         "2001466"
       ],
-      "note": "Longstop Gutgate"
+      "Conditions": [],
+      "Note": "Longstop Gutgate"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -27.24,
         "Y": 35.5,
         "Z": -236.09
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 130,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 130,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 289,
+        "Change": ""
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

@@ -69,10 +69,27 @@ namespace AutoDuty.Helpers
                 return false;
             }
 
-            if (addonChecker && seenAddon)
-                return true;
+            return addonChecker && seenAddon;
+        }
 
-            return false;
+        internal static bool SelectJournalResult(bool accept)
+        {
+            if (!EzThrottler.Throttle("JournalResult", 500)) 
+                return false;
+
+            bool addonChecker = AddonChecker("JournalResult", out AtkUnitBase* addon, out bool seenAddon);
+
+            if (!addonChecker && seenAddon)
+            {
+                AddonMaster.JournalResult journalResult = new(addon);
+                if(accept)
+                    journalResult.Complete();
+                else
+                    journalResult.Decline();
+                return false;
+            }
+
+            return addonChecker && seenAddon;
         }
 
         internal static bool ClickRepair()
@@ -126,7 +143,7 @@ namespace AutoDuty.Helpers
             return false;
         }
 
-        public static void ClickCheckboxButton(this AtkComponentCheckBox target, AtkComponentBase* addon, uint which, EventType type = EventType.CHANGE)
-        => ClickHelper.ClickAddonComponent(addon, target.OwnerNode, which, type);
+        public static void ClickCheckboxButton(this AtkComponentCheckBox target, AtkComponentBase* addon, uint which, EventType type = EventType.CHANGE) =>
+            ClickHelper.ClickAddonComponent(addon, target.OwnerNode, which, type);
     }
 }

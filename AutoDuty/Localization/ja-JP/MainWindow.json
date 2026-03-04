@@ -1,0 +1,29 @@
+{
+  "MainWindow": {
+    "Tabs": {
+      "Main": "メイン",
+      "Build": "ビルド",
+      "Paths": "パス",
+      "Config": "設定",
+      "Info": "情報",
+      "Logs": "ログ",
+      "Stats": "統計",
+      "Support": "AutoDutyを支援"
+    },
+    "Goto": {
+      "Barracks": "兵舎",
+      "Inn": "宿屋",
+      "GCSupply": "GC納品",
+      "FlagMarker": "フラグマーカー",
+      "SummoningBell": "呼び鈴",
+      "Apartment": "アパルトメント",
+      "PersonalHome": "個人ハウス",
+      "FCEstate": "FCハウス",
+      "TripleTriadTrader": "ﾄﾘﾌﾟﾙﾄﾗｲｱﾄﾞ交換員"
+    },
+    "TT": {
+      "RegisterCards": "TTｶｰﾄﾞ登録",
+      "SellCards": "TTｶｰﾄﾞ売却"
+    }
+  }
+}

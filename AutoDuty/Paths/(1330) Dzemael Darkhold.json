@@ -4,6 +4,18 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
+        "X": 2.2436545,
+        "Y": 4.735791,
+        "Z": 249.11252
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 16.979097,
         "Y": 8.3953285,
         "Z": 208.51074
@@ -120,6 +132,40 @@
     },
     {
       "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "origin": "Location",
+          "originId": 0,
+          "originLoc": {
+            "X": 29.563,
+            "Y": -14.207,
+            "Z": 61.993
+          },
+          "target": "Player",
+          "targetId": 0,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": "<",
+          "distance": 100.0
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "MoveTo",
       "Position": {
         "X": -224.82825,
@@ -180,6 +226,34 @@
     },
     {
       "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -111.099594,
+        "Y": -23.804768,
+        "Z": 4.6238256
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -111.824066,
+        "Y": -24.439007,
+        "Z": -7.4638395
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "Boss",
       "Position": {
         "X": -96.21404,
@@ -222,6 +296,40 @@
     },
     {
       "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "origin": "Location",
+          "originId": 0,
+          "originLoc": {
+            "X": -97.16,
+            "Y": -30.42,
+            "Z": -29.681
+          },
+          "target": "Player",
+          "targetId": 0,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": "<=",
+          "distance": 20.0
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "MoveTo",
       "Position": {
         "X": -15.0631075,
@@ -236,9 +344,9 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": 61.328613,
-        "Y": -37.990196,
-        "Z": -154.31364
+        "X": 77.634384,
+        "Y": -39.472744,
+        "Z": -164.33348
       },
       "Arguments": [
         ""
@@ -253,6 +361,18 @@
       {
         "Version": 279,
         "Change": "Added arm 1 treasure"
+      },
+      {
+        "Version": 290,
+        "Change": "Added safeguards for transitions"
+      },
+      {
+        "Version": 290,
+        "Change": "Moved B3 spot"
+      },
+      {
+        "Version": 291,
+        "Change": "Enhanced path stability"
       }
     ],
     "Notes": []

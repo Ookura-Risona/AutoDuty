@@ -42,7 +42,8 @@
     "RequiresBossModAlt": "AutoDuty requires BossMod plugin to be installed and loaded for proper mechanic handling. Please add 3rd party repo:\nhttps://puni.sh/api/repository/veyn",
     "Modes": {
       "Looping": "Looping",
-      "Playlist": "Playlist"
+      "Playlist": "Playlist",
+      "NoviceHall": "Hall of the Novice"
     },
     "DutyModes": {
       "None": "None",
@@ -52,7 +53,8 @@
       "Regular": "Regular",
       "Trial": "Trial",
       "Raid": "Raid",
-      "Variant": "Variant"
+      "Variant": "Variant",
+      "NoviceHall": "Hall of the Novice"
     },
     "LevelingModes": {
       "None": "None",

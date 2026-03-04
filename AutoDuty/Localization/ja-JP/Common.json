@@ -1,0 +1,21 @@
+{
+  "Common": {
+    "Start": "Start",
+    "Stop": "Stop",
+    "Pause": "Pause",
+    "Resume": "再開",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Close": "Close",
+    "Refresh": "Refresh",
+    "Add": "追加",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "Copy": "Copy",
+    "Clear": "Clear",
+    "Open": "Open",
+    "Load": "Load",
+    "Run": "Run",
+    "Build": "Build"
+  }
+}

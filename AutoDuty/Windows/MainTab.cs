@@ -1,4 +1,5 @@
 ﻿using AutoDuty.Helpers;
+using AutoDuty.External;
 using AutoDuty.IPC;
 using AutoDuty.Managers;
 using Dalamud.Interface.Components;
@@ -536,7 +537,7 @@ namespace AutoDuty.Windows
                                                             if (LevelingHelper.levelingListExperimental.Contains(item.Value.TerritoryType))
                                                                 ImGuiEx.HelpMarker("This dungeon is currently in testing for reliability.\nDo report any issues with it", symbolOverride: FontAwesomeIcon.ExclamationTriangle.ToIconString(), color: EzColor.Yellow);
                                                             if (item.Value.TerritoryType == 1048u)
-                                                                ImGuiEx.HelpMarker("CutsceneSkip detected. Please keep it actually on.", symbolOverride: FontAwesomeIcon.ExclamationTriangle.ToIconString(), color: EzColor.Blue);
+                                                                ImGuiEx.HelpMarker(DailyRoutinesIpc.PortaDecumanaHelpText, symbolOverride: FontAwesomeIcon.ExclamationTriangle.ToIconString(), color: EzColor.Blue);
                                                         }
                                                     }
                                             }

@@ -8,6 +8,7 @@ namespace AutoDuty.Helpers
     using System.Collections.Generic;
     using System.Linq;
     using Data;
+    using External;
     using IPC;
     using static Data.Classes;
 
@@ -58,7 +59,7 @@ namespace AutoDuty.Helpers
                 {
                     IEnumerable<uint> ids = levelingList;
 
-                    if (IPCSubscriber_Common.IsReady("SkipCutscene"))
+                    if (DailyRoutinesIpc.ShouldIncludePortaDecumana)
                     {
                         ids = ids.Concat([
                             1048u, // 45 Porta Decumana

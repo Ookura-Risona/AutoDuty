@@ -311,6 +311,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
             this.overrideAfk     = new OverrideAFK();
             this.ipcProvider     = new IPCProvider();
+            DailyRoutinesIpc.Initialize(PluginInterface);
             this.squadronManager = new SquadronManager(this.taskManager);
             this.variantManager  = new VariantManager(this.taskManager);
             this.actions         = new ActionsManager(Plugin, this.taskManager);
@@ -1005,6 +1006,7 @@ public sealed class AutoDuty : IDalamudPlugin
             //MainWindow.IsOpen = false;
             this.Overlay.IsOpen = true;
 
+        DailyRoutinesIpc.EnsureAutoCutsceneSkipForCurrentRun();
         this.Stage =  Stage.Looping;
         this.states   |= PluginState.Looping;
         this.SetGeneralSettings(false);
@@ -2210,6 +2212,7 @@ public sealed class AutoDuty : IDalamudPlugin
         foreach (IActiveHelper helper in ActiveHelper.activeHelpers) 
             helper.StopIfRunning();
 
+        DailyRoutinesIpc.RecoverTemporarilyEnabledModules();
         Wrath_IPCSubscriber.Release();
         this.action = "";
     }
@@ -2218,6 +2221,7 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         GitHubHelper.Dispose();
         this.StopAndResetAll();
+        DailyRoutinesIpc.Dispose();
         MultiboxUtility.Config?.MultiBox =  false;
         Svc.Framework.Update             -= this.Framework_Update;
         Svc.Framework.Update             -= SchedulerHelper.ScheduleInvoker;

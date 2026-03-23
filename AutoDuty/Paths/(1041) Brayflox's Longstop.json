@@ -124,14 +124,14 @@
     },
     {
       "Tag": "Treasure",
-      "Name": "MoveTo",
+      "Name": "StopForCombat",
       "Position": {
-        "X": 23.003115,
-        "Y": 15.71246,
-        "Z": -61.00559
+        "X": 23.227104,
+        "Y": 15.688599,
+        "Z": -60.626186
       },
       "Arguments": [
-        ""
+        "true"
       ],
       "Conditions": [],
       "Note": ""
@@ -226,7 +226,11 @@
       },
       {
         "Version": 289,
-        "Change": ""
+        "Change": "Added chests"
+      },
+      {
+        "Version": 291,
+        "Change": "fixed chest before b2"
       }
     ],
     "Notes": []

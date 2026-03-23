@@ -52,8 +52,11 @@ namespace AutoDuty.Data
 
             if (pathAction.Conditions.Count != 0)
             {
-                results.Add((v4, " | "));
-                results.Add((new Vector4(1, 165 / 255f, 0, 1), "Conditions"));
+                foreach (PathActionCondition condition in pathAction.Conditions)
+                {
+                    results.Add((v4, " | "));
+                    results.AddRange(condition.DrawStepEntry());
+                }
             }
             return results;
         }

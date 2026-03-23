@@ -1,0 +1,406 @@
+{
+  "Actions": [
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 226.71213,
+        "Y": 120.2,
+        "Z": 360.45444
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Interactable",
+      "Position": {
+        "X": 228.64,
+        "Y": 120.2,
+        "Z": 358.29
+      },
+      "Arguments": [
+        "2006966"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 2006966,
+          "property": "IsTargetable",
+          "value": 1
+        }
+      ],
+      "Note": "Exhaust Duct α"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 179.51,
+        "Y": 80.0,
+        "Z": 243.47
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 168.95059,
+        "Y": 80.0,
+        "Z": 239.67094
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Move Onto Conveyor Belt"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 128.71416,
+        "Y": 80.0,
+        "Z": 245.3537
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 126.51414,
+        "Y": 80.0,
+        "Z": 251.8541
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Move Onto Next Conveyor Belt"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 131.54938,
+        "Y": 80.03946,
+        "Z": 275.5218
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 132.84946,
+        "Y": 80.0,
+        "Z": 271.12152
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Take Conveyor Belt Back"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Interactable",
+      "Position": {
+        "X": 139.81335,
+        "Y": 80.0,
+        "Z": 247.17151
+      },
+      "Arguments": [
+        "2006966"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 2006966,
+          "property": "IsTargetable",
+          "value": 1
+        }
+      ],
+      "Note": "Exhaust Duct α"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 110.38087,
+        "Y": 44.99998,
+        "Z": 136.24895
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 106.88092,
+        "Y": 44.99998,
+        "Z": 133.44878
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Get On Next Conveyor Belt"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 56.683144,
+        "Y": 40.09994,
+        "Z": 117.91774
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 57.083138,
+        "Y": 40.09994,
+        "Z": 122.41767
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Take Next Conveyor To Kill Mobs"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 68.5232,
+        "Y": 44.99981,
+        "Z": 161.93594
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 68.02321,
+        "Y": 44.99981,
+        "Z": 158.23572
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Take Conveyor Back To Boss Entrance"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 53.274006,
+        "Y": 39.939747,
+        "Z": 91.90481
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 50.37405,
+        "Y": 39.939747,
+        "Z": 87.00488
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Take Final Conveyor To Boss"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.5,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Quickthinx Allthoughts"
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 294,
+    "Changelog": [
+      {
+        "Version": 296,
+        "Change": ""
+      }
+    ],
+    "Notes": []
+  }
+}

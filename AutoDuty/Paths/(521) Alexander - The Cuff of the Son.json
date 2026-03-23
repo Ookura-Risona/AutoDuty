@@ -1,0 +1,182 @@
+{
+  "Actions": [
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 15.720591,
+        "Y": 13.089955,
+        "Z": 42.845432
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 27.559937,
+        "Y": 13.272752,
+        "Z": 43.006283
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 0.025219874,
+        "Y": -26.0,
+        "Z": -85.03012
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Boss",
+      "Position": {
+        "X": -0.10623784,
+        "Y": -26.000002,
+        "Z": -128.63942
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Blaster"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -0.8329179,
+        "Y": -21.396942,
+        "Z": -155.20612
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.305612,
+        "Y": -20.0,
+        "Z": -190.46326
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Brawler"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -0.0151876155,
+        "Y": -14.0,
+        "Z": -223.97705
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.3858363,
+        "Y": -14.0,
+        "Z": -256.22778
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Swindler"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 0.7536428,
+        "Y": -9.318649,
+        "Z": -284.3627
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Boss",
+      "Position": {
+        "X": -0.5791368,
+        "Y": -7.999998,
+        "Z": -317.81146
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Vortexer"
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 294,
+    "Changelog": [
+      {
+        "Version": 296,
+        "Change": ""
+      }
+    ],
+    "Notes": []
+  }
+}

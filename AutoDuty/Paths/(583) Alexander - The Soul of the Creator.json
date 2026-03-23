@@ -1,0 +1,28 @@
+{
+  "Actions": [
+    {
+      "Tag": "Unsynced",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.448,
+        "Y": 399.99994,
+        "Z": 22.281
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Alexander Prime"
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 294,
+    "Changelog": [
+      {
+        "Version": 296,
+        "Change": ""
+      }
+    ],
+    "Notes": []
+  }
+}

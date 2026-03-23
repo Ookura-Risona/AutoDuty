@@ -96,6 +96,11 @@ public class ConfigurationMain
     }
 
     [JsonProperty]
+    public Dictionary<ulong, int> dutyCountSinceReset = [];
+    [JsonProperty]
+    public DateTime dutyCountResetDate;
+
+    [JsonProperty]
     public StatData stats = new();
 
     [JsonObject(MemberSerialization.OptOut)]
@@ -360,7 +365,7 @@ public class ConfigurationMain
         
         public override Type BindToType(string? assemblyName, string typeName)
         {
-            bool isInternal = (assemblyName?.StartsWith("AutoDuty") ?? false);
+            bool isInternal = assemblyName?.StartsWith("AutoDuty") ?? false;
 
             if (isInternal)
             {
@@ -1106,7 +1111,7 @@ public static class ConfigTab
             ImGui.Separator();
             ImGui.Spacing();
             ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
-            bool devHeader = ImGui.Selectable(Loc.Get("ConfigTab.Dev.Header"), devHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
+            bool devHeader = ImGui.Selectable("Dev###DevHeader", devHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
             ImGui.PopStyleVar();
             if (ImGui.IsItemHovered())
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -1115,406 +1120,39 @@ public static class ConfigTab
 
             if (devHeaderSelected)
             {
-                if (ImGui.Checkbox(Loc.Get("ConfigTab.Dev.UpdatePathsOnStartup") + "##DevUpdatePathsOnStartup", ref ConfigurationMain.Instance.updatePathsOnStartup))
+                if (ImGui.Checkbox("Update Paths On Startup##DevUpdatePathsOnStartup", ref ConfigurationMain.Instance.updatePathsOnStartup))
                     Configuration.Save();
 
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.PrintModList") + "##DevPrintModList")) 
+                if (ImGui.Button("Print Mod List##DevPrintModList")) 
                     Svc.Log.Info(string.Join("\n", PluginInterface.InstalledPlugins.Where(pl => pl.IsLoaded).GroupBy(pl => pl.Manifest.InstalledFromUrl).OrderByDescending(g => g.Count()).Select(g => g.Key+"\n\t"+string.Join("\n\t", g.Select(pl => pl.Name)))));
-                unsafe
-                {
-                    ImGuiEx.Text(Loc.Get("ConfigTab.Dev.InvitedBy") + InfoProxyPartyInvite.Instance()->InviterName + " | " + InfoProxyPartyInvite.Instance()->InviterWorldId);
-                }
 
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.DutySupport.Header") + "##DevDutySupport")) //ImGui.Button("check duty support?"))
-                    if(GenericHelpers.TryGetAddonMaster<AddonMaster.DawnStory>(out AddonMaster.DawnStory? m))
-                        if (m.IsAddonReady)
-                        {
-                            ImGuiEx.Text(Loc.Get("ConfigTab.Dev.DutySupport.Selected") + m.Reader.CurrentSelection);
-
-                            ImGuiEx.Text(Loc.Get("ConfigTab.Dev.DutySupport.Cnt") + m.Reader.EntryCount);
-                            foreach (AddonMaster.DawnStory.Entry? x in m.Entries)
-                            {
-                                ImGuiEx.Text($"{x.Name} / {x.ReaderEntry.Callback} / {x.Index}");
-                                if (ImGuiEx.HoveredAndClicked() && x.Status != 2)
-                                    x.Select();
-                            }
-                        }
-
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Squadron.Header") + "##DevSquadron"))
-                    unsafe
-                    {
-                        if (GenericHelpers.TryGetAddonByName("GcArmyCapture", out AtkUnitBase* armyCaptureAtk) && GenericHelpers.IsAddonReady(armyCaptureAtk))
-                        {
-                            ImGui.Indent();
-                            if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Squadron.Duties") + "##DevSquadronDuties"))
-                            {
-                                ReaderGCArmyCapture armyCapture = new(armyCaptureAtk);
-                                ImGui.Text($"{armyCapture.PlayerCharLvl} ({armyCapture.PlayerCharIlvl}) {armyCapture.PlayerCharName}");
-                                ImGui.Columns(6);
-
-                                ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Enabled"));
-                                ImGui.NextColumn();
-                                ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Completed"));
-                                ImGui.NextColumn();
-
-                                ImGui.NextColumn();
-                                ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Name"));
-                                ImGui.NextColumn();
-                                ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Level"));
-                                ImGui.NextColumn();
-                                ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Synced"));
-                                ImGui.NextColumn();
-
-
-                                foreach (ReaderGCArmyCapture.DungeonInfo dungeon in armyCapture.Entries)
-                                {
-                                    bool unk0 = dungeon.Unk0;
-                                    ImGui.Checkbox(string.Empty, ref unk0);
-                                    ImGui.NextColumn();
-                                    bool unk1 = dungeon.Completed;
-                                    ImGui.Checkbox(string.Empty, ref unk1);
-                                    ImGui.NextColumn();
-                                    ImGui.Text(dungeon.Unk2.ToString());
-                                    ImGui.NextColumn();
-                                    ImGui.Text(dungeon.Name.TextValue);
-                                    ImGui.NextColumn();
-                                    ImGui.Text(dungeon.Level);
-                                    ImGui.NextColumn();
-                                    bool synced = dungeon.Synced;
-                                    ImGui.Checkbox(string.Empty, ref synced);
-                                    ImGui.NextColumn();
-                                }
-                                ImGui.Columns(1);
-                            }
-                            if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Squadron.AvailableMembers") + "##DevGCArmyMembers"))
-                                if (GenericHelpers.TryGetAddonByName("GcArmyMemberList", out AtkUnitBase* armyMemberListAtk) && GenericHelpers.IsAddonReady(armyMemberListAtk))
-                                {
-                                    ReaderGCArmyMemberList armyMemberList = new(armyMemberListAtk);
-
-                                    ImGui.Columns(13);
-
-
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Selected"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Name"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Class"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.ClassId"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Level"));
-                                    ImGui.NextColumn();
-                                    ImGui.NextColumn();
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Physical"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Mental"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Tactical"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Chemistry"));
-                                    ImGui.NextColumn();
-                                    ImGui.Text(Loc.Get("ConfigTab.Dev.Squadron.Columns.Tactics"));
-                                    ImGui.NextColumn();
-
-
-                                    foreach (ReaderGCArmyMemberList.MemberInfo? member in armyMemberList.Entries)
-                                    {
-                                        ImGui.Text(member.Unk0.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Selected.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Name);
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Class);
-                                        ImGui.NextColumn();
-                                        ImGui.Text($"{member.ClassId} ({(ReaderGCArmyMemberList.SquadronClassType)(byte) member.ClassId})");
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Level.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Unk3.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Unk4.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Physical.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Mental.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Tactical.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Chemistry.ToString());
-                                        ImGui.NextColumn();
-                                        ImGui.Text(member.Tactics.ToString());
-                                        ImGui.NextColumn();
-                                    }
-
-                                    ImGui.Columns(1);
-                                }
-
-                            ImGui.Unindent();
-                        }
-                    }
-
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.TTCards.Header") + "##DevAvailableTTShop"))
-                    unsafe
-                    {
-                        if (GenericHelpers.TryGetAddonByName("TripleTriadCoinExchange", out AtkUnitBase* exchangeAddon))
-                            if (exchangeAddon->IsReady)
-                            {
-                                ReaderTripleTriadCoinExchange exchange = new(exchangeAddon);
-
-                                ImGuiEx.Text(Loc.Get("ConfigTab.Dev.TTCards.Cnt") + exchange.EntryCount);
-                                foreach (ReaderTripleTriadCoinExchange.CardEntry? x in exchange.Entries)
-                                {
-                                    ImGuiEx.Text($"({x.Id}) {x.Name} | {x.Count} | {x.Value} | {x.InDeck}");
-                                    if (ImGuiEx.HoveredAndClicked())
-                                    {
-                                        //x.Select();
-                                    }
-                                }
-                            }
-                    }
-
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Partycheck.Header") + "##DevPartyInfo"))
-                {
-                    ImGui.Indent();
-                    unsafe
-                    {
-                        ImGui.Text(Loc.Get("ConfigTab.Dev.Partycheck.PartySize") + Svc.Party.Count);
-                    
-                        bool healer   = false;
-                        bool tank     = false;
-                        int  dpsCount = 0;
-
-                        foreach (IPartyMember? item in Svc.Party)
-                        {
-                            ImGui.Text($"{item.ClassJob.ValueNullable?.Role} {((Job) item.ClassJob.RowId)} {((Job)item.ClassJob.RowId).GetCombatRole()}");
-                            switch (item.ClassJob.ValueNullable?.Role)
-                            {
-                                case 1:
-                                    tank = true;
-                                    break;
-                                case 2:
-                                case 3:
-                                    dpsCount++;
-                                    break;
-                                case 4:
-                                    healer = true;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        ImGui.NewLine();
-                        ImGui.Text(Loc.Get("ConfigTab.Dev.Partycheck.Valid") + (tank && healer && dpsCount > 1));
-                        ImGui.NewLine();
-                        foreach (UniversalPartyMember member in UniversalParty.Members)
-                        {
-                            ImGui.Text($"{member.ClassJob} {member.ClassJob.GetCombatRole()}");
-                        }
-                        ImGui.NewLine();
-
-                        foreach (PartyMember member in GroupManager.Instance()->MainGroup.PartyMembers)
-                        {
-                            ImGui.Text($"{(Job) member.ClassJob} {((Job) member.ClassJob).GetCombatRole()}");
-                        }
-                        ImGui.NewLine();
-                        try
-                        {
-                            InfoProxyPartyMember* instance = InfoProxyPartyMember.Instance();
-                            ImGui.Text(instance->EntryCount.ToString());
-                            ImGui.Text(instance->GetEntryCount().ToString());
-
-                            for (uint i = 0; i < instance->GetEntryCount(); i++)
-                            {
-                                InfoProxyCommonList.CharacterData* characterData = instance->GetEntry(i);
-                                ImGui.Text($"{(Job) characterData->Job} {((Job)characterData->Job).GetCombatRole()}");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Svc.Log.Error(ex.ToString());
-                        }
-                    }
-                    ImGui.Unindent();
-                }
-
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.BLU.Header") + "##DevBlueLoadout"))
-                {
-                    unsafe
-                    {
-                        Span<uint> blu = ActionManager.Instance()->BlueMageActions;
-                        foreach (uint u in blu)
-                        {
-                            if (u != 0)
-                            {
-                                if (BLUHelper.spellsById.TryGetValue(BLUHelper.NormalToAoz(u), out BLUHelper.BLUSpell? spell))
-                                {
-                                    ImGui.AlignTextToFramePadding();
-                                    ImGui.Text($"{u}: {BLUHelper.NormalToAoz(u)} {spell.Entry} {spell.Name}");
-                                    ImGui.SameLine();
-                                    if (ImGui.Button(Loc.Get("ConfigTab.Dev.BLU.Unload") + $"##DevBlueLoadoutUnload_{u}"))
-                                        BLUHelper.SpellLoadoutOut(spell.Entry);
-                                }
-
-                            } else
-                            {
-                                ImGui.Text(Loc.Get("ConfigTab.Dev.BLU.NothingLoaded"));
-                                ImGui.SameLine();
-                                if (ImGui.Button(Loc.Get("ConfigTab.Dev.BLU.Load") + "##DevBlueLoadoutLoad"))
-                                {
-                                    BLUHelper.SpellLoadoutIn((byte)Random.Shared.Next(1, 124));
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.RetainerPrices.Header") + "##DevRetainerPricesCheck"))
-                {
-                    unsafe
-                    {
-                        ImGui.Indent();
-
-
-                        InventoryContainer* container = InventoryManager.Instance()->GetInventoryContainer(InventoryType.RetainerMarket);
-                        Span<ulong>         prices    = InventoryManager.Instance()->RetainerMarketPrices;
-                        ImGui.Columns(2);
-
-                        for (int i = 0; i < container->Size; i++)
-                        {
-                            InventoryItem item = container->Items[i];
-                            ImGui.Text(item.Quantity.ToString());
-                            ImGui.NextColumn();
-                            ulong price = prices[i];
-                            ImGuiEx.Text(price.ToString());
-                            ImGui.NextColumn();
-                        }
-
-                        ImGui.Columns();
-                        ImGui.Unindent();
-                    }
-                }
-
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Buddy.Header") + "##DevBuddyChecks"))
-                {
-                    unsafe
-                    {
-                        Span<Buddy.BuddyMember> span = new(UIState.Instance()->Buddy.DutyHelperInfo.DutyHelpers, 7);
-                        ImGui.Columns(3);
-                        foreach (Buddy.BuddyMember member in span)
-                        {
-                            ImGui.Text(member.DataId.ToString());
-                            ImGui.NextColumn();
-                            ImGui.Text(member.EntityId.ToString());
-                            ImGui.NextColumn();
-                            ImGui.Text(member.Synced.ToString());
-                            ImGui.NextColumn();
-                        }
-                        ImGui.Columns(1);
-                        ImGui.Text($"Party {Svc.Party.Length}");
-                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Count}");
-                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(1).FirstOrDefault()?.ObjectKind}");
-                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(1).FirstOrDefault()?.BaseId}");
-                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(2).FirstOrDefault()?.BaseId}");
-                        ImGui.Text($"Party {PartyHelper.GetPartyMembers().Skip(3).FirstOrDefault()?.BaseId}");
-                        ImGui.Text($"Buddies: {Svc.Buddies.Length}");
-                        ImGui.Text($"Buddies: {Svc.Buddies.Count}");
-                        ImGui.Text($"Pet: {Svc.Buddies.PetBuddy?.GameObject?.Name}");
-                        ImGui.Text($"Pet: {Svc.Buddies.PetBuddy?.GameObject?.Name}");
-                        ImGui.Text($"Companion: {Svc.Buddies.CompanionBuddy?.GameObject?.Name}");
-                    }
-                }
-
-
-                if(ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.CheckAction") + "##DevCheckActionStatus"))
-                    unsafe
-                    {
-                        Svc.Log.Warning(ActionManager.Instance()->GetActionStatus(ActionType.Action, 23282).ToString());
-                    }
-                ImGui.SameLine();
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.CheckAction2") + "##DevCheckActionStatus2"))
-                    unsafe
-                    {
-                        Svc.Log.Warning(ActionManager.Instance()->GetActionStatus(ActionType.Action, 23277).ToString());
-                    }
-
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.Return") + "##DevReturnButton"))
-                    unsafe
-                    {
-                        VNavmesh_IPCSubscriber.Path_Stop();
-                        ActionManager.Instance()->UseAction(ActionType.Action, 6);
-                    }
-
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.RotationOn") + "##DevRotationOn")) 
+                if (ImGui.Button("Rotation On##DevRotationOn")) 
                     Plugin.SetRotationPluginSettings(true, ignoreConfig: true, ignoreTimer: true);
 
                 ImGui.SameLine();
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.RotationOff") + "##DevRotationoff"))
+                if (ImGui.Button("Rotation Off##DevRotationOff"))
                 {
                     Plugin.SetRotationPluginSettings(false, ignoreConfig: true, ignoreTimer: true);
                     if(Wrath_IPCSubscriber.IsEnabled)
                         Wrath_IPCSubscriber.Release();
                 }
 
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.BetweenLoopActions") + "##DevBetweenLoops"))
+                if (ImGui.Button("Between Loop Actions##DevBetweenLoops"))
                 {
                     Plugin.CurrentTerritoryContent =  ContentHelper.DictionaryContent.Values.First();
                     Plugin.states                  |= PluginState.Other;
                     Plugin.LoopTasks(false);
                 }
 
-                if (ImGui.Button(Loc.Get("ConfigTab.Dev.Actions.BossLootTest") + "##DevBossLootTest"))
+                if (ImGui.Button("Boss Loot Test##DevBossLootTest"))
                 {
                     IEnumerable<IGameObject> treasures = ObjectHelper.GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Treasure)?.
                                                                       Where(x => ObjectHelper.BelowDistanceToPoint(x.Position, Player.Position, 50, 10)) ?? [];
                     Svc.Log.Debug(treasures.Count() + "\n" + string.Join("\n", treasures.Select(igo => igo.Position.ToString())));
                 }
 
-                if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Teleport.Header") + "##DevTPPlay"))
+                if (ImGui.CollapsingHeader("Sheet Check"))
                 {
-                    ImGui.Indent();
-                    if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Teleport.Warps") + "##DevWarps"))
-                    {
-                        ImGui.Indent();
-                        foreach (Warp warp in Svc.Data.GameData.GetExcelSheet<Warp>()!)
-                        {
-                            if (warp.TerritoryType.RowId != 152)
-                                continue;
-
-                            if (ImGui.CollapsingHeader($"{warp.Name} {warp.Question} to {warp.TerritoryType.ValueNullable?.PlaceName.ValueNullable?.Name.ToString()}##{warp.RowId}"))
-                                if (warp.PopRange.ValueNullable is { } level)
-                                {
-                                    ImGui.Text($"{level.X} {level.Y} {level.Z} in {level.Territory.ValueNullable?.PlaceName.ValueNullable?.Name.ToString()}");
-                                    ImGui.Text($"{(new Vector3(level.X, level.Y, level.Z) - Player.Position)}");
-                                }
-                        }
-
-                        ImGui.Unindent();
-                    }
-
-                    if (ImGui.CollapsingHeader(Loc.Get("ConfigTab.Dev.Teleport.LevelTest")))
-                        foreach ((Level lvl, Vector3, Vector3) level in Svc.Data.GameData.GetExcelSheet<Level>()!.Where(lvl => lvl.Territory.RowId == 152)
-                                                                           .Select(lvl => (lvl, (new Vector3(lvl.X, lvl.Y, lvl.Z))))
-                                                                           .Select(tuple => (tuple.lvl, tuple.Item2, (tuple.Item2 - Player.Position))).OrderBy(lvl => lvl.Item3.LengthSquared()))
-                            ImGui.Text($"{level.lvl.RowId} {level.Item2} {level.Item3} {string.Join(" | ", level.lvl.Object.GetType().GenericTypeArguments.Select(t => t.FullName))}: {level.lvl.Object.RowId}");
-
-                    ImGuiEx.Text($"{typeof(Achievement).Assembly.GetTypes().Where(x => x.FullName?.StartsWith("Lumina.Excel.Sheets") ?? false).
-                                                        Select(x => (x, x.GetProperties().Where(f => f.PropertyType.Name == "RowRef`1" && f.PropertyType.GenericTypeArguments[0].FullName == typeof(Map).FullName))).
-                                                        Where(x => x.Item2.Any()).
-                                                        Select(x => $"{x.x} references {x.Item2.Select(pi => pi.Name).Print(", ")}").Print("\n")}");
-                    ImGui.Unindent();
-                }
-
-                if (ImGui.CollapsingHeader("DevNoviceHeader"))
-                {
-                    if (ImGui.Button("DevNoviceQueue"))
-                        Svc.Log.Warning("Queue: " + QueueHelper.Instance.QueueNoviceTutorial(ConfigurationMain.Instance.noviceQueue));
-                    ImGui.SameLine();
-                    ImGui.InputUInt($"##{nameof(ConfigurationMain.Instance.noviceQueue)}", ref ConfigurationMain.Instance.noviceQueue);
-
                     ImGuiEx.Text($"{typeof(Achievement).Assembly.GetTypes().Where(x => x.FullName?.StartsWith("Lumina.Excel.Sheets") ?? false).
                                                         Select(x => (x, x.GetProperties().Where(f => f.PropertyType.Name == "RowRef`1" && f.PropertyType.GenericTypeArguments[0] == typeof(Tutorial)))).
                                                         Where(x => x.Item2.Any()).
@@ -1860,21 +1498,21 @@ public static class ConfigTab
             {
                 ImGui.SameLine();
                 int rebuildX = Configuration.RebuildNavmeshAfterStuckXTimes;
-                if(ImGui.InputInt(Loc.Get("ConfigTab.Duty.RebuildNavmeshTimes"), ref rebuildX, 1))
+                if(ImGui.InputInt(Loc.Get("ConfigTab.Duty.RebuildNavmeshTimes") + "###RebuildTimesConfig", ref rebuildX, 1))
                 {
                     Configuration.RebuildNavmeshAfterStuckXTimes = (byte) Math.Clamp(rebuildX, byte.MinValue+1, byte.MaxValue);
                     Configuration.Save();
                 }
             }
 
-            if (ImGui.Checkbox(Loc.Get("ConfigTab.Duty.UseReturnWhenStuck"), ref Configuration.stuckReturn))
+            if (ImGui.Checkbox(Loc.Get("ConfigTab.Duty.UseReturnWhenStuck") + "###UseReturnConfig", ref Configuration.stuckReturn))
                 Configuration.Save();
 
             if (Configuration.StuckReturn)
             {
                 ImGui.SameLine();
                 int returnX = Configuration.StuckReturnX;
-                if (ImGui.InputInt(Loc.Get("ConfigTab.Duty.ReturnTimes"), ref returnX, 1))
+                if (ImGui.InputInt(Loc.Get("ConfigTab.Duty.ReturnTimes") + "###ReturnTimesConfig", ref returnX, 1))
                 {
                     Configuration.StuckReturnX = (byte)Math.Clamp(returnX, byte.MinValue + 1, byte.MaxValue);
                     Configuration.Save();

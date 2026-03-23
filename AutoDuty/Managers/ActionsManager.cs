@@ -62,7 +62,8 @@ namespace AutoDuty.Managers
             ("ConditionAction","condition;args,action;args", "Adds a ConditionAction step to the path; after moving to the position, AutoDuty will check the condition specified and invoke Action."),
             ("ModifyIndex", "what number (0-based)", "Adds a ModifyIndex step to the path; after moving to the position, AutoDuty will modify the index to the number specified."),
             ("Action", "", "Run any action"),
-            ("BLULoad", "enable?;which spell", "Enables or disables a spell from the current BLU loadout")
+            ("BLULoad", "enable?;which spell", "Enables or disables a spell from the current BLU loadout"),
+            ("VariantVote", "which option?", "Votes for the VVD option specified (0-based index)"),
         ];
 
         public void InvokeAction(PathAction action)
@@ -243,12 +244,15 @@ namespace AutoDuty.Managers
         {
             if (!int.TryParse(action.Arguments[0], out int _index))
                 return;
+            this.ModifyIndex(_index, action.Arguments[0][0] is '+' or '-');
+        }
 
-            if (action.Arguments[0][0] is '+' or '-')
-                Plugin.indexer += _index;
+        private void ModifyIndex(int index, bool modify)
+        {
+            if(modify)
+                Plugin.indexer += index;
             else
-                Plugin.indexer = _index;
-
+                Plugin.indexer = index;
             Plugin.Stage = Stage.Reading_Path;
         }
 
@@ -304,9 +308,9 @@ namespace AutoDuty.Managers
 
         public unsafe void ForceAttack(PathAction action)
         {
-            int tot = action.Arguments[0].IsNullOrEmpty() ? 10000 : int.TryParse(action.Arguments[0], out int time) ? time : 0;
-            if (action.Arguments[0].IsNullOrEmpty())
-                action.Arguments[0] = "10000";
+            int tot = action.Arguments.Count == 0 || action.Arguments[0].IsNullOrEmpty() ? 10000 : int.TryParse(action.Arguments[0], out int time) ? time : 0;
+            if (tot <= 0)
+                tot = 10000;
             taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 16), "ForceAttack-GA16");
             taskManager.Enqueue(() => Svc.Targets.Target != null,                                        "ForceAttack-GA1", new TaskManagerConfiguration(500));
             taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 1),  "ForceAttack-GA1");
@@ -443,6 +447,11 @@ namespace AutoDuty.Managers
                     taskManager.Enqueue(() => !(GetObjectsByRadius(int.TryParse(waitForWhats[1], out int radius) ? radius : 0)?.Count > 0), $"WaitFor-BNpcInRadius{waitForWhats[1]}");
                     taskManager.Enqueue(() => IsReady, "WaitFor", new TaskManagerConfiguration(int.MaxValue));
                     break;
+                case "Addon":
+                    if (waitForWhats.Length == 1)
+                        return;
+                    taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName(waitForWhats[1], out AtkUnitBase* addon) && addon->IsReady, $"WaitFor-{waitForWhats[1]}", new TaskManagerConfiguration(int.MaxValue));
+                    break;
             }
             taskManager.Enqueue(() => Plugin.action = "");
 
@@ -511,9 +520,10 @@ namespace AutoDuty.Managers
             return false;
         }
 
-        public unsafe void Target(PathAction action)
+        public void Target(PathAction action)
         {
-            if (!TryGetObjectIdRegex(action.Arguments[0], out string? objectDataId)) return;
+            if (!TryGetObjectIdRegex(action.Arguments[0], out string? objectDataId)) 
+                return;
 
             IGameObject? gameObject = null;
             Plugin.action = $"Target: {objectDataId}";
@@ -807,6 +817,14 @@ namespace AutoDuty.Managers
             }
         }
 
+        public void VariantVote(PathAction action)
+        {
+            if (action.Arguments.Count == 0)
+                return;
+            if(int.TryParse(action.Arguments[0], out int vote))
+                VariantManager.SelectPath(vote);
+        }
+
         public void PausePandora(PathAction _)
         {
             return;
@@ -1057,7 +1075,30 @@ namespace AutoDuty.Managers
                             break;
                     }
                     break;
-                default: break;
+
+                //Merchant's Tale
+                case 1315:
+                    switch (action.Arguments[0])
+                    {
+                        case "1":
+                            taskManager.Enqueue(() =>
+                                                {
+                                                    this.Rotation(Player.Object != null && Player.Object.Health < 0.75f);
+                                                }, "DutySpecificCode-MerchantsTale-Path5-HealthCheck");
+                            taskManager.EnqueueDelay(500);
+                            taskManager.Enqueue(() =>
+                                                {
+                                                    if (Svc.Objects.OrderBy(GetDistanceToPlayer).Where(o => o.BaseId == 0x4ACD).
+                                                            Take(action.Arguments.Count > 1 && int.TryParse(action.Arguments[1], out int count) ? count : 1).
+                                                            All(o => ((ICharacter)o).MissingHp <= 0))
+                                                        this.ModifyIndex(-1, true);
+                                                }, "DutySpecificCode-MerchantsTale-Path5");
+                            taskManager.EnqueueDelay(500);
+                            break;
+                    }
+                    break;
+                default: 
+                    break;
             }
         }
     }

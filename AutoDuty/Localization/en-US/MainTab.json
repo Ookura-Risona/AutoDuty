@@ -40,6 +40,9 @@
     "Busy": "Busy...",
     "RequiresVNavmeshAlt": "AutoDuty requires vnavmesh plugin to be installed and loaded for proper navigation and movement. Please add 3rd party repo:\nhttps://puni.sh/api/repository/veyn",
     "RequiresBossModAlt": "AutoDuty requires BossMod plugin to be installed and loaded for proper mechanic handling. Please add 3rd party repo:\nhttps://puni.sh/api/repository/veyn",
+    "DungeonsRemaining": "Dungeons Remaining: {0}",
+    "DungeonsRemainingExplanation": "An estimate of how many more dungeons you can still run before reaching the daily limit of 100 duties.",
+    "CurrentVariantPath": "Current variant path",
     "Modes": {
       "Looping": "Looping",
       "Playlist": "Playlist",

@@ -1,7 +1,6 @@
 ﻿using AutoDuty.Helpers;
 using AutoDuty.External;
 using AutoDuty.IPC;
-using AutoDuty.Managers;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using ECommons;
@@ -17,8 +16,10 @@ namespace AutoDuty.Windows
     using System.Collections.Generic;
     using System.Linq;
     using Dalamud.Interface;
+    using Dalamud.Interface.Utility;
     using Data;
     using ECommons.PartyFunctions;
+    using ECommons.Throttlers;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
     using static Data.Classes;
     using Vector2 = System.Numerics.Vector2;
@@ -203,6 +204,18 @@ namespace AutoDuty.Windows
                         ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(Loc.Get("MainTab.Times")).X * 1.1f.Scale());
                         MainWindow.LoopsConfig();
                         ImGui.PopItemWidth();
+
+                        if(dutyMode == DutyMode.Variant)
+                        {
+                            using ImRaii.IEndObject _ = ImRaii.ItemWidth(150 * ImGuiHelpers.GlobalScale);
+                            ImGui.AlignTextToFramePadding();
+                            ImGui.Text(Loc.Get("MainTab.CurrentVariantPath"));
+                            using ImRaii.IEndObject __ = ImRaii.Disabled(AutoDuty.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist);
+                            ImGui.SameLine();
+                            byte variantPath = Plugin.VariantPath;
+                            ImGui.InputByte($"###Path", ref variantPath, 1);
+                            Plugin.VariantPath = variantPath;
+                        }
 
                         DrawTerminationNotice();
 
@@ -484,6 +497,19 @@ namespace AutoDuty.Windows
                             AutoDuty.Configuration.AutoDutyModeEnum = AutoDutyMode.Looping;
                             break;
                     }
+                    if (Player.Available)
+                    {
+                        if (EzThrottler.Throttle("MainTabRemainingDungeonThrottle", 2000))
+                        {
+                            if (ConfigurationMain.Instance.dutyCountResetDate < TimeHelper.GetLastDateTimeForHour(8))
+                                ConfigurationMain.Instance.dutyCountSinceReset.Clear();
+                        }
+
+
+                        ImGui.SameLine();
+                        ImGui.Text($"|{Loc.Get("MainTab.DungeonsRemaining", 100 - ConfigurationMain.Instance.dutyCountSinceReset.GetValueOrDefault(Player.CID, 0))}");
+                        ImGuiComponents.HelpMarker(Loc.Get("MainTab.DungeonsRemainingExplanation"));
+                    }
 
                     DrawTerminationNotice();
 
@@ -647,7 +673,7 @@ namespace AutoDuty.Windows
                                         
                                             ImGui.PopItemWidth();
                                             ImGui.SameLine();
-                                            ImGui.PushItemWidth((entryContainer.Paths.Count > 1 ? (ImGui.GetContentRegionAvail().X - 107f.Scale()) / 2f : ImGui.GetContentRegionAvail().X - 200f.Scale()));
+                                            ImGui.PushItemWidth(150f);
                                             if (ImGui.BeginCombo($"##Playlist{i}DutySelection", $"({entry.Id}) {entryContent.Name}"))
                                             {
                                                 Job?    entryJob  = null;
@@ -709,6 +735,14 @@ namespace AutoDuty.Windows
                                                     Plugin.playlistCurrent.Remove(entry);
                                                     Plugin.playlistCurrent.Insert(i - 1, entry);
                                                 }
+                                            }
+
+                                            if (entry.DutyMode == DutyMode.Variant)
+                                            {
+                                                ImGui.PushItemWidth(80f.Scale());
+                                                ImGui.SameLine();
+                                                ImGui.InputByte($"###Playlist{i}PathIndex", ref entry.variantPathIndex, 1);
+                                                ImGui.PopItemWidth();
                                             }
 
                                             ImGui.SameLine();

@@ -1,0 +1,4136 @@
+{
+  "Actions": [
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -588.51044,
+        "Y": 7.6293945E-06,
+        "Z": 760.75885
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "Addon;VVDVoteRoute"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "VariantVote",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "0"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            0
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "VariantVote",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "VariantVote",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "VariantVote",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "3"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Paths 1,2,3,4 -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -677.5634,
+        "Y": 3.0000002,
+        "Z": 717.7797
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19103,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -672.33704,
+        "Y": 3.0000002,
+        "Z": 716.1654
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "origin": "Player",
+          "originId": 0,
+          "originLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "target": "Object",
+          "targetId": 19135,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": "<",
+          "distance": 10.0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -763.8533,
+        "Y": -3.0450985,
+        "Z": 752.06665
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -666.21936,
+        "Y": -15.780534,
+        "Z": -311.16522
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19135;NamePlateIconId;61721&ModifyIndex;+3"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": -478.3606,
+        "Y": 0.0,
+        "Z": 781.5521
+      },
+      "Arguments": [
+        "ObjectData;19139;NamePlateIconId;61721&ModifyIndex;+2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-3"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -666.5611,
+        "Y": -15.838581,
+        "Z": -312.80295
+      },
+      "Arguments": [
+        "19135"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": "Y'nazqha"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "0"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19135;NamePlateIconId;61721&ModifyIndex;-3"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -635.25757,
+        "Y": -21.285614,
+        "Z": -391.30023
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -634.96344,
+        "Y": -21.0,
+        "Z": -414.41528
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": "Rukhkh"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -674.5873,
+        "Y": -33.281002,
+        "Z": -511.81354
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19114,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -708.2612,
+        "Y": -36.09171,
+        "Z": -547.6091
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 2015018,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2015018"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": "Damaged Fence"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -704.0415,
+        "Y": -36.07453,
+        "Z": -546.2473
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -700.0415,
+        "Y": -36.07453,
+        "Z": -552.2473
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -688.9082,
+        "Y": -48.668938,
+        "Z": -571.88666
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -700.2232,
+        "Y": -50.25362,
+        "Z": -625.082
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -696.8699,
+        "Y": -50.037502,
+        "Z": -623.87964
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectSpawned;19325;false&ModifyIndex;-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19325,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Target",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "19325"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ForceAttack",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectSpawned;19325;true&ModifyIndex;-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -720.7188,
+        "Y": -50.989155,
+        "Z": -692.9281
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19357,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -758.1644,
+        "Y": -49.85391,
+        "Z": -643.45746
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "BossMod",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "off"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -774.52,
+        "Y": -50.0,
+        "Z": -677.76
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "DutySpecificCode",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1",
+        "2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "BossMod",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -759.69446,
+        "Y": -50.0,
+        "Z": -676.91705
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19294,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -774.5201,
+        "Y": -50.0,
+        "Z": -677.7562
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -792.4864,
+        "Y": -50.0,
+        "Z": -679.3137
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -801.65424,
+        "Y": -50.000004,
+        "Z": -699.39966
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            3
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -759.6429,
+        "Y": -49.938087,
+        "Z": -750.7367
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -752.98035,
+        "Y": -49.938087,
+        "Z": -751.6451
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -767.00305,
+        "Y": -49.938087,
+        "Z": -751.7699
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -760.1345,
+        "Y": -53.09736,
+        "Z": -771.7605
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -760.12665,
+        "Y": -53.992043,
+        "Z": -804.7366
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "Note": "Pari of Plenty"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Paths 5,6,7,8 -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "19139"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": "Perturbed Peasant"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19139;NamePlateIconId;61721&ModifyIndex;-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": -477.9366,
+        "Y": 0.0,
+        "Z": 781.1128
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 2015019,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": "Scattered Crates"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2015019"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": "Scattered Crates"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -415.18402,
+        "Y": 0.0,
+        "Z": 769.19885
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "19140"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": "Unlucky Clerk"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "origin": "Player",
+          "originId": 0,
+          "originLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "target": "Object",
+          "targetId": 19135,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": "<",
+          "distance": 10.0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -385.88995,
+        "Y": 0.08219087,
+        "Z": 766.50934
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 28.196854,
+        "Y": -17.28816,
+        "Z": 838.1034
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 114.75787,
+        "Y": -26.199678,
+        "Z": 842.25305
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 160.90337,
+        "Y": -37.57677,
+        "Z": 810.0745
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 160.90337,
+        "Y": -37.57677,
+        "Z": 789.0745
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": "Genie of the Lamp"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 193.73651,
+        "Y": -29.234291,
+        "Z": 656.91986
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 204.74908,
+        "Y": -28.538397,
+        "Z": 653.4887
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19135;NamePlateIconId;61721&ModifyIndex;+2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 204.01262,
+        "Y": -28.455463,
+        "Z": 658.75464
+      },
+      "Arguments": [
+        "19135"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": "Y'nazqha"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "0"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19135;NamePlateIconId;61721&ModifyIndex;-3"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "BossMod",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "off"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "off"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 292.49222,
+        "Y": -29.957844,
+        "Z": 686.5801
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 291.3407,
+        "Y": -28.685898,
+        "Z": 686.13275
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "DutySpecificCode",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1",
+        "2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 305.80774,
+        "Y": -29.843794,
+        "Z": 674.4505
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "DutySpecificCode",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1",
+        "2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "BossMod",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 301.0176,
+        "Y": -29.923834,
+        "Z": 684.00726
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            6,
+            13
+          ]
+        }
+      ],
+      "Note": "Yawning Maw"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 346.1651,
+        "Y": -28.349913,
+        "Z": 678.3267
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 395.19586,
+        "Y": -27.487127,
+        "Z": 638.8244
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 394.18454,
+        "Y": -27.026644,
+        "Z": 636.46606
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 380.02274,
+        "Y": -24.402185,
+        "Z": 622.7808
+      },
+      "Arguments": [
+        "2015035"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6
+          ]
+        }
+      ],
+      "Note": "Tangled Seaweed Barrier"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 380.30118,
+        "Y": -23.972107,
+        "Z": 614.4118
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 237.86562,
+        "Y": -28.49469,
+        "Z": 605.6417
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19123,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 236.03432,
+        "Y": -25.740118,
+        "Z": 579.1223
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2015020"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7
+          ]
+        }
+      ],
+      "Note": "Giant Conch Shell"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 315.76004,
+        "Y": -21.777044,
+        "Z": 624.90924
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19125,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 384.5051,
+        "Y": -29.280983,
+        "Z": 581.9086
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 383.38,
+        "Y": -29.343916,
+        "Z": 579.85297
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 375.34412,
+        "Y": -29.69257,
+        "Z": 559.03827
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 375.34412,
+        "Y": -29.69257,
+        "Z": 533.03827
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "Note": "Darya the Sea-maid"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Paths 9,10,11,12 -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -579.89014,
+        "Y": -9.956883,
+        "Z": 603.38434
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -580.47504,
+        "Y": -9.9673,
+        "Z": 604.875
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "origin": "Player",
+          "originId": 0,
+          "originLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "target": "Object",
+          "targetId": 19135,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": "<",
+          "distance": 10.0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -579.96014,
+        "Y": -9.999814,
+        "Z": 531.3188
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -18.83271,
+        "Y": -70.576836,
+        "Z": -417.29227
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 2.2873256,
+        "Y": -55.25468,
+        "Z": -478.38043
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 5.0874596,
+        "Y": -50.000004,
+        "Z": -529.9208
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": "Rukhkh"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 28.005896,
+        "Y": -40.786198,
+        "Z": -593.3585
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 48.66767,
+        "Y": -31.718927,
+        "Z": -632.89594
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 54.656265,
+        "Y": -30.908794,
+        "Z": -633.8851
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19135;NamePlateIconId;61721&ModifyIndex;+2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "19135"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": "Y'nazqha"
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "0"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "SelectString",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ConditionAction",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ObjectData;19135;NamePlateIconId;61721&ModifyIndex;-3"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "off"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "BossMod",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "off"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 163.17914,
+        "Y": -25.396496,
+        "Z": -638.48755
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 177.75414,
+        "Y": -24.692678,
+        "Z": -645.8662
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "DutySpecificCode",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1",
+        "1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 149.75952,
+        "Y": -26.019506,
+        "Z": -630.24554
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "DutySpecificCode",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1",
+        "1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 127.6751,
+        "Y": -24.964474,
+        "Z": -636.58514
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "DutySpecificCode",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "1",
+        "1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "BossMod",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "on"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19132,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            10
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 85.50611,
+        "Y": -29.5,
+        "Z": -695.016
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            11
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 91.46169,
+        "Y": -22.6,
+        "Z": -728.8257
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            11
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 130.84735,
+        "Y": -29.5,
+        "Z": -708.327
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "15000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "baseId": 19125,
+          "property": "IsTargetable",
+          "value": 0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 120.65593,
+        "Y": -29.5,
+        "Z": -688.16064
+      },
+      "Arguments": [
+        "10000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            11
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 170.14587,
+        "Y": -19.973103,
+        "Z": -756.68146
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 174.96814,
+        "Y": -18.572266,
+        "Z": -767.15
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 174.96146,
+        "Y": -18.391827,
+        "Z": -769.4763
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 168.81577,
+        "Y": -16.1895,
+        "Z": -820.0527
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "Note": "Lone Swordmaster"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Paths 13 -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 399.45105,
+        "Y": -29.000053,
+        "Z": 656.8101
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ChatCommand",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "/bow"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ChatCommand",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "/s I am returned!"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 405.30753,
+        "Y": -29.000069,
+        "Z": 662.2096
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 399.3076,
+        "Y": -29.000069,
+        "Z": 656.6095
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 396.30753,
+        "Y": -29.000069,
+        "Z": 663.2096
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 399.3076,
+        "Y": -29.000069,
+        "Z": 656.6095
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 405.5076,
+        "Y": -29.000069,
+        "Z": 654.3096
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 399.3076,
+        "Y": -29.000069,
+        "Z": 656.6095
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 400.60767,
+        "Y": -29.000069,
+        "Z": 663.609
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 400.46906,
+        "Y": -28.990343,
+        "Z": 661.7212
+      },
+      "Arguments": [
+        "2000"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "origin": "Player",
+          "originId": 0,
+          "originLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "target": "Object",
+          "targetId": 19135,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": "<",
+          "distance": 15.0
+        },
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 437.20886,
+        "Y": -29.98,
+        "Z": 707.0793
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 804.6809,
+        "Y": -30.0,
+        "Z": 670.415
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "pathIndices": [
+            13
+          ]
+        }
+      ],
+      "Note": "Deadly Dandan"
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 295,
+    "Changelog": [
+      {
+        "Version": 295,
+        "Change": "Stabilized initial vote and right path npc"
+      },
+      {
+        "Version": 295,
+        "Change": "Fixed path 2"
+      },
+      {
+        "Version": 296,
+        "Change": "Path 3,5,9 stabilized"
+      },
+      {
+        "Version": 297,
+        "Change": "Path 10 Golem additional wait step"
+      }
+    ],
+    "Notes": []
+  }
+}

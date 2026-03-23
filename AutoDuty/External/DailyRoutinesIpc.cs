@@ -26,13 +26,14 @@ internal static class DailyRoutinesIpc
     internal static bool IsDailyRoutinesEnabled =>
         _pluginInterface?.InstalledPlugins.Any(x => x is { InternalName: "DailyRoutines", IsLoaded: true }) == true;
 
-    internal static bool ShouldIncludePortaDecumana =>
-        IPCSubscriber_Common.IsReady("SkipCutscene") || IsDailyRoutinesEnabled;
-
     internal static string PortaDecumanaHelpText =>
-        IsDailyRoutinesEnabled && !IPCSubscriber_Common.IsReady("SkipCutscene")
-            ? "DailyRoutines detected. AutoDuty will temporarily enable AutoCutsceneSkip while running Porta Decumana."
-            : "CutsceneSkip detected. Please keep it actually on.";
+        IPCSubscriber_Common.IsReady("SkipCutscene")
+            ? "SkipCutscene detected. Please keep it actually on."
+            : IPCSubscriber_Common.IsReady("Skippy")
+                ? "Skippy detected. Please keep it enabled for Porta Decumana."
+                : IsDailyRoutinesEnabled
+                    ? "DailyRoutines detected. AutoDuty will temporarily enable AutoCutsceneSkip while running Porta Decumana."
+                    : "Porta Decumana requires SkipCutscene, Skippy, or DailyRoutines support.";
 
     internal static void Initialize(IDalamudPluginInterface pluginInterface)
     {

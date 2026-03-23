@@ -19,7 +19,7 @@ namespace AutoDuty.Helpers
         
         private static List<uint> ListGCArmyContent { get; set; } = [1245, 1039, 1041, 1042, 1330, 1331, 0/*159*/, 160, 349, 362, 188, 1064, 1066, 430, 510]; //Wanderer's Palace out for now.
         
-        private static List<uint> ListVVDContent { get; set; } = [1069, 1137, 1176]; //[1069, 1075, 1076, 1137, 1155, 1156, 1176, 1179, 1180]; *Criterions
+        private static List<uint> ListVVDContent { get; set; } = [1069, 1137, 1176, 1315]; //[1069, 1075, 1076, 1137, 1155, 1156, 1176, 1179, 1180]; *Criterions
 
         private static bool TryGetDawnIndex(uint indexIn, uint ex, out int indexOut)
         {

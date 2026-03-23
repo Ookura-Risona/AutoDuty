@@ -442,6 +442,7 @@ namespace AutoDuty.Windows
                             ConditionType.ObjectData => new PathActionConditionObjectData(),
                             ConditionType.Job => new PathActionConditionJob(),
                             ConditionType.ActionStatus => new PathActionConditionActionStatus(),
+                            ConditionType.VariantPath => new PathActionConditionVariantPath(),
                             _ => throw new ArgumentOutOfRangeException()
                         });
                     }
@@ -550,7 +551,9 @@ namespace AutoDuty.Windows
 
                     if (_duplicateItem)
                     {
-                        Plugin.Actions.Insert(_duplicateItemIndex, Plugin.Actions[_duplicateItemIndex].JSONClone());
+                        PathAction clone = Plugin.Actions[_duplicateItemIndex].JSONClone(ConfigurationMain.JsonSerializerSettings);
+                        if(clone != null)
+                            Plugin.Actions.Insert(_duplicateItemIndex, clone);
                         _duplicateItem = false;
                     }
                 }

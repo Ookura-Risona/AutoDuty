@@ -1,0 +1,476 @@
+{
+  "Actions": [
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 3.0817413,
+        "Y": -86.02058,
+        "Z": 329.90027
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump Right"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 68.742645,
+        "Y": 74.228584,
+        "Z": 256.8734
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump Left"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.3915292,
+        "Y": -60.90765,
+        "Z": 236.83199
+      },
+      "Arguments": [
+        "14000"
+      ],
+      "Conditions": [],
+      "Note": "Wait For Panel #1 To Activate"
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.26097775,
+        "Y": -57.45595,
+        "Z": 223.98341
+      },
+      "Arguments": [
+        "14000"
+      ],
+      "Conditions": [],
+      "Note": "Wait For Panel #2 To Activate"
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 5.5540257,
+        "Y": -51.03931,
+        "Z": 199.06541
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Go Back To Center"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 62.702263,
+        "Y": 2.4499378,
+        "Z": 108.99034
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump To Left Of Semi-Circle"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -33.61982,
+        "Y": 1.2229955,
+        "Z": 56.9418
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": "Makes sure you won't walk off the panel to target the patrolling enemy."
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -33.61982,
+        "Y": 1.2229955,
+        "Z": 56.9418
+      },
+      "Arguments": [
+        "14000"
+      ],
+      "Conditions": [],
+      "Note": "Wait For Panel To Activate"
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Jump",
+      "Position": {
+        "X": -23.380667,
+        "Y": 0.578985,
+        "Z": 60.788483
+      },
+      "Arguments": [
+        "250"
+      ],
+      "Conditions": [],
+      "Note": " Jumps into the death wall. Necessary to be on the SelectYes step if the rez bug happens."
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "SelectYesno",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "Yes"
+      ],
+      "Conditions": [],
+      "Note": "This will accept the rez if AD bugs out and doesn't for reason."
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 3.082,
+        "Y": -86.021,
+        "Z": 329.9
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump Right"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 68.743004,
+        "Y": 74.229004,
+        "Z": 256.87302
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump Left"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -1.013348,
+        "Y": -50.94448,
+        "Z": 198.46791
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump Left"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -67.853455,
+        "Y": -8.850731,
+        "Z": 114.291504
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump To Right Of Semi-Circle"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 33.914383,
+        "Y": 1.2578886,
+        "Z": 56.68622
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": "Makes sure you won't walk off the panel to target the patrolling enemy."
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Wait",
+      "Position": {
+        "X": 33.914383,
+        "Y": 1.2578886,
+        "Z": 56.68622
+      },
+      "Arguments": [
+        "14000"
+      ],
+      "Conditions": [],
+      "Note": "Wait For Panel To Activate"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -0.38482118,
+        "Y": 1.0445162,
+        "Z": 66.96775
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Jump To Center"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ConditionFlag;Jumping61;FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 2.312538,
+        "Y": -4.9630003,
+        "Z": 13.339716
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.4716593,
+        "Y": -4.9630003,
+        "Z": -4.535334
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Kaliya"
+    }
+  ],
+  "Meta": {
+    "CreatedAt": 298,
+    "Changelog": [
+      {
+        "Version": 299,
+        "Change": "Adjusted the Unsynced tags to only be on the second set of steps going to the other side. Adjusted the death-wall part to work normally and with the weird rez bug I got initially. Removed excess steps waiting for after combat."
+      }
+    ],
+    "Notes": []
+  }
+}

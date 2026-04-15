@@ -298,7 +298,7 @@ public sealed class AutoDuty : IDalamudPlugin
             this.assemblyDirectoryInfo = this.assemblyFileInfo.Directory;
 
             this.Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 296) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 300) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!this.configDirectory.Exists)
@@ -1898,7 +1898,8 @@ public sealed class AutoDuty : IDalamudPlugin
 
     internal void SetGeneralSettings(bool on)
     {
-        if (!on) this.GetGeneralSettings();
+        if (!on)
+            this.GetGeneralSettings();
 
         if (Configuration.AutoManageVnavAlignCamera && this.settingsActive.HasFlag(SettingsActive.Vnav_Align_Camera_Off))
         {

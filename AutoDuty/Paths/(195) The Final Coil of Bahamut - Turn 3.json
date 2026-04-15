@@ -1,20 +1,28 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
-        "X": 0,
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.3602946,
         "Y": -53.68296,
-        "Z": -170
+        "Z": -157.63081
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [
+        "3303"
+      ],
+      "Conditions": [],
+      "Note": "Phoenix"
     }
   ],
-  "meta": {
-    "createdAt": 227,
-    "changelog": [],
-    "notes": []
+  "Meta": {
+    "CreatedAt": 227,
+    "Changelog": [
+      {
+        "Version": 298,
+        "Change": ""
+      }
+    ],
+    "Notes": []
   }
 }

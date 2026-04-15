@@ -65,7 +65,7 @@ namespace AutoDuty.Helpers
             Svc.Framework.Update -= this.HelperUpdate;
             State                =  ActionState.None;
             Plugin.states        &= ~PluginState.Other;
-            if (!Plugin.states.HasFlag(PluginState.Looping))
+            if (!Plugin.states.HasFlag(PluginState.Looping) )
                 Plugin.SetGeneralSettings(true);
 
             territoryType = 0;

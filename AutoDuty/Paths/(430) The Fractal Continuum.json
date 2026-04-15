@@ -1,501 +1,656 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": 35.560867,
         "Y": -2.3841858E-07,
         "Z": 215.45259
       },
-      "arguments": [
+      "Arguments": [
         "2005242"
       ],
-      "note": "Allagan Teleporter"
+      "Conditions": [],
+      "Note": "Allagan Teleporter"
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 162.1085,
+        "Y": -3.5762787E-07,
+        "Z": 126.24891
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 228.48267,
+        "Y": 0.952477,
+        "Z": 104.01571
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 227.09108,
+        "Y": 1.8,
+        "Z": 53.101574
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 185.9451,
+        "Y": 1.8000002,
+        "Z": 25.791203
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 147.06482,
         "Y": 2.6999996,
         "Z": 31.211569
       },
-      "arguments": [
+      "Arguments": [
         "true"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 130.79497,
         "Y": 2.7524755,
         "Z": 40.11606
       },
-      "arguments": [],
-      "note": "Phantom Ray"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Phantom Ray"
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": 66.452194,
         "Y": 2.7416694,
         "Z": 76.812996
       },
-      "arguments": [
+      "Arguments": [
         "2005243"
       ],
-      "note": "Allagan Teleporter"
+      "Conditions": [],
+      "Note": "Allagan Teleporter"
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -240.46394,
+        "Y": -1.1920929E-07,
+        "Z": 159.39748
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure, W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -307.1,
+        "Y": -2.7000217,
+        "Z": 130.59325
+      },
+      "Arguments": [
+        "true"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -313.1523,
         "Y": -1.5233903,
         "Z": 131.68538
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "Jump",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "Jump",
+      "Position": {
         "X": -312.52225,
         "Y": -1.5154858,
         "Z": 133.97801
       },
-      "arguments": [
+      "Arguments": [
         "250"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": -313.05432,
         "Y": 0.17434967,
         "Z": 138.3718
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "MoveTo",
+      "Position": {
         "X": -317.07504,
         "Y": -0.3263378,
         "Z": 133.18024
       },
-      "arguments": [
+      "Arguments": [
         "false"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "Treasure, W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -321.14536,
+        "Y": 2.3841858E-07,
+        "Z": 134.2319
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "W2W",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -271.27768,
+        "Y": -2.6475267,
+        "Z": 103.65052
+      },
+      "Arguments": [
+        "false"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -242.42778,
         "Y": -1.4720837,
         "Z": 112.8937
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "Jump",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "Jump",
+      "Position": {
         "X": -243.13081,
         "Y": -1.5103258,
         "Z": 110.60748
       },
-      "arguments": [
+      "Arguments": [
         "250"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": -242.38641,
         "Y": 0.17994857,
         "Z": 106.3097
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "MoveTo",
+      "Position": {
         "X": -236.0963,
         "Y": -1.8119812E-05,
         "Z": 110.54394
       },
-      "arguments": [
+      "Arguments": [
         "false"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -191.90323,
         "Y": 0.037077665,
         "Z": 99.47533
       },
-      "arguments": [
+      "Arguments": [
         "true"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -169.39519,
         "Y": 0.011669397,
         "Z": 93.915375
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": -105.57304,
         "Y": -3.8146973E-06,
         "Z": 76.94864
       },
-      "arguments": [
+      "Arguments": [
         "2005244"
       ],
-      "note": "Allagan Teleporter"
+      "Conditions": [],
+      "Note": "Allagan Teleporter"
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Revival",
-      "name": "Revival",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 1.8260361,
         "Y": 0.23716056,
         "Z": 205.09894
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": 2.275641,
         "Y": -2.3841858E-07,
         "Z": 179.72731
       },
-      "arguments": [
+      "Arguments": [
         "2005261"
       ],
-      "note": "Allagan Teleporter"
+      "Conditions": [],
+      "Note": "Allagan Teleporter"
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -22.730883,
         "Y": 53.142616,
         "Z": -185.50232
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 23.271034,
         "Y": 53.142616,
         "Z": -195.31618
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -2.2747152,
         "Y": 53.142616,
         "Z": -196.40973
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": -0.41926986,
         "Y": 53.142616,
         "Z": -202.04817
       },
-      "arguments": [
+      "Arguments": [
         "2005263"
       ],
-      "note": "Violet Control Unit"
+      "Conditions": [],
+      "Note": "Violet Control Unit"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 57.620113,
         "Y": 53.142616,
         "Z": -213.32004
       },
-      "arguments": [
+      "Arguments": [
         "true"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 138.01868,
         "Y": 53.142616,
         "Z": -426.78165
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 166.81139,
         "Y": 53.142616,
         "Z": -446.03644
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": 128.53969,
         "Y": 53.142616,
         "Z": -424.13513
       },
-      "arguments": [
+      "Arguments": [
         "2005262"
       ],
-      "note": "Emerald Control Unit"
+      "Conditions": [],
+      "Note": "Emerald Control Unit"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 89.733315,
         "Y": 53.14261,
         "Z": -468.2036
       },
-      "arguments": [
+      "Arguments": [
         "true"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -133.41525,
         "Y": 53.142616,
         "Z": -439.93835
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": -166.79626,
         "Y": 53.142616,
         "Z": -446.57635
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": -127.52142,
         "Y": 53.14261,
         "Z": -423.7697
       },
-      "arguments": [
+      "Arguments": [
         "2005264"
       ],
-      "note": "Crimson Control Unit"
+      "Conditions": [],
+      "Note": "Crimson Control Unit"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -146.94633,
         "Y": 53.142616,
         "Z": -368.65564
       },
-      "arguments": [
+      "Arguments": [
         "true"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 0.2976375,
         "Y": 46.597,
         "Z": -344.6078
       },
-      "arguments": [],
-      "note": "Curator"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Curator"
     }
   ],
-  "meta": {
-    "createdAt": 106,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 106,
+    "Changelog": [
       {
-        "version": 170,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 170,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
       },
       {
-        "version": 221,
-        "change": "Full overhaul (b3 not included due to it being impossible to reach atm)"
+        "Version": 221,
+        "Change": "Full overhaul (b3 not included due to it being impossible to reach atm)"
       },
       {
-        "version": 221,
-        "change": "added last part"
+        "Version": 221,
+        "Change": "added last part"
+      },
+      {
+        "Version": 299,
+        "Change": ""
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

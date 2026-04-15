@@ -1,12 +1,38 @@
 {
   "Actions": [
     {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
+    },
+    {
       "Tag": "None",
       "Name": "KillInRange",
       "Position": {
-        "X": 262.324,
-        "Y": -3.877,
-        "Z": 97.74
+        "X": 263.24084,
+        "Y": -4.0729547,
+        "Z": 104.6609
+      },
+      "Arguments": [
+        "50"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "KillInRange",
+      "Position": {
+        "X": 246.05627,
+        "Y": -1.6525973,
+        "Z": 112.22568
       },
       "Arguments": [
         "50"
@@ -46,9 +72,23 @@
       "Tag": "None",
       "Name": "KillInRange",
       "Position": {
-        "X": 94.59,
-        "Y": -4.9,
-        "Z": 167.98
+        "X": 100.82104,
+        "Y": -4.876109,
+        "Z": 172.49214
+      },
+      "Arguments": [
+        "50"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "KillInRange",
+      "Position": {
+        "X": 113.889694,
+        "Y": -1.2527013,
+        "Z": 160.4139
       },
       "Arguments": [
         "50"
@@ -85,87 +125,71 @@
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
-        "X": 19.061289,
-        "Y": 0.094186544,
-        "Z": 122.0342
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 12.721626,
-        "Y": -1.6114043,
-        "Z": 135.71356
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -15.59859,
-        "Y": -1.1316875,
-        "Z": 147.11903
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -36.615063,
-        "Y": -0.35103357,
-        "Z": 140.27277
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -48.01541,
-        "Y": 5.5611906,
-        "Z": 150.80896
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -48.539455,
-        "Y": 3.2327464,
-        "Z": 168.12364
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -41.619495,
-        "Y": -2.5139806,
-        "Z": 173.88075
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [
-        "false"
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -20.413168,
+        "Y": -0.95471555,
+        "Z": 146.28275
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -48.440857,
+        "Y": 5.845995,
+        "Z": 158.52216
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -47.133793,
+        "Y": 3.5260937,
+        "Z": 167.30023
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -42.4893,
+        "Y": -2.5454347,
+        "Z": 174.53072
+      },
+      "Arguments": [
+        "FALSE"
       ],
       "Conditions": [],
       "Note": ""
@@ -179,10 +203,22 @@
         "Z": 187.39543
       },
       "Arguments": [
-        "false"
+        "FALSE"
       ],
       "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #1 -->"
     },
     {
       "Tag": "None",
@@ -195,6 +231,18 @@
       "Arguments": [],
       "Conditions": [],
       "Note": "Myrmidon Princess"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
     },
     {
       "Tag": "None",
@@ -225,6 +273,34 @@
       "Note": ""
     },
     {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "KillInRange",
+      "Position": {
+        "X": 253.72389,
+        "Y": -1.3240283,
+        "Z": -50.308716
+      },
+      "Arguments": [
+        "25"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "Treasure",
       "Name": "TreasureCoffer",
       "Position": {
@@ -245,7 +321,7 @@
         "Z": -97.31757
       },
       "Arguments": [
-        "20"
+        "25"
       ],
       "Conditions": [],
       "Note": ""
@@ -282,12 +358,52 @@
       "Tag": "None",
       "Name": "KillInRange",
       "Position": {
-        "X": 318.90244,
-        "Y": -3.2365692,
-        "Z": -174.40202
+        "X": 285.18137,
+        "Y": -0.43636405,
+        "Z": -183.82678
       },
       "Arguments": [
-        "45"
+        "25"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 274.7681,
+        "Y": 5.505849,
+        "Z": -198.25186
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 277.864,
+        "Y": 5.5296564,
+        "Z": -201.15628
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 285.62595,
+        "Y": 0.22729814,
+        "Z": -205.59491
+      },
+      "Arguments": [
+        "FALSE"
       ],
       "Conditions": [],
       "Note": ""
@@ -296,12 +412,12 @@
       "Tag": "None",
       "Name": "KillInRange",
       "Position": {
-        "X": 320.32535,
-        "Y": -1.7890131,
-        "Z": -224.08423
+        "X": 316.26263,
+        "Y": -1.2271727,
+        "Z": -225.98412
       },
       "Arguments": [
-        "20"
+        "25"
       ],
       "Conditions": [],
       "Note": ""
@@ -338,9 +454,9 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -144.47176,
-        "Y": -0.5039823,
-        "Z": 186.63612
+        "X": -144.41386,
+        "Y": -0.6221034,
+        "Z": 188.35213
       },
       "Arguments": [],
       "Conditions": [],
@@ -350,15 +466,27 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -144.45644,
-        "Y": -3.254499,
-        "Z": 179.36198
+        "X": -144.42491,
+        "Y": -3.3649666,
+        "Z": 178.72006
       },
       "Arguments": [
-        "false"
+        "FALSE"
       ],
       "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #2 -->"
     },
     {
       "Tag": "None",
@@ -371,6 +499,18 @@
       "Arguments": [],
       "Conditions": [],
       "Note": "Giant Tunnel Worm"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
     },
     {
       "Tag": "None",
@@ -401,40 +541,68 @@
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
-        "X": -14.588497,
-        "Y": -4.0279956,
-        "Z": -154.41905
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -117.47775,
+        "Y": -5.889226,
+        "Z": -217.70515
       },
       "Arguments": [],
       "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": -178.32861,
-        "Y": 2.0487468,
-        "Z": -154.38928
+        "X": -233.06232,
+        "Y": -5.57749,
+        "Z": -75.191826
       },
       "Arguments": [],
       "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
-        "X": -179.44313,
-        "Y": -0.46356416,
-        "Z": -164.45644
+        "X": -178.03215,
+        "Y": 0.2636969,
+        "Z": -159.2436
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": ""
+      "Note": "<-- Boss / ボス #3 -->"
     },
     {
       "Tag": "None",
@@ -455,6 +623,10 @@
       {
         "Version": 291,
         "Change": "Modified with KillInRange action"
+      },
+      {
+        "Version": 299,
+        "Change": "Added Trash/Boss Comments & Boss names. Added Unsynced steps. Added missing Treasure Chests."
       }
     ],
     "Notes": []

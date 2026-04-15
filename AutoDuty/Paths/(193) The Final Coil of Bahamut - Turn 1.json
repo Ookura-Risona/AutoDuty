@@ -2,6 +2,34 @@
   "Actions": [
     {
       "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 0.019999996,
+        "Y": 0.48,
+        "Z": 167.0802
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": "Helps make sure you don't walk into the port back to the previous area while targeting enemies."
+    },
+    {
+      "Tag": "None",
       "Name": "WaitFor",
       "Position": {
         "X": 0.0,
@@ -15,80 +43,12 @@
       "Note": ""
     },
     {
-      "Tag": "Unsynced",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "FALSE"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "Synced, W2W",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "FALSE"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
       "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -27.138088,
-        "Y": 18.0,
-        "Z": -8.986666
-      },
-      "Arguments": [
-        ""
-      ],
-      "Conditions": [],
-      "Note": "Helps avoid slightly janky pathing."
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 18.421719,
-        "Y": 42.0,
-        "Z": 10.135402
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "Unsynced",
       "Name": "StopForCombat",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "TRUE"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "Synced, W2W",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": 2.6317458,
+        "Y": -20.000004,
+        "Z": 133.07559
       },
       "Arguments": [
         "TRUE"
@@ -100,9 +60,9 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 19.649754,
-        "Y": 35.999996,
-        "Z": -14.700875
+        "X": -0.07044729,
+        "Y": -19.599998,
+        "Z": 79.47739
       },
       "Arguments": [
         ""
@@ -112,13 +72,43 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "StopForCombat",
       "Position": {
-        "X": 24.776487,
-        "Y": 22.81211,
-        "Z": -18.745892
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "Arguments": [],
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": "Helps make sure you don't walk into the port back to the previous area while targeting enemies."
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 18.498104,
+        "Y": -29.999998,
+        "Z": 20.187124
+      },
+      "Arguments": [
+        "TRUE"
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -126,9 +116,9 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 15.892527,
-        "Y": 18.0,
-        "Z": -17.734894
+        "X": -0.69515115,
+        "Y": -29.71795,
+        "Z": 9.553051
       },
       "Arguments": [
         ""
@@ -138,14 +128,14 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "WaitFor",
       "Position": {
-        "X": 20.838081,
-        "Y": 8.378757,
-        "Z": -23.364038
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [
-        "FALSE"
+        "IsReady"
       ],
       "Conditions": [],
       "Note": ""
@@ -154,9 +144,9 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 57.671013,
-        "Y": -0.00013625622,
-        "Z": -19.79465
+        "X": 2.8740585,
+        "Y": -5.0,
+        "Z": -156.63664
       },
       "Arguments": [],
       "Conditions": [],
@@ -166,12 +156,40 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 57.379696,
-        "Y": -8.977404,
-        "Z": -46.108215
+        "X": -0.12323623,
+        "Y": -4.957697,
+        "Z": -168.10223
       },
       "Arguments": [
-        "FALSE"
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 0.3343301,
+        "Y": -1.1920929E-06,
+        "Z": -279.2546
+      },
+      "Arguments": [
+        ""
       ],
       "Conditions": [],
       "Note": ""
@@ -180,23 +198,23 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": 57.84,
-        "Y": -9.0,
-        "Z": -70.32
+        "X": -0.069610015,
+        "Y": -1.1920929E-06,
+        "Z": -306.76794
       },
       "Arguments": [
         ""
       ],
       "Conditions": [],
-      "Note": "Living Liquid"
+      "Note": "Imdugud"
     }
   ],
   "Meta": {
-    "CreatedAt": 285,
+    "CreatedAt": 298,
     "Changelog": [
       {
-        "Version": 298,
-        "Change": ""
+        "Version": 299,
+        "Change": "Added WaitFor:IsReady during forced movement. Added short StopForCombat segments to avoid accidentally stepping on the back-teleporters. Removed excess MoveTo steps. Removed Unsynced tags since it should work perfectly fine while Synced?"
       }
     ],
     "Notes": []

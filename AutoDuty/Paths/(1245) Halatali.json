@@ -1,16 +1,84 @@
 {
   "Actions": [
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
       "Position": {
-        "X": 230.11583,
-        "Y": 9.827038,
-        "Z": -23.979305
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [],
       "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 156.9388,
+        "Y": 6.2784195,
+        "Z": -66.165726
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 22.592537,
+        "Y": 1.5844924,
+        "Z": 98.82864
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #1 -->"
     },
     {
       "Tag": "Revival",
@@ -20,56 +88,6 @@
         "Y": 0.0,
         "Z": 0.0
       },
-      "Arguments": [
-        ""
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 138.32365,
-        "Y": -1.6419466,
-        "Z": -6.0795965
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 122.16758,
-        "Y": -3.0464303,
-        "Z": 35.170464
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 91.701355,
-        "Y": -3.6533675,
-        "Z": 82.36648
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 17.785288,
-        "Y": 0.9252167,
-        "Z": 99.11807
-      },
       "Arguments": [],
       "Conditions": [],
       "Note": ""
@@ -78,35 +96,35 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": 30.54,
-        "Y": 0.95,
-        "Z": 129.66
+        "X": 30.076004,
+        "Y": 0.9545418,
+        "Z": 125.03961
       },
       "Arguments": [
         ""
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Firemane"
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
       "Position": {
-        "X": 36.138577,
-        "Y": 0.9545418,
-        "Z": 127.80088
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": ""
+      "Note": "<-- Trash Packs / 雑魚 -->"
     },
     {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": 32.06,
-        "Y": 0.95,
-        "Z": 129.77
+        "X": 32.866,
+        "Y": 0.9545418,
+        "Z": 130.9583
       },
       "Arguments": [
         "2001619"
@@ -143,12 +161,26 @@
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "Interactable",
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 74.735535,
+        "Y": -11.165159,
+        "Z": -105.90789
       },
       "Arguments": [
         "2001624"
@@ -157,24 +189,26 @@
       "Note": "Chain Winch"
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": 74.644196,
-        "Y": -10.853093,
-        "Z": -108.25956
+        "X": 75.234436,
+        "Y": -11.03907,
+        "Z": -106.76251
       },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Chance to spawn after using a Winch."
     },
     {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": 43.43475,
+        "Y": -11.040856,
+        "Z": -85.47054
       },
       "Arguments": [
         "2001625"
@@ -186,9 +220,21 @@
       "Tag": "Treasure",
       "Name": "TreasureCoffer",
       "Position": {
-        "X": 41.44,
-        "Y": -10.89,
-        "Z": -84.35
+        "X": 41.65467,
+        "Y": -10.900485,
+        "Z": -84.30613
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Chance to spawn after using a Winch."
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -22.407799,
+        "Y": 0.16448319,
+        "Z": -131.95642
       },
       "Arguments": [
         ""
@@ -197,26 +243,16 @@
       "Note": ""
     },
     {
-      "Tag": "None",
+      "Tag": "Unsynced",
       "Name": "MoveTo",
       "Position": {
-        "X": -13.74324,
-        "Y": -1.5165342,
-        "Z": -116.668564
+        "X": -17.174164,
+        "Y": -11.172751,
+        "Z": -137.87387
       },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -5.7234087,
-        "Y": -10.661033,
-        "Z": -187.30362
-      },
-      "Arguments": [],
+      "Arguments": [
+        "FALSE"
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -224,9 +260,9 @@
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": 16.414598,
+        "Y": -10.966246,
+        "Z": -189.88957
       },
       "Arguments": [
         "2001626"
@@ -238,9 +274,21 @@
       "Tag": "Treasure",
       "Name": "TreasureCoffer",
       "Position": {
-        "X": 18.28,
-        "Y": -10.93,
-        "Z": -190.16
+        "X": 18.181356,
+        "Y": -10.928166,
+        "Z": -190.35655
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Chance to spawn after using a Winch."
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 30.598001,
+        "Y": -15.7974205,
+        "Z": -132.61546
       },
       "Arguments": [
         ""
@@ -250,23 +298,11 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -31.192667,
-        "Y": -11.049809,
-        "Z": -127.65173
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": -37.440296,
+        "Y": -11.070918,
+        "Z": -128.69514
       },
       "Arguments": [
         "2001627"
@@ -275,24 +311,24 @@
       "Note": "Chain Winch"
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": -71.372,
-        "Y": -10.794906,
-        "Z": -107.85388
+        "X": -39.73436,
+        "Y": -11.061834,
+        "Z": -129.22627
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": ""
+      "Note": "Chance to spawn after using a Winch."
     },
     {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": -81.42801,
+        "Y": -11.029103,
+        "Z": -112.195435
       },
       "Arguments": [
         "2001628"
@@ -301,12 +337,50 @@
       "Note": "Chain Winch"
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": -119.09809,
-        "Y": -6.2826014,
-        "Z": -110.3725
+        "X": -82.42086,
+        "Y": -10.93343,
+        "Z": -113.425186
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "Chance to spawn after using a Winch."
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -177.57599,
+        "Y": -12.407101,
+        "Z": -106.77886
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #2 -->"
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [],
       "Conditions": [],
@@ -316,47 +390,35 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": -179.64,
-        "Y": -15.31,
-        "Z": -132.33
+        "X": -182.74692,
+        "Y": -15.306585,
+        "Z": -132.63612
       },
       "Arguments": [
         ""
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Thunderclap Guivre"
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
       "Position": {
-        "X": -183.59157,
-        "Y": -15.306585,
-        "Z": -135.03816
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -183.35744,
-        "Y": -15.306585,
-        "Z": -135.50076
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
+      "Note": "<-- Trash Packs / 雑魚 -->"
     },
     {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": -178.0384,
+        "Y": -15.306587,
+        "Z": -133.69275
       },
       "Arguments": [
         "2001647"
@@ -393,24 +455,40 @@
       "Note": ""
     },
     {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -159.9117,
-        "Y": 9.060096,
-        "Z": -13.877168
+        "X": -138.34854,
+        "Y": 5.640684,
+        "Z": -28.227573
       },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Helps avoid slightly janky pathing."
     },
     {
       "Tag": "Treasure",
       "Name": "TreasureCoffer",
       "Position": {
-        "X": -121.42,
-        "Y": 9.83,
-        "Z": -1.11
+        "X": -122.82572,
+        "Y": 9.833187,
+        "Z": -1.0819875
       },
       "Arguments": [
         ""
@@ -419,18 +497,56 @@
       "Note": ""
     },
     {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -168.72563,
+        "Y": 12.558849,
+        "Z": 10.897344
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": -172.88,
-        "Y": 12.66,
-        "Z": 11.6
+        "X": -172.20668,
+        "Y": 12.661985,
+        "Z": 12.365979
       },
       "Arguments": [
         "2001623"
       ],
       "Conditions": [],
       "Note": "Ludus Door"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #3 -->"
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
       "Tag": "None",
@@ -444,7 +560,7 @@
         ""
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Tangata"
     }
   ],
   "Meta": {
@@ -457,6 +573,10 @@
       {
         "Version": 290,
         "Change": "Removed trying to avoid patrol"
+      },
+      {
+        "Version": 299,
+        "Change": "Added Trash/Boss Comments & Boss names. Added Unsynced steps. Added missing Treasure Chests. Added appropriate Revival steps. Removed excess MoveTo steps."
       }
     ],
     "Notes": []

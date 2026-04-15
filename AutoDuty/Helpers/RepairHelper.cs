@@ -26,7 +26,7 @@ namespace AutoDuty.Helpers
 
         internal override void Start()
         {
-            if (!InventoryHelper.CanRepair(100))
+            if (!InventoryHelper.CanRepair(99))
                 return;
             base.Start();
         }
@@ -74,7 +74,8 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating)) this.Stop();
+            if (Plugin.states.HasFlag(PluginState.Navigating)) 
+                this.Stop();
 
             if (Conditions.Instance()->Mounted && GotoHelper.State != ActionState.Running)
             {
@@ -140,7 +141,8 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            if (Svc.ClientState.TerritoryType != RepairVendorTerritoryType && ContentHelper.DictionaryContent.ContainsKey(Svc.ClientState.TerritoryType) && Conditions.Instance()->BoundByDuty) this.Stop();
+            if (Svc.ClientState.TerritoryType != RepairVendorTerritoryType && ContentHelper.DictionaryContent.ContainsKey(Svc.ClientState.TerritoryType) && Conditions.Instance()->BoundByDuty)
+                this.Stop();
 
             if (Svc.ClientState.TerritoryType != RepairVendorTerritoryType || RepairVendorGameObject == null || Vector3.Distance(Player.Position, RepairVendorGameObject.Position) > 3f)
             {
@@ -149,6 +151,12 @@ namespace AutoDuty.Helpers
             }
             else if (PlayerHelper.IsValid)
             {
+                if (!InventoryHelper.CanRepair(99))
+                {
+                    this.Stop();
+                    return;
+                }
+
                 if (GenericHelpers.TryGetAddonByName("SelectIconString", out addonSelectIconString) && GenericHelpers.IsAddonReady(addonSelectIconString))
                 {
                     Svc.Log.Debug($"Clicking SelectIconString({PreferredRepairNpc?.RepairIndex})");

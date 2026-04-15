@@ -1,17 +1,72 @@
 {
   "Actions": [
     {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "DutySpecificCode",
       "Position": {
-        "X": 347.75,
-        "Y": 44.14,
-        "Z": -223.21
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [
         "1"
       ],
+      "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 223.55579,
+        "Y": 40.314785,
+        "Z": -146.92798
+      },
+      "Arguments": [
+        "OFF"
+      ],
+      "Conditions": [],
+      "Note": "To avoid aggroing clams, which may not die and keep you in combat."
     },
     {
       "Tag": "Treasure",
@@ -24,19 +79,77 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 75.09057,
+        "Y": 29.933828,
+        "Z": -44.197563
+      },
+      "Arguments": [
+        "ON"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "5000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "OFF"
+      ],
+      "Conditions": [],
+      "Note": "To avoid the small chance of attacking a clam."
     },
     {
       "Tag": "None",
       "Name": "DutySpecificCode",
       "Position": {
-        "X": 90.26,
-        "Y": 27.2,
-        "Z": -56.04
+        "X": 80.45049,
+        "Y": 29.748713,
+        "Z": -47.99161
       },
       "Arguments": [
         "2"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -50,7 +163,34 @@
       "Arguments": [
         "3"
       ],
+      "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "ON"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #1 -->"
     },
     {
       "Tag": "None",
@@ -63,20 +203,74 @@
       "Arguments": [
         ""
       ],
-      "Note": ""
+      "Conditions": [],
+      "Note": "Chopper"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
     },
     {
       "Tag": "None",
       "Name": "Interactable",
+      "Position": {
+        "X": 63.835476,
+        "Y": 32.827415,
+        "Z": -31.80106
+      },
+      "Arguments": [
+        "2000216"
+      ],
+      "Conditions": [],
+      "Note": "Inconspicuous Switch"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "2000216"
+        "FALSE"
       ],
-      "Note": "Inconspicuous Switch"
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": -2.61113,
+        "Y": 23.704987,
+        "Z": 25.600103
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #2 -->"
     },
     {
       "Tag": "None",
@@ -87,22 +281,10 @@
         "Z": 56.34
       },
       "Arguments": [
-        "<-31,24,63>"
+        "<-30.66, 23.76, 62.21>"
       ],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "Interactable",
-      "Position": {
-        "X": -91.82,
-        "Y": 13.84,
-        "Z": 145.88
-      },
-      "Arguments": [
-        "2000250"
-      ],
-      "Note": "Captain's Quarters Key"
+      "Conditions": [],
+      "Note": "Captain Madison"
     },
     {
       "Tag": "Comment",
@@ -112,49 +294,145 @@
         "Y": 0.0,
         "Z": 0.0
       },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Packs / 雑魚 -->"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
       "Arguments": [
-        ""
+        "FALSE"
       ],
-      "Note": "<-- Below line is a temporary bandaid until Issue #409 is implemented -->"
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -163.60359,
+        "Y": 19.3208,
+        "Z": 124.48099
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "KillInRange",
       "Position": {
-        "X": -95.1,
-        "Y": 19.9,
-        "Z": 171.1
+        "X": -92.70103,
+        "Y": 13.84802,
+        "Z": 142.95366
       },
       "Arguments": [
-        "ItemCount;2000512;<;1&ModifyIndex;7"
+        "13"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": -95.1,
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2000250"
+      ],
+      "Conditions": [],
+      "Note": "Captain's Quarters Key"
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "Interactable",
+      "Position": {
+        "X": -39.84539,
+        "Y": 16.09964,
+        "Z": 160.07915
+      },
+      "Arguments": [
+        "2000256"
+      ],
+      "Conditions": [],
+      "Note": "Key to the Hole"
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "2000232"
+      ],
+      "Conditions": [],
+      "Note": "The Hole"
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -0.3900931,
+        "Y": 15.305544,
+        "Z": 177.06567
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -95.085335,
         "Y": 19.9,
-        "Z": 171.1
+        "Z": 171.06482
       },
       "Arguments": [
         "2000227"
       ],
+      "Conditions": [],
       "Note": "Captain's Quarters"
     },
     {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
-        "X": -95.15,
-        "Y": 20.01,
-        "Z": 190.03
+        "X": -94.833565,
+        "Y": 20.012,
+        "Z": 192.34413
       },
       "Arguments": [
         "2000255"
       ],
+      "Conditions": [],
       "Note": "Waverider Gate Key"
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -129.77435,
+        "Y": 16.35,
+        "Z": 156.49306
+      },
+      "Arguments": [
+        "2000231"
+      ],
+      "Conditions": [],
+      "Note": "Waverider Gate"
     },
     {
       "Tag": "Comment",
@@ -164,49 +442,87 @@
         "Y": 0.0,
         "Z": 0.0
       },
-      "Arguments": [
-        ""
-      ],
-      "Note": "<-- Below line is a temporary bandaid until Issue #409 is implemented -->"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- The other Chest around here is skipped because it's surrounded... -->"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- ...by a lot of enemies which makes it dangerous for min-iLvl Tanks. -->"
+    },
+    {
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #3 -->"
     },
     {
       "Tag": "None",
-      "Name": "ConditionAction",
+      "Name": "Boss",
+      "Position": {
+        "X": -183.50957,
+        "Y": 6.4215565,
+        "Z": 245.3128
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": "Captain Madison"
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       },
       "Arguments": [
-        "ItemCount;2000513;<;1&ModifyIndex;11"
+        "FALSE"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "Interactable",
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
       "Position": {
-        "X": -129.54,
-        "Y": 16.3,
-        "Z": 156.32
+        "X": -300.03293,
+        "Y": 5.576687,
+        "Z": 275.29684
       },
       "Arguments": [
-        "2000231"
+        "TRUE"
       ],
-      "Note": "Waverider Gate"
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "Boss",
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
       "Position": {
-        "X": -183.12,
-        "Y": 6.38,
-        "Z": 244.52
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "Arguments": [
-        ""
-      ],
-      "Note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス #4 -->"
     },
     {
       "Tag": "None",
@@ -219,7 +535,8 @@
       "Arguments": [
         ""
       ],
-      "Note": ""
+      "Conditions": [],
+      "Note": "Denn the Orcatoothed"
     }
   ],
   "Meta": {
@@ -251,11 +568,13 @@
       },
       {
         "Version": 231,
-        "Change": "Re-added last boss step"
+        "Change": "Re-added last boss step."
+      },
+	  {
+        "Version": 299,
+        "Change": "Added Trash/Boss Comments & Boss names. Added Unsynced steps (primarily before the first boss). Added KillInRange steps. Added Treasure steps (and a note about the missing one)."
       }
     ],
     "Notes": []
   }
-
 }
-

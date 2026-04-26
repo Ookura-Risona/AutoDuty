@@ -1,169 +1,156 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -3.26,
-        "Y": 13.16,
-        "Z": 55.05
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -2.0,
+        "Y": 12.070728,
+        "Z": 4.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": "ADS"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
-        "X": -2.52,
-        "Y": 11.55,
-        "Z": 16.15
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -20.795559,
+        "Y": 5.999999,
+        "Z": -154.69922
+      },
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 48.23,
-        "Y": 6,
-        "Z": -237.34
+      "Tag": "Unsynced",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -18.40175,
+        "Y": -4.5698204,
+        "Z": -159.32178
       },
-      "arguments": [
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 53.65901,
+        "Y": 5.0242767,
+        "Z": -220.85155
+      },
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Helps avoid janky pathing."
     },
     {
-      "tag": "None",
-      "name": "ForceAttack",
-      "position": {
-        "X": 48.23,
-        "Y": 6,
-        "Z": -237.34
+      "Tag": "None",
+      "Name": "KillInRange",
+      "Position": {
+        "X": 50.036148,
+        "Y": 4.1418505,
+        "Z": -247.10843
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "10"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 50.97,
-        "Y": 3.27,
-        "Z": -248.25
+      "Tag": "None",
+      "Name": "KillInRange",
+      "Position": {
+        "X": 44.239292,
+        "Y": 1.1302965,
+        "Z": -337.04892
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "10"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 44.23,
-        "Y": 1.14,
-        "Z": -337.1
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "TRUE"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
-        "500"
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -9.01,
-        "Y": 0.9,
-        "Z": -384.37
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
-        "X": -14.56,
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -15.0,
         "Y": -0.3,
-        "Z": -397.75
+        "Z": -400.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -44.6,
-        "Y": 0.9,
-        "Z": -411.77
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -44.51,
-        "Y": 0.9,
-        "Z": -417.19
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Caduceus"
     }
   ],
-  "meta": {
-    "createdAt": 106,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 106,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 299,
+        "Change": "Added Boss names. Added Unsynced steps. Replaced ForceAttack step with KillInRange. Removed excess MoveTo steps."
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

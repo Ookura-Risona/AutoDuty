@@ -1,21 +1,21 @@
 {
   "Actions": [
     {
-      "Tag": "None",
-      "Name": "Wait",
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
       "Position": {
         "X": 0.0,
-        "Y": 0.5,
-        "Z": 167.0
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [
-        "500"
+        "IsReady"
       ],
       "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "None",
+      "Tag": "Unsynced",
       "Name": "StopForCombat",
       "Position": {
         "X": 0.0,
@@ -24,118 +24,6 @@
       },
       "Arguments": [
         "FALSE"
-      ],
-      "Conditions": [],
-      "Note": "Helps make sure you don't walk into the port back to the previous area while targeting enemies."
-    },
-    {
-      "Tag": "None",
-      "Name": "WaitFor",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "IsReady"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 2.6317458,
-        "Y": -20.000004,
-        "Z": 133.07559
-      },
-      "Arguments": [
-        "TRUE"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "Wait",
-      "Position": {
-        "X": 0.0,
-        "Y": -19.599995,
-        "Z": 80.0
-      },
-      "Arguments": [
-        "500"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "FALSE"
-      ],
-      "Conditions": [],
-      "Note": "Helps make sure you don't walk into the port back to the previous area while targeting enemies."
-    },
-    {
-      "Tag": "None",
-      "Name": "WaitFor",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "IsReady"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 18.498104,
-        "Y": -29.999998,
-        "Z": 20.187124
-      },
-      "Arguments": [
-        "TRUE"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "Wait",
-      "Position": {
-        "X": 0.0,
-        "Y": -29.499998,
-        "Z": 10.0
-      },
-      "Arguments": [
-        "500"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "WaitFor",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "IsReady"
       ],
       "Conditions": [],
       "Note": ""
@@ -144,9 +32,23 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 2.8740585,
-        "Y": -5.0,
-        "Z": -156.63664
+        "X": 75.03,
+        "Y": -516.68,
+        "Z": -128.56
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 75.5844,
+        "Y": -531.57574,
+        "Z": -51.75253
       },
       "Arguments": [],
       "Conditions": [],
@@ -156,9 +58,93 @@
       "Tag": "None",
       "Name": "Wait",
       "Position": {
+        "X": 69.15314,
+        "Y": -531.8076,
+        "Z": -49.82223
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 71.953094,
+        "Y": -531.1078,
+        "Z": -51.32221
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
         "X": 0.0,
-        "Y": -4.7000003,
-        "Z": -167.0
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.9909041,
+        "Y": -504.188,
+        "Z": 22.365892
+      },
+      "Arguments": [
+        "TRUE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.6040497,
+        "Y": -504.7151,
+        "Z": 24.71679
+      },
+      "Arguments": [
+        "2003420"
+      ],
+      "Conditions": [],
+      "Note": "Frontal Bulkhead"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.046868466,
+        "Y": -506.66666,
+        "Z": 49.67069
+      },
+      "Arguments": [
+        "1000"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.045442726,
+        "Y": -506.3116,
+        "Z": 46.53614
       },
       "Arguments": [
         "500"
@@ -182,41 +168,22 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 0.3343301,
-        "Y": -1.1920929E-06,
-        "Z": -279.2546
-      },
-      "Arguments": [
-        ""
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": -0.069610015,
-        "Y": -1.1920929E-06,
-        "Z": -306.76794
+        "X": -2.6956096,
+        "Y": -506.98016,
+        "Z": 102.15097
       },
       "Arguments": [
         ""
       ],
       "Conditions": [],
-      "Note": "Imdugud"
+      "Note": "The Avatar"
     }
   ],
   "Meta": {
-    "CreatedAt": 298,
-    "Changelog": [
-      {
-        "Version": 299,
-        "Change": "Added WaitFor:IsReady after launch pads. Added short StopForCombat segments to avoid accidentally stepping on the back-teleporters. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed excess MoveTo steps. Removed Unsynced tags since it should work perfectly fine while Synced?"
-      }
-    ],
+    "CreatedAt": 299,
+    "Changelog": [],
     "Notes": []
   }
 }

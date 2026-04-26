@@ -104,58 +104,11 @@
       ],
       "Conditions": [],
       "Note": "Melusine"
-    },
-    {
-      "Tag": "Comment",
-      "Name": "<-- Comment -->",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": "<-- Unsure if this is necessary, but kept it in from the old path. Do first-timers need to click the Terminal? -->"
-    },
-    {
-      "Tag": "None",
-      "Name": "Interactable",
-      "Position": {
-        "X": -450.0,
-        "Y": 799.77954,
-        "Z": 141.33641
-      },
-      "Arguments": [
-        "2003417"
-      ],
-      "Conditions": [],
-      "Note": "Allagan Terminal"
     }
   ],
   "Meta": {
-    "CreatedAt": 106,
-    "Changelog": [
-      {
-        "Version": 161,
-        "Change": "Converted to new JSON Structure"
-      },
-      {
-        "Version": 163,
-        "Change": "Converted to newer JSON Structure"
-      },
-      {
-        "Version": 164,
-        "Change": "Converted to JSON Structure with Tags"
-      },
-      {
-        "Version": 189,
-        "Change": "Adjusted tags to string values"
-      },
-      {
-        "Version": 299,
-        "Change": "Added Boss name. Added Interactable IDs. Removed AutoMoveFor step. Replaced Waits with a loop Condition in the gauntlet. Removed excess MoveTo steps."
-      }
-    ],
+    "CreatedAt": 299,
+    "Changelog": [],
     "Notes": []
   }
 }

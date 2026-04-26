@@ -1,78 +1,70 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
-        "X": -33.68,
-        "Y": 97.71,
-        "Z": -108.68
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -27.20573,
+        "Y": 97.14557,
+        "Z": -105.98358
       },
-      "arguments": [
-        "5000"
-      ],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -8.33,
-        "Y": 50.86,
-        "Z": -21.2
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": -15.468869,
+        "Y": 57.26551,
+        "Z": -45.893475
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "FALSE"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 12.35,
-        "Y": 53.64,
-        "Z": 34.25
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.0,
+        "Y": 50.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 18.88,
-        "Y": 53.19,
-        "Z": 28.86
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Twintania"
     }
   ],
-  "meta": {
-    "createdAt": 106,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 106,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 299,
+        "Change": "Added Boss step and name. Replaced AutoMoveFor with MoveTo:False. Removed excess MoveTo steps."
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

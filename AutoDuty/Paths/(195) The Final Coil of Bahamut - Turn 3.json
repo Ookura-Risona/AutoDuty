@@ -4,12 +4,12 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": 0.3602946,
+        "X": 0.0,
         "Y": -53.68296,
-        "Z": -157.63081
+        "Z": -165.0
       },
       "Arguments": [
-        "3303"
+        ""
       ],
       "Conditions": [],
       "Note": "Phoenix"
@@ -20,6 +20,10 @@
     "Changelog": [
       {
         "Version": 298,
+        "Change": ""
+      },
+      {
+        "Version": 299,
         "Change": ""
       }
     ],

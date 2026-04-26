@@ -44,12 +44,26 @@
       "Tag": "None",
       "Name": "KillInRange",
       "Position": {
-        "X": -63.508232,
-        "Y": -12.000006,
-        "Z": -54.00587
+        "X": -68.14541,
+        "Y": -12.000003,
+        "Z": -54.205536
       },
       "Arguments": [
         "15"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "TRUE"
       ],
       "Conditions": [],
       "Note": ""
@@ -80,7 +94,7 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Avoids getting stuck in the doorway."
+      "Note": "Helps avoid getting stuck in the doorway."
     },
     {
       "Tag": "None",
@@ -111,20 +125,6 @@
       "Note": ""
     },
     {
-      "Tag": "Unsynced",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "TRUE"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
@@ -148,7 +148,7 @@
         "FALSE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Jumps down the hole."
     },
     {
       "Tag": "Comment",
@@ -297,8 +297,8 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 223.42851,
-        "Y": -38.94356,
+        "X": 228.52882,
+        "Y": -37.443584,
         "Z": -0.43220353
       },
       "Arguments": [
@@ -399,13 +399,13 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Avoids getting stuck in the doorway."
+      "Note": "Helps avoid getting stuck in the doorway."
     },
     {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 161.12961,
+        "X": 155.42926,
         "Y": -4.0,
         "Z": -73.7
       },
@@ -469,7 +469,7 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Avoids getting stuck in the doorway."
+      "Note": "Helps avoid getting stuck in the doorway."
     },
     {
       "Tag": "None",
@@ -497,7 +497,7 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Avoids getting stuck in the doorway."
+      "Note": "Helps avoid getting stuck in the doorway."
     },
     {
       "Tag": "None",
@@ -522,10 +522,10 @@
         "Z": 19.143215
       },
       "Arguments": [
-        ""
+        "FALSE"
       ],
       "Conditions": [],
-      "Note": "Avoids getting stuck in the doorway."
+      "Note": "Helps avoid getting stuck in the doorway."
     },
     {
       "Tag": "None",
@@ -594,6 +594,10 @@
       {
         "Version": 299,
         "Change": "Added Trash/Boss Comments & Boss names. Added Unsynced steps. Added KillInRange steps. Added WaitFor:IsReady after transitions. Added Condition to not leave the 1st boss fight early. Removed AutoMoveFor steps. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 300,
+        "Change": "Adjusted the Coords of MoveTo's in transition walls to be farther in the wall."
       }
     ],
     "Notes": []

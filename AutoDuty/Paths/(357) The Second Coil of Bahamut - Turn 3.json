@@ -1,247 +1,236 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "Unsynced",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "FALSE"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 75.03,
         "Y": -516.68,
         "Z": -128.56
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 69.3,
-        "Y": -531.71,
-        "Z": -49.98
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 75.5844,
+        "Y": -531.57574,
+        "Z": -51.75253
       },
-      "arguments": [
-        ""
-      ],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 69.15314,
+        "Y": -531.8076,
+        "Z": -49.82223
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 71.49,
-        "Y": -531.55,
-        "Z": -50.47
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 71.953094,
+        "Y": -531.1078,
+        "Z": -51.32221
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "500"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        "3000"
+      "Arguments": [
+        "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 0.11,
-        "Y": -505.05,
-        "Z": 25.96
+      "Tag": "Unsynced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.9909041,
+        "Y": -504.188,
+        "Z": 22.365892
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "TRUE"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": 0.6040497,
+        "Y": -504.7151,
+        "Z": 24.71679
       },
-      "arguments": [
-        "Frontal Bulkhead"
+      "Arguments": [
+        "2003420"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Frontal Bulkhead"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 0.07,
-        "Y": -506.67,
-        "Z": 49.66
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.046868466,
+        "Y": -506.66666,
+        "Z": 49.67069
       },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 0.14,
-        "Y": -506.54,
-        "Z": 47.61
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": -0.045442726,
+        "Y": -506.3116,
+        "Z": 46.53614
       },
-      "arguments": [
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": -2.6956096,
+        "Y": -506.98016,
+        "Z": 102.15097
+      },
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": "The Avatar"
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
-        "3000"
-      ],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Unsure if this is necessary, but kept it in from the old path. Do first-timers need to click the Terminal? -->"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
-        "X": -1.98,
-        "Y": -506.98,
-        "Z": 91.81
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
+        "X": -2.42969,
+        "Y": -506.48483,
+        "Z": 140.50052
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "2003418"
       ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -2.48,
-        "Y": -506.98,
-        "Z": 101.34
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -5.04,
-        "Y": -506.98,
-        "Z": 124.76
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -0.37,
-        "Y": -506.98,
-        "Z": 125.09
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -7.45,
-        "Y": -506.8,
-        "Z": 148.35
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
-      },
-      "arguments": [
-        "Allagan Terminal"
-      ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Allagan Terminal"
     }
   ],
-  "meta": {
-    "createdAt": 106,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 106,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 299,
+        "Change": "Added Boss name. Added Unsynced steps. Replaced Waits after launch pads with WaitFor:IsReady. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed excess MoveTo steps."
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

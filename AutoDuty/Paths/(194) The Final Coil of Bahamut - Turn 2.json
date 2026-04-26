@@ -2,17 +2,17 @@
   "Actions": [
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": 3.0817413,
-        "Y": -86.02058,
-        "Z": 329.90027
+        "X": 3.0,
+        "Y": -86.0,
+        "Z": 330.0
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump Right"
+      "Note": "Jumps to the right."
     },
     {
       "Tag": "None",
@@ -30,17 +30,17 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": 68.742645,
-        "Y": 74.228584,
-        "Z": 256.8734
+        "X": 68.8,
+        "Y": 74.25,
+        "Z": 257.0
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump Left"
+      "Note": "Jumps to the left."
     },
     {
       "Tag": "None",
@@ -82,7 +82,7 @@
         "14000"
       ],
       "Conditions": [],
-      "Note": "Wait For Panel #1 To Activate"
+      "Note": "Waits for the first panel to activate."
     },
     {
       "Tag": "None",
@@ -110,21 +110,21 @@
         "14000"
       ],
       "Conditions": [],
-      "Note": "Wait For Panel #2 To Activate"
+      "Note": "Waits for the second panel to activate."
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": 5.5540257,
-        "Y": -51.03931,
-        "Z": 199.06541
+        "X": 5.4999995,
+        "Y": -51.0,
+        "Z": 198.50009
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Go Back To Center"
+      "Note": "Jumps to the right."
     },
     {
       "Tag": "None",
@@ -142,17 +142,17 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": 62.702263,
-        "Y": 2.4499378,
-        "Z": 108.99034
+        "X": 62.8,
+        "Y": 2.7,
+        "Z": 109.2
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump To Left Of Semi-Circle"
+      "Note": "Jumps to the left of the semi-circle."
     },
     {
       "Tag": "None",
@@ -172,9 +172,9 @@
       "Tag": "None",
       "Name": "StopForCombat",
       "Position": {
-        "X": -33.61982,
-        "Y": 1.2229955,
-        "Z": 56.9418
+        "X": -38.345512,
+        "Y": 0.578984,
+        "Z": 52.79439
       },
       "Arguments": [
         "FALSE"
@@ -194,7 +194,7 @@
         "14000"
       ],
       "Conditions": [],
-      "Note": "Wait For Panel To Activate"
+      "Note": "Waits for the panel to activate."
     },
     {
       "Tag": "None",
@@ -254,20 +254,20 @@
     },
     {
       "Tag": "Unsynced",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": 3.082,
-        "Y": -86.021,
-        "Z": 329.9
+        "X": 3.0,
+        "Y": -86.0,
+        "Z": 330.0
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump Right"
+      "Note": "Jumps to the right."
     },
     {
-      "Tag": "None",
+      "Tag": "Unsynced",
       "Name": "WaitFor",
       "Position": {
         "X": 0.0,
@@ -282,20 +282,20 @@
     },
     {
       "Tag": "Unsynced",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": 68.743004,
-        "Y": 74.229004,
-        "Z": 256.87302
+        "X": 68.8,
+        "Y": 74.25,
+        "Z": 257.0
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump Left"
+      "Note": "Jumps to the left."
     },
     {
-      "Tag": "None",
+      "Tag": "Unsynced",
       "Name": "WaitFor",
       "Position": {
         "X": 0.0,
@@ -310,20 +310,20 @@
     },
     {
       "Tag": "Unsynced",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": -1.013348,
-        "Y": -50.94448,
-        "Z": 198.46791
+        "X": -1.0,
+        "Y": -51.0,
+        "Z": 198.65
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump Left"
+      "Note": "Jumps to the left."
     },
     {
-      "Tag": "None",
+      "Tag": "Unsynced",
       "Name": "WaitFor",
       "Position": {
         "X": 0.0,
@@ -338,20 +338,20 @@
     },
     {
       "Tag": "Unsynced",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": -67.853455,
-        "Y": -8.850731,
-        "Z": 114.291504
+        "X": -68.1,
+        "Y": -8.881643,
+        "Z": 114.13509
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump To Right Of Semi-Circle"
+      "Note": "Jumps to the right of the semi-circle."
     },
     {
-      "Tag": "None",
+      "Tag": "Unsynced",
       "Name": "WaitFor",
       "Position": {
         "X": 0.0,
@@ -368,9 +368,9 @@
       "Tag": "Unsynced",
       "Name": "StopForCombat",
       "Position": {
-        "X": 33.914383,
-        "Y": 1.2578886,
-        "Z": 56.68622
+        "X": 38.4702,
+        "Y": 0.5789957,
+        "Z": 51.911808
       },
       "Arguments": [
         "FALSE"
@@ -408,17 +408,17 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "Wait",
       "Position": {
-        "X": -0.38482118,
-        "Y": 1.0445162,
-        "Z": 66.96775
+        "X": 0.0,
+        "Y": 1.0,
+        "Z": 67.0
       },
       "Arguments": [
-        ""
+        "500"
       ],
       "Conditions": [],
-      "Note": "Jump To Center"
+      "Note": "Jumps to the boss platform."
     },
     {
       "Tag": "None",
@@ -438,9 +438,9 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 2.312538,
+        "X": 0.0,
         "Y": -4.9630003,
-        "Z": 13.339716
+        "Z": 13.5
       },
       "Arguments": [
         ""
@@ -452,9 +452,9 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": 0.4716593,
+        "X": 0.0,
         "Y": -4.9630003,
-        "Z": -4.535334
+        "Z": -5.0
       },
       "Arguments": [
         ""
@@ -468,7 +468,7 @@
     "Changelog": [
       {
         "Version": 299,
-        "Change": "Adjusted the Unsynced tags to only be on the second set of steps going to the other side. Adjusted the death-wall part to work normally and with the weird rez bug I got initially. Removed excess steps waiting for after combat."
+        "Change": "Adjusted the Unsynced tags to only be on the second set of steps going to the other side. Adjusted the death-wall part to work normally and with the weird rez bug I got initially. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed excess steps waiting for after combat."
       }
     ],
     "Notes": []

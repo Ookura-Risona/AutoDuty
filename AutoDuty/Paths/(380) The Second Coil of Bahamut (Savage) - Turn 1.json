@@ -151,58 +151,11 @@
       ],
       "Conditions": [],
       "Note": "Rafflesia"
-    },
-    {
-      "Tag": "Comment",
-      "Name": "<-- Comment -->",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": "<-- Unsure if this is necessary, but kept it in from the old path. Do first-timers need to click the Terminal? -->"
-    },
-    {
-      "Tag": "None",
-      "Name": "Interactable",
-      "Position": {
-        "X": -312.22476,
-        "Y": 8.667104,
-        "Z": 42.588623
-      },
-      "Arguments": [
-        "2003416"
-      ],
-      "Conditions": [],
-      "Note": "Allagan Terminal"
     }
   ],
   "Meta": {
-    "CreatedAt": 106,
-    "Changelog": [
-      {
-        "Version": 161,
-        "Change": "Converted to new JSON Structure"
-      },
-      {
-        "Version": 163,
-        "Change": "Converted to newer JSON Structure"
-      },
-      {
-        "Version": 164,
-        "Change": "Converted to JSON Structure with Tags"
-      },
-      {
-        "Version": 189,
-        "Change": "Adjusted tags to string values"
-      },
-      {
-        "Version": 299,
-        "Change": "Added Boss name. Added KillInRange steps. Removed excess MoveTo steps."
-      }
-    ],
+    "CreatedAt": 299,
+    "Changelog": [],
     "Notes": []
   }
 }

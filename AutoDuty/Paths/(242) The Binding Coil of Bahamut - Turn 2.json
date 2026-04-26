@@ -1,117 +1,114 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -1.2,
-        "Y": -0.03,
-        "Z": 36.51
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 0.0,
+        "Y": -0.029942036,
+        "Z": 38.99996
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 49.17,
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 50.0,
         "Y": -21.06,
-        "Z": 55.64
+        "Z": 55.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 40.16,
-        "Y": -41.99,
-        "Z": 94.19
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
+        "X": 40.0,
+        "Y": -41.989624,
+        "Z": 93.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 39.42,
-        "Y": -41.99,
-        "Z": 82.28
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 24.855566,
+        "Y": -41.9,
+        "Z": 110.603004
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "OFF"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Avoids pulling the boss early while running down the slope."
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 0.49,
-        "Y": -65.98,
-        "Z": 79.72
+      "Tag": "None",
+      "Name": "Rotation",
+      "Position": {
+        "X": 19.071024,
+        "Y": -66.06241,
+        "Z": 73.43916
       },
-      "arguments": [
-        ""
+      "Arguments": [
+        "ON"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": "Prevents getting stuck while pathing towards the boss."
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": 1.97,
-        "Y": -65.98,
-        "Z": 67.96
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
+        "X": 0.0,
+        "Y": -65.98484,
+        "Z": 80.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
-    },
-    {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
-        "X": -2.42,
-        "Y": -65.98,
-        "Z": 67.82
-      },
-      "arguments": [
-        ""
-      ],
-      "note": ""
+      "Conditions": [],
+      "Note": "ADS"
     }
   ],
-  "meta": {
-    "createdAt": 106,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 106,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 299,
+        "Change": "Added Boss step and name. Added Rotation steps to prevent getting stuck while pathing to the boss (and to prevent pulling early before getting to the Boss step). Removed excess MoveTo steps."
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

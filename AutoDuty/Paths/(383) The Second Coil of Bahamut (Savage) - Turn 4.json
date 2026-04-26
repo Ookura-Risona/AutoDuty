@@ -4,25 +4,20 @@
       "Tag": "None",
       "Name": "Boss",
       "Position": {
-        "X": 450.0,
+        "X": 0.0,
         "Y": 0.0,
-        "Z": -5.0
+        "Z": -2.0
       },
       "Arguments": [
         ""
       ],
       "Conditions": [],
-      "Note": "Bahamut Prime"
+      "Note": "Nael deus Darnus"
     }
   ],
   "Meta": {
-    "CreatedAt": 285,
-    "Changelog": [
-      {
-        "Version": 299,
-        "Change": ""
-      }
-    ],
+    "CreatedAt": 299,
+    "Changelog": [],
     "Notes": []
   }
 }

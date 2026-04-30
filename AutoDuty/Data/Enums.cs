@@ -411,7 +411,10 @@
             ObjectData,
             Job,
             ActionStatus,
-            VariantPath
+            VariantPath,
+            Not,
+            Or,
+            And
         }
 
         public enum ObjectDataProperty

@@ -422,9 +422,12 @@ namespace AutoDuty.Windows
                         delIndex = index;
                     ImGui.SameLine();
                     ImGui.AlignTextToFramePadding();
-                    ImGui.Text(Loc.Get("BuildTab.Condition"));
+                    ImGui.Text(condition.ParseKey.ToLocalizedString());
                     ImGui.SameLine();
+                    float indent = ImGui.GetCursorPosX();
+                    ImGui.Indent(indent);
                     condition.DrawConfig();
+                    ImGui.Unindent(indent);
                     ImGui.Separator();
                 }
 
@@ -432,23 +435,9 @@ namespace AutoDuty.Windows
                     _conditions.RemoveAt(delIndex);
 
 
-                ConditionType newConditionType = ConditionType.None;
-                if (ImGuiEx.EnumCombo(Loc.Get("BuildTab.AddNewCondition"), ref newConditionType))
-                {
-                    if (newConditionType != ConditionType.None)
-                    {
-                        _conditions.Add(newConditionType switch
-                        {
-                            ConditionType.Distance => new PathActionConditionDistance(),
-                            ConditionType.ItemCount => new PathActionConditionItemCount(),
-                            ConditionType.ObjectData => new PathActionConditionObjectData(),
-                            ConditionType.Job => new PathActionConditionJob(),
-                            ConditionType.ActionStatus => new PathActionConditionActionStatus(),
-                            ConditionType.VariantPath => new PathActionConditionVariantPath(),
-                            _ => throw new ArgumentOutOfRangeException()
-                        });
-                    }
-                }
+                PathActionCondition? actionCondition = PathActionCondition.ConditionSelection();
+                if (actionCondition != null)
+                    _conditions.Add(actionCondition);
             }
         }
 

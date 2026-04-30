@@ -319,7 +319,10 @@
         "ObjectData": "Object",
         "ItemCount": "Item",
         "Job": "Job",
-        "ActionStatus": "ActionStatus"
+        "ActionStatus": "ActionStatus",
+        "Not": "Not",
+        "Or": "Or",
+        "And": "And"
       },
       "ObjectDataProperty": {
         "EventState": "EventState",

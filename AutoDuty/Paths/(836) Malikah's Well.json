@@ -1,399 +1,432 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -20.17,
         "Y": 119.88,
         "Z": 49.67
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 67.19,
         "Y": 119.99,
         "Z": -39.15
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 76.16,
         "Y": 119.76,
         "Z": -69.51
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 105.98,
         "Y": 120.06,
         "Z": -85.92
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
+      "Tag": "None",
+      "Name": "AutoMoveFor",
+      "Position": {
         "X": 116.58,
         "Y": 119.89,
         "Z": -91.44
       },
-      "arguments": [
+      "Arguments": [
         "2000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 290.24,
         "Y": 18.76,
         "Z": 262.77
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 278.14,
-        "Y": 17,
+        "Y": 17.0,
         "Z": 197.92
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 209.1,
         "Y": 12.52,
         "Z": 98.9
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 191.92,
         "Y": 11.98,
         "Z": 165.95
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
+      "Tag": "None",
+      "Name": "AutoMoveFor",
+      "Position": {
         "X": 171.63,
         "Y": 11.99,
         "Z": 170.76
       },
-      "arguments": [
+      "Arguments": [
         "2000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 161.83,
         "Y": -9.93,
         "Z": 223.56
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 149.57,
         "Y": -9.78,
         "Z": 230.45
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 157.46,
-        "Y": -10,
+        "Y": -10.0,
         "Z": 226.4
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 111.32,
         "Y": -15.62,
         "Z": 237.38
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 134.13,
         "Y": -20.01,
         "Z": 295.34
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 145.72,
         "Y": -19.94,
         "Z": 290.3
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
+      "Tag": "None",
+      "Name": "AutoMoveFor",
+      "Position": {
         "X": 148.19,
         "Y": -19.94,
         "Z": 292.39
       },
-      "arguments": [
+      "Arguments": [
         "4000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 183.54,
         "Y": -80.7,
         "Z": 326.87
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 207.84,
-        "Y": -86,
+        "Y": -86.0,
         "Z": 268.66
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 220.6,
-        "Y": -84,
+        "Y": -84.0,
         "Z": 207.69
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 197.72,
-        "Y": -84,
+        "Y": -84.0,
         "Z": 166.35
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 205.59,
-        "Y": -84,
-        "Z": 124
+        "Y": -84.0,
+        "Z": 124.0
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 202.22,
         "Y": -83.8,
         "Z": 130.24
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 206.4,
-        "Y": -80,
+        "Y": -80.0,
         "Z": 35.11
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 184.89,
-        "Y": -80,
+        "Y": -80.0,
         "Z": 26.71
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 184.97,
         "Y": -77.31,
         "Z": 6.92
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 202.59,
         "Y": -67.18,
         "Z": -15.35
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
+      "Tag": "None",
+      "Name": "AutoMoveFor",
+      "Position": {
         "X": 197.81,
         "Y": -71.21,
         "Z": -42.57
       },
-      "arguments": [
+      "Arguments": [
         "3000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 195.28,
         "Y": -93.4,
         "Z": -92.99
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 160,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 160,
+    "Changelog": [
       {
-        "version": 168,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 168,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 172,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 172,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

@@ -68,7 +68,7 @@ public sealed class MainWindow : Window, IDisposable
 
     internal static void LoopsConfig()
     {
-        using ImRaii.IEndObject _ = ImRaii.Disabled(MultiboxUtility.Config.MultiBox && !MultiboxUtility.Config.Host);
+        using ImRaii.DisabledDisposable _ = ImRaii.Disabled(MultiboxUtility.Config.MultiBox && !MultiboxUtility.Config.Host);
 
         if ((AutoDuty.Configuration.UseSliderInputs  && ImGui.SliderInt("Times", ref AutoDuty.Configuration.LoopTimes, 0, 100)) || 
             (!AutoDuty.Configuration.UseSliderInputs && ImGui.InputInt("Times", ref AutoDuty.Configuration.LoopTimes, 1)))
@@ -410,7 +410,7 @@ public sealed class MainWindow : Window, IDisposable
     {
         DrawPopup();
 
-        if(DalamudHelper.IsOnStaging())
+        if(DalamudReflector.IsOnStaging())
         {
             ImGui.TextColored(GradientColor.Get(ImGuiHelper.ExperimentalColor, ImGuiHelper.ExperimentalColor2, 500), "NOT SUPPORTED ON STAGING.");
             ImGui.Text("Please type in \"/xlbranch\" and pick Release, then restart the game.");

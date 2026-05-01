@@ -1,169 +1,184 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -123.69,
         "Y": -28.86,
         "Z": -60.44
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Combat"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "OOC"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "ConditionFlag;Jumping61;false"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -38.54,
         "Y": 114.71,
         "Z": -10.52
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": -40.22,
         "Y": 114.71,
         "Z": 1.89
       },
-      "arguments": [
+      "Arguments": [
         "2007455"
       ],
-      "note": "Cranial Hatch"
+      "Conditions": [],
+      "Note": "Cranial Hatch"
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
         "X": -40.22,
         "Y": 114.71,
         "Z": 1.89
       },
-      "arguments": [
+      "Arguments": [
         "IsReady"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Interactable",
-      "position": {
+      "Tag": "None",
+      "Name": "Interactable",
+      "Position": {
         "X": -40.22,
         "Y": 114.71,
         "Z": 1.89
       },
-      "arguments": [
+      "Arguments": [
         "2007456"
       ],
-      "note": "Ingress"
+      "Conditions": [],
+      "Note": "Ingress"
     },
     {
-      "tag": "None",
-      "name": "WaitFor",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "ConditionFlag;Jumping61;false"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "ForceAttack",
-      "position": {
+      "Tag": "None",
+      "Name": "ForceAttack",
+      "Position": {
         "X": 1.32,
         "Y": -250.29,
         "Z": -236.48
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 1.32,
         "Y": -250.29,
         "Z": -236.48
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 156,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 156,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

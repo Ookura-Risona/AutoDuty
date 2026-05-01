@@ -255,7 +255,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000263,
           "quantity": 1,
           "operatorValue": "<"
@@ -628,7 +628,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001235,
           "property": "IsTargetable",
           "value": 1
@@ -677,7 +677,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001233,
           "property": "IsTargetable",
           "value": 1
@@ -804,6 +804,10 @@
       {
         "Version": 300,
         "Change": "Added Unsynced StopForCombat:True and KillInRange before Interactables. Removed unnecessary Unsynced StopForCombat steps between second and third bosses. Adjusted the Wait after the first boss to an appropriate WaitFor. Added an extra step before the final boss so that nothing important is skipped by anyone watching the cutscene."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

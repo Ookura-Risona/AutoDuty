@@ -517,7 +517,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2781,
           "property": "IsTargetable",
           "value": 1
@@ -786,6 +786,10 @@
       {
         "Version": 299,
         "Change": "Added Trash/Boss Comments & Boss Names. Added Unsynced Steps. Added steps for the missing Treasure Chests. Added KillInRange steps. Adjusted the WaitFor:Combat. Adjusted the wait before the second boss."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

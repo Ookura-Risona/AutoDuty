@@ -543,6 +543,10 @@
       {
         "Version": 300,
         "Change": "Adjusted the Coords of MoveTo's in transition walls to be farther in the wall."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

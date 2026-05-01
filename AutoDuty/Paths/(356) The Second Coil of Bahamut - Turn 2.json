@@ -83,7 +83,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002735,
           "property": "EventState",
           "value": 7
@@ -154,6 +154,10 @@
       {
         "Version": 299,
         "Change": "Added Boss name. Added Interactable IDs. Removed AutoMoveFor step. Replaced Waits with a loop Condition in the gauntlet. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

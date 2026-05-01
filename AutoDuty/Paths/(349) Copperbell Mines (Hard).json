@@ -37,7 +37,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002901,
           "property": "IsTargetable",
           "value": 0
@@ -448,7 +448,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002735,
           "property": "EventState",
           "value": 0
@@ -565,6 +565,10 @@
       {
         "Version": 300,
         "Change": "Added a MoveTo:False after the elevator to prevent vnav having issues navigating while it's still descending."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

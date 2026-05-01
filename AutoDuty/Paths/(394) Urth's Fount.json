@@ -25,6 +25,10 @@
       {
         "Version": 299,
         "Change": "Added Boss name. Adjusted Coordinates to be within the boss' aggro radius."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -1,1313 +1,1419 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 1 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 1 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 0.11,
         "Y": -477.79,
         "Z": 201.86
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -0.02,
         "Y": -478.05,
         "Z": 184.71
       },
-      "arguments": [
+      "Arguments": [
         "1200"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 0.83,
         "Y": -478.05,
         "Z": 170.89
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 2 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 2 -->"
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -0.85,
         "Y": -478.15,
         "Z": 139.49
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -9.15,
         "Y": -469.86,
         "Z": 113.92
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -14.8,
         "Y": -469.99,
         "Z": 106.66
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 3 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 3 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 21.48,
         "Y": -462.57,
         "Z": 5.99
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": 50.67,
         "Y": -460.52,
         "Z": -2.07
       },
-      "arguments": [
+      "Arguments": [
         "1300"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 63.77,
         "Y": -460.75,
         "Z": -1.86
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 4 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 4 -->"
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 95.95,
         "Y": -452.76,
         "Z": -17.85
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": 82.85,
         "Y": -444.04,
         "Z": -39.7
       },
-      "arguments": [
+      "Arguments": [
         "1200"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 72.75,
         "Y": -444.17,
         "Z": -42.11
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Boss / \u30DC\u30B9 1 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス 1 -->"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 67.96,
         "Y": -442.97,
         "Z": -134.76
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Movement / \u52D5\u304D --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Movement / 動き -->"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 63.1,
         "Y": -443.47,
         "Z": -175.56
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
+      "Tag": "None",
+      "Name": "AutoMoveFor",
+      "Position": {
         "X": 62.79,
         "Y": -443.16,
         "Z": -179.31
       },
-      "arguments": [
+      "Arguments": [
         "3000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "2000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 5 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 5 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -298.06,
         "Y": -187.14,
         "Z": 215.17
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -299.56,
         "Y": -185.04,
         "Z": 194.49
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -300.54,
-        "Y": -185,
+        "Y": -185.0,
         "Z": 183.95
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 6 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 6 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -300.88,
         "Y": -184.99,
         "Z": 160.62
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -302.12,
         "Y": -184.96,
         "Z": 153.41
       },
-      "arguments": [
+      "Arguments": [
         "800"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -305.87,
         "Y": -184.86,
         "Z": 143.65
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 7 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 7 -->"
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -319.99,
         "Y": -180.76,
         "Z": 119.32
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -333.2,
         "Y": -181.07,
         "Z": 107.68
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -342.09,
         "Y": -180.98,
         "Z": 99.18
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": -342.41,
         "Y": -180.82,
         "Z": 77.25
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 8 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 8 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -326.45,
         "Y": -180.73,
         "Z": 79.83
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -309.42,
         "Y": -180.42,
         "Z": 75.07
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -296.71,
         "Y": -177.49,
         "Z": 71.17
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 9 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 9 -->"
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -277.63,
         "Y": -175.6,
         "Z": 74.97
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -256.3,
         "Y": -172.01,
         "Z": 78.42
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -242.61,
         "Y": -171.99,
         "Z": 78.36
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": -225.83,
         "Y": -171.83,
         "Z": 65.61
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Boss / \u30DC\u30B9 2 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス 2 -->"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -258.14,
-        "Y": -169,
+        "Y": -169.0,
         "Z": -36.76
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Movement / \u52D5\u304D --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Movement / 動き -->"
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -262.05,
         "Y": -167.83,
         "Z": -83.64
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "AutoMoveFor",
-      "position": {
+      "Tag": "None",
+      "Name": "AutoMoveFor",
+      "Position": {
         "X": -262.72,
         "Y": -167.71,
         "Z": -88.07
       },
-      "arguments": [
+      "Arguments": [
         "3000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "2000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 10 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 10 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 0.43,
         "Y": 536.54,
         "Z": 28.64
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": 2.71,
         "Y": 534.59,
         "Z": 17.45
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": 3.1,
         "Y": 534.65,
         "Z": 3.67
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 22.65,
         "Y": 535.61,
         "Z": -38.63
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 11 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 11 -->"
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 43.51,
         "Y": 534.66,
         "Z": -43.25
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": 44.45,
         "Y": 534.68,
         "Z": -43.69
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 53.15,
         "Y": 535.05,
         "Z": -54.24
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": 40.13,
         "Y": 539.11,
         "Z": -100.14
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 12 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 12 -->"
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": 11.14,
         "Y": 538.21,
         "Z": -110.72
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -2.01,
         "Y": 538.06,
         "Z": -123.61
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "MoveTo",
-      "position": {
+      "Tag": "None",
+      "Name": "MoveTo",
+      "Position": {
         "X": -11.92,
         "Y": 538.42,
         "Z": -132.16
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Trash Pack / \u96D1\u9B5A 13 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Trash Pack / 雑魚 13 -->"
     },
     {
-      "tag": "Synced",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "Synced",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -85.25,
         "Y": 541.8,
         "Z": -69.17
       },
-      "arguments": [
+      "Arguments": [
         "False"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "Off"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Wait",
-      "position": {
+      "Tag": "Synced",
+      "Name": "Wait",
+      "Position": {
         "X": -87.96,
         "Y": 541.69,
         "Z": -66.36
       },
-      "arguments": [
+      "Arguments": [
         "1000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Synced",
-      "name": "Rotation",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Synced",
+      "Name": "Rotation",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [
+      "Arguments": [
         "On"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "StopForCombat",
-      "position": {
+      "Tag": "None",
+      "Name": "StopForCombat",
+      "Position": {
         "X": -98.9,
         "Y": 541.93,
         "Z": -56.45
       },
-      "arguments": [
+      "Arguments": [
         "True"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Comment",
-      "name": "\u003C-- Comment --\u003E",
-      "position": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+      "Tag": "Comment",
+      "Name": "<-- Comment -->",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "arguments": [],
-      "note": "\u003C-- Boss / \u30DC\u30B9 3 --\u003E"
+      "Arguments": [],
+      "Conditions": [],
+      "Note": "<-- Boss / ボス 3 -->"
     },
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -20.66,
         "Y": 546.1,
         "Z": -56.44
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 160,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 160,
+    "Changelog": [
       {
-        "version": 168,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 168,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 172,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 172,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
-    "notes": [
+    "Notes": [
       "Stops before each pack to allow the NPC Tank to dash in first (where possible).",
       "",
       "Zot Specific Note - RSR Target Settings: HighMaxHP (to help with last boss)",
@@ -1316,8 +1422,8 @@
       " - A variety of factors such as enemy aggro range being reduced, enemies scaled up,",
       "and allies scaled down have made DPS/Healer W2W pulls inconsistent as of ShB dungeons.",
       " - Some enemies have a wide variance in how much they wander around",
-      "so there may be cases where your character doesn\u0027t walk far enough",
-      "and the NPC Tank doesn\u0027t dash in immediately. It won\u0027t cause any",
+      "so there may be cases where your character doesn't walk far enough",
+      "and the NPC Tank doesn't dash in immediately. It won't cause any",
       "real issues tho and it gives the Tank time to catch up, at least."
     ]
   }

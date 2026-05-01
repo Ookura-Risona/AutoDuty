@@ -11,6 +11,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -50,6 +53,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -63,6 +67,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -76,6 +81,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -89,6 +95,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -102,6 +109,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -115,6 +123,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -128,6 +137,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -141,6 +151,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -154,6 +165,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -167,6 +179,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -180,6 +193,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -193,6 +207,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -206,6 +221,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -219,6 +235,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -232,6 +249,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -245,6 +263,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -258,6 +277,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -283,6 +303,10 @@
       {
         "Version": 252,
         "Change": "AutoMoves replaced"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

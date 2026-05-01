@@ -1,40 +1,46 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 0.35,
-        "Y": -0,
+        "Y": -0.0,
         "Z": 13.11
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "Treasure",
-      "name": "TreasureCoffer",
-      "position": {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
         "X": -0.78,
-        "Y": -0,
+        "Y": -0.0,
         "Z": -11.72
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 170,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 170,
+    "Changelog": [
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

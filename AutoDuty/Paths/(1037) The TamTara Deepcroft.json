@@ -418,13 +418,17 @@
         "Version": 164,
         "Change": "Converted to JSON Structure with Tags"
       },
-	  {
+      {
         "Version": 189,
         "Change": "Adjusted tags to string values"
       },
-	  {
+      {
         "Version": 299,
         "Change": "Added Trash/Boss Comments & Boss names. Added Unsynced steps. Added Treasure steps. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

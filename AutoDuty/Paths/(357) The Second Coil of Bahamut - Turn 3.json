@@ -229,6 +229,10 @@
       {
         "Version": 299,
         "Change": "Added Boss name. Added Unsynced steps. Replaced Waits after launch pads with WaitFor:IsReady. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

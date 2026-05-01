@@ -243,7 +243,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Object",
           "originId": 2985,
           "originLoc": {
@@ -277,7 +277,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Object",
           "originId": 2985,
           "originLoc": {
@@ -311,7 +311,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Object",
           "originId": 2985,
           "originLoc": {
@@ -373,7 +373,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -631,7 +631,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002735,
           "property": "EventState",
           "value": 0
@@ -654,6 +654,10 @@
       {
         "Version": 300,
         "Change": "Added Unsynced KillInRange to ensure the transforming enemy is killed before moving on."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

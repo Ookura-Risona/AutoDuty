@@ -451,6 +451,10 @@
       {
         "Version": 299,
         "Change": "Added W2W/StopForCombat"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

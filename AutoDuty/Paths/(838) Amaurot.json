@@ -11,6 +11,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -35,6 +37,7 @@
         "Z": 0.0
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -48,6 +51,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "The First Beast"
     },
     {
@@ -61,6 +65,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -74,6 +79,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -87,6 +93,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -100,6 +107,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -111,6 +119,7 @@
         "Z": 0.0
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -124,6 +133,7 @@
       "Arguments": [
         " "
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -137,6 +147,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -150,6 +161,7 @@
       "Arguments": [
         "2009984"
       ],
+      "Conditions": [],
       "Note": "Aetherial Flow"
     },
     {
@@ -163,6 +175,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -176,6 +189,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -189,6 +203,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -202,6 +217,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -215,6 +231,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -228,6 +245,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -241,6 +259,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -252,6 +271,7 @@
         "Z": 0.0
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -265,6 +285,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -278,6 +299,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -291,6 +313,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -316,6 +339,10 @@
       {
         "Version": 252,
         "Change": "Fixed revivals, automoves and some treasure steps"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

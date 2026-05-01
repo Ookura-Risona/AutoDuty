@@ -1,40 +1,46 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": 99.69,
-        "Y": -0,
+        "Y": -0.0,
         "Z": 97.91
       },
-      "arguments": [
+      "Arguments": [
         ""
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     },
     {
-      "tag": "None",
-      "name": "Wait",
-      "position": {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
         "X": 99.69,
-        "Y": -0,
+        "Y": -0.0,
         "Z": 97.91
       },
-      "arguments": [
+      "Arguments": [
         "20000"
       ],
-      "note": ""
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 186,
-    "changelog": [
+  "Meta": {
+    "CreatedAt": 186,
+    "Changelog": [
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

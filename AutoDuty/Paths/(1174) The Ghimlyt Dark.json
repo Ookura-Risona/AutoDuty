@@ -243,6 +243,10 @@
       {
         "Version": 289,
         "Change": "Added Treasure Coffers"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

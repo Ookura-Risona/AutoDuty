@@ -376,6 +376,10 @@
       {
         "Version": 286,
         "Change": "Increase door delay because it felt close..."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

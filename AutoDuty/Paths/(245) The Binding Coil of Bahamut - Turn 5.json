@@ -63,6 +63,10 @@
       {
         "Version": 299,
         "Change": "Added Boss step and name. Replaced AutoMoveFor with MoveTo:False. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

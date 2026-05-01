@@ -128,13 +128,13 @@ namespace AutoDuty.Helpers
 
         internal static void DrawIcon(FontAwesomeIcon icon)
         {
-            using ImRaii.Font font = ImRaii.PushFont(UiBuilder.IconFont);
+            using ImRaii.FontDisposable font = ImRaii.PushFont(UiBuilder.IconFont);
             ImGui.SetItemAllowOverlap();
             ImGui.Text(icon.ToIconString());
             ImGui.SameLine();
         }
 
-        internal static ImRaii.IEndObject RequiresPlugin(ExternalPlugin plugin, string id, string? message = null, bool inline = false, bool write = true)
+        internal static IDisposable RequiresPlugin(ExternalPlugin plugin, string id, string? message = null, bool inline = false, bool write = true)
         {
             if (plugin == ExternalPlugin.None)
                 return new EndUnconditionally();
@@ -158,7 +158,7 @@ namespace AutoDuty.Helpers
             }
             else
             {
-                ImRaii.IEndObject disabled = ImRaii.Disabled();
+                ImRaii.DisabledDisposable disabled = ImRaii.Disabled();
 
                 ImGui.AlignTextToFramePadding();
                 return new EndUnconditionally(() =>
@@ -191,12 +191,9 @@ namespace AutoDuty.Helpers
         }
 
 
-        //Straight from Dalamud
-        private struct EndUnconditionally(Action endAction, bool success) : ImRaii.IEndObject
+        private struct EndUnconditionally(Action endAction, bool success) : IDisposable
         {
             private Action EndAction { get; } = endAction;
-
-            public bool Success { get; } = success;
 
             private bool Disposed { get; set; } = false;
 

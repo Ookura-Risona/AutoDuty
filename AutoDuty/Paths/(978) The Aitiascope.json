@@ -11,6 +11,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         "2011758"
       ],
+      "Conditions": [],
       "Note": "Aether Current"
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -50,6 +53,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -63,6 +67,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -76,6 +81,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -89,6 +95,7 @@
       "Arguments": [
         "5000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -102,6 +109,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -115,6 +123,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -128,6 +137,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -141,6 +151,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -154,6 +165,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -167,6 +179,7 @@
       "Arguments": [
         "2000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -180,6 +193,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -193,6 +207,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -206,6 +221,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -227,6 +243,10 @@
       {
         "Version": 246,
         "Change": "Modernized path"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

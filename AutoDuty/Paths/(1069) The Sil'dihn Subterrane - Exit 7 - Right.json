@@ -320,7 +320,12 @@
   ],
   "Meta": {
     "CreatedAt": 285,
-    "Changelog": [],
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
     "Notes": [
       "Requires BMR Rotation to solve drake puzzle"
     ]

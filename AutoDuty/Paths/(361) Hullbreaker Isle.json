@@ -269,7 +269,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004054,
           "property": "IsTargetable",
           "value": 1
@@ -290,7 +290,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000986,
           "quantity": 0,
           "operatorValue": ">"
@@ -353,7 +353,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -387,7 +387,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -471,7 +471,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -533,7 +533,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004055,
           "property": "IsTargetable",
           "value": 1
@@ -554,7 +554,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004056,
           "property": "IsTargetable",
           "value": 1
@@ -575,7 +575,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -609,7 +609,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000986,
           "quantity": 1,
           "operatorValue": ">"
@@ -658,7 +658,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004055,
           "property": "IsTargetable",
           "value": 1
@@ -679,7 +679,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004056,
           "property": "IsTargetable",
           "value": 1
@@ -700,7 +700,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -734,7 +734,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000986,
           "quantity": 1,
           "operatorValue": ">"
@@ -783,7 +783,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004055,
           "property": "IsTargetable",
           "value": 1
@@ -804,7 +804,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004056,
           "property": "IsTargetable",
           "value": 1
@@ -825,7 +825,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -859,7 +859,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000986,
           "quantity": 1,
           "operatorValue": ">"
@@ -908,7 +908,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004055,
           "property": "IsTargetable",
           "value": 1
@@ -929,7 +929,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2004056,
           "property": "IsTargetable",
           "value": 1
@@ -950,7 +950,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -969,7 +969,7 @@
           "distance": 30.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 276,
           "property": "IsTargetable",
           "value": 1
@@ -990,7 +990,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -1009,7 +1009,7 @@
           "distance": 30.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 277,
           "property": "IsTargetable",
           "value": 1
@@ -1030,7 +1030,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -1064,7 +1064,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -1098,7 +1098,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000986,
           "quantity": 2,
           "operatorValue": "<"
@@ -1131,7 +1131,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 276,
           "property": "IsTargetable",
           "value": 1
@@ -1152,7 +1152,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 277,
           "property": "IsTargetable",
           "value": 1
@@ -1653,6 +1653,10 @@
       {
         "Version": 300,
         "Change": "Added an extra step before the final boss so that nothing important is skipped by anyone watching the cutscene. Adjusted the MoveTo's in the geysers in the final boss fight to short Waits for better consistency."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

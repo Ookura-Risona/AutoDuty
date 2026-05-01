@@ -81,7 +81,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -100,7 +100,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -119,7 +119,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers, DPS"
         }
       ],
@@ -206,7 +206,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -225,7 +225,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -244,7 +244,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -263,7 +263,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers, DPS"
         }
       ],
@@ -418,7 +418,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -437,7 +437,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -456,7 +456,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers, DPS"
         }
       ],
@@ -557,7 +557,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -576,7 +576,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -595,7 +595,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers, DPS"
         }
       ],
@@ -746,6 +746,10 @@
       {
         "Version": 299,
         "Change": "Merged the Regular & W2W paths. Added Trash/Boss Comments & Boss names. Adjusted and expanded the W2W steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

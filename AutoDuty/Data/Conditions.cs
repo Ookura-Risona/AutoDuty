@@ -16,6 +16,7 @@ namespace AutoDuty.Data;
 using System.Linq;
 using System.Numerics;
 using ECommons.GameFunctions;
+using Newtonsoft.Json;
 
 public abstract class PathActionCondition
 {
@@ -23,6 +24,7 @@ public abstract class PathActionCondition
 
     public static readonly Dictionary<ConditionType, Type> PARSE_KEYS;
 
+    [JsonIgnore]
     public virtual ConditionType ParseKey => PARSE_KEY;
 
     static PathActionCondition()
@@ -378,7 +380,7 @@ public class PathActionConditionVariantPath : PathActionCondition
             this.pathIndices.Add((byte)(this.pathIndices.Count == 0 ? 1 : this.pathIndices.Last() + 1));
         ImGui.SameLine();
 
-        using ImRaii.IEndObject _ = ImRaii.Disabled(this.pathIndices.Count == 0);
+        using ImRaii.DisabledDisposable _ = ImRaii.Disabled(this.pathIndices.Count == 0);
         if (ImGuiComponents.IconButton(FontAwesomeIcon.Minus))
             this.pathIndices.RemoveAt(this.pathIndices.Count - 1);
     }
@@ -400,7 +402,7 @@ public abstract class PathActionConditionLogicCollection : PathActionCondition
         {
             PathActionCondition condition = this.conditions[index];
 
-            using ImRaii.Id _ = ImRaii.PushId($"BuildTab_Condition_Logic_{index}");
+            using ImRaii.IdDisposable _ = ImRaii.PushId($"BuildTab_Condition_Logic_{index}");
             ImGui.Text(condition.ParseKey.ToLocalizedString());
             ImGui.SameLine();
 
@@ -417,7 +419,7 @@ public abstract class PathActionConditionLogicCollection : PathActionCondition
             this.conditions.Add(pathActionCondition);
 
         ImGui.SameLine();
-        using ImRaii.IEndObject __ = ImRaii.Disabled(this.conditions.Count == 0);
+        using ImRaii.DisabledDisposable __ = ImRaii.Disabled(this.conditions.Count == 0);
         if (ImGuiComponents.IconButton("ConditionLogic_Del", FontAwesomeIcon.Minus))
             this.conditions.RemoveAt(this.conditions.Count - 1);
     }

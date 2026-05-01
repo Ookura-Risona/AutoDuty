@@ -383,6 +383,10 @@
       {
         "Version": 291,
         "Change": "Boat Waits replaced by b1 check"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

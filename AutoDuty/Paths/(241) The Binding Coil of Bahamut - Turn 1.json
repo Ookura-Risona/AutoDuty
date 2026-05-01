@@ -149,6 +149,10 @@
       {
         "Version": 299,
         "Change": "Added Boss names. Added Unsynced steps. Replaced ForceAttack step with KillInRange. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -173,7 +173,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Location",
           "originId": 0,
           "originLoc": {
@@ -353,7 +353,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Location",
           "originId": 0,
           "originLoc": {
@@ -481,6 +481,10 @@
       {
         "Version": 299,
         "Change": "Added Trash/Boss Comments. Added Unsynced steps. Removed excess MoveTo steps (kept the notable ones from previous Changes)."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

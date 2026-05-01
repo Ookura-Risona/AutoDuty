@@ -598,7 +598,12 @@
   ],
   "Meta": {
     "CreatedAt": 285,
-    "Changelog": [],
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
     "Notes": []
   }
 }

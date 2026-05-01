@@ -307,7 +307,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Casters"
         }
       ],
@@ -326,7 +326,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Aiming"
         }
       ],
@@ -345,7 +345,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -364,7 +364,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers"
         }
       ],
@@ -383,7 +383,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Melee"
         }
       ],
@@ -402,7 +402,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -421,7 +421,7 @@
           "distance": 5.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Melee"
         }
       ],
@@ -440,7 +440,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Melee"
         }
       ],
@@ -459,7 +459,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks, DPS"
         }
       ],
@@ -478,7 +478,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers"
         }
       ],
@@ -647,6 +647,10 @@
       {
         "Version": 300,
         "Change": "Adjusted the Coords of the MoveTo in the transition wall to be farther in said wall."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

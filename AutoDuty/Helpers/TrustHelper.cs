@@ -168,7 +168,7 @@ namespace AutoDuty.Helpers
                                      {
                                          Index       = index,
                                          MemberIds   = memberId,
-                                         Name        = dawnSheet.GetRow((uint)name)!.Unknown0.ToString(),
+                                         Name        = dawnSheet.GetRow((uint)name)!.Name.ToString(),
                                          Role        = role,
                                          Job         = jobSheet.GetRow((uint)classJob)!,
                                          MemberName  = name,

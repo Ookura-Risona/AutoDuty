@@ -609,6 +609,10 @@
       {
         "Version": 300,
         "Change": "Added Unsynced KillInRange before Interactables."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -48,6 +48,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Dalamud.Game.DutyState;
 using Multibox;
 using static Data.Classes;
 using TaskManager = ECommons.Automation.NeoTaskManager.TaskManager;
@@ -274,7 +275,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
             IPCBase.DefaultWrapper = SafeWrapper.IPCException;
             ECommonsMain.Init(PluginInterface, Plugin, Module.DalamudReflector, Module.ObjectFunctions);
-            PictoService.Initialize(PluginInterface);
+            PctService.Initialize(PluginInterface);
 
             this.isDev = PluginInterface.IsDev;
 
@@ -298,7 +299,7 @@ public sealed class AutoDuty : IDalamudPlugin
             this.assemblyDirectoryInfo = this.assemblyFileInfo.Directory;
 
             this.Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 300) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 304) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!this.configDirectory.Exists)
@@ -682,7 +683,7 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         if (PlayerHelper.IsValid)
         {
-            using PctDrawList? drawList = PictoService.Draw();
+            using PctDrawList? drawList = PctService.Draw();
 
             if (drawList != null)
             {
@@ -729,7 +730,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
     private DateTime lastDutyStart = DateTime.MinValue;
 
-    private void DutyState_DutyStarted(object?     sender, ushort e)
+    private void DutyState_DutyStarted(IDutyStateEventArgs args)
     {
         this.dutyState         = DutyState.DutyStarted;
         this.lastDutyStart     = DateTime.UtcNow;
@@ -746,9 +747,9 @@ public sealed class AutoDuty : IDalamudPlugin
         }
     }
 
-    private void DutyState_DutyWiped(object?       sender, ushort e) => this.dutyState = DutyState.DutyWiped;
-    private void DutyState_DutyRecommenced(object? sender, ushort e) => this.dutyState = DutyState.DutyRecommenced;
-    private void DutyState_DutyCompleted(object? sender, ushort e)
+    private void DutyState_DutyWiped(IDutyStateEventArgs       args) => this.dutyState = DutyState.DutyWiped;
+    private void DutyState_DutyRecommenced(IDutyStateEventArgs args) => this.dutyState = DutyState.DutyRecommenced;
+    private void DutyState_DutyCompleted(IDutyStateEventArgs args)
     {
         Svc.Log.Warning("Duty Done");
         this.dutyState = DutyState.DutyComplete;
@@ -847,7 +848,7 @@ public sealed class AutoDuty : IDalamudPlugin
         }
     }
 
-    private void ClientState_TerritoryChanged(ushort t)
+    private void ClientState_TerritoryChanged(uint t)
     {
         if (MultiboxUtility.Config.MultiBox)
         {
@@ -2255,7 +2256,7 @@ public sealed class AutoDuty : IDalamudPlugin
         this.overrideCamera?.Dispose();
         Svc.ClientState.TerritoryChanged -= this.ClientState_TerritoryChanged;
         Svc.Condition.ConditionChange    -= this.Condition_ConditionChange;
-        PictoService.Dispose();
+        PctService.Dispose();
         PluginInterface.UiBuilder.Draw   -= this.UiBuilderOnDraw;
         Svc.Commands.RemoveHandler(CommandName);
     }

@@ -11,6 +11,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -50,6 +53,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -63,6 +67,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -76,6 +81,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -87,6 +93,7 @@
         "Z": -95.75481
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -100,6 +107,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Minduruya"
     },
     {
@@ -113,6 +121,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -126,6 +135,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -139,6 +149,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -152,6 +163,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -165,6 +177,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -178,6 +191,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -191,6 +205,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -204,6 +219,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -217,6 +233,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -230,6 +247,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -243,6 +261,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -256,6 +275,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -269,6 +289,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -282,6 +303,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -295,6 +317,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -306,6 +329,7 @@
         "Z": 4.874687
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -319,6 +343,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Sanduruva"
     },
     {
@@ -332,6 +357,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -345,6 +371,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -358,6 +385,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -371,6 +399,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -384,6 +413,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -397,6 +427,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -410,6 +441,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -423,6 +455,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -436,6 +469,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -449,6 +483,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -462,6 +497,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -475,6 +511,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -488,6 +525,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -501,6 +539,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -514,6 +553,7 @@
       "Arguments": [
         "2500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -527,6 +567,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -540,6 +581,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -551,6 +593,7 @@
         "Z": -25.812904
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -564,6 +607,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Cinduruya + the others"
     }
   ],
@@ -589,6 +633,10 @@
       {
         "Version": 242,
         "Change": "Adjusted b2-b3 w2w stretches"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

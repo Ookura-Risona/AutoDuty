@@ -11,6 +11,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         "2009422"
       ],
+      "Conditions": [],
       "Note": "Rathalos"
     },
     {
@@ -37,17 +39,18 @@
       "Arguments": [
         "2009576"
       ],
+      "Conditions": [],
       "Note": "Rathalos's Tail"
     }
   ],
   "Meta": {
     "CreatedAt": 258,
-    "Changelog": [],
-    "Notes": [ ]
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
+    "Notes": []
   }
-
 }
-
-
-
-

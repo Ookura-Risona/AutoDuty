@@ -11,6 +11,7 @@
       "Arguments": [
         "12000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         "20000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         "2012809"
       ],
+      "Conditions": [],
       "Note": "Perceptive Portal"
     },
     {
@@ -50,6 +53,7 @@
       "Arguments": [
         "3000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -63,6 +67,7 @@
       "Arguments": [
         "2000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -76,6 +81,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -89,6 +95,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -102,6 +109,7 @@
       "Arguments": [
         "9000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -115,6 +123,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -128,6 +137,7 @@
       "Arguments": [
         "2013344"
       ],
+      "Conditions": [],
       "Note": "Woven Rope"
     },
     {
@@ -141,6 +151,7 @@
       "Arguments": [
         "2000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -154,6 +165,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -167,6 +179,7 @@
       "Arguments": [
         "2013343"
       ],
+      "Conditions": [],
       "Note": "Shojo Temple Entrance"
     },
     {
@@ -180,6 +193,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -193,6 +207,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -206,6 +221,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -219,6 +235,7 @@
       "Arguments": [
         "7000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -232,6 +249,7 @@
       "Arguments": [
         "30000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -245,6 +263,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -258,6 +277,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -271,6 +291,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -284,6 +305,7 @@
       "Arguments": [
         "10000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -297,6 +319,7 @@
       "Arguments": [
         "20000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -310,6 +333,7 @@
       "Arguments": [
         "16140"
       ],
+      "Conditions": [],
       "Note": "Shishu White Baboon"
     },
     {
@@ -323,6 +347,7 @@
       "Arguments": [
         "0"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -336,6 +361,7 @@
       "Arguments": [
         "3000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -349,6 +375,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -362,6 +389,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -375,6 +403,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -388,6 +417,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -401,6 +431,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -430,6 +461,10 @@
       {
         "Version": 268,
         "Change": "fix monkey interaction"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

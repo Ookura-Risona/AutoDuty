@@ -591,6 +591,10 @@
       {
         "Version": 300,
         "Change": "Added Unsynced StopForCombat:True before Interactables."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

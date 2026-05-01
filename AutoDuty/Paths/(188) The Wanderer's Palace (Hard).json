@@ -537,6 +537,10 @@
       {
         "Version": 299,
         "Change": "Added Trash/Boss Comments & Boss Names. Added Unsynced Steps. Added Treasure steps. Added KillInRange steps. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

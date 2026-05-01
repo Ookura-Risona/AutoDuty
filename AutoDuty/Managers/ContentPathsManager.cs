@@ -151,19 +151,20 @@ namespace AutoDuty.Managers
 
                             this.RevivalFound = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
                             this.W2WFound     = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
-                            /*
-                            if (this.pathFile.Meta.LastUpdatedVersion < 189)
+
+                            
+                            if (this.pathFile.Meta.LastUpdatedVersion < 304)
                             {
 
                                 pathFile.Meta.Changelog.Add(new PathFileChangelogEntry
                                                             {
-                                                                Version = 189,
-                                                                Change  = "Adjusted tags to string values"
+                                                                Version = 304,
+                                                                Change  = "Version update"
                                                             });
 
-                                json = JsonSerializer.Serialize(pathFile, BuildTab.jsonSerializerOptions);
+                                json = JsonConvert.SerializeObject(pathFile, ConfigurationMain.JsonSerializerSettings);
                                 File.WriteAllText(FilePath, json);
-                            }*/
+                            }
                         }
                         catch (Exception ex)
                         {

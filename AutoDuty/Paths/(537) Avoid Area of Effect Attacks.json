@@ -27,7 +27,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "DPS"
         }
       ],
@@ -46,7 +46,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -65,7 +65,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers"
         }
       ],
@@ -98,7 +98,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "DPS"
         }
       ],
@@ -117,7 +117,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -136,7 +136,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers"
         }
       ],
@@ -295,7 +295,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "DPS"
         }
       ],
@@ -314,7 +314,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -333,7 +333,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers"
         }
       ],
@@ -364,7 +364,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "DPS"
         }
       ],
@@ -383,7 +383,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -402,7 +402,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers"
         }
       ],
@@ -425,7 +425,12 @@
   ],
   "Meta": {
     "CreatedAt": 291,
-    "Changelog": [],
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
     "Notes": []
   }
 }

@@ -518,6 +518,10 @@
       {
         "Version": 286,
         "Change": "Added wait at the end to prevent immediate leave"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": [

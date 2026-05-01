@@ -107,6 +107,10 @@
       {
         "Version": 299,
         "Change": "Added Boss step and name. Added Rotation steps to prevent getting stuck while pathing to the boss (and to prevent pulling early before getting to the Boss step). Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

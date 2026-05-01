@@ -11,6 +11,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         "on"
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -62,6 +65,10 @@
       {
         "Version": 251,
         "Change": "Stopped dodging because of lack of module"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

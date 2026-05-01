@@ -39,6 +39,10 @@
       {
         "Version": 299,
         "Change": "Added Boss names. Adjusted Coordinates to be within the boss' aggro radius. Removed excess MoveTo steps & unnecessary TreasureCoffer step."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -171,7 +171,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001123,
           "property": "IsTargetable",
           "value": 1
@@ -192,7 +192,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks, Healers, Samurai, Maiming, Scouting, Aiming, Casters"
         }
       ],
@@ -237,7 +237,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -272,7 +272,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -307,7 +307,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -342,7 +342,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -375,7 +375,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -410,7 +410,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -443,7 +443,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -464,7 +464,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001125,
           "property": "IsTargetable",
           "value": 0
@@ -499,7 +499,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -520,7 +520,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2001071,
           "quantity": 2,
           "operatorValue": ">"
@@ -555,7 +555,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2001071,
           "quantity": 3,
           "operatorValue": "<"
@@ -576,7 +576,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001124,
           "property": "IsTargetable",
           "value": 1
@@ -597,7 +597,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001125,
           "property": "IsTargetable",
           "value": 1
@@ -618,7 +618,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001126,
           "property": "IsTargetable",
           "value": 1
@@ -653,7 +653,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Monk"
         }
       ],
@@ -672,7 +672,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001127,
           "property": "IsTargetable",
           "value": 1
@@ -733,7 +733,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002789,
           "property": "IsTargetable",
           "value": 1
@@ -768,7 +768,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2001071,
           "quantity": 2,
           "operatorValue": "<"
@@ -803,7 +803,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001128,
           "property": "IsTargetable",
           "value": 1
@@ -836,7 +836,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001129,
           "property": "IsTargetable",
           "value": 1
@@ -1005,7 +1005,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2001071,
           "quantity": 2,
           "operatorValue": "<"
@@ -1100,6 +1100,10 @@
       {
         "Version": 300,
         "Change": "Added Unsynced KillInRange before Interactable."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

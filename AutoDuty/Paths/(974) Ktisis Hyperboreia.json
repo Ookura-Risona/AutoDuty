@@ -705,6 +705,10 @@
       {
         "Version": 284,
         "Change": "Adjusted arm 1 wait to happen on non W2W"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

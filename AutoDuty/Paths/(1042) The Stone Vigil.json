@@ -199,7 +199,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2001879,
           "property": "EventState",
           "value": 0
@@ -317,11 +317,15 @@
         "Version": 189,
         "Change": "Adjusted tags to string values"
       },
-	  {
+      {
         "Version": 299,
         "Change": "Added Trash/Boss Comments & Boss names. Added Unsynced steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
-    "notes": []
+    "Notes": []
   }
 }

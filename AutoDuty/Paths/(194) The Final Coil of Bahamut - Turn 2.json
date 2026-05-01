@@ -469,6 +469,10 @@
       {
         "Version": 299,
         "Change": "Adjusted the Unsynced tags to only be on the second set of steps going to the other side. Adjusted the death-wall part to work normally and with the weird rez bug I got initially. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed excess steps waiting for after combat."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

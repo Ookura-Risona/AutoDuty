@@ -285,7 +285,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2003313,
           "property": "IsTargetable",
           "value": 1
@@ -318,7 +318,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2003313,
           "property": "IsTargetable",
           "value": 1
@@ -339,7 +339,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2001189,
           "quantity": 0,
           "operatorValue": ">"
@@ -374,7 +374,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2003313,
           "property": "IsTargetable",
           "value": 1
@@ -395,7 +395,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2001189,
           "quantity": 1,
           "operatorValue": "<"
@@ -484,7 +484,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2370,
           "property": "IsTargetable",
           "value": 1
@@ -693,6 +693,10 @@
       {
         "Version": 300,
         "Change": "Removed unnecessary steps during the check-for-key section. Moved various Unsynced StopForCombat steps to better spots within the path."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

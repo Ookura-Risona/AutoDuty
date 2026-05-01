@@ -11,12 +11,18 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Innocence"
     }
   ],
   "Meta": {
     "CreatedAt": 245,
-    "Changelog": [],
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
     "Notes": []
   }
 }

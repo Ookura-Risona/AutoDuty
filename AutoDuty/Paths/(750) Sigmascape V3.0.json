@@ -1,20 +1,26 @@
 {
-  "actions": [
+  "Actions": [
     {
-      "tag": "None",
-      "name": "Boss",
-      "position": {
+      "Tag": "None",
+      "Name": "Boss",
+      "Position": {
         "X": -0.14804105,
-        "Y": 0,
+        "Y": 0.0,
         "Z": -7.5064154
       },
-      "arguments": [],
-      "note": ""
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
     }
   ],
-  "meta": {
-    "createdAt": 227,
-    "changelog": [],
-    "notes": []
+  "Meta": {
+    "CreatedAt": 227,
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
+    "Notes": []
   }
 }

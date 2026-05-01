@@ -369,6 +369,9 @@ public class ConfigurationMain
 
             if (isInternal)
             {
+                if (typeName.Contains("AutoDuty.Data.Classes+PathActionCondition"))
+                    typeName = typeName.Replace("AutoDuty.Data.Classes+PathActionCondition", "AutoDuty.Data.PathActionCondition");
+
                 Type? type = typeof(Configuration).Assembly.GetType(typeName);
                 if (type != null)
                     return type;
@@ -886,7 +889,7 @@ public static class ConfigTab
             ImGuiHelper.DrawIcon(FontAwesomeIcon.CheckCircle);
         ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - 180 * ImGuiHelpers.GlobalScale);
         ImGui.SetItemAllowOverlap();
-        using (ImRaii.IEndObject configCombo = ImRaii.Combo("##ConfigCombo", ConfigurationMain.Instance.ActiveProfileName))
+        using (ImRaii.ComboDisposable configCombo = ImRaii.Combo("##ConfigCombo", ConfigurationMain.Instance.ActiveProfileName))
         {
             if (configCombo)
                 foreach (string key in ConfigurationMain.Instance.ConfigNames)
@@ -1007,7 +1010,7 @@ public static class ConfigTab
 
         if (bareProfile)
             ImGuiEx.TextWrapped(Loc.Get("ConfigTab.Profile.BareProfileNote"));
-        using ImRaii.IEndObject _ = ImRaii.Disabled(bareProfile);
+        using ImRaii.DisabledDisposable _ = ImRaii.Disabled(bareProfile);
 
         //Start of Window & Overlay Settings
         ImGui.Spacing();
@@ -2775,9 +2778,12 @@ public static class ConfigTab
             foreach (Sounds sound in validSounds)
                 if (ImGui.Selectable(sound.ToName()))
                 {
-                    Configuration.SoundEnum = sound;
-                    UIGlobals.PlaySoundEffect((uint)sound);
-                    Configuration.Save();
+                    unsafe
+                    {
+                        Configuration.SoundEnum = sound;
+                        UIGlobals.PlaySoundEffect((uint)sound);
+                        Configuration.Save();
+                    }
                 }
 
             ImGui.EndCombo();

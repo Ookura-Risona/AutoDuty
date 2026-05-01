@@ -1,6 +1,6 @@
 {
   "Actions": [
-{
+    {
       "Tag": "None",
       "Name": "Wait",
       "Position": {
@@ -213,7 +213,12 @@
   ],
   "Meta": {
     "CreatedAt": 291,
-    "Changelog": [],
+    "Changelog": [
+      {
+        "Version": 304,
+        "Change": "Version update"
+      }
+    ],
     "Notes": []
   }
 }

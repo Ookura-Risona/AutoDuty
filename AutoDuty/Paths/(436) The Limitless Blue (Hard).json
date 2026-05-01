@@ -11,6 +11,7 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -22,6 +23,7 @@
         "Z": -5.53312
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -35,6 +37,7 @@
       "Arguments": [
         "on"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -48,6 +51,7 @@
       "Arguments": [
         "25000"
       ],
+      "Conditions": [],
       "Note": "allow time for melees to kill stuff before stopping AI"
     },
     {
@@ -61,6 +65,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -74,6 +79,7 @@
       "Arguments": [
         "1000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -88,6 +94,7 @@
         "ObjectData;2005545;IsTargetable;false",
         "ModifyIndex;-1"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -101,6 +108,7 @@
       "Arguments": [
         "2005545"
       ],
+      "Conditions": [],
       "Note": "Dragonkiller"
     },
     {
@@ -114,6 +122,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -127,6 +136,7 @@
       "Arguments": [
         "2005544"
       ],
+      "Conditions": [],
       "Note": "Dragonkiller"
     },
     {
@@ -140,6 +150,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -153,6 +164,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -167,6 +179,7 @@
         "ObjectData;4423;IsTargetable;false",
         "ModifyIndex;-1"
       ],
+      "Conditions": [],
       "Note": "Chitin Carapace (4421)"
     },
     {
@@ -180,6 +193,7 @@
       "Arguments": [
         "on"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -193,6 +207,7 @@
       "Arguments": [
         "ConditionFlag;48;true"
       ],
+      "Conditions": [],
       "Note": "Wait for jumping from the shell"
     },
     {
@@ -206,6 +221,7 @@
       "Arguments": [
         "IsReady"
       ],
+      "Conditions": [],
       "Note": "and land before moving..."
     },
     {
@@ -219,6 +235,7 @@
       "Arguments": [
         "250"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -233,6 +250,7 @@
         "ObjectData;3834;IsTargetable;true",
         "ModifyIndex;+2"
       ],
+      "Conditions": [],
       "Note": "Vapor Bubble"
     },
     {
@@ -246,6 +264,7 @@
       "Arguments": [
         "-2"
       ],
+      "Conditions": [],
       "Note": "allow ai for melees untill the bubbles show up"
     },
     {
@@ -259,6 +278,7 @@
       "Arguments": [
         "5000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -272,6 +292,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": "back to the scripted events"
     },
     {
@@ -285,6 +306,7 @@
       "Arguments": [
         "100"
       ],
+      "Conditions": [],
       "Note": "Wait away from the edge to maybe survive the random KB"
     },
     {
@@ -299,6 +321,7 @@
         "ObjectData;2005545;IsTargetable;false",
         "ModifyIndex;-1"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -312,6 +335,7 @@
       "Arguments": [
         "/ac Sprint"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -325,6 +349,7 @@
       "Arguments": [
         "2005545"
       ],
+      "Conditions": [],
       "Note": "Dragonkiller"
     },
     {
@@ -338,6 +363,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -351,6 +377,7 @@
       "Arguments": [
         "2005544"
       ],
+      "Conditions": [],
       "Note": "Dragonkiller"
     },
     {
@@ -364,6 +391,7 @@
       "Arguments": [
         "off"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -377,6 +405,7 @@
       "Arguments": [
         "500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -391,6 +420,7 @@
         "ObjectData;4424;IsTargetable;false",
         "ModifyIndex;-1"
       ],
+      "Conditions": [],
       "Note": "Corona (4422)"
     },
     {
@@ -404,6 +434,7 @@
       "Arguments": [
         "true"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -417,6 +448,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     }
   ],
@@ -442,6 +474,10 @@
       {
         "Version": 252,
         "Change": "Copy from Extreme and adjust IDs"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -232,9 +232,9 @@ internal static class StatsTab
         ImGui.TableNextColumn();
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        using (ImRaii.IEndObject endObject = ImRaii.Combo("##StatsTabFilterTerritory", territoryFilter.Count is >= 1 or 0 ? 
-                                                                                          Loc.Get("StatsTab.SelectedMultiCount", territoryFilter.Count) :
-                                                                                          TerritoryName(territoryFilter.First())))
+        using (ImRaii.ComboDisposable endObject = ImRaii.Combo("##StatsTabFilterTerritory", territoryFilter.Count is >= 1 or 0 ? 
+                                                                                                   Loc.Get("StatsTab.SelectedMultiCount", territoryFilter.Count) :
+                                                                                                   TerritoryName(territoryFilter.First())))
         {
             if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
             {
@@ -268,7 +268,7 @@ internal static class StatsTab
         ImGui.TableNextColumn();
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        using (ImRaii.IEndObject endObject = ImRaii.Combo("##StatsTabFilterChar", charFilter.Count is >= 1 or 0 ?
+        using (ImRaii.ComboDisposable endObject = ImRaii.Combo("##StatsTabFilterChar", charFilter.Count is >= 1 or 0 ?
                                                                                            Loc.Get("StatsTab.SelectedMultiCount", charFilter.Count) :
                                                                                            CharName(charFilter.First())))
         {
@@ -304,7 +304,7 @@ internal static class StatsTab
 
         ImGui.TableNextColumn();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        using (ImRaii.IEndObject endObject = ImRaii.Combo("##StatsTabFilterIlvl", $"{ilvlFilterMin} - {ilvlFilterMax}"))
+        using (ImRaii.ComboDisposable endObject = ImRaii.Combo("##StatsTabFilterIlvl", $"{ilvlFilterMin} - {ilvlFilterMax}"))
         {
             if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
             {
@@ -319,7 +319,7 @@ internal static class StatsTab
         ImGui.TableNextColumn();
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        using (ImRaii.IEndObject endObject = ImRaii.Combo("##StatsTabFilterJob", jobFilter.ToLocalizedString()))
+        using (ImRaii.ComboDisposable endObject = ImRaii.Combo("##StatsTabFilterJob", jobFilter.ToLocalizedString()))
         {
             if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
             {
@@ -336,7 +336,7 @@ internal static class StatsTab
 
         ImGui.TableNextColumn();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        using (ImRaii.IEndObject endObject = ImRaii.Combo("##StatsTabFilterDeaths", $"{deathsFilterMin} - {deathsFilterMax}"))
+        using (ImRaii.ComboDisposable endObject = ImRaii.Combo("##StatsTabFilterDeaths", $"{deathsFilterMin} - {deathsFilterMax}"))
         {
             if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
             {

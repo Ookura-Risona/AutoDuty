@@ -549,6 +549,10 @@
       {
         "Version": 286,
         "Change": "Add delay before scales puzzle"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -11,6 +11,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -24,6 +25,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -37,6 +39,7 @@
       "Arguments": [
         "4000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -50,6 +53,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -63,6 +67,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -76,6 +81,7 @@
       "Arguments": [
         "3500"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -89,6 +95,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -102,6 +109,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -115,6 +123,7 @@
       "Arguments": [
         "3700"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -128,6 +137,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -141,6 +151,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -154,6 +165,7 @@
       "Arguments": [
         "11000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -167,6 +179,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -180,6 +193,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -193,6 +207,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -206,6 +221,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -219,6 +235,7 @@
       "Arguments": [
         "7000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -232,6 +249,7 @@
       "Arguments": [
         "2000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -245,6 +263,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -258,6 +277,7 @@
       "Arguments": [
         "2000"
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -271,6 +291,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -284,6 +305,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -297,6 +319,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -310,6 +333,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -323,6 +347,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Small Calca and Brina dolls"
     },
     {
@@ -336,6 +361,7 @@
       "Arguments": [
         ""
       ],
+      "Conditions": [],
       "Note": "Wait for phase change and fight big Calcabrina doll"
     },
     {
@@ -347,6 +373,7 @@
         "Z": -181.61241
       },
       "Arguments": [],
+      "Conditions": [],
       "Note": ""
     },
     {
@@ -360,35 +387,38 @@
       "Arguments": [
         "2000139"
       ],
+      "Conditions": [],
       "Note": "Exit"
     }
   ],
   "Meta": {
-    "createdAt": 106,
-    "changelog": [
+    "CreatedAt": 106,
+    "Changelog": [
       {
-        "version": 161,
-        "change": "Converted to new JSON Structure"
+        "Version": 161,
+        "Change": "Converted to new JSON Structure"
       },
       {
-        "version": 163,
-        "change": "Converted to newer JSON Structure"
+        "Version": 163,
+        "Change": "Converted to newer JSON Structure"
       },
       {
-        "version": 164,
-        "change": "Converted to JSON Structure with Tags"
+        "Version": 164,
+        "Change": "Converted to JSON Structure with Tags"
       },
       {
-        "version": 189,
-        "change": "Adjusted tags to string values"
+        "Version": 189,
+        "Change": "Adjusted tags to string values"
       },
       {
         "Version": 241,
         "Change": "Adjusted AutoMove positions and moved walk positions after boss to actually continue"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []
   }
 }
-
-

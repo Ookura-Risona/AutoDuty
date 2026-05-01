@@ -80,7 +80,7 @@ namespace AutoDuty.Windows
 
         private static void DrawPathElements()
         {
-            using ImRaii.IEndObject? d = ImRaii.Disabled(!InDungeon || Plugin.Stage > 0 || !Player.Available);
+            using ImRaii.DisabledDisposable d = ImRaii.Disabled(!InDungeon || Plugin.Stage > 0 || !Player.Available);
             ImGui.Text(Loc.Get("BuildTab.BuildPath", Svc.ClientState.TerritoryType, ContentHelper.DictionaryContent.TryGetValue(Svc.ClientState.TerritoryType, out Classes.Content? content) ? content.Name : TerritoryName.GetTerritoryName(Svc.ClientState.TerritoryType)));
 
             ImGui.AlignTextToFramePadding();
@@ -415,7 +415,7 @@ namespace AutoDuty.Windows
                 int delIndex = -1;
                 for (int index = 0; index < _conditions.Count; index++)
                 {
-                    using ImRaii.Id _ = ImRaii.PushId($"BuildTab_Condition_{index}");
+                    using ImRaii.IdDisposable _ = ImRaii.PushId($"BuildTab_Condition_{index}");
 
                     PathActionCondition condition = _conditions[index];
                     if (ImGuiComponents.IconButton(FontAwesomeIcon.TrashAlt))

@@ -53,7 +53,7 @@ namespace AutoDuty.Windows
                 Process.Start("explorer.exe", Plugin.pathsDirectory.FullName);
 
             ImGui.SameLine();
-            using (ImRaii.IEndObject? d = ImRaii.Disabled(_selectedDutyPath == null))
+            using (ImRaii.DisabledDisposable d = ImRaii.Disabled(_selectedDutyPath == null))
             {
                 if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.OpenFile")))
                     Process.Start("explorer", _selectedDutyPath?.FilePath ?? string.Empty);

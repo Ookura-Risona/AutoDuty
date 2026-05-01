@@ -201,6 +201,10 @@
       {
         "Version": 299,
         "Change": "Added Boss name. Added KillInRange steps. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

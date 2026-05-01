@@ -507,6 +507,10 @@
       {
         "Version": 300,
         "Change": "Added Note for RSR users before first boss."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

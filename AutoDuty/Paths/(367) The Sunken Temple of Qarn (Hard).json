@@ -189,7 +189,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2002735,
           "property": "EventState",
           "value": 0
@@ -598,6 +598,10 @@
       {
         "Version": 300,
         "Change": "Adjusted the Coords of MoveTo's in transition walls to be farther in the wall."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

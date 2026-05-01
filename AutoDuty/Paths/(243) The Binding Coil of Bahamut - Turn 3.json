@@ -999,6 +999,10 @@
       {
         "Version": 299,
         "Change": "Replaced Waits after launch pads with WaitFor:IsReady. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed AutoMoveFor steps. Removed excess MoveTo steps."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

@@ -67,7 +67,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2000162,
           "property": "IsTargetable",
           "value": 0
@@ -308,7 +308,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000441,
           "quantity": 1,
           "operatorValue": "<"
@@ -369,7 +369,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2000174,
           "property": "IsTargetable",
           "value": 0
@@ -766,6 +766,10 @@
       {
         "Version": 300,
         "Change": "Added False on MoveTo steps after the elevators to prevent the possibility of skipping them. Adjusted the step before the final boss so that it won't be skipped by anyone watching the cutscene."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

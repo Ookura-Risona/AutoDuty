@@ -53,7 +53,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             0
           ]
@@ -74,7 +74,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -98,7 +98,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -122,7 +122,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -171,7 +171,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -195,13 +195,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19103,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -225,7 +225,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -249,7 +249,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -268,7 +268,7 @@
           "distance": 10.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -292,7 +292,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -330,7 +330,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -368,7 +368,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -392,7 +392,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -417,7 +417,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -446,7 +446,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -470,7 +470,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -494,7 +494,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -518,7 +518,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -542,7 +542,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -578,7 +578,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -602,7 +602,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -626,13 +626,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19114,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -654,7 +654,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -678,13 +678,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2015018,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -706,7 +706,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -728,7 +728,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -750,7 +750,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -772,7 +772,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -794,7 +794,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -816,7 +816,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -837,7 +837,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -858,7 +858,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -879,13 +879,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19325,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -906,7 +906,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -925,7 +925,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -946,7 +946,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -967,7 +967,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1
           ]
@@ -988,7 +988,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -1010,13 +1010,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19357,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2
@@ -1038,7 +1038,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1059,7 +1059,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1080,7 +1080,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1102,7 +1102,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1123,7 +1123,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1144,7 +1144,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1165,7 +1165,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1186,7 +1186,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             4
           ]
@@ -1207,13 +1207,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19294,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             4
           ]
@@ -1234,7 +1234,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1255,7 +1255,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1276,7 +1276,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             3
           ]
@@ -1297,7 +1297,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -1319,7 +1319,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -1341,7 +1341,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -1365,7 +1365,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -1401,7 +1401,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             1,
             2,
@@ -1437,7 +1437,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1462,7 +1462,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1487,7 +1487,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1512,7 +1512,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1537,13 +1537,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2015019,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1568,7 +1568,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1593,7 +1593,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1618,7 +1618,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1643,7 +1643,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1668,7 +1668,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -1687,7 +1687,7 @@
           "distance": 10.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1712,7 +1712,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1737,7 +1737,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1762,7 +1762,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1787,7 +1787,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1812,7 +1812,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1835,7 +1835,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1860,7 +1860,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1885,7 +1885,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1908,7 +1908,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1933,7 +1933,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1958,7 +1958,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -1983,7 +1983,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2009,7 +2009,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             6
           ]
@@ -2030,7 +2030,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2055,7 +2055,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2080,7 +2080,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2103,7 +2103,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2125,7 +2125,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2148,7 +2148,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2173,7 +2173,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2199,7 +2199,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5
           ]
@@ -2220,7 +2220,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             6,
             13
@@ -2243,7 +2243,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             6
           ]
@@ -2264,7 +2264,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2285,7 +2285,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2306,7 +2306,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2329,7 +2329,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6
@@ -2351,7 +2351,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6
@@ -2373,7 +2373,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2395,13 +2395,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19123,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2423,7 +2423,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7
           ]
@@ -2444,7 +2444,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7
           ]
@@ -2465,7 +2465,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2487,13 +2487,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19125,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2515,7 +2515,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2535,7 +2535,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             7,
             8
@@ -2557,7 +2557,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2579,7 +2579,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2603,7 +2603,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             5,
             6,
@@ -2639,7 +2639,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2663,7 +2663,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2687,7 +2687,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -2706,7 +2706,7 @@
           "distance": 15.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2730,7 +2730,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2754,7 +2754,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2778,7 +2778,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2802,7 +2802,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2824,7 +2824,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2848,7 +2848,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2872,7 +2872,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2894,7 +2894,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2918,7 +2918,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2942,7 +2942,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2966,7 +2966,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -2990,7 +2990,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3014,7 +3014,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3038,7 +3038,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10
@@ -3060,7 +3060,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             11,
             12
@@ -3082,7 +3082,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3104,7 +3104,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3128,7 +3128,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3153,7 +3153,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             10
           ]
@@ -3174,7 +3174,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10
@@ -3197,7 +3197,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9
           ]
@@ -3218,13 +3218,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19132,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             10
           ]
@@ -3246,7 +3246,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             10
           ]
@@ -3267,7 +3267,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             11
           ]
@@ -3288,7 +3288,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             11
           ]
@@ -3309,7 +3309,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             11,
             12
@@ -3331,13 +3331,13 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 19125,
           "property": "IsTargetable",
           "value": 0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             11,
             12
@@ -3359,7 +3359,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             11
           ]
@@ -3380,7 +3380,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3402,7 +3402,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3424,7 +3424,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3446,7 +3446,7 @@
       "Arguments": [],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3470,7 +3470,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             9,
             10,
@@ -3506,7 +3506,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3527,7 +3527,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3548,7 +3548,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3569,7 +3569,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3590,7 +3590,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3611,7 +3611,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3632,7 +3632,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3653,7 +3653,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3674,7 +3674,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3695,7 +3695,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3716,7 +3716,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3737,7 +3737,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3758,7 +3758,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionDistance, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
           "origin": "Player",
           "originId": 0,
           "originLoc": {
@@ -3777,7 +3777,7 @@
           "distance": 15.0
         },
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3798,7 +3798,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3819,7 +3819,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3840,7 +3840,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionVariantPath, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionVariantPath, AutoDuty",
           "pathIndices": [
             13
           ]
@@ -3871,6 +3871,10 @@
       {
         "Version": 300,
         "Change": "Paths 5,6,9,10 updated with new bossmod modules"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

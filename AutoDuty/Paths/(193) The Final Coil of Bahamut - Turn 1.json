@@ -215,6 +215,10 @@
       {
         "Version": 299,
         "Change": "Added WaitFor:IsReady after launch pads. Added short StopForCombat segments to avoid accidentally stepping on the back-teleporters. Replaced MoveTo's on launch pads with short Waits for better consistency. Removed excess MoveTo steps. Removed Unsynced tags since it should work perfectly fine while Synced?"
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

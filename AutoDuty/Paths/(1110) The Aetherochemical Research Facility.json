@@ -81,7 +81,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -100,7 +100,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Tanks"
         }
       ],
@@ -119,7 +119,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionJob, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionJob, AutoDuty",
           "job": "Healers, DPS"
         }
       ],
@@ -388,7 +388,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2005307,
           "property": "IsTargetable",
           "value": 0
@@ -752,6 +752,10 @@
       {
         "Version": 300,
         "Change": "Added Coords to the KillInRange on the Elevator. Added False on MoveTo steps after the elevators to prevent the possibility of skipping them. Adjusted the Coords of MoveTo's in transition walls to be farther in the wall."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

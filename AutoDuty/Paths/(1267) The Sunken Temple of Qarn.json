@@ -499,7 +499,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000566,
           "quantity": 0,
           "operatorValue": ">"
@@ -534,7 +534,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000566,
           "quantity": 0,
           "operatorValue": ">"
@@ -569,7 +569,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000565,
           "quantity": 0,
           "operatorValue": ">"
@@ -604,7 +604,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionItemCount, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
           "itemId": 2000565,
           "quantity": 0,
           "operatorValue": ">"
@@ -639,7 +639,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2000658,
           "property": "IsTargetable",
           "value": 1
@@ -660,7 +660,7 @@
       ],
       "Conditions": [
         {
-          "$type": "AutoDuty.Data.Classes+PathActionConditionObjectData, AutoDuty",
+          "$type": "AutoDuty.Data.PathActionConditionObjectData, AutoDuty",
           "baseId": 2000430,
           "property": "EventState",
           "value": 0
@@ -755,6 +755,10 @@
       {
         "Version": 300,
         "Change": "Added Unsynced KillInRange steps to ensure ghosts are killed for the GC Hunting Log. Added an extra step before the final boss so that nothing important is skipped by anyone watching the cutscene. Added failsafes for the Interacts at the end. Removed unnecessary KillInRange steps after the first boss. Removed the Treasure steps required for any Coffer that only gives Elemental Shards."
+      },
+      {
+        "Version": 304,
+        "Change": "Version update"
       }
     ],
     "Notes": []

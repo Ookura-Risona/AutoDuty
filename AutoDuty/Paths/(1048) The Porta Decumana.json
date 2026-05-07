@@ -23,7 +23,7 @@
         "Z": 480.35
       },
       "Arguments": [
-        "5000"
+        "1000"
       ],
       "Conditions": [],
       "Note": ""
@@ -69,6 +69,10 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 304,
+        "Change": "shortened Wait time"
       }
     ],
     "Notes": []

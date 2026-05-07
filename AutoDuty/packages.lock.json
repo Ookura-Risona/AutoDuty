@@ -17,8 +17,8 @@
       "Pictomancy": {
         "type": "Direct",
         "requested": "[1.0.*, )",
-        "resolved": "1.0.2",
-        "contentHash": "Dq4Z1GfRNjuMsa3a9Ce3IxGFmFKZxrdfIYIOXkOkFuFvFsZklEfkdiG2ThrU/t94zfNC+oYoSKGZbI4xxlRqpQ==",
+        "resolved": "1.0.3",
+        "contentHash": "S/fLDASI7BcGjGNelma9O6Fd5ljBX6ZX5mm8OrnUuVorBnTFTe+A/zHX/V59+ZQhdezAa2b95NhGWtdVN+lZcQ==",
         "dependencies": {
           "KamiToolKit": "1.1.2",
           "SharpDX.D3DCompiler": "4.2.0",
@@ -120,13 +120,13 @@
       "ecommons.ipc": {
         "type": "Project",
         "dependencies": {
-          "ECommons": "[3.1.0.1, )"
+          "ECommons": "[3.2.0.11, )"
         }
       },
       "nightmareui": {
         "type": "Project",
         "dependencies": {
-          "ECommons": "[3.2.0.9-stg, )"
+          "ECommons": "[3.2.0.16, )"
         }
       }
     }

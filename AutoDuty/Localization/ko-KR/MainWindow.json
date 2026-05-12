@@ -1,0 +1,29 @@
+{
+  "MainWindow": {
+    "Tabs": {
+      "Main": "메인",
+      "Build": "빌드",
+      "Paths": "경로",
+      "Config": "설정",
+      "Info": "정보",
+      "Logs": "로그",
+      "Stats": "통계",
+      "Support": "AutoDuty 지원"
+    },
+    "Goto": {
+      "Barracks": "총사령부",
+      "Inn": "여관",
+      "GCSupply": "총사령부 납품",
+      "FlagMarker": "플래그 마커",
+      "SummoningBell": "초인종",
+      "Apartment": "아파트",
+      "PersonalHome": "개인집",
+      "FCEstate": "자유부대",
+      "TripleTriadTrader": "트리플트라이어드 교환원"
+    },
+    "TT": {
+      "RegisterCards": "TT카드 등록",
+      "SellCards": "TT카드 매각"
+    }
+  }
+}

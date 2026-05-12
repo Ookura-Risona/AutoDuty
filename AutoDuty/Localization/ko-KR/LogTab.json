@@ -1,0 +1,42 @@
+{
+  "LogTab": {
+    "AutoScroll": "자동 스크롤",
+    "ClearLog": "로그 지우기",
+    "CopyLog": "전체 로그를 클립보드에 복사",
+    "CreateIssue": "Issue 생성",
+    "CreateIssueTooltip": "클릭하면 Create Issue 팝업이 열립니다(GitHub 인증 후). 양식 작성 후 리포지토리에 Issue를 제출합니다",
+    "FilterLogLevel": "로그 레벨로 필터링",
+    "DebugLevelWarning": "AutoDuty에서 Dalamud의 로그 레벨을 변경할 수 없습니다. 디버그 표시는 Dalamud 로그 \"/xllog\"를 열고 왼쪽 상단에서 적절한 레벨을 설정하세요.",
+
+    "Auth": {
+      "PollingGithub": "GitHub 사용자 인증 확인 중: {0}",
+      "WaitingResponse": "GitHub 응답 대기 중",
+      "ClickHere": "여기를 클릭",
+      "ToCopy": " 을(를) 복사하여 ",
+      "ToClipboard": " 클립보드에:",
+      "OpenGithub": "GitHub 열기",
+      "InBrowserPaste": " 을(를) 브라우저에 붙여넣기"
+    },
+
+    "IssueForm": {
+      "Submitting": "Issue 제출 중",
+      "Title": "Issue: 버그 보고",
+      "AddTitle": "제목 입력",
+      "DuplicateWarning": "같은 버그가 보고되지 않았는지 Issues 페이지에서 먼저 검색해주세요. 유사한 Issue가 있다면 첫 번째 게시물에 👍를 눌러 우선순위를 높이는데 협조해주세요.",
+      "WhatHappened": "무슨 일이 발생했나요?",
+      "WhatHappenedHelp": "예상했던 동작도 함께 기재해주세요. 공유할 수 있는 스크린샷도 첨부해주세요.",
+      "ReproSteps": "재현 방법",
+      "ReproStepsHelp": "이쪽에서 재현할 수 있도록 단계를 모두 기재해주세요.",
+      "Submit": "Issue 제출"
+    },
+
+    "LogLevels": {
+      "Verbose": "Verbose",
+      "Debug": "Debug",
+      "Information": "Information",
+      "Warning": "Warning",
+      "Error": "Error",
+      "Fatal": "Fatal"
+    }
+  }
+}

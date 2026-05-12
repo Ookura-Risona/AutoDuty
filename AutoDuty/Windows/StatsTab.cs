@@ -58,6 +58,8 @@ internal static class StatsTab
 
     private const string TimeSpanFormat = @"hh\:mm\:ss\.FFFF";
 
+    public static bool refilter = false;
+
     public static void Draw()
     {
         ConfigurationMain.StatData stats = filteredStats ??= ConfigurationMain.Instance.stats;
@@ -148,8 +150,6 @@ internal static class StatsTab
     
     #region filters
         ConfigurationMain.StatData unfilteredRecords = ConfigurationMain.Instance.stats;
-
-        bool refilter = false;
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -361,6 +361,7 @@ internal static class StatsTab
                                                                         ddr.CompletionTime >= dateTimeFilterMinDate && ddr.CompletionTime <= dateTimeFilterMaxDate &&
                                                                         ddr.Duration       >= durationFilterMin     && ddr.Duration       <= durationFilterMax     &&
                                                                         (ddr.Deaths == null || ddr.Deaths >= deathsFilterMin && ddr.Deaths <= deathsFilterMax));
+            refilter = false;
         }
 
 #endregion
@@ -370,7 +371,7 @@ internal static class StatsTab
         {
             ImGui.TableNextRow();
             ImGui.TableNextColumn();
-            ImGui.Text(completionTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            ImGui.Text((Censor.Config.Enabled ? completionTime : completionTime.ToLocalTime()).ToString("yyyy-MM-dd HH:mm:ss"));
             ImGui.TableNextColumn();
             ImGui.Text(duration.ToString(TimeSpanFormat));
             ImGui.TableNextColumn();

@@ -1,0 +1,30 @@
+{
+  "InfoTab": {
+    "Title": "정보",
+    "SetupGuideIntro": "AutoDuty와 의존 플러그인의 기본 설정은 다음 가이드를 확인하세요:",
+    "InformationAndSetup": "정보 및 설정",
+    "PathStatusInfo": "위 가이드에는 각 경로의 상태(성숙도·모듈 성숙도·안정성)도 기재되어 있습니다. 루프 성공을 위한 주의사항도 확인할 수 있습니다. 요청·버그·기여는 AutoDuty GitHub에서 이슈를 생성해주세요:",
+    "GitHubIssues": "GitHub Issues",
+    "DiscordInvite": "기타 질문은 Discord로 문의해주세요.",
+    "PunishDiscord": "Punish Discord",
+    "Install": "설치",
+    "RequiredPlugins": "필수 플러그인",
+    "CombatPlugins": "전투 플러그인",
+    "CombatPluginsNote": "선호도가 다를 수 있으므로 원하는 것을 선택하여 설정에서 설정하세요",
+    "RecommendedPlugins": "권장 플러그인",
+    "PluginDesc": {
+      "BossModFights": "보스전 처리 담당",
+      "VNavMovement": "이동 담당",
+      "BossModRotations": "딜사이클 기능 내장",
+      "WrathCombo": "Puni.sh 제작 딜사이클 플러그인",
+      "RotationSolverReborn": "Reborn 제작 딜사이클 플러그인",
+      "AntiAFK": "AFK 판정 회피",
+      "AutoRetainer": "호출 가능. 총사령부 납품 및 폐기 지원",
+      "Avarice": "방향 지정 판정에 사용",
+      "Lifestream": "고기능 텔레포트",
+      "Pandora": "보물 상자 획득 + 탱커 스탠스",
+      "Gearsetter": "장비 후보 제안",
+      "Stylist": "장비 후보 제안"
+    }
+  }
+}

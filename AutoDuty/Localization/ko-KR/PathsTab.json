@@ -1,0 +1,15 @@
+{
+  "PathsTab": {
+    "Title": "경로 파일",
+    "OpenFolder": "폴더 열기",
+    "OpenFile": "파일 열기",
+    "DoNotOverwrite": "업데이트 시에 덮어쓰지 않습니다",
+    "ClearCachedJobs": "캐시된 직업을 전부 삭제",
+    "CollapseAll": "모두 접기",
+    "RevealAll": "모두 전개",
+    "DownloadPaths": "경로 다운로드",
+    "BrokenStatus": "파손",
+    "Separator": " => ",
+    "ClearJobSelection": "이 임무의 직업 선택을 클리어했습니다"
+  }
+}

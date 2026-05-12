@@ -1,0 +1,22 @@
+{
+  "StatsTab": {
+    "ClearStatistics": "통계 삭제",
+    "ClearStatisticsHelp": "Ctrl 키를 길게 눌러 통계를 완전히 삭제",
+    "DutiesRun": "실행 횟수: {0}",
+    "TimeSpent": "경과 시간: {0}",
+    "DutiesRunHeader": "실행 횟수",
+    "ScrambleNames": "이름을 익명화",
+    "SelectedMultiCount": "{0} 건 선택",
+    "FilterOnlySelected": "선택만",
+    "Unknown": "불명 ({0})",
+    "Columns": {
+      "CompletedAt": "완료 일시",
+      "Duration": "소요 시간",
+      "Duty": "임무",
+      "Char": "캐릭터",
+      "ilvl": "아이템 레벨",
+      "Job": "직업",
+      "Deaths": "전투 불능"
+    }
+  }
+}

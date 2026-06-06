@@ -10,7 +10,7 @@ namespace AutoDuty.Helpers
                 DateTime.UtcNow.Date.AddDays(1).AddHours(hours);
 
         internal static DateTime GetLastDateTimeForHour(int hours) =>
-            DateTime.UtcNow.Hour > hours ?
+            DateTime.UtcNow.Hour >= hours ?
                 DateTime.UtcNow.Date.AddHours(hours) :
                 DateTime.UtcNow.Date.AddDays(-1).AddHours(hours);
     }

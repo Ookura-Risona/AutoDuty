@@ -68,7 +68,7 @@ public unsafe class Overlay : Window
 
         List<Action> lineActions = [];
 
-        if (!Plugin.states.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
+        if (!Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
         {
             if (AutoDuty.Configuration.HideOverlayWhenStopped)
             {
@@ -96,7 +96,7 @@ public unsafe class Overlay : Window
                             });
         }
 
-        if (InDungeon || Plugin.states.HasFlag(PluginState.Looping))
+        if (InDungeon || Plugin.States.HasFlag(PluginState.Looping))
         {
             this.lineHeight++;
             lineActions.Add(() =>
@@ -105,8 +105,8 @@ public unsafe class Overlay : Window
                                 {
                                     if (Plugin.Stage == 0)
                                     {
-                                        if (!Plugin.states.HasFlag(PluginState.Navigating) && !Plugin.states.HasFlag(PluginState.Looping))
-                                            if (ImGui.Button($"{Loc.Get("Common.Start")}###OverlayStart"))
+                                        if (!Plugin.States.HasFlag(PluginState.Navigating) && !Plugin.States.HasFlag(PluginState.Looping))
+                                            if (ImGui.Button("启动"))
                                             {
                                                 Plugin.LoadPath();
                                                 Plugin.Run(Svc.ClientState.TerritoryType);
@@ -152,18 +152,18 @@ public unsafe class Overlay : Window
 
                                     ImGui.SameLine(0, 5);
 
-                                    if (Plugin.states.HasFlag(PluginState.Navigating) || Plugin.states.HasFlag(PluginState.Navigating))
+                                    if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.States.HasFlag(PluginState.Navigating))
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.states.HasFlag(PluginState.Navigating) ? $": {Plugin.currentLoop} of {AutoDuty.Configuration.LoopTimes} Loops" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $": {Plugin.currentLoop} of {AutoDuty.Configuration.LoopTimes} Loops" : "")}";
                                     else
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.states.HasFlag(PluginState.Navigating) ? $": {Plugin.currentLoop} of {AutoDuty.Configuration.LoopTimes} Loops" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $": {Plugin.currentLoop} of {AutoDuty.Configuration.LoopTimes} Loops" : "")}";
 
                                     ImGui.TextColored(new Vector4(93 / 255f, 226 / 255f, 231 / 255f, 1), loopsText);
                                 });
             }
         }
-        if (InDungeon || Plugin.states.HasFlag(PluginState.Navigating) || RepairHelper.State == ActionState.Running || GotoHelper.State == ActionState.Running || GotoInnHelper.State == ActionState.Running || GotoBarracksHelper.State == ActionState.Running || GCTurninHelper.State == ActionState.Running || ExtractHelper.State == ActionState.Running || DesynthHelper.State == ActionState.Running || QueueHelper.State == ActionState.Running)
+        if (InDungeon || Plugin.States.HasFlag(PluginState.Navigating) || RepairHelper.State == ActionState.Running || GotoHelper.State == ActionState.Running || GotoInnHelper.State == ActionState.Running || GotoBarracksHelper.State == ActionState.Running || GCTurninHelper.State == ActionState.Running || ExtractHelper.State == ActionState.Running || DesynthHelper.State == ActionState.Running || QueueHelper.State == ActionState.Running)
             if (AutoDuty.Configuration.ShowActionText)
             {
                 this.lineHeight++;

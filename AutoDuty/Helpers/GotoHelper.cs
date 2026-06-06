@@ -64,8 +64,8 @@ namespace AutoDuty.Helpers
                 this.InfoLog($"Goto Finished");
             Svc.Framework.Update -= this.HelperUpdate;
             State                =  ActionState.None;
-            Plugin.states        &= ~PluginState.Other;
-            if (!Plugin.states.HasFlag(PluginState.Looping) )
+            Plugin.States        &= ~PluginState.Other;
+            if (!Plugin.States.HasFlag(PluginState.Looping) )
                 Plugin.SetGeneralSettings(true);
 
             territoryType = 0;
@@ -99,7 +99,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating)) this.Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating)) this.Stop();
 
             if (!EzThrottler.Check("Goto"))
                 return;

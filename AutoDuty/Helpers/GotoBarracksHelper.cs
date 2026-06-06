@@ -62,7 +62,7 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating)) this.Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating)) this.Stop();
 
             if (!EzThrottler.Check("GotoBarracks"))
                 return;

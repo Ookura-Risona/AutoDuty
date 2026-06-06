@@ -95,7 +95,7 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating))
+            if (Plugin.States.HasFlag(PluginState.Navigating))
             {
                 Svc.Log.Debug($"AutoDuty has Started, Stopping GotoHousing");
                 this.Stop();

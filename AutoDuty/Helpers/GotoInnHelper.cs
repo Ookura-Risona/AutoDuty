@@ -42,6 +42,15 @@ namespace AutoDuty.Helpers
             base.Stop();
         }
 
+        internal static bool InGCInn(GrandCompany grandCompany = GrandCompany.Unemployed)
+        {
+            whichGrandCompany = grandCompany is GrandCompany.Unemployed or > GrandCompany.ImmortalFlames ?
+                                    PlayerHelper.GetGrandCompany() :
+                                    grandCompany;
+
+            return Svc.ClientState.TerritoryType == InnTerritoryType(whichGrandCompany);
+        }
+
         internal static uint InnTerritoryType(GrandCompany grandCompany) => grandCompany switch
         {
             GrandCompany.Maelstrom => 177u,
@@ -88,7 +97,7 @@ namespace AutoDuty.Helpers
 
         protected override void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating))
+            if (Plugin.States.HasFlag(PluginState.Navigating))
             {
                 Svc.Log.Debug($"AutoDuty has Started, Stopping GotoInn");
                 this.Stop();

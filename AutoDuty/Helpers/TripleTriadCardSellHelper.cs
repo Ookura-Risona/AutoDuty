@@ -46,7 +46,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon)
+            if (Plugin.States.HasFlag(PluginState.Navigating) || InDungeon)
             {
                 this.Stop();
                 return;

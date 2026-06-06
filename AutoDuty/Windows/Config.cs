@@ -22,21 +22,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Party;
 using Data;
 using ECommons.Configuration;
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
-using ECommons.PartyFunctions;
-using ECommons.UIHelpers.AddonMasterImplementations;
-using ECommons.UIHelpers.AtkReaderImplementations;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.Group;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Info;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using FFXIVClientStructs.FFXIV.Component.GUI;
 using Lumina.Excel.Sheets;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -48,8 +40,6 @@ using ECommons.IPC.Subscribers.RotationSolverReborn;
 using Multibox;
 using NightmareUI.Censoring;
 using Achievement = Lumina.Excel.Sheets.Achievement;
-using Buddy = FFXIVClientStructs.FFXIV.Client.Game.UI.Buddy;
-using Map = Lumina.Excel.Sheets.Map;
 using Vector2 = FFXIVClientStructs.FFXIV.Common.Math.Vector2;
 
 [JsonObject(MemberSerialization.OptIn)]
@@ -476,7 +466,7 @@ public class Configuration
         {
             this.hideOverlayWhenStopped = value;
             if (Plugin.Overlay != null) 
-                SchedulerHelper.ScheduleAction("LockOverlaySetter", () => Plugin.Overlay.IsOpen = !value || Plugin.states.HasAnyFlag(PluginState.Looping, PluginState.Navigating), () => Plugin.Overlay != null);
+                SchedulerHelper.ScheduleAction("LockOverlaySetter", () => Plugin.Overlay.IsOpen = !value || Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating), () => Plugin.Overlay != null);
         }
     }
     internal bool lockOverlay = false;
@@ -553,7 +543,7 @@ public class Configuration
     #region RSR
 
     public RotationSolverRebornIPC.TargetHostileType RSR_TargetHostileType    = RotationSolverRebornIPC.TargetHostileType.AllTargetsCanAttack;
-    public RotationSolverRebornIPC.TargetingType     RSR_TargetingTypeTank    = RotationSolverRebornIPC.TargetingType.HighMaxHP;
+    public RotationSolverRebornIPC.TargetingType     RSR_TargetingTypeTank    = RotationSolverRebornIPC.TargetingType.HighHP;
     public RotationSolverRebornIPC.TargetingType     RSR_TargetingTypeNonTank = RotationSolverRebornIPC.TargetingType.LowHP;
     #endregion
 
@@ -626,6 +616,8 @@ public class Configuration
 
     public bool PathDrawEnabled   = false;
     public int  PathDrawStepCount = 5;
+
+    public bool DisableRenderWhileActive = false;
 
     public bool       OverridePartyValidation        = false;
     public bool       UsingAlternativeRotationPlugin = false;
@@ -743,6 +735,8 @@ public class Configuration
     public int  AutoGCTurninSlotsLeft     = 5;
     public bool AutoGCTurninSlotsLeftBool = false;
     public bool AutoGCTurninUseTicket     = false;
+
+    public bool ArmoireEntrust = false;
 
     public bool TripleTriadRegister;
     public bool TripleTriadSell;
@@ -1143,7 +1137,7 @@ public static class ConfigTab
                 if (ImGui.Button("Between Loop Actions##DevBetweenLoops"))
                 {
                     Plugin.CurrentTerritoryContent =  ContentHelper.DictionaryContent.Values.First();
-                    Plugin.states                  |= PluginState.Other;
+                    Plugin.States                  |= PluginState.Other;
                     Plugin.LoopTasks(false);
                 }
 
@@ -1152,6 +1146,11 @@ public static class ConfigTab
                     IEnumerable<IGameObject> treasures = ObjectHelper.GetObjectsByObjectKind(Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Treasure)?.
                                                                       Where(x => ObjectHelper.BelowDistanceToPoint(x.Position, Player.Position, 50, 10)) ?? [];
                     Svc.Log.Debug(treasures.Count() + "\n" + string.Join("\n", treasures.Select(igo => igo.Position.ToString())));
+                }
+
+                unsafe
+                {
+                    //RaptureAtkModule.Instance().item
                 }
 
                 if (ImGui.CollapsingHeader("Sheet Check"))
@@ -1541,6 +1540,9 @@ public static class ConfigTab
                 ImGui.Unindent();
             }
 
+            if (ImGui.Checkbox(Loc.Get("ConfigTab.Duty.DisableRenderWhileActive"), ref Configuration.DisableRenderWhileActive))
+                Configuration.Save();
+            ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Duty.DisableRenderWhileActiveHelp"));
 
 
             ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
@@ -2236,7 +2238,11 @@ public static class ConfigTab
                 }
 
                 ImGui.Columns(1);
-                
+
+                if(ImGui.Checkbox(Loc.Get("ConfigTab.BetweenLoop.ArmoireEntrust") + "##ArmoireEntrust", ref Configuration.ArmoireEntrust))
+                    Configuration.Save();
+                ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.BetweenLoop.ArmoireEntrustHelp"));
+
 
                 using (ImGuiHelper.RequiresPlugin(ExternalPlugin.AutoRetainer, "AR", inline: true))
                 {

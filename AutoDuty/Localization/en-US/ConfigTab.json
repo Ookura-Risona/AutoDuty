@@ -80,6 +80,8 @@
       "ReturnTimes": "times",
       "DrawPath": "Draw next steps in Path",
       "DrawPathSteps": "Drawing X steps",
+      "DisableRenderWhileActive": "Disable rendering",
+      "DisableRenderWhileActiveHelp": "Disables rendering the 3D world while AutoDuty is active",
       "W2W": {
         "Header": "> W2W Config <",
         "TreatUnsyncAsW2W": "Treat Unsync as W2W",
@@ -162,6 +164,8 @@
       "AutoGCTurnin": "Auto GC Turnin",
       "InventorySlotsLeft": "Inventory Slots Left @",
       "UseGCAetheryteTicket": "Use GC Aetheryte Ticket",
+      "ArmoireEntrust": "Entrust to Armoire",
+      "ArmoireEntrustHelp": "Will entrust items in the inventory to the armoire between loops.",
       "RegisterTripleTriadCards": "Register Triple Triad Cards",
       "SellTripleTriadCards": "Sell Triple Triad Cards",
       "SlotsOccupied": "Slots occupied",

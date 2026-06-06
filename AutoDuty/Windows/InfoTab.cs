@@ -75,7 +75,7 @@ namespace AutoDuty.Windows
             ImGui.Text(Loc.Get("InfoTab.RequiredPlugins"));
 
             ImGui.Columns(3, "PluginInstallerRequired", false);
-            ImGui.SetColumnWidth(0, 60);
+            ImGui.SetColumnWidth(0, 65);
             ImGui.SetColumnWidth(1, 100);
 
             PluginInstallLine(ExternalPlugin.BossMod, Loc.Get("InfoTab.PluginDesc.BossModFights"));

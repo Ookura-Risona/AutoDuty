@@ -20,7 +20,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon) this.Stop();
+            if (Plugin.States.HasFlag(PluginState.Navigating) || InDungeon) this.Stop();
 
             if (!EzThrottler.Throttle("CardsRegister", 250))
                 return;

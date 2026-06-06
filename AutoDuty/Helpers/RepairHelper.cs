@@ -74,7 +74,7 @@ namespace AutoDuty.Helpers
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating)) 
+            if (Plugin.States.HasFlag(PluginState.Navigating)) 
                 this.Stop();
 
             if (Conditions.Instance()->Mounted && GotoHelper.State != ActionState.Running)

@@ -8,7 +8,8 @@
       "Repair": "Repair",
       "Equip": "Equip",
       "Coffers": "Coffers",
-      "TripleTriad": "Triple Triad"
+      "TripleTriad": "Triple Triad",
+      "Armoire": "Armoire"
     },
     "Tooltip": {
       "TurnIn": "Click to Goto GC Turnin and Invoke AutoRetainer's GC Turnin",

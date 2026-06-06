@@ -101,11 +101,11 @@ namespace AutoDuty.Helpers
 
             this.InfoLog(this.Name + " started");
 
-            if (!Plugin.states.HasFlag(PluginState.Looping) && !ActiveHelper.AnyHelperRunning())
+            if (!Plugin.States.HasFlag(PluginState.Looping) && !ActiveHelper.AnyHelperRunning())
                 Plugin.SetGeneralSettings(false);
 
             State         =  ActionState.Running;
-            Plugin.states |= PluginState.Other;
+            Plugin.States |= PluginState.Other;
 
             if(this.TimeOut > 0)
                 SchedulerHelper.ScheduleAction($"Helper_{this.Name}_TimeOut", this.Stop, this.TimeOut);
@@ -153,7 +153,7 @@ namespace AutoDuty.Helpers
 
         protected bool UpdateBase()
         {
-            if (Plugin.states.HasFlag(PluginState.Navigating) || InDungeon)
+            if (Plugin.States.HasFlag(PluginState.Navigating) || InDungeon)
             {
                 this.Stop();
                 return false;
@@ -175,9 +175,9 @@ namespace AutoDuty.Helpers
                 return;
 
             State         =  ActionState.None;
-            Plugin.states &= ~PluginState.Other;
+            Plugin.States &= ~PluginState.Other;
 
-            if (!Plugin.states.HasFlag(PluginState.Looping) && !ActiveHelper.AnyHelperRunning())
+            if (!Plugin.States.HasFlag(PluginState.Looping) && !ActiveHelper.AnyHelperRunning())
                 Plugin.SetGeneralSettings(true);
             Svc.Framework.Update -= this.HelperStopUpdate;
         }

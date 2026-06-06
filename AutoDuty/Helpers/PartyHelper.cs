@@ -62,23 +62,6 @@
             if (DateTime.Now.Subtract(partyCombatCheckTime).TotalSeconds < partyCombatCheckInterval.TotalSeconds)
                 return partyInCombat;
 
-
-            if (Plugin.pathAction?.Name != "Boss")
-            {
-                EnemyListNumberArray.EnemyListEnemyNumberArray[] inCombatEnemies = [..EnemyListNumberArray.Instance()->Enemies.ToArray().Where(x => x.MaxHPPercent > 0)];
-
-                if (inCombatEnemies.Length > 0 && inCombatEnemies.All(x =>
-                                                                          Svc.Objects.FirstOrDefault(y => y.EntityId == x.EntityId) is IBattleChara chara &&
-                                                                          !ObjectHelper.IsBoss(chara)                                                     &&
-                                                                          (!chara.IsTargetable || ObjectHelper.GetDistanceToPlayer(chara) > 25)))
-                {
-                    Svc.Log.Debug($"Technically in combat but all enemies untargetable.");
-                    partyInCombat        = false;
-                    partyCombatCheckTime = DateTime.Now;
-                    return partyInCombat;
-                }
-            }
-
             List<IBattleChara> members = GetPartyMembers();
             if (!partyInCombat && members.Any(x => !x.Struct()->IsDead() && x.Struct()->InCombat))
                 partyInCombat = true;

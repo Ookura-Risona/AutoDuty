@@ -1503,7 +1503,7 @@ public static class ConfigTab
                 int rebuildX = Configuration.RebuildNavmeshAfterStuckXTimes;
                 if(ImGui.InputInt(Loc.Get("ConfigTab.Duty.RebuildNavmeshTimes") + "###RebuildTimesConfig", ref rebuildX, 1))
                 {
-                    Configuration.RebuildNavmeshAfterStuckXTimes = (byte) Math.Clamp(rebuildX, byte.MinValue+1, byte.MaxValue);
+                    Configuration.RebuildNavmeshAfterStuckXTimes = (byte) Math.Clamp(rebuildX, byte.MinValue + 2, byte.MaxValue);
                     Configuration.Save();
                 }
             }
@@ -1517,10 +1517,18 @@ public static class ConfigTab
                 int returnX = Configuration.StuckReturnX;
                 if (ImGui.InputInt(Loc.Get("ConfigTab.Duty.ReturnTimes") + "###ReturnTimesConfig", ref returnX, 1))
                 {
-                    Configuration.StuckReturnX = (byte)Math.Clamp(returnX, byte.MinValue + 1, byte.MaxValue);
+                    Configuration.StuckReturnX = (byte)Math.Clamp(returnX, byte.MinValue + 2, byte.MaxValue);
                     Configuration.Save();
                 }
             }
+
+            if (Configuration is { RebuildNavmeshOnStuck: true, stuckReturn: true } && 
+                Configuration.RebuildNavmeshAfterStuckXTimes >= Configuration.StuckReturnX)
+            {
+                Configuration.StuckReturnX = Configuration.RebuildNavmeshAfterStuckXTimes + 1;
+                Configuration.Save();
+            }
+
 
             ImGui.Unindent();
 
@@ -1541,7 +1549,15 @@ public static class ConfigTab
             }
 
             if (ImGui.Checkbox(Loc.Get("ConfigTab.Duty.DisableRenderWhileActive"), ref Configuration.DisableRenderWhileActive))
+            {
+                if (!Configuration.DisableRenderWhileActive)
+                    RenderDisableManager.RemoveRequest();
+                else if (Plugin.States != PluginState.None)
+                    RenderDisableManager.PlaceRequest();
+
                 Configuration.Save();
+            }
+
             ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Duty.DisableRenderWhileActiveHelp"));
 
 

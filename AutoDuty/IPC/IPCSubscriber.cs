@@ -291,6 +291,7 @@ namespace AutoDuty.IPC
                     WrathIPCWrapper.SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.HealerAlwaysHardTarget,       true);
                     WrathIPCWrapper.SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.UnTargetAndDisableForPenalty, true);
                     WrathIPCWrapper.SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.IgnoreRangeInBoss,            true);
+                    WrathIPCWrapper.SetVariantReadyForJob(_curLease.Value, (uint) (Plugin.currentPlayerItemLevelAndClassJob.Value ?? Plugin.jobLastKnown), true);
                 }
             }
         }

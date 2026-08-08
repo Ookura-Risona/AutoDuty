@@ -31,7 +31,7 @@ namespace AutoDuty.Helpers
             }
         }
 
-        private static object? ModifyConfig(Type configType, string configValue, out string failReason)
+        internal static object? ConvertConfigValue(Type configType, string configValue, out string failReason)
         {
             failReason = $"value must be of type: {configType.ToString().Replace("System.", "")}";
 
@@ -45,7 +45,7 @@ namespace AutoDuty.Helpers
                     return configEnum;
             } else if (configType is { IsGenericType: true, IsGenericTypeDefinition: false } && configType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                return Activator.CreateInstance(configType, ModifyConfig(configType.GetGenericArguments()[0], configValue, out failReason));
+                return Activator.CreateInstance(configType, ConvertConfigValue(configType.GetGenericArguments()[0], configValue, out failReason));
             }
             else if (configType.GetInterface(nameof(IConvertible)) != null)
             {
@@ -55,6 +55,9 @@ namespace AutoDuty.Helpers
 
             return null;
         }
+
+        private static object? ModifyConfig(Type configType, string configValue, out string failReason) =>
+            ConvertConfigValue(configType, configValue, out failReason);
 
         internal static bool ModifyConfig(string configName, params string[] configValues)
         {

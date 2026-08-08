@@ -35,6 +35,27 @@
     },
     {
       "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2001568,
+          "quantity": 5,
+          "operatorValue": "!="
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "Interactable",
       "Position": {
         "X": -162.16138,
@@ -46,6 +67,27 @@
       ],
       "Conditions": [],
       "Note": "Cloud Altar"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2001568,
+          "quantity": 4,
+          "operatorValue": ">"
+        }
+      ],
+      "Note": ""
     },
     {
       "Tag": "None",
@@ -61,14 +103,14 @@
     },
     {
       "Tag": "None",
-      "Name": "AutoMoveFor",
+      "Name": "MoveTo",
       "Position": {
-        "X": -162.16618,
-        "Y": 4.8706846,
-        "Z": 296.17984
+        "X": -157.45715,
+        "Y": 4.8718967,
+        "Z": 298.2442
       },
       "Arguments": [
-        "1000"
+        "false"
       ],
       "Conditions": [],
       "Note": ""
@@ -131,6 +173,27 @@
     },
     {
       "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2001568,
+          "quantity": 3,
+          "operatorValue": ">"
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "MoveTo",
       "Position": {
         "X": -88.62402,
@@ -143,14 +206,14 @@
     },
     {
       "Tag": "None",
-      "Name": "AutoMoveFor",
+      "Name": "MoveTo",
       "Position": {
-        "X": -90.34853,
-        "Y": 20.73152,
-        "Z": 299.0473
+        "X": -93.123955,
+        "Y": 20.493982,
+        "Z": 295.25037
       },
       "Arguments": [
-        "1000"
+        "false"
       ],
       "Conditions": [],
       "Note": ""
@@ -187,14 +250,48 @@
       "Tag": "None",
       "Name": "StopForCombat",
       "Position": {
-        "X": -3.692,
-        "Y": 42.97,
-        "Z": 212.583
+        "X": -9.537341,
+        "Y": 43.09932,
+        "Z": 213.08075
       },
       "Arguments": [
         "true"
       ],
       "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionDistance, AutoDuty",
+          "origin": "Location",
+          "originId": 0,
+          "originLoc": {
+            "X": -9.415,
+            "Y": 43.107,
+            "Z": 213.245
+          },
+          "target": "Player",
+          "targetId": 0,
+          "targetLoc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "operatorValue": ">",
+          "distance": 5.0
+        }
+      ],
       "Note": ""
     },
     {
@@ -210,6 +307,27 @@
       ],
       "Conditions": [],
       "Note": "Cloud Altar"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2001568,
+          "quantity": 2,
+          "operatorValue": ">"
+        }
+      ],
+      "Note": ""
     },
     {
       "Tag": "None",
@@ -268,6 +386,18 @@
       "Note": ""
     },
     {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "WaitFor",
       "Position": {
@@ -296,20 +426,6 @@
       "Note": "Nunyenunc"
     },
     {
-      "Tag": "Treasure",
-      "Name": "TreasureCoffer",
-      "Position": {
-        "X": 69.793144,
-        "Y": 38.16634,
-        "Z": 215.29466
-      },
-      "Arguments": [
-        ""
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
       "Tag": "None",
       "Name": "Interactable",
       "Position": {
@@ -325,6 +441,27 @@
     },
     {
       "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2001568,
+          "quantity": 1,
+          "operatorValue": ">"
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "MoveTo",
       "Position": {
         "X": 74.62408,
@@ -337,14 +474,14 @@
     },
     {
       "Tag": "None",
-      "Name": "AutoMoveFor",
+      "Name": "MoveTo",
       "Position": {
-        "X": 74.32343,
-        "Y": 38.363537,
-        "Z": 209.24767
+        "X": 80.299034,
+        "Y": 38.146236,
+        "Z": 206.32034
       },
       "Arguments": [
-        "1000"
+        "false"
       ],
       "Conditions": [],
       "Note": ""
@@ -429,15 +566,27 @@
     },
     {
       "Tag": "None",
-      "Name": "AutoMoveFor",
+      "Name": "MoveTo",
       "Position": {
-        "X": 159.71623,
-        "Y": 66.381096,
-        "Z": 31.491564
+        "X": 162.51094,
+        "Y": 62.921844,
+        "Z": 22.70262
       },
       "Arguments": [
-        "1000"
+        "false"
       ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
       "Conditions": [],
       "Note": ""
     },
@@ -466,20 +615,6 @@
       ],
       "Conditions": [],
       "Note": "Canu Vanu"
-    },
-    {
-      "Tag": "Treasure",
-      "Name": "TreasureCoffer",
-      "Position": {
-        "X": 179.8766,
-        "Y": 64.090004,
-        "Z": -24.047499
-      },
-      "Arguments": [
-        ""
-      ],
-      "Conditions": [],
-      "Note": ""
     },
     {
       "Tag": "None",
@@ -547,6 +682,27 @@
     },
     {
       "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2001568,
+          "quantity": 0,
+          "operatorValue": ">"
+        }
+      ],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "Wait",
       "Position": {
         "X": 0.0,
@@ -610,6 +766,18 @@
       "Note": ""
     },
     {
+      "Tag": "Revival",
+      "Name": "Revival",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
@@ -623,14 +791,14 @@
     },
     {
       "Tag": "None",
-      "Name": "AutoMoveFor",
+      "Name": "MoveTo",
       "Position": {
-        "X": 174.57137,
-        "Y": 59.474503,
-        "Z": -307.57806
+        "X": 174.6651,
+        "Y": 59.42665,
+        "Z": -313.44534
       },
       "Arguments": [
-        "1000"
+        "false"
       ],
       "Conditions": [],
       "Note": ""
@@ -662,20 +830,6 @@
       ],
       "Conditions": [],
       "Note": "Waukkeon"
-    },
-    {
-      "Tag": "Treasure",
-      "Name": "TreasureCoffer",
-      "Position": {
-        "X": 172.0228,
-        "Y": 58.533985,
-        "Z": -353.64792
-      },
-      "Arguments": [
-        ""
-      ],
-      "Conditions": [],
-      "Note": ""
     }
   ],
   "Meta": {
@@ -688,6 +842,10 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 325,
+        "Change": "Modernized path"
       }
     ],
     "Notes": []

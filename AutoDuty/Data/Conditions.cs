@@ -15,6 +15,8 @@ namespace AutoDuty.Data;
 
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
+using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using Newtonsoft.Json;
 
@@ -58,6 +60,7 @@ public abstract class PathActionCondition
                     ConditionType.Job => new PathActionConditionJob(),
                     ConditionType.ActionStatus => new PathActionConditionActionStatus(),
                     ConditionType.VariantPath => new PathActionConditionVariantPath(),
+                    ConditionType.ConditionFlag => new PathActionConditionConditionFlag(),
                     ConditionType.Not => new PathActionConditionNot(),
                     ConditionType.Or => new PathActionConditionOr() ,
                     ConditionType.And => new PathActionConditionAnd(),
@@ -357,6 +360,31 @@ public class PathActionConditionDistance : PathActionCondition
         yield return (new Vector4(1, 165 / 255f, 0, 1), ConditionType.Distance.ToLocalizedString());
     }
 }
+
+public class PathActionConditionConditionFlag : PathActionCondition
+{
+    public new const ConditionType PARSE_KEY = ConditionType.ConditionFlag;
+    public override  ConditionType ParseKey => PARSE_KEY;
+
+    public ConditionFlag flag;
+
+    public override bool IsFulfilled() => 
+        Svc.Condition[this.flag];
+
+    public override void DrawConfig()
+    {
+        Dictionary<ConditionFlag, string> dictionary = Enum.GetValues<ConditionFlag>().Distinct().
+                                                            ToDictionary(value => value, value => $"({(int)value}) {value}");
+        ImGuiEx.EnumCombo("ConditionFlag", ref this.flag, names: dictionary);
+    }
+
+    public override IEnumerable<(Vector4 color, string text)> DrawStepEntry()
+    {
+        yield return (new Vector4(1, 165 / 255f, 0, 1), $"{ConditionType.ConditionFlag.ToLocalizedString()} ");
+        yield return (new Vector4(1, 165 / 255f, 0, 1), this.flag.ToString());
+    }
+}
+
 
 public class PathActionConditionVariantPath : PathActionCondition
 {

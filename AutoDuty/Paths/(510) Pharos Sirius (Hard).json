@@ -57,6 +57,18 @@
       "Note": ""
     },
     {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 6.7342267,
+        "Y": 63.600002,
+        "Z": -57.530216
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
@@ -69,6 +81,18 @@
       ],
       "Conditions": [],
       "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -11.173034,
+        "Y": 30.0,
+        "Z": -34.463215
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": " seems to bug out with the raised chest"
     },
     {
       "Tag": "None",
@@ -179,6 +203,18 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -37.45091,
+        "Y": 6.2690687,
+        "Z": -196.3255
+      },
+      "Arguments": [],
       "Conditions": [],
       "Note": ""
     },
@@ -349,6 +385,14 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 321,
+        "Change": "added treasure coffer"
+      },
+      {
+        "Version": 321,
+        "Change": "added the last treasure coffers"
       }
     ],
     "Notes": []

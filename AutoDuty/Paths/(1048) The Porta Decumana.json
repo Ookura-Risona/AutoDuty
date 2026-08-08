@@ -12,15 +12,15 @@
         ""
       ],
       "Conditions": [],
-      "Note": "The Ultima Weapon"
+      "Note": "The Ultima Weapon 14587"
     },
     {
       "Tag": "None",
       "Name": "Wait",
       "Position": {
-        "X": -689.56,
-        "Y": -185.73,
-        "Z": 480.35
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
       "Arguments": [
         "1000"
@@ -40,7 +40,7 @@
         ""
       ],
       "Conditions": [],
-      "Note": "The Ultima Weapon"
+      "Note": "The Ultima Weapon 14592"
     }
   ],
   "Meta": {
@@ -73,6 +73,10 @@
       {
         "Version": 304,
         "Change": "shortened Wait time"
+      },
+      {
+        "Version": 325,
+        "Change": "Stabilized.. I think"
       }
     ],
     "Notes": []

@@ -108,7 +108,6 @@ public sealed class AutoDuty : IDalamudPlugin
 
     internal static   string         Name   => "AutoDuty";
     internal static   AutoDuty       Plugin { get; private set; } = null!;
-    internal          bool           stopForCombat    = true;
     internal readonly DirectoryInfo  pathsDirectory   = null!;
     internal readonly FileInfo       assemblyFileInfo = null!;
     internal readonly FileInfo       configFile       = null!;
@@ -261,7 +260,7 @@ public sealed class AutoDuty : IDalamudPlugin
     private           LevelingMode             levelingModeEnum  = LevelingMode.None;
     private const     string                   CommandName       = "/autoduty";
     private readonly  DirectoryInfo            configDirectory   = null!;
-    private readonly  ActionsManager           actions           = null!;
+    public readonly   ActionsManager           actions           = null!;
     private readonly  SquadronManager          squadronManager   = null!;
     private readonly  VariantManager           variantManager    = null!;
     private readonly  OverrideAFK              overrideAfk       = null!;
@@ -278,6 +277,8 @@ public sealed class AutoDuty : IDalamudPlugin
     public readonly bool           isDev;
 
     private readonly (string[], string, Action<string[]>)[] commands = null!;
+
+    public DutyDataTemporary? DutyData { get; set; } = new();
 
     public AutoDuty()
     {
@@ -317,7 +318,7 @@ public sealed class AutoDuty : IDalamudPlugin
             this.assemblyDirectoryInfo = this.assemblyFileInfo.Directory;
 
             this.Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 315) :
+                ((PluginInterface.IsDev     ? new Version(0,0,0, 325) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!this.configDirectory.Exists)
@@ -345,7 +346,6 @@ public sealed class AutoDuty : IDalamudPlugin
             this.squadronManager = new SquadronManager(this.taskManager);
             this.variantManager  = new VariantManager(this.taskManager);
             this.actions         = new ActionsManager(Plugin, this.taskManager);
-            BuildTab.ActionsList  = this.actions.actionsList;
             this.overrideCamera   = new OverrideCamera();
             this.Overlay          = new Overlay();
             this.MainWindow       = new MainWindow();
@@ -863,15 +863,18 @@ public sealed class AutoDuty : IDalamudPlugin
 
     private unsafe bool StopLoop =>
         Configuration.EnableTerminationActions &&
-        (this.CurrentTerritoryContent == null                                                                               ||
-         (Configuration.StopLevel      && Player.Level >= Configuration.StopLevelInt) ||
-         (Configuration.StopNoRestedXP && AgentHUD.Instance()->ExpRestedExperience == 0)                               ||
-         (Configuration.TerminationBLUSpellsEnabled && (Configuration.TerminationBLUSpellsEnabled ?
+        (this.CurrentTerritoryContent == null                                                                     ||
+         (Configuration.StopLevel      && Player.Level                             >= Configuration.StopLevelInt) ||
+         (Configuration.StopNoRestedXP && AgentHUD.Instance()->ExpRestedExperience == 0)                          ||
+         (Configuration.TerminationBLUSpellsEnabled && (Configuration.TerminationBLUSpellsAll ?
                                                             Configuration.TerminationBLUSpells.All(BLUHelper.SpellUnlocked) :
                                                             Configuration.TerminationBLUSpells.Any(BLUHelper.SpellUnlocked))) ||
          (Configuration.StopItemQty && (Configuration.StopItemAll ?
                                             Configuration.StopItemQtyItemDictionary.All(x => InventoryManager.Instance()->GetInventoryItemCount(x.Key) >= x.Value.Value) :
-                                            Configuration.StopItemQtyItemDictionary.Any(x => InventoryManager.Instance()->GetInventoryItemCount(x.Key) >= x.Value.Value))));
+                                            Configuration.StopItemQtyItemDictionary.Any(x => InventoryManager.Instance()->GetInventoryItemCount(x.Key) >= x.Value.Value))) ||
+         (Configuration.StopWhenDutyGathered && GlamourLog_IPCSubscriber.AllStoredFromDungeon(Plugin.CurrentTerritoryContent.TerritoryType)) ||
+         (Configuration.TerminationInventoryFree && Configuration.TerminationInventoryFreeSlots >= InventoryHelper.SlotsFree) ||
+         (Configuration.TerminationiLvl && InventoryHelper.CurrentItemLevel >= Configuration.TerminationiLvlInt));
 
     private void TrustLeveling()
     {
@@ -908,9 +911,10 @@ public sealed class AutoDuty : IDalamudPlugin
 
         Svc.Log.Debug($"ClientState_TerritoryChanged: t={t}");
 
-        this.currentTerritoryType  = t;
-        this.mainListClicked       = false;
-        this.FrameworkUpdateInDuty = _ => { };
+        this.currentTerritoryType = t;
+        this.mainListClicked      = false;
+
+        this.DutyData = null;
 
         if (t == 0)
             return;
@@ -1233,6 +1237,9 @@ public sealed class AutoDuty : IDalamudPlugin
         {
             this.AutoEquipRecommendedGear();
 
+            if(Configuration.GlamourChestEntrust)
+                EnqueueActiveHelper<GlamourChestHelper>();
+
             if(Configuration.ArmoireEntrust)
                 EnqueueActiveHelper<ArmoireHelper>();
 
@@ -1548,7 +1555,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
         if (MultiboxUtility.MultiboxBlockingNextStep)
         {
-            if (PartyHelper.PartyInCombat() && Plugin.stopForCombat)
+            if (PartyHelper.PartyInCombat() && (Plugin.DutyData?.StopForCombat ?? true))
             {
                 if (Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false })
                     this.SetRotationPluginSettings(true);
@@ -1623,7 +1630,7 @@ public sealed class AutoDuty : IDalamudPlugin
             return;
         }
 
-        BossMod_IPCSubscriber.InBoss(this.pathAction.Name.Equals("Boss") || this.pathAction.Note.Contains("!TankClose")); //extremely hacky and hopefully short-lived
+        this.DutyData?.StayCloseToTank = this.pathAction.Name.Equals("Boss") || this.pathAction.Note.Contains("!TankClose"); //todo  still hacky. Due to requiring a path change, delayed till testing done
 
         if(MultiboxUtility.Config.Host)
             MultiboxUtility.MultiboxBlockingNextStep = false;
@@ -1665,7 +1672,7 @@ public sealed class AutoDuty : IDalamudPlugin
             }
         }
 
-        if (PartyHelper.PartyInCombat() && Plugin.stopForCombat)
+        if (PartyHelper.PartyInCombat() && (Plugin.DutyData?.StopForCombat ?? true))
         {
             if (Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false }) 
                 this.SetRotationPluginSettings(true);
@@ -1906,7 +1913,9 @@ public sealed class AutoDuty : IDalamudPlugin
         this.mainListClicked =  false;
         this.Stage           =  Stage.Reading_Path;
         this.States          |= PluginState.Navigating;
-        this.stopForCombat   =  true;
+
+        this.DutyData = new DutyDataTemporary();
+
         if (Configuration.AutoManageVnavAlignCamera && !VNavmesh_IPCSubscriber.Path_GetAlignCamera)
             VNavmesh_IPCSubscriber.Path_SetAlignCamera(true);
 
@@ -2238,7 +2247,7 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         this.PreStageChecks();
 
-        this.FrameworkUpdateInDuty(framework);
+        this.DutyData?.FrameworkUpdate(framework);
 
         switch (this.Stage)
         {
@@ -2267,10 +2276,36 @@ public sealed class AutoDuty : IDalamudPlugin
         }
     }
 
-    public event IFramework.OnUpdateDelegate FrameworkUpdateInDuty = _ => {};
+    public class DutyDataTemporary : IDisposable
+    {
+        public event IFramework.OnUpdateDelegate FrameworkUpdateInDuty = _ => { };
+
+        public bool StayCloseToTank
+        {
+            get;
+            set
+            {
+                BossMod_IPCSubscriber.StayCloseToTank(value);
+                field = value;
+            }
+        } = true;
+
+        public bool StopForCombat { get; set; } = true;
+
+        public void FrameworkUpdate(IFramework framework) =>
+            this.FrameworkUpdateInDuty(framework);
+
+        public void Dispose()
+        {
+            this.FrameworkUpdateInDuty = _ => { };
+            GC.SuppressFinalize(this);
+        }
+    }
 
     private void StopAndResetAll()
     {
+        ConfigOverrideHelper.Pop();
+
         if (this.bareModeSettingsActive != SettingsActive.None)
         {
             Configuration.EnablePreLoopActions     = this.bareModeSettingsActive.HasFlag(SettingsActive.PreLoop_Enabled);
@@ -2287,14 +2322,15 @@ public sealed class AutoDuty : IDalamudPlugin
             this.taskManager.Abort();
         }
 
-        this.mainListClicked              = false;
-        this.FrameworkUpdateInDuty = _ => {};
+        this.mainListClicked = false;
+
+        this.DutyData = null;
+
         if (!InDungeon) 
             this.currentLoop = 0;
         if (Configuration.AutoManageBossModAISettings) 
             BossMod_IPCSubscriber.DisablePresets();
 
-        this.stopForCombat = true;
         this.actions.Rotation(true, false);
 
         this.SetGeneralSettings(true);

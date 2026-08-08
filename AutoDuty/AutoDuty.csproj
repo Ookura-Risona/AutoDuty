@@ -57,7 +57,7 @@
     <ProjectReference Include="..\ECommons.IPC\ECommons.IPC\ECommons.IPC.csproj" />
     <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
     <ProjectReference Include="..\NightmareUI\NightmareUI\NightmareUI.csproj" />
-    <PackageReference Include="Pictomancy" Version="1.0.9" />
+    <PackageReference Include="Pictomancy" Version="1.0.10" />
     <PackageReference Include="WrathCombo.API" Version="0.5.*" />
     <Reference Include="Dalamud.Common">
       <HintPath>$(DalamudLibPath)Dalamud.Common.dll</HintPath>

@@ -7,6 +7,7 @@ using ECommons.EzIpcManager;
 
 namespace AutoDuty.IPC
 {
+    using System.Collections.Generic;
     using ECommons.DalamudServices;
     using Newtonsoft.Json.Linq;
 
@@ -39,6 +40,25 @@ namespace AutoDuty.IPC
                     break;
             }
         }
+
+        [EzIPC]
+        public bool PushConfigOverrides(object overrides)
+        {
+            Dictionary<string, string> dict = overrides switch
+            {
+                Dictionary<string, string> d => d,
+                JObject jo => jo.ToObject<Dictionary<string, string>>() ?? [],
+                _ => null
+            };
+            if (dict is null)
+            {
+                Svc.Log.Warning("Expected Dictionary<string, string>");
+                return false;
+            }
+            return ConfigOverrideHelper.Push(dict);
+        }
+
+        [EzIPC] public bool PopConfigOverrides() => ConfigOverrideHelper.Pop(); // don't really need to ever call this since AD does already on stop
 
         [EzIPC] public void Run(uint   territoryType, int loops = 0, bool bareMode = false)
         {

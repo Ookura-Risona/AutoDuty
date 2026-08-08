@@ -2,86 +2,28 @@
   "Actions": [
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": -808.1095,
-        "Y": 2.94577,
-        "Z": 277.8496
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -763.00256,
-        "Y": 3.249399,
-        "Z": 274.48428
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -745.3331,
-        "Y": 6.06264,
-        "Z": 267.45648
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -742.0147,
-        "Y": 5.872718,
-        "Z": 252.56227
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -747.87225,
-        "Y": 5.9475107,
-        "Z": 223.11707
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -742.71124,
-        "Y": 5.992653,
-        "Z": 219.71938
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "ForceAttack",
-      "Position": {
-        "X": -742.71,
-        "Y": 5.99,
-        "Z": 219.72
+        "X": -763.01324,
+        "Y": 3.197323,
+        "Z": 274.97012
       },
       "Arguments": [
-        ""
+        "20"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "KillInRange",
+      "Position": {
+        "X": -671.7338,
+        "Y": 2.492319,
+        "Z": 193.77646
+      },
+      "Arguments": [
+        "30"
       ],
       "Conditions": [],
       "Note": ""
@@ -90,119 +32,13 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -725.35724,
-        "Y": 5.5921726,
-        "Z": 202.9681
+        "X": -545.87537,
+        "Y": -0.004441142,
+        "Z": 144.76093
       },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -707.5445,
-        "Y": 3.333172,
-        "Z": 195.53824
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -681.24615,
-        "Y": 2.8744998,
-        "Z": 197.0222
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -674.8239,
-        "Y": 2.8042898,
-        "Z": 195.07063
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -657.25104,
-        "Y": 2.4312177,
-        "Z": 185.00754
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -637.9043,
-        "Y": 0.34946716,
-        "Z": 183.96013
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -606.09814,
-        "Y": -0.42076755,
-        "Z": 161.33232
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -603.6418,
-        "Y": -0.35987097,
-        "Z": 142.0034
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -582.42413,
-        "Y": -0.4562924,
-        "Z": 139.23116
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -537.5162,
-        "Y": -0.029845178,
-        "Z": 145.67113
-      },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -218,17 +54,19 @@
         ""
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Amhuluk"
     },
     {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -513.7095,
-        "Y": -0.029845178,
-        "Z": 144.10396
+        "X": -377.21667,
+        "Y": -10.319313,
+        "Z": 202.77686
       },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -236,9 +74,23 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -504.94455,
-        "Y": -0.029845178,
-        "Z": 145.47078
+        "X": -345.05426,
+        "Y": -10.274317,
+        "Z": 176.16696
+      },
+      "Arguments": [
+        ""
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -334.1114,
+        "Y": -10.001604,
+        "Z": 166.74666
       },
       "Arguments": [],
       "Conditions": [],
@@ -246,13 +98,15 @@
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "KillInRange",
       "Position": {
-        "X": -473.51187,
-        "Y": -2.960563,
-        "Z": 143.36726
+        "X": -258.40604,
+        "Y": -23.198515,
+        "Z": 161.41756
       },
-      "Arguments": [],
+      "Arguments": [
+        "40"
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -260,153 +114,23 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -454.26102,
-        "Y": -6.073945,
-        "Z": 139.45242
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -407.95346,
-        "Y": -9.987575,
-        "Z": 152.18152
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -387.2591,
-        "Y": -10.273695,
-        "Z": 197.35323
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -380.51935,
-        "Y": -10.316005,
-        "Z": 201.50807
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -367.4611,
-        "Y": -10.10006,
-        "Z": 199.12573
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -355.57666,
-        "Y": -10.15715,
-        "Z": 180.41678
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -345.0904,
-        "Y": -10.233635,
-        "Z": 177.72966
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -334.49634,
-        "Y": -10.004366,
-        "Z": 167.01093
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -330.25314,
-        "Y": -10.668382,
-        "Z": 181.3815
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -266.09186,
-        "Y": -23.568441,
-        "Z": 184.47704
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -249.82977,
-        "Y": -23.127977,
-        "Z": 134.00305
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -212.3666,
+        "X": -215.05872,
         "Y": -23.343822,
-        "Z": 110.36681
+        "Z": 107.103516
       },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": -197.96132,
+        "X": -197.78024,
         "Y": -23.0,
-        "Z": 122.49752
+        "Z": 122.59932
       },
       "Arguments": [],
       "Conditions": [],
@@ -416,47 +140,13 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -196.84737,
-        "Y": -22.99954,
-        "Z": 101.084885
+        "X": -175.23624,
+        "Y": -25.19692,
+        "Z": 64.2298
       },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -174.49995,
-        "Y": -23.162643,
-        "Z": 96.428566
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -174.78682,
-        "Y": -25.000093,
-        "Z": 57.632957
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -175.06667,
-        "Y": -25.000183,
-        "Z": 39.820618
-      },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -472,15 +162,15 @@
         ""
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "Magitek Core"
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": -165.4848,
-        "Y": -25.000183,
-        "Z": 29.281147
+        "X": -76.30502,
+        "Y": -25.123917,
+        "Z": 3.9335263
       },
       "Arguments": [],
       "Conditions": [],
@@ -490,49 +180,15 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": -175.68616,
-        "Y": -25.000183,
-        "Z": 32.87912
+        "X": -75.70424,
+        "Y": -25.15023,
+        "Z": -13.117281
       },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": "Chest"
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -157.17554,
-        "Y": -25.000187,
-        "Z": -8.394113
-      },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
       "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -119.94276,
-        "Y": -25.184584,
-        "Z": -13.486572
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": -76.31864,
-        "Y": -25.159101,
-        "Z": 3.7312949
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": "Chest"
     },
     {
       "Tag": "None",
@@ -550,6 +206,20 @@
     },
     {
       "Tag": "None",
+      "Name": "WaitFor",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "IsReady"
+      ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
       "Name": "Wait",
       "Position": {
         "X": 0.0,
@@ -557,69 +227,28 @@
         "Z": 0.0
       },
       "Arguments": [
-        "20000"
+        "1000"
       ],
       "Conditions": [],
       "Note": ""
     },
     {
       "Tag": "None",
-      "Name": "MoveTo",
+      "Name": "ModifyIndex",
       "Position": {
-        "X": 651.05475,
-        "Y": -55.500168,
-        "Z": -73.6702
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
       },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 683.1585,
-        "Y": -55.500168,
-        "Z": -58.740402
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 698.35516,
-        "Y": -55.50017,
-        "Z": -57.707584
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 719.50385,
-        "Y": -55.38427,
-        "Z": -92.41858
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 722.00903,
-        "Y": -55.0,
-        "Z": -121.1439
-      },
-      "Arguments": [],
-      "Conditions": [],
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionConditionFlag, AutoDuty",
+          "flag": "UsingChocoboTaxi"
+        }
+      ],
       "Note": ""
     },
     {
@@ -635,12 +264,12 @@
       "Note": ""
     },
     {
-      "Tag": "None",
-      "Name": "MoveTo",
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
       "Position": {
-        "X": 751.2394,
-        "Y": -55.525776,
-        "Z": -99.18367
+        "X": 722.1185,
+        "Y": -55.0,
+        "Z": -121.37007
       },
       "Arguments": [],
       "Conditions": [],
@@ -650,11 +279,13 @@
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
-        "X": 786.54297,
-        "Y": -56.999996,
-        "Z": -97.49809
+        "X": 766.16437,
+        "Y": -56.08054,
+        "Z": -98.5338
       },
-      "Arguments": [],
+      "Arguments": [
+        ""
+      ],
       "Conditions": [],
       "Note": ""
     },
@@ -670,45 +301,7 @@
         ""
       ],
       "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 807.99585,
-        "Y": -56.999546,
-        "Z": -97.359314
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "MoveTo",
-      "Position": {
-        "X": 797.004,
-        "Y": -56.999546,
-        "Z": -97.09604
-      },
-      "Arguments": [],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "Wait",
-      "Position": {
-        "X": 797.0,
-        "Y": -57.0,
-        "Z": -97.1
-      },
-      "Arguments": [
-        "2000"
-      ],
-      "Conditions": [],
-      "Note": ""
+      "Note": "Lunar Bahamut"
     }
   ],
   "Meta": {
@@ -741,6 +334,10 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 315,
+        "Change": "Complete overhaul"
       }
     ],
     "Notes": []

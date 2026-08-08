@@ -157,41 +157,46 @@ namespace AutoDuty.Data
             mode is LevelingMode.Trust_Group or LevelingMode.Trust_Solo;
 
 
-        public static (string url, string name) GetExternalPluginData(this ExternalPlugin plugin) =>
-            plugin switch
-            {
-                ExternalPlugin.vnav => (@"https://puni.sh/api/repository/veyn", "vnavmesh"),
-                ExternalPlugin.BossMod => (@"https://puni.sh/api/repository/veyn", "BossMod"),
-                ExternalPlugin.Avarice => (@"https://love.puni.sh/ment.json", "Avarice"),
-                ExternalPlugin.RotationSolverReborn => (@"https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json", "RotationSolver"),
-                ExternalPlugin.WrathCombo => (@"https://love.puni.sh/ment.json", "WrathCombo"),
-                ExternalPlugin.AEAssist => (string.Empty, "AEAssistV3"),
-                ExternalPlugin.AutoRetainer => (@"https://love.puni.sh/ment.json", "AutoRetainer"),
-                ExternalPlugin.Gearsetter => (@"https://puni.sh/api/repository/vera", "Gearsetter"),
-                ExternalPlugin.Stylist => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "Stylist"),
-                ExternalPlugin.Lifestream => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "Lifestream"),
-                ExternalPlugin.AntiAFK => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "AntiAfkKick-Dalamud"),
-                ExternalPlugin.Pandora => (@"https://love.puni.sh/ment.json", "PandorasBox"),
-                _ => throw new ArgumentOutOfRangeException(nameof(plugin), plugin, null)
-            };
+        extension(ExternalPlugin plugin)
+        {
+            public (string url, string name) GetExternalPluginData() =>
+                plugin switch
+                {
+                    ExternalPlugin.vnav => (@"https://puni.sh/api/repository/veyn", "vnavmesh"),
+                    ExternalPlugin.BossMod => (@"https://puni.sh/api/repository/veyn", "BossMod"),
+                    ExternalPlugin.Avarice => (@"https://love.puni.sh/ment.json", "Avarice"),
+                    ExternalPlugin.RotationSolverReborn => (@"https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json", "RotationSolver"),
+                    ExternalPlugin.WrathCombo => (@"https://love.puni.sh/ment.json", "WrathCombo"),
+                    ExternalPlugin.AEAssist => (string.Empty, "AEAssistV3"),
+                    ExternalPlugin.AutoRetainer => (@"https://love.puni.sh/ment.json", "AutoRetainer"),
+                    ExternalPlugin.Gearsetter => (@"https://puni.sh/api/repository/vera", "Gearsetter"),
+                    ExternalPlugin.Stylist => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "Stylist"),
+                    ExternalPlugin.Lifestream => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "Lifestream"),
+                    ExternalPlugin.AntiAFK => (@"https://raw.githubusercontent.com/NightmareXIV/MyDalamudPlugins/main/pluginmaster.json", "AntiAfkKick-Dalamud"),
+                    ExternalPlugin.Pandora => (@"https://love.puni.sh/ment.json", "PandorasBox"),
+                    ExternalPlugin.GlamourLog => (@"https://puni.sh/api/repository/croizat", "GlamourLog"),
+                    _ => throw new ArgumentOutOfRangeException(nameof(plugin), plugin, null)
+                };
 
-        public static string GetExternalPluginName(this ExternalPlugin plugin) =>
-            plugin switch
-            {
-                ExternalPlugin.vnav => "vnavmesh",
-                ExternalPlugin.BossMod => "Boss Mod",
-                ExternalPlugin.Avarice => "Avarice",
-                ExternalPlugin.RotationSolverReborn => "Rotation Solver Reborn",
-                ExternalPlugin.WrathCombo => "Wrath Combo",
-                ExternalPlugin.AEAssist => "AEAssist",
-                ExternalPlugin.AutoRetainer => "AutoRetainer",
-                ExternalPlugin.Gearsetter => "Gearsetter",
-                ExternalPlugin.Stylist => "Stylist",
-                ExternalPlugin.Lifestream => "Lifestream",
-                ExternalPlugin.AntiAFK => "Anti-AfkKick",
-                ExternalPlugin.Pandora => "Pandora's Box",
-                _ => throw new ArgumentOutOfRangeException(nameof(plugin), plugin, null)
-            };
+            public string GetExternalPluginName() =>
+                plugin switch
+                {
+                    ExternalPlugin.vnav => "vnavmesh",
+                    ExternalPlugin.BossMod => "Boss Mod",
+                    ExternalPlugin.Avarice => "Avarice",
+                    ExternalPlugin.RotationSolverReborn => "Rotation Solver Reborn",
+                    ExternalPlugin.WrathCombo => "Wrath Combo",
+                    ExternalPlugin.AEAssist => "AEAssist",
+                    ExternalPlugin.AutoRetainer => "AutoRetainer",
+                    ExternalPlugin.Gearsetter => "Gearsetter",
+                    ExternalPlugin.Stylist => "Stylist",
+                    ExternalPlugin.Lifestream => "Lifestream",
+                    ExternalPlugin.AntiAFK => "Anti-AfkKick",
+                    ExternalPlugin.Pandora => "Pandora's Box",
+                    ExternalPlugin.GlamourLog => "Glamour Log",
+                    _ => throw new ArgumentOutOfRangeException(nameof(plugin), plugin, null)
+                };
+        }
 
         public static bool HasInstaller(this ExternalPlugin plugin)
         {

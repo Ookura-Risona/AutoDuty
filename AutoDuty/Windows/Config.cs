@@ -17,28 +17,29 @@ using static AutoDuty.Windows.ConfigTab;
 
 namespace AutoDuty.Windows;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Data;
 using ECommons.Configuration;
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
+using ECommons.IPC.Subscribers.RotationSolverReborn;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Info;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using Lumina.Excel.Sheets;
+using Multibox;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Properties;
-using System.Numerics;
-using System.Text;
-using ECommons.IPC.Subscribers.RotationSolverReborn;
-using Multibox;
 using NightmareUI.Censoring;
+using Properties;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Text;
 using Achievement = Lumina.Excel.Sheets.Achievement;
 using Vector2 = FFXIVClientStructs.FFXIV.Common.Math.Vector2;
 
@@ -191,7 +192,7 @@ public class ConfigurationMain
         if (this.profileByName.ContainsKey(name))
         {
             this.activeProfileName = name;
-            EzConfig.Save();
+            Save();
             return true;
         }
         return false;
@@ -202,7 +203,7 @@ public class ConfigurationMain
         if (this.profileByName.ContainsKey(this.ActiveProfileName))
         {
             this.DefaultConfigName = this.ActiveProfileName;
-            EzConfig.Save();
+            Save();
         }
     }
 
@@ -289,7 +290,7 @@ public class ConfigurationMain
         config.Name                 = newName;
         this.activeProfileName      = newName;
 
-        EzConfig.Save();
+        Save();
 
         return true;
     }
@@ -317,7 +318,7 @@ public class ConfigurationMain
                                                               Name  = Player.Name,
                                                               World = Player.CurrentWorldName
                                                           };
-                                    EzConfig.Save();
+                                    Save();
 
                                     LevelingHelper.ResetLevelingDuties();
                                 });
@@ -333,11 +334,18 @@ public class ConfigurationMain
                                     this.profileByName[this.ActiveProfileName].CIDs.Remove(cid);
                                     this.profileByCID.Remove(cid);
 
-                                    EzConfig.Save();
+                                    Save();
                                 });
 
     public static void DebugLog(string message) => 
         Svc.Log.Debug($"Configuration Main: {message}");
+
+    public static void Save()
+    {
+        if (!ConfigOverrideHelper.HasOverrides)
+            EzConfig.Save();
+    }
+
 
     public static JsonSerializerSettings JsonSerializerSettings { get; } = new()
                                                                            {
@@ -736,7 +744,8 @@ public class Configuration
     public bool AutoGCTurninSlotsLeftBool = false;
     public bool AutoGCTurninUseTicket     = false;
 
-    public bool ArmoireEntrust = false;
+    public bool ArmoireEntrust      = false;
+    public bool GlamourChestEntrust = false;
 
     public bool TripleTriadRegister;
     public bool TripleTriadSell;
@@ -751,32 +760,41 @@ public class Configuration
     #endregion
 
     #region Termination
-    public bool                                        EnableTerminationActions    = true;
-    public bool                                        StopLevel                   = false;
-    public int                                         StopLevelInt                = 1;
-    public bool                                        StopNoRestedXP              = false;
-    public bool                                        StopItemQty                 = false;
-    public bool                                        StopItemAll                 = false;
-    public Dictionary<uint, KeyValuePair<string, int>> StopItemQtyItemDictionary   = [];
-    public int                                         StopItemQtyInt              = 1;
-    public bool                                        TerminationBLUSpellsEnabled = false;
-    public List<uint>                                  TerminationBLUSpells        = [];
-    public bool                                        TerminationBLUSpellsAll     = false;
-    public bool                                        ExecuteCommandsTermination  = false;
-    public List<string>                                CustomCommandsTermination   = [];
-    public bool                                        PlayEndSound                = false;
-    public bool                                        CustomSound                 = false;
-    public float                                       CustomSoundVolume           = 0.5f;
-    public Sounds                                      SoundEnum                   = Sounds.None;
-    public string                                      SoundPath                   = "";
-    public TerminationMode                             TerminationMethodEnum       = TerminationMode.Do_Nothing;
-    public bool                                        TerminationKeepActive       = true;
-    #endregion
+    public bool                                        EnableTerminationActions      = true;
+    public bool                                        StopLevel                     = false;
+    public int                                         StopLevelInt                  = 1;
+    public bool                                        StopNoRestedXP                = false;
+    public bool                                        StopItemQty                   = false;
+    public bool                                        StopItemAll                   = false;
+    public Dictionary<uint, KeyValuePair<string, int>> StopItemQtyItemDictionary     = [];
+    public int                                         StopItemQtyInt                = 1;
+    public bool                                        StopWhenDutyGathered          = false;
+    public bool                                        TerminationBLUSpellsEnabled   = false;
+    public List<uint>                                  TerminationBLUSpells          = [];
+    public bool                                        TerminationBLUSpellsAll       = false;
+    public bool                                        TerminationInventoryFree      = false;
+    public int                                         TerminationInventoryFreeSlots = 0;
+    public bool                                        TerminationiLvl               = false;
+    public int                                         TerminationiLvlInt            = 0;
 
-    public static void Save() => 
-        EzConfig.Save();
+    public bool                                        ExecuteCommandsTermination   = false;
+    public List<string>                                CustomCommandsTermination    = [];
+    public bool                                        PlayEndSound                 = false;
+    public bool                                        CustomSound                  = false;
+    public float                                       CustomSoundVolume            = 0.5f;
+    public Sounds                                      SoundEnum                    = Sounds.None;
+    public string                                      SoundPath                    = "";
+    public TerminationMode                             TerminationMethodEnum        = TerminationMode.Do_Nothing;
+    public bool                                        TerminationKeepActive        = true;
+	#endregion
 
-    public TrustMemberName?[] SelectedTrustMembers = new TrustMemberName?[3];
+	public static void Save()
+	{
+        if (!ConfigOverrideHelper.HasOverrides)
+		    EzConfig.Save();
+	}
+
+	public TrustMemberName?[] SelectedTrustMembers = new TrustMemberName?[3];
 }
 
 public static class ConfigTab
@@ -872,6 +890,11 @@ public static class ConfigTab
             ImGui.SetTooltip(Loc.Get("ConfigTab.LanguageHelp"));
 
         ImGui.Separator();
+
+        bool overridesActive = ConfigOverrideHelper.HasOverrides;
+        if (overridesActive)
+            ImGuiEx.TextWrapped(Loc.Get("ConfigTab.Profile.ConfigOverridesActiveNote"));
+        using ImRaii.DisabledDisposable overrideLock = ImRaii.Disabled(overridesActive);
 
         //Start of Profile Selection
         ImGui.AlignTextToFramePadding();
@@ -1150,7 +1173,8 @@ public static class ConfigTab
 
                 unsafe
                 {
-                    //RaptureAtkModule.Instance().item
+                    ImGui.Text($"In Area: " + GotoHousingHelper.InHousingArea(Housing.FC_Estate));
+                    ImGui.Text($"Indoors: " + GotoHousingHelper.InPrivateHouse(Housing.FC_Estate));
                 }
 
                 if (ImGui.CollapsingHeader("Sheet Check"))
@@ -1421,13 +1445,13 @@ public static class ConfigTab
                     using (ImRaii.Disabled(Configuration.positionalRoleBased))
                     {
                         ImGui.SameLine(0, 10);
-                        if (ImGui.Button(Configuration.PositionalEnum.ToCustomString()))
+                        if (ImGui.Button(Configuration.PositionalEnum.ToLocalizedString()))
                             ImGui.OpenPopup("PositionalPopup");
             
                         if (ImGui.BeginPopup("PositionalPopup"))
                         {
                             foreach (Positional positional in Enum.GetValues(typeof(Positional)))
-                                if (ImGui.Selectable(positional.ToCustomString(), Configuration.PositionalEnum == positional))
+                                if (ImGui.Selectable(positional.ToLocalizedString(), Configuration.PositionalEnum == positional))
                                 {
                                     Configuration.PositionalEnum = positional;
                                     Configuration.Save();
@@ -1630,7 +1654,7 @@ public static class ConfigTab
             using (ImRaii.Disabled(!Configuration.EnablePreLoopActions))
             {
                 ImGui.Separator();
-                MakeCommands(Loc.Get("ConfigTab.PreLoop.ExecuteCommands"), ref Configuration.ExecuteCommandsPreLoop, ref Configuration.CustomCommandsPreLoop, ref preLoopCommand, "CommandsPreLoop");
+                MakeCommands("ConfigTab.PreLoop.ExecuteCommands", ref Configuration.ExecuteCommandsPreLoop, ref Configuration.CustomCommandsPreLoop, ref preLoopCommand, "CommandsPreLoop");
 
                 ImGui.Separator();
 
@@ -1982,7 +2006,7 @@ public static class ConfigTab
                 ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.BetweenLoop.WaitTimeHelp"));
                 ImGui.Separator();
 
-                MakeCommands(Loc.Get("ConfigTab.BetweenLoop.ExecuteCommands"), ref Configuration.ExecuteCommandsBetweenLoop, ref Configuration.CustomCommandsBetweenLoop, ref betweenLoopCommand, "CommandsBetweenLoop");
+                MakeCommands("ConfigTab.BetweenLoop.ExecuteCommands", ref Configuration.ExecuteCommandsBetweenLoop, ref Configuration.CustomCommandsBetweenLoop, ref betweenLoopCommand, "CommandsBetweenLoop");
 
                 if (ImGui.Checkbox(Loc.Get("ConfigTab.BetweenLoop.AutoExtract"), ref Configuration.AutoExtract))
                     Configuration.Save();
@@ -2032,12 +2056,11 @@ public static class ConfigTab
                                 Configuration.Save();
                             }
 
-                            for (int i = 0; i < module->NumGearsets; i++)
+                            foreach (RaptureGearsetModule.GearsetEntry gearsetEntry in module->Entries)
                             {
-                                RaptureGearsetModule.GearsetEntry* gearset = module->GetGearset(i);
-                                if(ImGui.Selectable(gearset->NameString, Configuration.AutoOpenCoffersGearset == gearset->Id))
+                                if (module->IsValidGearset(gearsetEntry.Id) && ImGui.Selectable($"{gearsetEntry.Id+1}: {gearsetEntry.NameString}", Configuration.AutoOpenCoffersGearset == gearsetEntry.Id))
                                 {
-                                    Configuration.AutoOpenCoffersGearset = gearset->Id;
+                                    Configuration.AutoOpenCoffersGearset = gearsetEntry.Id;
                                     Configuration.Save();
                                 }
                             }
@@ -2219,7 +2242,6 @@ public static class ConfigTab
                     }
 
                 ImGui.Columns(2, "TripleTriadColumns");
-                ImGui.SetColumnWidth(0, 200 * ImGuiHelpers.GlobalScale);
                 if (ImGui.Checkbox(Loc.Get("ConfigTab.BetweenLoop.RegisterTripleTriadCards"), ref Configuration.TripleTriadRegister))
                     Configuration.Save();
                 ImGui.NextColumn();
@@ -2255,10 +2277,24 @@ public static class ConfigTab
 
                 ImGui.Columns(1);
 
-                if(ImGui.Checkbox(Loc.Get("ConfigTab.BetweenLoop.ArmoireEntrust") + "##ArmoireEntrust", ref Configuration.ArmoireEntrust))
-                    Configuration.Save();
-                ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.BetweenLoop.ArmoireEntrustHelp"));
+                using (ImGuiHelper.RequiresPlugin(ExternalPlugin.GlamourLog, "EntrustGlamourLog"))
+                {
+                    ImGui.Columns(2);
 
+                    if (ImGui.Checkbox(Loc.Get("ConfigTab.BetweenLoop.GlamourEntrust") + "##GlamourEntrust", ref Configuration.GlamourChestEntrust))
+                        Configuration.Save();
+                    ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.BetweenLoop.GlamourEntrustHelp"));
+
+                    ImGui.NextColumn();
+                    float x = ImGui.GetCursorPosX() - 100f.Scale();
+
+                    if (ImGui.Checkbox(Loc.Get("ConfigTab.BetweenLoop.ArmoireEntrust") + "##ArmoireEntrust", ref Configuration.ArmoireEntrust))
+                        Configuration.Save();
+                    ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.BetweenLoop.ArmoireEntrustHelp"));
+                    ImGui.Columns(1);
+
+                    ImGui.SetCursorPosX(x);
+                }
 
                 using (ImGuiHelper.RequiresPlugin(ExternalPlugin.AutoRetainer, "AR", inline: true))
                 {
@@ -2320,7 +2356,7 @@ public static class ConfigTab
         {
             if (ImGui.Checkbox($"{Loc.Get("ConfigTab.Termination.Enable")}###TerminationEnable", ref Configuration.EnableTerminationActions))
                 Configuration.Save();
-
+            ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Termination.Help"));
             using (ImRaii.Disabled(!Configuration.EnableTerminationActions))
             {
                 ImGui.Separator();
@@ -2350,15 +2386,41 @@ public static class ConfigTab
                     }
                     ImGui.PopItemWidth();
                 }
-                ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Termination.StopAtLevelHelp"));
+
                 if (ImGui.Checkbox(Loc.Get("ConfigTab.Termination.StopNoRestedXP"), ref Configuration.StopNoRestedXP))
                     Configuration.Save();
 
-                ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Termination.StopNoRestedXPHelp"));
+                if (ImGui.Checkbox(Loc.Get("ConfigTab.Termination.StopAtILevel"), ref Configuration.TerminationiLvl))
+                    Configuration.Save();
+
+                if (Configuration.TerminationiLvl)
+                {
+                    ImGui.SameLine(0, 10);
+                    ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+                    if (Configuration.UseSliderInputs)
+                    {
+                        if (ImGui.SliderInt("##ItemLevel", ref Configuration.TerminationiLvlInt, 1, 100))
+                        {
+                            Configuration.TerminationiLvlInt = Math.Clamp(Configuration.TerminationiLvlInt, 1, 100);
+                            Configuration.Save();
+                        }
+                    }
+                    else
+                    {
+                        if (ImGui.InputInt("##ItemLevel", ref Configuration.TerminationiLvlInt, 1, 5))
+                        {
+                            Configuration.TerminationiLvlInt = Math.Clamp(Configuration.TerminationiLvlInt, 1, 100);
+                            Configuration.Save();
+                        }
+                    }
+                    ImGui.PopItemWidth();
+                }
+
+
+
                 if (ImGui.Checkbox(Loc.Get("ConfigTab.Termination.StopAtItemQty"), ref Configuration.StopItemQty))
                     Configuration.Save();
 
-                ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Termination.StopAtItemQtyHelp"));
                 if (Configuration.StopItemQty)
                 {
                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - 125 * ImGuiHelpers.GlobalScale);
@@ -2406,6 +2468,13 @@ public static class ConfigTab
                         Configuration.Save();
                 }
 
+                using (ImGuiHelper.RequiresPlugin(ExternalPlugin.GlamourLog, "StopWhenDutyGatheredGlamourLog", inline: true))
+                {
+                    if (ImGui.Checkbox(Loc.Get("ConfigTab.Termination.StopWhenDutyGathered"), ref Configuration.StopWhenDutyGathered))
+                        Configuration.Save();
+                    ImGuiComponents.HelpMarker(Loc.Get("ConfigTab.Termination.StopWhenDutyGatheredHelp"));
+                }
+
                 if (ImGui.Checkbox(Loc.Get("ConfigTab.Termination.StopBLUSpell"), ref Configuration.TerminationBLUSpellsEnabled))
                     Configuration.Save();
 
@@ -2450,7 +2519,29 @@ public static class ConfigTab
                     ImGui.Unindent();
                 }
 
-                MakeCommands(Loc.Get("ConfigTab.Termination.ExecuteCommandsOnTermination"), ref Configuration.ExecuteCommandsTermination,  ref Configuration.CustomCommandsTermination, ref terminationCommand, "CommandsTermination");
+                if(ImGui.Checkbox(Loc.Get("ConfigTab.Termination.StopWhenInventoryFull") + "###StopWhenInventoryFull", ref Configuration.TerminationInventoryFree))
+                    Configuration.Save();
+
+                if (Configuration.TerminationInventoryFree)
+                {
+                    ImGui.Indent();
+                    ImGui.PushItemWidth(150f.Scale());
+
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.Text(Loc.Get("ConfigTab.Termination.StopWhenInventoryFullSlots"));
+                    ImGui.SameLine();
+                    if(ImGui.InputInt("###StopWhenInventoryFullSlotsInput", ref Configuration.TerminationInventoryFreeSlots, 1, 5))
+                    {
+                        Configuration.TerminationInventoryFreeSlots = Math.Clamp(Configuration.TerminationInventoryFreeSlots, 0, 139);
+                        Configuration.Save();
+                    }
+
+                    ImGui.PopItemWidth();
+                    ImGui.Unindent();
+                }
+
+
+                MakeCommands("ConfigTab.Termination.ExecuteCommandsOnTermination", ref Configuration.ExecuteCommandsTermination,  ref Configuration.CustomCommandsTermination, ref terminationCommand, "CommandsTermination");
 
                 if (ImGui.Checkbox(Loc.Get("ConfigTab.Termination.PlaySoundOnCompletion"), ref Configuration.PlayEndSound)) //Heavily Inspired by ChatAlerts
                     Configuration.Save();
@@ -2737,10 +2828,10 @@ public static class ConfigTab
 
         static void MakeCommands(string checkbox, ref bool execute, ref List<string> commands, ref string curCommand, string id)
         {
-            if (ImGui.Checkbox($"{checkbox}{(execute ? ":" : string.Empty)} ", ref execute))
+            if (ImGui.Checkbox($"{Loc.Get(checkbox)}{(execute ? ":" : string.Empty)} ", ref execute))
                 Configuration.Save();
 
-            ImGuiComponents.HelpMarker($"{checkbox}.\nFor example, /echo test");
+            ImGuiComponents.HelpMarker(Loc.Get(checkbox + "Help", "/echo test"));
 
             if (execute)
             {

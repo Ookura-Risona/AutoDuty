@@ -55,7 +55,7 @@ namespace AutoDuty.Helpers
                 return true;
             }
 
-            if (PlayerHelper.IsMoving && !Player.Character->InCombat && Vector3.Distance(Player.Position, position) >= 10)
+            if (PlayerHelper.IsMoving && !Player.Character->InCombat && Vector3.Distance(Player.Position, position) >= 10 && Player.Status.All(x => x.StatusId != 496))
             {
                 //sprint
                 if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0 && ActionManager.Instance()->QueuedActionId != 4 && !PlayerHelper.IsCasting)

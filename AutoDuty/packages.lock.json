@@ -16,9 +16,9 @@
       },
       "Pictomancy": {
         "type": "Direct",
-        "requested": "[1.0.9, )",
-        "resolved": "1.0.9",
-        "contentHash": "pstT42Q08Q8189TFj2ettIWr+0MDKd9FQZcGunhycW1xrWC3ZnOcitsmJGxM2w+x6Ueghcfe95NudkKwJTsfuA==",
+        "requested": "[1.0.10, )",
+        "resolved": "1.0.10",
+        "contentHash": "xHRbKtdyT15T58oZH4QSHdsnjlRMc3Vi4DbrnnIWeeZfDX3yyBu0CiVYUR37ALIGcOd1sl0bpX/9GpLl+PEMTg==",
         "dependencies": {
           "KamiToolKit": "1.1.2",
           "SharpDX.D3DCompiler": "4.2.0",
@@ -30,8 +30,8 @@
       "WrathCombo.API": {
         "type": "Direct",
         "requested": "[0.5.*, )",
-        "resolved": "0.5.5",
-        "contentHash": "mvUBFTUQt35b52MeyuPXPk+3udCAmZ+cLV5mv9Y67FQP78UT+qtpEMdAGYxEynj7+hcPGL4fGk2GB2L6eRle5Q=="
+        "resolved": "0.5.6",
+        "contentHash": "wSVdsjRG4BeaZkRGpG3SuTTKMjUrVi+k/YpUEnqH+DnXb6XLXlRFc4P2bExVad0Wv+hOpI/VFZ5QBEJ5yzjMEg=="
       },
       "KamiToolKit": {
         "type": "Transitive",
@@ -126,7 +126,7 @@
       "nightmareui": {
         "type": "Project",
         "dependencies": {
-          "ECommons": "[3.2.1.3, )"
+          "ECommons": "[3.2.1.17, )"
         }
       }
     }

@@ -16,7 +16,7 @@ namespace AutoDuty.IPC
     using System.Collections.Generic;
     using ECommons.GameFunctions;
     using Helpers;
-    using Dalamud.Plugin;
+    using Data;
     using ECommons.IPC.Subscribers.RotationSolverReborn;
     using ECommons.IPC.Subscribers.Skippy;
     using WrathCombo.API;
@@ -137,11 +137,11 @@ namespace AutoDuty.IPC
             }
         }
 
-        public static void InBoss(bool boss)
+        public static void StayCloseToTank(bool boss)
         {
             if (Configuration.AutoManageBossModAISettings)
             {
-                string role = boss ? "None" : nameof(Role.Tank);
+                string role = boss ? "None" : nameof(Enums.Role.Tank);
 
                 BossMod.Presets_AddTransientStrategy("AutoDuty",         "BossMod.Autorotation.MiscAI.StayCloseToPartyRole", "Role", role);
                 BossMod.Presets_AddTransientStrategy("AutoDuty Passive", "BossMod.Autorotation.MiscAI.StayCloseToPartyRole", "Role", role);
@@ -377,13 +377,36 @@ namespace AutoDuty.IPC
             IsEnabled && Skippy.GetSkippedCategories().Contains(SkippyIPC.SkippedCategory.SkipMSQRoulette);
     }
 
+    public static class GlamourLog_IPCSubscriber
+    {
+        internal static bool IsEnabled => GlamourLog.Available;
+
+        public static List<uint> FromDungeon(uint territory) =>
+            !ContentHelper.DictionaryContent.TryGetValue(territory, out Classes.Content items) ?
+                [] :
+                GlamourLog.GetItemsFromContent(items.RowId);
+
+        public static bool Busy =>
+            !GlamourLog.Available || GlamourLog.IsBusy();
+
+        public static bool Entrust() =>
+            GlamourLog.Available && GlamourLog.EntrustAll();
+
+        public static bool IsStored(uint itemId) =>
+            GlamourLog.IsItemOwned(itemId);
+
+        public static bool AllStoredFromDungeon(uint territoryType) =>
+            IsEnabled &&
+            ContentHelper.DictionaryContent.TryGetValue(territoryType, out Classes.Content content) &&
+            GlamourLog.IsContentComplete(content.RowId);
+    }
 
     internal static class AEAssist_IPCSubscriber
     {
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("AEAssistV3");
     }
 
-    internal class IPCSubscriber_Common
+    internal static class IPCSubscriber_Common
     {
         internal static bool IsReady(string pluginName) => DalamudReflector.TryGetDalamudPlugin(pluginName, out _, false, true);
 

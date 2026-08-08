@@ -408,7 +408,7 @@ public sealed class MainWindow : Window, IDisposable
     private static (string, Action, Vector4?, bool)[] TabList =>
     [
         ("Main", MainTab.Draw, null, false),
-        ("Build", BuildTab.Draw, null, false),
+        ("Build", BuildTab.DrawBuildTab, null, false),
         ("Paths", PathsTab.Draw, null, false),
         ("Config", ConfigTab.Draw, null, false),
         ("Info", InfoTab.Draw, null, false),

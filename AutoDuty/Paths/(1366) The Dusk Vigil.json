@@ -113,6 +113,18 @@
       "Note": ""
     },
     {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 129.75818,
+        "Y": -7.8897448,
+        "Z": -4.182866
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
@@ -239,6 +251,18 @@
       "Note": "Lord Commander's Key"
     },
     {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 228.52852,
+        "Y": -8.05008,
+        "Z": -44.505695
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
@@ -323,6 +347,18 @@
       "Note": ""
     },
     {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": 74.466675,
+        "Y": 24.000008,
+        "Z": -270.58896
+      },
+      "Arguments": [],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
       "Tag": "None",
       "Name": "MoveTo",
       "Position": {
@@ -373,6 +409,18 @@
       "Arguments": [
         "false"
       ],
+      "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "TreasureCoffer",
+      "Position": {
+        "X": -44.448418,
+        "Y": 32.63325,
+        "Z": -280.23227
+      },
+      "Arguments": [],
       "Conditions": [],
       "Note": ""
     },
@@ -431,6 +479,14 @@
       {
         "Version": 304,
         "Change": "Duty Support"
+      },
+      {
+        "Version": 321,
+        "Change": ""
+      },
+      {
+        "Version": 321,
+        "Change": "added treasure chests"
       }
     ],
     "Notes": []

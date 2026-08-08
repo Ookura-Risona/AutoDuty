@@ -22,50 +22,50 @@ using static AutoDuty.Helpers.PlayerHelper;
 
 namespace AutoDuty.Managers
 {
-    using ECommons.ExcelServices;
-    using FFXIVClientStructs.FFXIV.Client.Game.Object;
-    using global::AutoDuty.Properties;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using ECommons.ExcelServices;
+    using FFXIVClientStructs.FFXIV.Client.Game.Object;
+    using Properties;
     using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
-    internal class ActionsManager(AutoDuty plugin, TaskManager taskManager)
+    public class ActionsManager(AutoDuty plugin, TaskManager taskManager)
     {
-        public readonly List<(string, string, string)> actionsList =
+        public readonly List<(string actionName, string actionHelp, string[] arguments)> actionsList =
         [
-            ("<-- Comment -->","comment?","Adds a Comment to the path; AutoDuty will do nothing but display them.\nExample: <-- Trash Pack #1 -->"),
-            ("Wait","how long?", "Adds a Wait (for x milliseconds) step to the path; after moving to the position, AutoDuty will wait x milliseconds.\nExample: Wait|0.02, 23.85, -394.89|8000"),
-            ("WaitFor","for?","Adds a WaitFor (Condition) step to the path; after moving to the position, AutoDuty will wait for a condition from the following list:\nCombat - waits until in combat\nIsReady - waits until the player is ready\nIsValid - waits until the player is valid\nIsOccupied - waits until the player is occupied\nBNpcInRadius - waits until a battle npc either spawns or path's into the radius specified\nExample: WaitFor|-12.12, 18.76, -148.05|Combat"),
-            ("Boss","Loot Loc, Loot Range", "Adds a Boss step to the path; after (and while) moving to the position, AutoDuty will attempt to find the boss object. If not found, AD will wait 10s at the position for the boss to spawn and will then Invoke the Boss Action.\nExample: Boss|-2.91, 2.90, -204.68|"),
-            ("Interactable","interact with?", "Adds an Interactable step to the path; after moving to within 2y of the position, AutoDuty will interact with the object specified (recommended to input DataId) until either the object is no longer targetable, you meet certain conditions, or a YesNo/Talk addon appears.\nExample: Interactable|21.82, 7.10, 27.40|1004346 (Goblin Pathfinder)"),
-            ("TreasureCoffer","false", "Adds a TreasureCoffer flag to the path; AutoDuty will loot any treasure coffers automatically if it gets within interact range of one (while Config Loop Option is on), this is just a flag to mark the positions of Treasure Coffers.\nNote: AutoDuty will ignore this Path entry when Looting is disabled entirely or Boss Loot Only is enabled.\nExample: TreasureCoffer|3.21, 6.06, -97.63|"),
-            ("SelectYesno","yes or no?", "Adds a SelectYesNo step to the path; after moving to the position, AutoDuty will click Yes or No on this addon.\nExample: SelectYesno|9.41, 1.94, -311.25|Yes"),
-            ("SelectString", "list index", "Adds a SelectString step to the path; after moving to the position, AutoDuty will pick the indexed string.\nExample: SelectYesno|908.24, 327.26, -561.96|1"),
-            ("SelectJournalResult", "accept?", "Accepts (or declines) a JournalResult.\nExample: SelectJournalResult|908.24, 327.26, -561.96|true"),
-            ("MoveToObject","Object Name?", "Adds a MoveToObject step to the path; AutoDuty will will move the object specified (recommend input DataId)"),
-            ("DutySpecificCode","step #?", "Adds a DutySpecificCode step to the path; after moving to the position, AutoDuty will invoke the Duty Specific Action for this TerritoryType and the step # specified.\nExample: DutySpecificCode|174.68, 102.00, -66.46|1"),
-            ("BossMod", "on / off", "Adds a BossMod step to the path; after moving to the position, AutoDuty will turn BossMod on or off.\nExample: BossMod|-132.08, -342.25, 1.98|Off"),
-            ("Rotation", "on / off", "Adds a Rotation step to the path; after moving to the position, AutoDuty will turn Rotation Plugin on or off.\nExample: Rotation|-132.08, -342.25, 1.98|Off"),
-            ("Target", "Target what?", "Adds a Target step to the path; after moving to the position, AutoDuty will Target the object specified (recommend inputing DataId)."),
-            ("KillInRange","Range","Kills every enemy in range"),
-            ("AutoMoveFor", "how long?", "Adds an AutoMoveFor step to the path; AutoDuty will turn on Standard Mode and Auto Move for the time specified in milliseconds (or until player is not ready).\nExample: AutoMoveFor|-18.21, 1.61, 114.16|3000"),
-            ("ChatCommand","Command with args?", "Adds a ChatCommand step to the path; after moving to the position, AutoDuty will execute the Command specified.\nExample: ChatCommand|-5.86, 164.00, 501.72|/bmrai follow Alisaie"),
-            ("StopForCombat","true/false", "Adds a StopForCombat step to the path; after moving to the position, AutoDuty will turn StopForCombat on or off.\nExample: StopForCombat|-1.36, 5.76, -108.78|False"),
-            ("Revival", "false", "Adds a Revive flag to the path; this is just a flag to mark the positions of Revival Points, AutoDuty will ignore this step during navigation.\nUse this if the Revive Teleporter does not take you directly to the arena of the last boss you killed, such as Sohm Al.\nExample: Revival|33.57, -202.93, -70.30|"),
-            ("ForceAttack",  "false", "Adds a ForceAttack step to the path; after moving to the position, AutoDuty will ForceAttack the closest mob.\nExample: ForceAttack|-174.24, 6.56, -301.67|"),
-            ("Jump", "automove for how long before", "Adds a Jump step to the path; after AutoMoving, AutoDuty will jump.\nExample: Jump|0, 0, 0|200"),
-            ("JumpTo", "jump where? [how long before jump?]", "Move towards point with no mesh then jump\nExample: JumpTo|720.55, 57.24, 8.89|720.637, 57.242, 9.762[|100]"),
-            //("PausePandora", "Which feature | how long"),
-            ("CameraFacing", "Face which Coords?", "Adds a CameraFacing step to the path; after moving to the position, AutoDuty will face the coordinates specified.\nExample: CameraFacing|720.66, 57.24, 9.18|722.05, 62.47, 15.55"),
-            ("ClickTalk", "false", "Adds a ClickTalk step to the path; after moving to the position, AutoDuty will click the talk addon."),
-            ("ConditionAction","condition;args,action;args", "Adds a ConditionAction step to the path; after moving to the position, AutoDuty will check the condition specified and invoke Action."),
-            ("ModifyIndex", "what number (0-based)", "Adds a ModifyIndex step to the path; after moving to the position, AutoDuty will modify the index to the number specified."),
-            ("Action", "", "Run any action"),
-            ("BLULoad", "enable?;which spell", "Enables or disables a spell from the current BLU loadout"),
-            ("VariantVote", "which option?", "Votes for the VVD option specified (0-based index)"),
-            ("DisableBMModule", "which module?, disable?", "Disables the BossMod module specified by name"),
+            ("MoveTo", "Adds a MoveTo step to the path; AutoDuty will move to the position specified.", ["Pathfinding?"]),
+            ("<-- Comment -->", "Adds a Comment to the path; AutoDuty will do nothing but display them.", []),
+            ("Wait", "Adds a Wait (for x milliseconds) step to the path; after moving to the position, AutoDuty will wait x milliseconds.", ["how long?"]),
+            ("WaitFor","Adds a WaitFor (Condition) step to the path; after moving to the position, AutoDuty will wait for a condition from the following list:\nCombat - waits until in combat\nIsReady - waits until the player is ready\nIsValid - waits until the player is valid\nIsOccupied - waits until the player is occupied\nBNpcInRadius - waits until a battle npc either spawns or path's into the radius specified", ["for?"]),
+            ("Boss", "Adds a Boss step to the path; after (and while) moving to the position, AutoDuty will attempt to find the boss object. If not found, AD will wait 10s at the position for the boss to spawn and will then Invoke the Boss Action.", ["Loot Loc","Loot Range"]),
+            ("Interactable", "Adds an Interactable step to the path; after moving to within 2y of the position, AutoDuty will interact with the object specified (recommended to input DataId) until either the object is no longer targetable, you meet certain conditions, or a YesNo/Talk addon appears", ["interact with? (DataID)"]),
+            ("TreasureCoffer", "Adds a TreasureCoffer flag to the path; AutoDuty will loot any treasure coffers automatically if it gets within interact range of one (while Config Loop Option is on), this is just a flag to mark the positions of Treasure Coffers.\nNote: AutoDuty will ignore this Path entry when Looting is disabled entirely or Boss Loot Only is enabled.\nExample: TreasureCoffer|3.21, 6.06, -97.63|", []),
+            ("SelectYesno", "Adds a SelectYesNo step to the path; after moving to the position, AutoDuty will click Yes or No on this addon", ["yes or no?"]),
+            ("SelectString", "Adds a SelectString step to the path; after moving to the position, AutoDuty will pick the indexed string", ["Select entry index"]),
+            ("SelectJournalResult", "Accepts (or declines) a JournalResult", ["accept? (true/false)"]),
+            ("MoveToObject","Adds a MoveToObject step to the path; AutoDuty will will move the object specified (recommend input DataId)", ["Target Id"]),
+            ("DutySpecificCode","Adds a DutySpecificCode step to the path; after moving to the position, AutoDuty will invoke the Duty Specific Action for this TerritoryType and the step # specified", ["index"]),
+            ("BossMod", "Adds a BossMod step to the path; after moving to the position, AutoDuty will turn BossMod on or off", ["on / off"]),
+            ("Rotation", "Adds a Rotation step to the path; after moving to the position, AutoDuty will turn Rotation Plugin on or off", ["on / off"]),
+            ("Target", "Adds a Target step to the path; after moving to the position, AutoDuty will Target the object specified (recommended to input DataId).", ["Target what?"]),
+            ("KillInRange","Kills every enemy in range", ["Range"]),
+            ("AutoMoveFor", "Adds an AutoMoveFor step to the path; AutoDuty will turn on Standard Mode and Auto Move for the time specified in milliseconds (or until player is not ready)", ["how long in ms?"]),
+            ("ChatCommand","Adds a ChatCommand step to the path; after moving to the position, AutoDuty will execute the Command specified", ["chat command"]),
+            ("StopForCombat","Adds a StopForCombat step to the path; after moving to the position, AutoDuty will turn StopForCombat on or off", ["true/false"]),
+            ("Revival", "Adds a Revive flag to the path; this is just a flag to mark the positions of Revival Points, AutoDuty will ignore this step during navigation.\nUse this if the Revive Teleporter does not take you directly to the arena of the last boss you killed, such as Sohm Al", []),
+            ("ForceAttack",  "Adds a ForceAttack step to the path; after moving to the position, AutoDuty will ForceAttack the closest mob", []),
+            ("Jump", "Adds a Jump step to the path; after AutoMoving, AutoDuty will jump", ["automove duration before jump"]),
+            ("JumpTo", "Move towards point with no mesh then jump", ["jump where?", "how long before jump?"]),
+            ("CameraFacing", "Adds a CameraFacing step to the path; after moving to the position, AutoDuty will face the coordinates specified", ["Target Coords"]),
+            ("ClickTalk", "Adds a ClickTalk step to the path; after moving to the position, AutoDuty will click the talk addon.", ["false"]),
+            ("ConditionAction","Adds a ConditionAction step to the path; after moving to the position, AutoDuty will check the condition specified and invoke Action.", ["condition", "args", "action", "args"]),
+            ("ModifyIndex","Adds a ModifyIndex step to the path; after moving to the position, AutoDuty will modify the index to the number specified.", ["which step (use +- for relative changes)"]),
+            ("Action", "Run any action", ["ActionType", "id"]),
+            ("BLULoad", "Enables or disables a spell from the current BLU loadout", ["enable?", "which spell"]),
+            ("VariantVote", "Votes for the VVD option specified (0-based index)", ["which option?"]),
+            ("DisableBMModule", "Disables the BossMod module specified by name", ["which module?", "disable?"])
         ];
 
         public void InvokeAction(PathAction action)
@@ -301,7 +301,7 @@ namespace AutoDuty.Managers
             if (!Player.Available)
                 return;
 
-            Plugin.stopForCombat = stop;
+            Plugin.DutyData?.StopForCombat = stop;
             taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(stop), "StopForCombat");
             if (stop && waitAfter)
                 this.Wait(500);
@@ -349,13 +349,12 @@ namespace AutoDuty.Managers
             if (action.Arguments.Count > 1 && int.TryParse(action.Arguments[1], out int parsedWait) && parsedWait > 0)
                 wait = parsedWait;
             taskManager.Enqueue(() => VNavmesh_IPCSubscriber.Path_MoveTo([position], false), "Start-JumpTo-Move");
-            if (wait > 0)
-            {
-                taskManager.Enqueue(() => EzThrottler.Throttle("JumpTo", Convert.ToInt32(wait)), "JumpTo-Wait");
-                taskManager.Enqueue(() => EzThrottler.Check("JumpTo"), "JumpTo-Wait", new TaskManagerConfiguration(Convert.ToInt32(wait)));
-            }
+
+            taskManager.Enqueue(() => EzThrottler.Throttle("JumpTo", Convert.ToInt32(wait)), "JumpTo-Wait");
+            taskManager.Enqueue(() => EzThrottler.Check("JumpTo"),                           "JumpTo-Wait", new TaskManagerConfiguration(Convert.ToInt32(wait)));
+
             taskManager.Enqueue(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2), "JumpTo");
-            taskManager.Enqueue(() => MovementHelper.Move(position, useMesh:false), "Finish-JumpTo-Move");
+            taskManager.Enqueue(() => MovementHelper.Move(position, useMesh: false),                    "Finish-JumpTo-Move");
         }
 
         public void ChatCommand(PathAction action)
@@ -391,11 +390,11 @@ namespace AutoDuty.Managers
 
         public unsafe void Wait(int ms)
         {
-            if (Plugin.stopForCombat)
+            if (Plugin.DutyData?.StopForCombat ?? true)
                 taskManager.Enqueue(() => !Player.Character->InCombat, "Wait", new TaskManagerConfiguration(int.MaxValue));
             taskManager.Enqueue(() => EzThrottler.Throttle("Wait", ms), "Wait");
             taskManager.Enqueue(() => EzThrottler.Check("Wait"),                                          "Wait", new TaskManagerConfiguration(ms));
-            if (Plugin.stopForCombat)
+            if (Plugin.DutyData?.StopForCombat ?? true)
                 taskManager.Enqueue(() => !Player.Character->InCombat, "Wait", new TaskManagerConfiguration(int.MaxValue));
         }
 
@@ -575,7 +574,7 @@ namespace AutoDuty.Managers
                                 }, "KillInRange-Main", new TaskManagerConfiguration(int.MaxValue));
             taskManager.Enqueue(() =>
                                 {
-                                    if(!Plugin.stopForCombat)
+                                    if(!Plugin.DutyData?.StopForCombat ?? true)
                                         BossMod_IPCSubscriber.SetMovement(false);
                                 }, "KillInRange-StopForCombat");
             taskManager.Enqueue(() => Plugin.action = "");
@@ -696,12 +695,12 @@ namespace AutoDuty.Managers
 
             IGameObject? gameObject = null;
             Plugin.action = $"Interactable";
-            taskManager.Enqueue(() => Player.Character->InCombat && Plugin.stopForCombat || 
+            taskManager.Enqueue(() => Player.Character->InCombat && (Plugin.DutyData?.StopForCombat ?? true) || 
                                       (gameObject = Svc.Objects.Where(x => x.BaseId.EqualsAny(dataIds) && x.IsTargetable).OrderBy(GetDistanceToPlayer).FirstOrDefault()) != null, "Interactable-GetGameObjectUnlessInCombat");
             taskManager.Enqueue(() => { Plugin.action = $"Interactable: {gameObject?.BaseId}"; }, "Interactable-SetActionVar");
             taskManager.Enqueue(() =>
             {
-                if (Player.Character->InCombat && Plugin.stopForCombat)
+                if (Player.Character->InCombat && (Plugin.DutyData?.StopForCombat ?? true))
                 {
                     taskManager.Abort();
                     taskManager.Enqueue(() => !Player.Character->InCombat, "Interactable-InCombatWait", new TaskManagerConfiguration(int.MaxValue));
@@ -931,14 +930,14 @@ namespace AutoDuty.Managers
                     switch (action.Arguments[0])
                     {
                         case "1":
-                            Plugin.FrameworkUpdateInDuty += this.PraeFrameworkUpdateMount;
+                            Plugin.DutyData?.FrameworkUpdateInDuty += this.PraeFrameworkUpdateMount;
                             this.Interactable(new PathAction { Arguments = ["2012819"] });
                             break;
                         case "2":
-                            Plugin.FrameworkUpdateInDuty -= this.PraeFrameworkUpdateMount;
+                            Plugin.DutyData?.FrameworkUpdateInDuty -= this.PraeFrameworkUpdateMount;
                             break;
                         case "3":
-                            Plugin.FrameworkUpdateInDuty += this.PraeFrameworkUpdateGaius;
+                            Plugin.DutyData?.FrameworkUpdateInDuty += this.PraeFrameworkUpdateGaius;
                             break;
                     }
                     break;
@@ -1121,7 +1120,7 @@ namespace AutoDuty.Managers
                             taskManager.Enqueue(() =>
                                                 {
                                                     this.Rotation(false);
-                                                    Plugin.stopForCombat = false;
+                                                    Plugin.DutyData?.StopForCombat = false;
                                                 }, "DutySpecificCode-MerchantsTale-2-Setup");
                             taskManager.EnqueueDelay(500);
                             taskManager.Enqueue(() =>
@@ -1145,7 +1144,7 @@ namespace AutoDuty.Managers
                             taskManager.Enqueue(() =>
                                                 {
                                                     this.Rotation(true);
-                                                    Plugin.stopForCombat = true;
+                                                    Plugin.DutyData?.StopForCombat = true;
                                                 }, "DutySpecificCode-MerchantsTale-RotationOn");
                             break;
                     }

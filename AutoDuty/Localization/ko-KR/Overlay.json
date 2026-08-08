@@ -8,7 +8,8 @@
       "Repair": "수리",
       "Equip": "장비 갱신",
       "Coffers": "상자 개봉",
-      "TripleTriad": "트리플 트라이어드"
+      "TripleTriad": "트리플 트라이어드",
+      "Armoire": "추억의 보관함"
     },
     "Tooltip": {
       "TurnIn": "클릭하면 총사령부 납품 장소로 이동하여 AutoRetainer의 총사령부 납품을 실행합니다",

@@ -115,6 +115,7 @@ namespace AutoDuty.Windows
             PluginInstallLine(ExternalPlugin.Pandora,      Loc.Get("InfoTab.PluginDesc.Pandora"));
             PluginInstallLine(ExternalPlugin.Gearsetter,   Loc.Get("InfoTab.PluginDesc.Gearsetter"));
             PluginInstallLine(ExternalPlugin.Stylist,      Loc.Get("InfoTab.PluginDesc.Stylist"));
+            PluginInstallLine(ExternalPlugin.GlamourLog,      Loc.Get("InfoTab.PluginDesc.GlamourLog"));
 
 
             ImGui.Columns(1);

@@ -163,7 +163,7 @@
         "Z": -28.65
       },
       "Arguments": [
-        ""
+        "false"
       ],
       "Conditions": [],
       "Note": ""
@@ -289,6 +289,10 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 319,
+        "Change": "Improved transition off the broken section in arm 2"
       }
     ],
     "Notes": []

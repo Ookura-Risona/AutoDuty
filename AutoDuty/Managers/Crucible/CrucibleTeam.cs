@@ -19,17 +19,27 @@ namespace AutoDuty.Managers
     public record CrucibleFamiliar
     {
         public uint   Number             { get; set; }
-        public string Name               { get; set; } = "";
-        public int    Rank               { get; set; }
+        public string Name               { get; set; } = string.Empty;
+
+        public int Rank
+        {
+            get;
+            set
+            {
+                if (value > field)
+                    field = value;
+            }
+        }
+
         public int    Hp                 { get; set; }
         public int    Strength           { get; set; }
         public int    PhysicalResistance { get; set; }
         public int    Constitution       { get; set; }
         public int    Intelligence       { get; set; }
         public int    MagicResistance    { get; set; }
-        public string Exp                { get; set; } = "";
-        public string Classification     { get; set; } = "";
-        public string Element            { get; set; } = "";
+        public string Exp                { get; set; } = string.Empty;
+        public string Classification     { get; set; } = string.Empty;
+        public string Element            { get; set; } = string.Empty;
 
         public int Score() => this.Hp + this.Strength + this.PhysicalResistance + this.Constitution + this.Intelligence + this.MagicResistance;
     }
@@ -49,14 +59,12 @@ namespace AutoDuty.Managers
         private static readonly string[]  DetailWindows = ["XBMMonsterBookDetail", "XBMPetActionDetail"];
         private static readonly TimeSpan CacheInterval = TimeSpan.FromMilliseconds(750);
 
-        private static SortedDictionary<uint, string>? sheetNames;
-
         private static SortedDictionary<uint, string> SheetNames
         {
             get
             {
-                if (sheetNames != null)
-                    return sheetNames;
+                if (field != null)
+                    return field;
 
                 SortedDictionary<uint, string> names = [];
                 try
@@ -72,7 +80,7 @@ namespace AutoDuty.Managers
                     names.Clear();
                 }
 
-                return sheetNames = names;
+                return field = names;
             }
         }
 
@@ -290,8 +298,18 @@ namespace AutoDuty.Managers
 
             Dictionary<uint, CrucibleFamiliar> familiars = Mine(true)!.Familiars;
             familiars.TryGetValue(seen.Number, out CrucibleFamiliar? before);
+
+            if (seen != before)
+            {
+                if(before != null)
+                    if (seen.Rank < before.Rank)
+                        return false;
+
             familiars[seen.Number] = seen;
-            return seen != before;
+                return true;
+        }
+
+            return false;
         }
 
         private static bool RememberFamiliarFromTeamRow(uint number, CrucibleUi.TeamRow row)

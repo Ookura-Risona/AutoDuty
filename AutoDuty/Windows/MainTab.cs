@@ -291,7 +291,7 @@ namespace AutoDuty.Windows
                             if (ImGui.Selectable(Loc.Get($"MainTab.Modes.{mode}"), AutoDuty.Configuration.Meta.AutoDutyModeEnum == mode))
                             {
                                 AutoDuty.Configuration.Meta.AutoDutyModeEnum = mode;
-                               ConfigurationProfileV2.Save();
+                                ConfigurationProfileV2.Save();
                             }
 
                         if (ImGui.Selectable(Loc.Get("MainTab.Modes.NoviceHall")))
@@ -350,14 +350,14 @@ namespace AutoDuty.Windows
                             ImGui.TextColored(AutoDuty.Configuration.Meta.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, Loc.Get("MainTab.SelectDutyMode"));
                             ImGui.SameLine(0);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
-                            if (ImGui.BeginCombo("##DutyModeEnum", Loc.Get($"MainTab.DutyModes.{AutoDuty.Configuration.Meta.DutyModeEnum}")))
+                            if (ImGui.BeginCombo("##DutyModeEnum", Loc.Get($"MainTab.DutyModes.{AutoDuty.Configuration.Meta.DutyModeEnum}"), ImGuiComboFlags.HeightLargest))
                             {
                                 foreach (DutyMode mode in Enum.GetValues(typeof(DutyMode)))
                                     //if(mode is not DutyMode.NoviceHall)
                                     if (ImGui.Selectable(Loc.Get($"MainTab.DutyModes.{mode}"), AutoDuty.Configuration.Meta.DutyModeEnum == mode))
                                     {
                                         AutoDuty.Configuration.Meta.DutyModeEnum = mode;
-                                       ConfigurationProfileV2.Save();
+                                        ConfigurationProfileV2.Save();
                                     }
 
                                 ImGui.EndCombo();
@@ -949,7 +949,7 @@ namespace AutoDuty.Windows
             float rowHeight = ImGui.GetFrameHeightWithSpacing();
             float height    = Math.Min(owned.Count + 1, 12) * rowHeight + 4 * scale;
 
-            ImGuiTableFlags flags = ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.ScrollY | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.PadOuterX;
+            const ImGuiTableFlags flags = ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.ScrollY | ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.PadOuterX;
             if (!ImGui.BeginTable("##CrucibleTable", 6, flags, new Vector2(0, height)))
                 return;
 

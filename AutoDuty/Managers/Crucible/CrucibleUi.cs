@@ -5,12 +5,14 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Managers
 {
-    using Helpers;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using ECommons;
+    using ECommons.UIHelpers.AtkReaderImplementations;
+    using Helpers;
 
     internal static unsafe class CrucibleUi
     {
@@ -275,38 +277,48 @@ namespace AutoDuty.Managers
             return owned;
         }
 
+        public static IEnumerable<uint> BestiaryShowing(AtkUnitBase* notebook)
+        {
+            ReaderXBMMonsterNotebook x = new(notebook);
+            return x.CurrentPageEntries.Select(m => m.Number);
+        }
+
         public static bool BestiaryShows(AtkUnitBase* notebook, uint number)
         {
-            int slot  = (int)(number - 1) % BestiaryPageSize;
-            int label = 29 + slot * 8;
-            return label < notebook->AtkValuesCount && Digits(notebook->AtkValues[label].GetValueAsString()) == number;
+            ReaderXBMMonsterNotebook x = new(notebook);
+
+            foreach (ReaderXBMMonsterNotebook.MonsterEntry entry in x.CurrentPageEntries)
+                if (entry.Number == number)
+                    return true;
+
+            return false;
         }
 
         public static CrucibleFamiliar? BestiarySelected(AtkUnitBase* notebook)
         {
-            if (notebook->AtkValuesCount <= 273 || notebook->AtkValues[255].Byte == 0)
+            ReaderXBMMonsterNotebook reader = new(notebook);
+
+            if (notebook->AtkValuesCount <= 273 || !reader.Selected)
                 return null;
 
-            string Value(int index) => notebook->AtkValues[index].Type.ToString().Contains("String") ? notebook->AtkValues[index].GetValueAsString().Trim() : "";
-
-            uint number = (uint)Digits(Value(229));
-            int  rank   = Digits(Value(258));
+            uint number = reader.SelectedNumber;
+            int  rank   = reader.SelectedRank;
             if (number == 0 || rank == 0)
                 return null;
 
             return new CrucibleFamiliar
                    {
                        Number             = number,
-                       Name               = Value(230),
+                       Name               = reader.SelectedName.GetText(),
                        Rank               = rank,
-                       Hp                 = MaxOf(Value(259)),
-                       Exp                = Value(260),
-                       Strength           = Digits(Value(265)),
-                       PhysicalResistance = Digits(Value(267)),
-                       Constitution       = Digits(Value(269)),
-                       Intelligence       = Digits(Value(271)),
-                       MagicResistance    = Digits(Value(273)),
-                       Classification     = Value(239)
+                       Hp                 = reader.SelectedMaxHP,
+                       Exp                = reader.SelectedXP.ToString(),
+                       Strength           = reader.SelectedStrength,
+                       PhysicalResistance = reader.SelectedPhysResistance,
+                       Constitution       = reader.SelectedConstitution,
+                       Intelligence       = reader.SelectedIntelligence,
+                       MagicResistance    = reader.SelectedMagicResistance,
+                       Classification     = reader.Classification.GetText()
                    };
         }
 
@@ -485,7 +497,7 @@ namespace AutoDuty.Managers
             {
                 private const uint FirstEntryParam = 4;
 
-                public static void ShowPage(AtkUnitBase* notebook, int page) => AddonHelper.FireCallBack(notebook, true, 3, page);
+                public static void ShowPage(AtkUnitBase* notebook, uint page) => AddonHelper.FireCallBack(notebook, true, 3, page);
 
                 public static bool PickEntry(AtkUnitBase* notebook, uint slotOnPage)
                 {

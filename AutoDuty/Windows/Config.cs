@@ -11,15 +11,19 @@ using ECommons.ImGuiMethods;
 
 namespace AutoDuty.Windows;
 
+using Configurations;
 using Dalamud.Game.ClientState.Objects.Types;
 using Data;
 using ECommons.ExcelServices;
 using ECommons.GameFunctions;
 using ECommons.IPC.Subscribers.RotationSolverReborn;
+using ECommons.UIHelpers.AtkReaderImplementations;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 using FFXIVClientStructs.FFXIV.Client.LayoutEngine;
 using FFXIVClientStructs.FFXIV.Client.UI.Info;
 using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 using FFXIVClientStructs.Interop;
 using FFXIVClientStructs.STD;
 using Lumina.Excel.Sheets;
@@ -29,8 +33,6 @@ using Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Configurations;
-using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 using Achievement = Lumina.Excel.Sheets.Achievement;
 using Vector2 = FFXIVClientStructs.FFXIV.Common.Math.Vector2;
 
@@ -415,6 +417,22 @@ public static class ConfigTab
                                     ImGuiEx.Text($"{item.Text} - {item.CurrentCount}/{item.NeededCount} - {item.NeededPercentage}% ~ {item.Enabled} - {item.Type} - Complete: {item.Complete} - {item.CurrentCount == item.NeededCount}");
                                 }
                             }
+                        }
+                    }
+                }
+
+                if (ImGui.CollapsingHeader("XBMBestiary"))
+                {
+                    unsafe
+                    {
+                        if (GenericHelpers.TryGetAddonByName("XBMMonsterNotebook", out AtkUnitBase* addon))
+                        {
+                            ReaderXBMMonsterNotebook x = new(addon);
+
+                            ImGui.Text("Page: " + (x.CurrentPage+1) + "/" + x.PageCount);
+
+                            foreach (ReaderXBMMonsterNotebook.MonsterEntry entry in x.CurrentPageEntries)
+                                ImGui.Text($"Mob: {entry.Number} | {entry.Caught}");
                         }
                     }
                 }

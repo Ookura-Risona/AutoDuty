@@ -8,11 +8,12 @@ using Newtonsoft.Json;
 
 namespace AutoDuty.Managers
 {
+    using ECommons.Throttlers;
+    using ECommons.UIHelpers.AtkReaderImplementations;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using ECommons.Throttlers;
     using Screens = CrucibleUi.Screens;
 
     [JsonObject(MemberSerialization.OptOut)]
@@ -228,8 +229,6 @@ namespace AutoDuty.Managers
             if (!Player.Available)
                 return;
 
-            Svc.Log.Debug("Crucible Team - Update Cache");
-
             bool changed = false;
             foreach (string window in DetailWindows)
                 if (CrucibleUi.FamiliarDetail(window) is { } seen)
@@ -305,9 +304,9 @@ namespace AutoDuty.Managers
                     if (seen.Rank < before.Rank)
                         return false;
 
-            familiars[seen.Number] = seen;
+                familiars[seen.Number] = seen;
                 return true;
-        }
+            }
 
             return false;
         }
@@ -561,7 +560,9 @@ namespace AutoDuty.Managers
 
             if (this.scanQueue == null)
             {
-                this.scanQueue   = CrucibleTeam.MissingRanks();
+                IEnumerable<uint> showing = CrucibleUi.BestiaryShowing(notebook);
+
+                this.scanQueue   = CrucibleTeam.MissingRanks().OrderByDescending(showing.Contains).ThenBy(x => x).ToList();
                 this.scanTotal   = this.scanQueue.Count;
                 this.scanFrom    = now;
                 this.scanChanged = false;
@@ -602,7 +603,7 @@ namespace AutoDuty.Managers
                 else if (!this.scanRetried && now - this.scanStarted > ScanRetry)
                 {
                     this.scanRetried = true;
-                    Screens.Notebook.PickEntry(notebook, SlotOf(this.scanning));
+                    Screens.Notebook.PickEntry(notebook, SlotOf(notebook, this.scanning));
                 }
 
                 return false;
@@ -623,7 +624,7 @@ namespace AutoDuty.Managers
                 return false;
 
             this.Status = $"Reading familiar ranks ({this.scanTotal - this.scanQueue.Count + 1}/{this.scanTotal})";
-            if (!Screens.Notebook.PickEntry(notebook, SlotOf(next)))
+            if (!Screens.Notebook.PickEntry(notebook, SlotOf(notebook, next)))
             {
                 Svc.Log.Warning($"[Crucible] Couldn't click No. {next} in the bestiary; skipping it");
                 this.scanQueue.Remove(next);
@@ -635,6 +636,20 @@ namespace AutoDuty.Managers
             this.scanRead    = null;
             this.scanRetried = false;
             return false;
+        }
+
+        private uint SlotOf(AtkUnitBase* notebook, uint number)
+        {
+            ReaderXBMMonsterNotebook x = new(notebook);
+
+            for (int index = 0; index < x.CurrentPageEntries.Count; index++)
+            {
+                ReaderXBMMonsterNotebook.MonsterEntry entry = x.CurrentPageEntries[index];
+                if (entry.Number == number)
+                    return (uint) index;
+            }
+
+            return 0;
         }
 
         private void StartScanClear(AtkUnitBase* party, int teamCount, DateTime now)
@@ -802,11 +817,12 @@ namespace AutoDuty.Managers
                 return false;
             }
 
-            uint showing = missing.FirstOrDefault(x => CrucibleUi.BestiaryShows(bestiary, x));
-            int  page    = showing == 0 ? -1 : PageOf(showing);
 
             this.batch.Clear();
-            this.batch.AddRange(missing.OrderBy(x => PageOf(x) == page ? 0 : 1).ThenBy(x => x));
+
+            IEnumerable<uint> showing = CrucibleUi.BestiaryShowing(bestiary);
+
+            this.batch.AddRange(missing.OrderBy(x => showing.Contains(x) ? 0 : 1).ThenBy(x => x));
             this.batchTotal = this.batch.Count;
             this.SetStep(Step.AddBatch, now);
             return false;
@@ -836,7 +852,7 @@ namespace AutoDuty.Managers
             }
 
             this.Status = $"Adding {CrucibleTeam.NameOf(next)} ({this.batchTotal - this.batch.Count + 1}/{this.batchTotal})";
-            if (!Screens.Notebook.PickEntry(bestiary, SlotOf(next)))
+            if (!Screens.Notebook.PickEntry(bestiary, SlotOf(bestiary, next)))
                 return this.Fail($"Couldn't pick No. {next} in the bestiary.");
 
             this.batch.RemoveAt(0);
@@ -851,7 +867,10 @@ namespace AutoDuty.Managers
 
             if (now - this.requestedAt > Resend)
             {
-                Screens.Notebook.ShowPage(notebook, PageOf(number));
+                Svc.Log.Debug($"Crucible Team - Switch to Page for {number}");
+                ReaderXBMMonsterNotebook monsterNotebook = new(notebook);
+
+                Screens.Notebook.ShowPage(notebook, (monsterNotebook.CurrentPage + 1) % monsterNotebook.PageCount);
                 this.requestedAt = now;
             }
 
@@ -863,12 +882,6 @@ namespace AutoDuty.Managers
             Screens.PetParty.OpenBestiary(party);
             this.requestedAt = now;
         }
-
-        private static int PageOf(uint number) =>
-            (int)(number - 1) / CrucibleUi.BestiaryPageSize;
-
-        private static uint SlotOf(uint number) =>
-            (number - 1) % CrucibleUi.BestiaryPageSize;
 
         private void SetStep(Step next, DateTime now)
         {

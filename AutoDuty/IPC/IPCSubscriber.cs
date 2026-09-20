@@ -370,6 +370,7 @@ namespace AutoDuty.IPC
             RotationSolverReborn.OtherCommand(RotationSolverRebornIPC.OtherCommandType.Settings, $"HostileType {AutoDuty.Configuration.DutyConfig.RSR.TargetHostileType}");
             RotationSolverReborn.OtherCommand(RotationSolverRebornIPC.OtherCommandType.Settings, "FriendlyPartyNpcHealRaise3 true");
             RotationSolverReborn.OtherCommand(RotationSolverRebornIPC.OtherCommandType.Settings, "AutoOffAfterCombat false");
+            RotationSolverReborn.OtherCommand(RotationSolverRebornIPC.OtherCommandType.Settings, "TargetFreely true");
             RotationSolverReborn.AutodutyChangeOperatingMode(RotationSolverRebornIPC.StateCommandType.AutoDuty, Plugin.currentPlayerItemLevelAndClassJob.Value.GetCombatRole() == CombatRole.Tank ?
                                                                                                                     AutoDuty.Configuration.DutyConfig.RSR.TargetingTypeTank :
                                                                                                                     AutoDuty.Configuration.DutyConfig.RSR.TargetingTypeNonTank);

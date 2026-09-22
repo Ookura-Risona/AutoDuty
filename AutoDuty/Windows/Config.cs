@@ -421,20 +421,54 @@ public static class ConfigTab
                     }
                 }
 
-                if (ImGui.CollapsingHeader("XBMBestiary"))
+                if (ImGui.CollapsingHeader("XBM"))
                 {
-                    unsafe
+                    ImGui.Indent();
+                    if (ImGui.CollapsingHeader("XBMBestiary"))
                     {
-                        if (GenericHelpers.TryGetAddonByName("XBMMonsterNotebook", out AtkUnitBase* addon))
+                        unsafe
                         {
-                            ReaderXBMMonsterNotebook x = new(addon);
+                            if (GenericHelpers.TryGetAddonByName("XBMMonsterNotebook", out AtkUnitBase* addon))
+                            {
+                                ReaderXBMMonsterNotebook x = new(addon);
 
-                            ImGui.Text("Page: " + (x.CurrentPage+1) + "/" + x.PageCount);
+                                ImGui.Text("Page: " + (x.CurrentPage + 1) + "/" + x.PageCount);
 
-                            foreach (ReaderXBMMonsterNotebook.MonsterEntry entry in x.CurrentPageEntries)
-                                ImGui.Text($"Mob: {entry.Number} | {entry.Caught}");
+                                foreach (ReaderXBMMonsterNotebook.MonsterEntry entry in x.CurrentPageEntries)
+                                    ImGui.Text($"Mob: {entry.Number} | {entry.Caught}");
+                            }
                         }
                     }
+
+                    if (ImGui.CollapsingHeader("XBMShop"))
+                    {
+                        unsafe
+                        {
+                            if (GenericHelpers.TryGetAddonByName("XBMContentsItemShop", out AtkUnitBase* addon))
+                            {
+                                ReaderXBMContentsItemShop x = new(addon);
+                                ImGui.Text($"Coins: {x.Coins}");
+                                ImGui.Text("Stock:");
+                                ImGui.Indent();
+                                foreach (ReaderXBMContentsItemShop.StockEntry entry in x.StockEntries)
+                                    ImGui.Text($"Shop: {entry.Listed} | {entry.Item} | {entry.PriceString} | {entry.Price} | {entry.Discounted} | {entry.Bought}");
+                                ImGui.Unindent();
+
+                                ImGui.Text("Gear:");
+                                ImGui.Indent();
+                                foreach (ReaderXBMContentsItemShop.ItemEntry entry in x.ItemEntries)
+                                    ImGui.Text($"Gear: {entry.Unk0} | {entry.Sellable} | {entry.IconId} | {entry.Id} | {entry.Name}");
+                                ImGui.Unindent();
+
+                                ImGui.Text("Owned:");
+                                ImGui.Indent();
+                                foreach (ReaderXBMContentsItemShop.GearEntry entry in x.OwnedEntriesOwned)
+                                    ImGui.Text($"Owned: {entry.Owned} | {entry.Unk2} | {entry.Id} | {entry.Name}");
+                                ImGui.Unindent();
+                            }
+                        }
+                    }
+                    ImGui.Unindent();
                 }
 
                 if (ImGui.CollapsingHeader("Sheet Check"))

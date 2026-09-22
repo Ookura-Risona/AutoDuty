@@ -11,6 +11,7 @@ namespace AutoDuty.Managers
     using System.Linq;
     using System.Text.RegularExpressions;
     using ECommons;
+    using ECommons.UIHelpers;
     using ECommons.UIHelpers.AtkReaderImplementations;
     using Helpers;
 
@@ -39,8 +40,6 @@ namespace AutoDuty.Managers
         public readonly record struct TeamRow(string Name, int Rank, int Hp, int Strength, int PhysicalResistance, int Constitution, int Intelligence, int MagicResistance, int CurrentHp);
 
         public readonly record struct Choice(uint NodeId, uint Param, string Text);
-
-        public readonly record struct ShopEntry(int Index, uint Row, int Price, bool Bought);
 
         public static AtkUnitBase* Ready(string name)
         {
@@ -199,83 +198,17 @@ namespace AutoDuty.Managers
             return items;
         }
 
-        private static class ShopValues
-        {
-            public const int Coins      = 1; 
-            public const int StockCount = 2;
-
-            public const int StockStart   = 3;
-            public const int StockListed  = 0; 
-            public const int StockItem    = 1; 
-            public const int StockPrice   = 2; 
-            public const int StockBought  = 4; 
-
-            public const int HeldStart = 154;
-            public const int HeldItem  = 3;    
-
-            public const int GearStart = 205;
-            public const int GearOwned = 0;    
-            public const int GearItem  = 3;   
-
-            public const int Stride = 5;
-            public const int Slots  = 10;
-        }
-
         public static int ShopCoins(AtkUnitBase* shop) =>
-            shop->AtkValuesCount > ShopValues.Coins ? FirstNumber(shop->AtkValues[ShopValues.Coins].GetValueAsString()) : 0;
+            (int)new ReaderXBMContentsItemShop(shop).Coins;
 
-        public static List<ShopEntry> ShopStock(AtkUnitBase* shop)
-        {
-            List<ShopEntry> stock = [];
-            if (shop->AtkValuesCount <= ShopValues.StockCount)
-                return stock;
+        public static List<ReaderXBMContentsItemShop.StockEntry> ShopStock(AtkUnitBase* shop) => 
+            new ReaderXBMContentsItemShop(shop).StockEntries;
 
-            int count = (int)AsUInt(shop->AtkValues[ShopValues.StockCount]);
-            for (int i = 0; i < count; i++)
-            {
-                int at = ShopValues.StockStart + i * ShopValues.Stride;
-                if (at + ShopValues.StockBought >= shop->AtkValuesCount)
-                    break;
+        public static HashSet<uint> ShopHeldItems(AtkUnitBase* shop) => 
+            new ReaderXBMContentsItemShop(shop).ItemEntriesValid.Select(ie => ie.Id).ToHashSet();
 
-                uint row = AsUInt(shop->AtkValues[at + ShopValues.StockItem]);
-                if (shop->AtkValues[at + ShopValues.StockListed].Byte == 0 || row == 0)
-                    continue;
-
-                stock.Add(new ShopEntry(i, row,
-                                        FirstNumber(shop->AtkValues[at + ShopValues.StockPrice].GetValueAsString()),
-                                        shop->AtkValues[at + ShopValues.StockBought].Byte != 0));
-            }
-
-            return stock;
-        }
-
-        public static int ShopHeldItems(AtkUnitBase* shop)
-        {
-            int held = 0;
-            for (int k = 0; k < ShopValues.Slots; k++)
-            {
-                int at = ShopValues.HeldStart + k * ShopValues.Stride + ShopValues.HeldItem;
-                if (at < shop->AtkValuesCount && AsUInt(shop->AtkValues[at]) != 0)
-                    held++;
-            }
-
-            return held;
-        }
-
-        public static HashSet<uint> ShopOwnedGear(AtkUnitBase* shop)
-        {
-            HashSet<uint> owned = [];
-            for (int k = 0; k < ShopValues.Slots; k++)
-            {
-                int at = ShopValues.GearStart + k * ShopValues.Stride;
-                if (at + ShopValues.GearItem >= shop->AtkValuesCount || shop->AtkValues[at + ShopValues.GearOwned].Byte == 0)
-                    continue;
-
-                owned.Add(AsUInt(shop->AtkValues[at + ShopValues.GearItem]));
-            }
-
-            return owned;
-        }
+        public static HashSet<uint> ShopOwnedGear(AtkUnitBase* shop) => 
+            new ReaderXBMContentsItemShop(shop).OwnedEntriesOwned.Select(ge => ge.Id).ToHashSet();
 
         public static IEnumerable<uint> BestiaryShowing(AtkUnitBase* notebook)
         {

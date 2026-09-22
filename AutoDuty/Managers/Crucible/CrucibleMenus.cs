@@ -8,6 +8,7 @@ namespace AutoDuty.Managers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using ECommons.UIHelpers.AtkReaderImplementations;
     using Screens = CrucibleUi.Screens;
 
     internal sealed unsafe class CrucibleMenus
@@ -38,7 +39,7 @@ namespace AutoDuty.Managers
         private List<int>? restPicks;
         private int        restStep;
 
-        private readonly HashSet<int> shopTried = [];
+        private readonly HashSet<uint> shopTried = [];
         private DateTime   shopNext;
         private DateTime   feedFrom = DateTime.MinValue;
         private List<int>? feedOrder;
@@ -279,8 +280,8 @@ namespace AutoDuty.Managers
             if (CrucibleUi.IsOpen(CrucibleUi.YesNo) || CrucibleUi.IsOpen(CrucibleUi.TeamWindow))
                 return;
 
-            int coins = CrucibleUi.ShopCoins(shop);
-            List<CrucibleUi.ShopEntry> affordable = CrucibleUi.ShopStock(shop).Where(x => !x.Bought && x.Price <= coins && !this.shopTried.Contains(x.Index)).ToList();
+            int                                       coins      = CrucibleUi.ShopCoins(shop);
+            List<ReaderXBMContentsItemShop.StockEntry> affordable = CrucibleUi.ShopStock(shop).Where(x => !x.Bought && x.Price <= coins && !this.shopTried.Contains(x.Item)).ToList();
 
             if (this.ChooseBuy(affordable, CrucibleUi.ShopHeldItems(shop), CrucibleUi.ShopOwnedGear(shop)) is not { } buy)
             {
@@ -297,15 +298,15 @@ namespace AutoDuty.Managers
                 return;
             }
 
-            this.Status = $"Buying {CrucibleItemData.NameOf(buy.Row)} for {buy.Price}";
-            Svc.Log.Info($"[Crucible] Shop: buying {CrucibleItemData.NameOf(buy.Row)} for {buy.Price} of {coins} coins");
+            this.Status = $"Buying {CrucibleItemData.NameOf(buy.Item)} for {buy.Price}";
+            Svc.Log.Info($"[Crucible] Shop: buying {CrucibleItemData.NameOf(buy.Item)} for {buy.Price} of {coins} coins");
 
-            this.shopTried.Add(buy.Index);
-            Screens.ItemShop.Buy(shop, buy.Index);
+            this.shopTried.Add(buy.Item);
+            Screens.ItemShop.Buy(shop, buy.purchaseIndex);
             this.confirmFrom = now;
             this.shopNext    = now + ShopStep;
 
-            if (CrucibleItemData.ShopFeed.Contains(buy.Row))
+            if (CrucibleItemData.ShopFeed.Contains(buy.Item))
             {
                 this.fedThisVisit = true;
                 this.feedFrom     = now;
@@ -314,22 +315,22 @@ namespace AutoDuty.Managers
             }
         }
 
-        private CrucibleUi.ShopEntry? ChooseBuy(List<CrucibleUi.ShopEntry> stock, int held, HashSet<uint> ownedGear)
+        private ReaderXBMContentsItemShop.StockEntry? ChooseBuy(List<ReaderXBMContentsItemShop.StockEntry> stock, HashSet<uint> held, HashSet<uint> ownedGear)
         {
-            if (held < ItemCap && FirstInStock(stock, CrucibleItemData.ShopHealing) is { } healing)
+            if (held.Count < ItemCap && FirstInStock(stock, CrucibleItemData.ShopHealing, held) is { } healing)
                 return healing;
 
-            if (FirstInStock(stock.Where(x => !ownedGear.Contains(x.Row)), CrucibleItemData.ShopGear) is { } gear)
+            if (FirstInStock(stock.Where(x => !ownedGear.Contains(x.Item)), CrucibleItemData.ShopGear, held) is { } gear)
                 return gear;
 
-            return this.fedThisVisit ? null : FirstInStock(stock, CrucibleItemData.ShopFeed);
+            return this.fedThisVisit ? null : FirstInStock(stock, CrucibleItemData.ShopFeed, held);
         }
 
-        private static CrucibleUi.ShopEntry? FirstInStock(IEnumerable<CrucibleUi.ShopEntry> stock, uint[] priority)
+        private static ReaderXBMContentsItemShop.StockEntry? FirstInStock(IEnumerable<ReaderXBMContentsItemShop.StockEntry> stock, uint[] priority, HashSet<uint> owned)
         {
-            Dictionary<uint, CrucibleUi.ShopEntry> byRow = stock.GroupBy(x => x.Row).ToDictionary(g => g.Key, g => g.First());
+            Dictionary<uint, ReaderXBMContentsItemShop.StockEntry> byRow = stock.GroupBy(x => x.Item).ToDictionary(g => g.Key, g => g.First());
             foreach (uint row in priority)
-                if (byRow.TryGetValue(row, out CrucibleUi.ShopEntry entry))
+                if (!owned.Contains(row) && byRow.TryGetValue(row, out ReaderXBMContentsItemShop.StockEntry? entry))
                     return entry;
             return null;
         }

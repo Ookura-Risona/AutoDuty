@@ -54,7 +54,17 @@ namespace AutoDuty.Managers
 
     internal static unsafe class CrucibleTeam
     {
-        public const int TeamSize  = 10;
+        public static int TeamSize(uint? id = null) => (id ?? Plugin.CurrentTerritoryContent?.TerritoryType) switch
+        {
+            1339u => 10,
+            1340u => 12,
+            1341u => 14,
+            1342u => 12,
+            1343u => 15,
+            _ => 10
+        };
+
+
         public const int FightSize = 3;
 
         private static readonly string[]  DetailWindows = ["XBMMonsterBookDetail", "XBMPetActionDetail"];
@@ -157,7 +167,7 @@ namespace AutoDuty.Managers
         public static List<uint> Custom()
         {
             HashSet<uint> owned = Owned().ToHashSet();
-            return AutoDuty.Configuration.Meta.Crucible.CustomTeam.Distinct().Where(owned.Contains).Take(TeamSize).ToList();
+            return AutoDuty.Configuration.Meta.Crucible.CustomTeam.Distinct().Where(owned.Contains).Take(TeamSize()).ToList();
         }
 
         public static bool SetCustomPick(uint number, bool pick)
@@ -165,7 +175,7 @@ namespace AutoDuty.Managers
             List<uint> team = Custom();
             if (pick)
             {
-                if (team.Contains(number) || team.Count >= TeamSize || !Owned().Contains(number))
+                if (team.Contains(number) || team.Count >= TeamSize() || !Owned().Contains(number))
                     return false;
                 team.Add(number);
             }
@@ -181,7 +191,7 @@ namespace AutoDuty.Managers
         private static void SaveCustom(List<uint> team)
         {
             if (!OwnershipKnown)
-                team = team.Concat(AutoDuty.Configuration.Meta.Crucible.CustomTeam.Where(x => !team.Contains(x))).Distinct().Take(TeamSize).ToList();
+                team = team.Concat(AutoDuty.Configuration.Meta.Crucible.CustomTeam.Where(x => !team.Contains(x))).Distinct().Take(TeamSize()).ToList();
 
             AutoDuty.Configuration.Meta.Crucible.CustomTeam = team;
             ConfigurationProfileV2.Save();
@@ -196,12 +206,12 @@ namespace AutoDuty.Managers
             return Owned().OrderByDescending(x => cached.TryGetValue(x, out CrucibleFamiliar? f) ? f.Rank : -1)
                           .ThenByDescending(x => cached.TryGetValue(x, out CrucibleFamiliar? f) ? f.Score() : -1)
                           .ThenBy(x => x)
-                          .Take(TeamSize)
+                          .Take(TeamSize())
                           .ToList();
         }
 
         public static List<uint> Leveling() =>
-            Owned().OrderBy(x => LevelingKey(x)).ThenBy(x => x).Take(TeamSize).ToList();
+            Owned().OrderBy(x => LevelingKey(x)).ThenBy(x => x).Take(TeamSize()).ToList();
 
         public static (int Rank, float Exp) LevelingKey(uint number, int liveRank = 0)
         {
@@ -386,7 +396,7 @@ namespace AutoDuty.Managers
         private bool        scanChanged;
         private bool        scanRetried;
         private bool        scanClearing;
-        private int         scanCap = CrucibleTeam.TeamSize;
+        //private int         scanCap = CrucibleTeam.TeamSizeMax;
         private uint        scanRequeued;
         private int         clearTries;
 
@@ -408,7 +418,6 @@ namespace AutoDuty.Managers
             this.scanQueue      = null;
             this.scanning       = 0;
             this.scanClearing   = false;
-            this.scanCap        = CrucibleTeam.TeamSize;
             this.scanRequeued   = 0;
             this.clearTries     = 0;
             CrucibleTeam.Scanning = false;
@@ -589,7 +598,6 @@ namespace AutoDuty.Managers
                     if (teamCount > 0 && this.scanRequeued != this.scanning)
                     {
                         Svc.Log.Info($"[Crucible] The board won't take another familiar at {teamCount}; clearing it and re-reading No. {this.scanning}");
-                        this.scanCap      = Math.Min(this.scanCap, teamCount);
                         this.scanRequeued = this.scanning;
                         this.scanning     = 0;
                         this.StartScanClear(party, teamCount, now);
@@ -612,7 +620,7 @@ namespace AutoDuty.Managers
             if (this.scanQueue.Count == 0)
                 return this.FinishScan(now);
 
-            if (teamCount >= this.scanCap)
+            if (teamCount >= Screens.PetParty.GetTeamSize(party))
             {
                 Svc.Log.Info($"[Crucible] Board is holding {teamCount}; clearing it before reading more ranks");
                 this.StartScanClear(party, teamCount, now);

@@ -87,7 +87,7 @@ public sealed class MainWindow : Window, IDisposable
 
     internal static void StopResumePause()
     {
-        using (ImRaii.Disabled(!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running))
+        using (ImRaii.Disabled(!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && !ActiveHelper.AnyHelperRunning()))
         {
             if (ImGui.Button($"Stop###Stop2"))
             {
@@ -97,7 +97,7 @@ public sealed class MainWindow : Window, IDisposable
             ImGui.SameLine(0, 5);
         }
 
-        using (ImRaii.Disabled((!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && RepairHelper.State != ActionState.Running && GotoHelper.State != ActionState.Running && GotoInnHelper.State != ActionState.Running && GotoBarracksHelper.State != ActionState.Running && GCTurninHelper.State != ActionState.Running && ExtractHelper.State != ActionState.Running && DesynthHelper.State != ActionState.Running) || Plugin.CurrentTerritoryContent == null))
+        using (ImRaii.Disabled((!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.States.HasFlag(PluginState.Navigating) && !ActiveHelper.AnyHelperRunning()) || Plugin.CurrentTerritoryContent == null))
         {
             if (Plugin.Stage == Stage.Paused)
             {

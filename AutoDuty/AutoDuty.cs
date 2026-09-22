@@ -186,8 +186,11 @@ public sealed class AutoDuty : IDalamudPlugin
                     break;
             }
 
-            if(value is not Stage.Paused)
-                this.taskManager.StepMode = false;
+            if (value is not Stage.Paused)
+            {
+                this.taskManager.StepMode =  false;
+                this.States               &= ~PluginState.Paused;
+            }
 
             if (value is Stage.Stopped or Stage.Paused && !this.runStartTime.Equals(DateTime.UnixEpoch))
             {
@@ -240,11 +243,10 @@ public sealed class AutoDuty : IDalamudPlugin
 
     internal PluginState States
     {
-        get => field;
+        get;
         set
         {
             field = value;
-
 
             if (Configuration.DutyConfig.DisableRenderWhileActive)
                 if(field == PluginState.None)

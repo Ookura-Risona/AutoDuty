@@ -475,6 +475,7 @@ namespace AutoDuty.Managers
             {
                 private const uint RestOrReturnButton = 21;
 
+                public static int  GetTeamSize(AtkUnitBase*  party)          => (int) new ReaderXBMPetParty(party).TeamSize;
                 public static void Pick(AtkUnitBase*         party, int row) => AddonHelper.FireCallBack(party, true, 1, row);
                 public static void OpenRowMenu(AtkUnitBase*  party, int row) => AddonHelper.FireCallBack(party, true, 2, row);
                 public static void OpenBestiary(AtkUnitBase* party) => AddonHelper.FireCallBack(party, true, 5);

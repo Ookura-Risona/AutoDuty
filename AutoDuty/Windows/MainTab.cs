@@ -909,7 +909,7 @@ namespace AutoDuty.Windows
             IReadOnlyDictionary<uint, CrucibleFamiliar> cached = CrucibleTeam.Familiars;
             List<uint>                                  owned  = CrucibleTeam.Owned().ToList();
 
-            if (ImGui.CollapsingHeader($"{Loc.Get("MainTab.Crucible.Familiars", team.Count, CrucibleTeam.TeamSize)}###CrucibleFamiliars"))
+            if (ImGui.CollapsingHeader($"{Loc.Get("MainTab.Crucible.Familiars", team.Count, CrucibleTeam.TeamSize())}###CrucibleFamiliars"))
             {
                 using (ImRaii.Disabled(!ImGui.GetIO().KeyCtrl || cached.Count == 0))
                     if (ImGui.SmallButton(Loc.Get("MainTab.Crucible.ClearRanks")))
@@ -972,12 +972,12 @@ namespace AutoDuty.Windows
                     ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg1, ImGui.ColorConvertFloat4ToU32(CruciblePickedRow));
 
                 ImGui.TableNextColumn();
-                bool full = !picked && team.Count >= CrucibleTeam.TeamSize;
+                bool full = !picked && team.Count >= CrucibleTeam.TeamSize();
                 using (ImRaii.Disabled(!custom || full))
                     if (ImGui.Checkbox($"##CruciblePick{number}", ref picked))
                         CrucibleTeam.SetCustomPick(number, picked);
                 if (custom && full && ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                    ImGui.SetTooltip(Loc.Get("MainTab.Crucible.CustomFull", CrucibleTeam.TeamSize));
+                    ImGui.SetTooltip(Loc.Get("MainTab.Crucible.CustomFull", CrucibleTeam.TeamSize()));
 
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();

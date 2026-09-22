@@ -223,8 +223,12 @@ namespace AutoDuty.Managers
         {
             IEnumerable<int> alive = Enumerable.Range(0, team.Count).Where(row => team[row].Hp == 0 || team[row].CurrentHp > 0);
 
+            /*
             if (AutoDuty.Configuration.Meta.Crucible.TeamMode == CrucibleTeamMode.Leveling)
                 alive = alive.OrderBy(row => LevelingKey(NumberFor(team[row].Name), team[row].Rank)).ThenBy(row => row);
+            */
+
+            alive = alive.OrderByDescending(row => (NumberFor(team[row].Name), team[row].Rank)).ThenBy(row => row);
 
             return alive.ToList();
         }

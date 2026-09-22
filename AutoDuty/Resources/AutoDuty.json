@@ -341,13 +341,14 @@
         "Option": "Enabled"
       }
     ],
-    "BossMod.Autorotation.xan.VariantAI": [],
     "BossMod.Autorotation.xan.Caster": [
       {
         "Track": "Raise",
         "Option": "Swiftcast"
       }
     ],
+    "BossMod.Autorotation.xan.VariantAI": [],
+    "BossMod.Autorotation.xan.CrucibleAI": [],
     "BossMod.Autorotation.MiscAI.StayCloseToTarget": [],
     "BossMod.Autorotation.MiscAI.StayWithinLeylines": [
       {

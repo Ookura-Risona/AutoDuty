@@ -17,6 +17,7 @@ namespace AutoDuty.Managers
         private const int   RestPicks  = 2;
         private const float RestBelow  = 0.6f;
         private const int   ItemCap    = 10;
+        private const int   GearCap    = 10;
         private const float FightLow   = 0.4f;
         private const float BoardLow   = 0.6f;
 
@@ -179,8 +180,8 @@ namespace AutoDuty.Managers
             if (choices.Count == 0)
                 return;
 
-            var available = choices.Where(tc => !tc.Bought).ToList();
-            var best    = available.OrderBy(x => CrucibleItemData.TreasureRank(x.Item)).ThenBy(x => x.treasureIndex).First();
+            List<ReaderXBMContentsTreasure.TreasureChoice> available = choices.Where(tc => !tc.Bought).ToList();
+            ReaderXBMContentsTreasure.TreasureChoice       best      = available.OrderBy(x => CrucibleItemData.TreasureRank(x.Item)).ThenBy(x => x.treasureIndex).First();
 
             Svc.Log.Info($"[Crucible] Treasure: taking {Describe(best)} from {string.Join(" / ", available.Select(Describe))}");
 
@@ -321,7 +322,7 @@ namespace AutoDuty.Managers
             if (held.Count < ItemCap && FirstInStock(stock, CrucibleItemData.ShopHealing, held) is { } healing)
                 return healing;
 
-            if (FirstInStock(stock.Where(x => !ownedGear.Contains(x.Item)), CrucibleItemData.ShopGear, held) is { } gear)
+            if (ownedGear.Count < GearCap && FirstInStock(stock.Where(x => !ownedGear.Contains(x.Item)), CrucibleItemData.ShopGear, held) is { } gear)
                 return gear;
 
             return this.fedThisVisit ? null : FirstInStock(stock, CrucibleItemData.ShopFeed, held);

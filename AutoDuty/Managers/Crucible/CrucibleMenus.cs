@@ -175,23 +175,24 @@ namespace AutoDuty.Managers
         {
             this.next = now + Retry;
 
-            List<CrucibleUi.Choice> choices = CrucibleUi.Choices(treasure, Screens.Treasure.FirstItemParam);
+            List<ReaderXBMContentsTreasure.TreasureChoice> choices = CrucibleUi.Choices(treasure, Screens.Treasure.FirstItemParam);
             if (choices.Count == 0)
                 return;
 
-            var offered = choices.Select(x => (Choice: x, Item: CrucibleItemData.ItemIn(x.Text))).ToList();
-            var best    = offered.OrderBy(x => CrucibleItemData.TreasureRank(x.Item)).ThenBy(x => x.Choice.Param).First();
+            var available = choices.Where(tc => !tc.Bought).ToList();
+            var best    = available.OrderBy(x => CrucibleItemData.TreasureRank(x.Item)).ThenBy(x => x.treasureIndex).First();
 
-            Svc.Log.Info($"[Crucible] Treasure: taking {Describe(best)} from {string.Join(" / ", offered.Select(Describe))}");
+            Svc.Log.Info($"[Crucible] Treasure: taking {Describe(best)} from {string.Join(" / ", available.Select(Describe))}");
 
-            if (Screens.Treasure.Take(treasure, best.Choice.NodeId))
-            {
-                this.confirmFrom = now;
-                this.Status      = $"Taking {(best.Item != 0 ? CrucibleItemData.NameOf(best.Item) : best.Choice.Text)}";
-            }
+            Screens.Treasure.Take(treasure, (uint)best.treasureIndex);
 
-            static string Describe((CrucibleUi.Choice Choice, uint Item) x) =>
-                x.Item != 0 ? $"{CrucibleItemData.NameOf(x.Item)} ({x.Item})" : $"unknown \"{x.Choice.Text}\"";
+            this.confirmFrom = now;
+            this.Status      = $"Taking {(best.Item != 0 ? CrucibleItemData.NameOf(best.Item) : best.treasureIndex)}";
+
+            return;
+
+            static string Describe(ReaderXBMContentsTreasure.TreasureChoice choice) =>
+                $"{CrucibleItemData.NameOf(choice.Item)} ({choice.treasureIndex})";
         }
 
         private void Rest(AtkUnitBase* party, DateTime now)

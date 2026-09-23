@@ -122,31 +122,8 @@ namespace AutoDuty.Managers
             return null;
         }
 
-        public static List<Choice> Choices(AtkUnitBase* addon, uint minParam)
-        {
-            List<Choice> choices = [];
-            for (int i = 0; i < addon->UldManager.NodeListCount; i++)
-            {
-                AtkResNode* node = addon->UldManager.NodeList[i];
-                if (node == null || !node->IsVisible())
-                    continue;
-
-                AtkComponentNode* component = node->GetAsAtkComponentNode();
-                if (component == null || component->Component == null)
-                    continue;
-
-                AtkEvent* evt = node->AtkEventManager.Event;
-                while (evt != null && evt->State.EventType != AtkEventType.ButtonClick)
-                    evt = evt->NextEvent;
-
-                if (evt == null || evt->Param < minParam)
-                    continue;
-
-                choices.Add(new Choice(node->NodeId, evt->Param, AllText(&component->Component->UldManager)));
-            }
-
-            return choices;
-        }
+        public static List<ReaderXBMContentsTreasure.TreasureChoice> Choices(AtkUnitBase* addon, uint minParam) => 
+            new ReaderXBMContentsTreasure(addon).TreasureChoices;
 
         public static int ContextMenuOptionCount(AtkUnitBase* menu)
         {
@@ -458,7 +435,7 @@ namespace AutoDuty.Managers
             {
                 public const uint FirstItemParam = 2;
 
-                public static bool Take(AtkUnitBase* treasure, uint nodeId) => ClickButton(treasure, nodeId);
+                public static void Take(AtkUnitBase* treasure, uint nodeId) => AddonHelper.FireCallBack(treasure, true, 2, nodeId);
             }
 
             internal static class Result

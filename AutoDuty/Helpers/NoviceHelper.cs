@@ -1,15 +1,12 @@
 ﻿using ECommons.DalamudServices;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AutoDuty.Helpers
 {
     using Data;
     using ECommons.ExcelServices;
     using ECommons.GameFunctions;
-    using FFXIVClientStructs.FFXIV.Client.Game;
-    using FFXIVClientStructs.FFXIV.Client.Game.UI;
     using Lumina.Excel.Sheets;
     using System.Linq;
 
@@ -70,7 +67,7 @@ namespace AutoDuty.Helpers
             return canRun;
         }
 
-        public static List<PlaylistEntry> CreatePlaylist()
+        public static Playlist CreatePlaylist()
         {
             List<PlaylistEntry> entries = [];
             List<Tutorial> tutorials = [];
@@ -82,25 +79,23 @@ namespace AutoDuty.Helpers
                 tutorials.AddRange(TutorialsTank);
             if (JobsAllowedHealer.HasJob(job))
                 tutorials.AddRange(TutorialsHealer);
-            if (job.GetCombatRole() != CombatRole.NonCombat)
+            if (job.GetCombatRole() != CombatRole.NonCombat && PlayerHelper.GetCurrentLevelFromSheet(job) >= 49)
                 tutorials.AddRange(TutorialsGimmick);
 
             foreach (Tutorial tutorial in tutorials)
             {
+                Svc.Log.Debug($"Adding NoviceHall: {tutorial.RowId}");
                 uint id = GetTerritoryOfTutorial(tutorial.RowId);
                 if(ContentPathsManager.DictionaryPaths.ContainsKey(id))
-                {
-                    //if (UIState.IsInstanceContentCompleted(ContentHelper.DictionaryContent[id].Id))
-                        entries.Add(new PlaylistEntry
-                                    {
-                                        Id       = id,
-                                        DutyMode = DutyMode.NoviceHall,
-                                        count    = 1
-                                    });
-                }
+                    entries.Add(new PlaylistEntry
+                                {
+                                    Id       = id,
+                                    DutyMode = DutyMode.NoviceHall,
+                                    count    = 1
+                                });
             }
 
-            return entries;
+            return new Playlist { Name = $"Novice Playlist {job.GetCombatRole()} {job}", Entries = entries };
         }
     }
 }

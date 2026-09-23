@@ -1,0 +1,78 @@
+{
+  "LoopActions": {
+    "AutoEquip": {
+      "GearSourceHelp": "Vanilla - 무기고 내부만 사용\nGearsetter - gearsetter에 문의하여 오래된 장비를 소지품으로 이동 가능\nStylist - stylist 설정 사용",
+      "MoveOldToInventory": "오래된 장비를 소지품으로 이동",
+      "MoveOldToInventoryHelp": "무기 이외의 교체 대상 장비를 소지품으로 이동합니다.",
+      "RequiresGearsetterOrStylist": "* 무기고 외부 장비는 Gearsetter 또는 Stylist가 필요합니다"
+    },
+    "Repair": {
+      "Self": "자가수리",
+      "SelfHelp": "다크 매터로 자가 수리합니다 (제작 숙련도 필요)",
+      "CityNpc": "도시 NPC",
+      "CityNpcHelp": "설정한 수리 NPC를 이용합니다.",
+      "TriggerAt": "발동 임계값 @",
+      "PreferredRepairNPC": "선호 수리 NPC: ",
+      "PreferredRepairNPCHelp": "가능하면 수리 NPC를 소환 벨이나 귀환 위치와 맞추는 것을 권장합니다",
+      "NPCSearchHint": "NPC 이름 또는 지역명을 입력하여 검색",
+      "GrandCompanyInn": "그랜드 컴퍼니 병사"
+    },
+    "AutoRetainer": {
+      "PreferredSummoningBell": "선호 집사 초의종 위치: ",
+      "PreferredSummoningBellHelp": "어떤 위치를 선택하든 실행 시 현재 위치에 집사 초의종이 있으면 그곳을 우선합니다",
+      "WaitingUpTo": "최대 대기 시간...",
+      "Seconds": "초"
+    },
+    "TripleTriadSell": {
+      "SlotsOccupied": "사용 슬롯",
+      "CardCount": "카드 수"
+    },
+    "Extract": {
+      "Equipped": "장착 중",
+      "All": "모두"
+    },
+    "GCTurnIn": {
+      "InventorySlotsLeft": "소지품 빈 칸이 @ 이하일 때",
+      "UseGCAetheryteTicket": "텔레포  이용권(총사령부) 사용"
+    },
+    "Desynth": {
+      "OnlySkillUps": "스킬 상승만",
+      "ItemLevelLimit": "아이템 레벨 상한",
+      "ItemLevelLimitHelp": "분해 스킬이 '아이템 레벨 + 이 값'에 도달하면, 해당 아이템의 분해를 중단합니다.",
+      "NQOnly": "NQ 결과 보증",
+      "ProtectGearsets": "장비세트 보호",
+      "ProtectGearsetterUpgrades": "Gearsetter 업그레이드 장비 자동 분해 방지",
+      "ProtectGearsetterUpgradesHelp": "아직 어떤 장비세트에도 등록되지 않았더라도, Gearsetter가 업그레이드로 추천하는 장비는 분해하지 않고 보호합니다. Gearsetter 플러그인이 필요합니다.",
+      "Categories": "분해 카테고리"
+    },
+    "Coffers": {
+      "OpenCoffersWithGearset": "개봉 시 기어셋: ",
+      "CurrentGearset": "현재 기어셋",
+      "UseBlacklist": "블랙리스트 사용",
+      "UseBlacklistHelp": "자동 개봉하지 않을 상자를 지정할 수 있습니다.",
+      "SelectCoffer": "상자 선택",
+      "CofferName": "상자 이름",
+      "CofferNameHint": "상자 이름을 입력하여 검색",
+      "AddCoffer": "상자 추가"
+    },
+    "Retire": {
+    },
+    "ConsumeItems": {
+      "AutoConsumeHelp": "실행 중 및 각 반복 작업 간에 대상 상태가 없는 경우 이 아이템들을 사용합니다",
+      "IgnoreStatus": "상태 무시",
+      "IgnoreStatusHelp": "실행 중 및 각 반복 작업 간에 상태 유무와 관계없이 매번 이 아이템들을 사용합니다",
+      "MinTimeRemaining": "남은 시간 최소값",
+      "MinTimeRemainingHelp": "상태 남은 시간이 이 값(분) 미만의 경우 이 아이템들을 사용합니다",
+      "ItemName": "아이템 이름",
+      "ItemNameHint": "아이템 이름을 입력하여 검색",
+      "AddItem": "아이템 추가"
+    },
+    "ExecuteCommands": {
+      "ExecuteCommandsHelp": "모든 반복 작업 시작 시 명령어 실행\n예: {0}"
+    },
+    "Wait": {
+      "WaitTime": "(초) 반복 작업 간 대기 시간",
+      "WaitTimeHelp": "반복 작업 간 처리를 X초 지연시킵니다."
+    }
+  }
+}

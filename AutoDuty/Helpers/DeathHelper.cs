@@ -10,8 +10,8 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 namespace AutoDuty.Helpers
 {
     using System;
-    using Windows;
     using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+    using FFXIVClientStructs.FFXIV.Common.Math;
     using Multibox;
 
     internal static class DeathHelper
@@ -47,6 +47,7 @@ namespace AutoDuty.Helpers
                         DebugLog("Player is Revived changing state to Revived");
                         oldIndex              = Plugin.indexer;
                         findShortcutStartTime = Environment.TickCount;
+                        shortcutUseLocation   = null;
                         FindShortcut();
                         break;
                     case PlayerLifeState.Alive:
@@ -74,7 +75,7 @@ namespace AutoDuty.Helpers
             if (Plugin.taskManager.IsBusy)
                 Plugin.taskManager.Abort();
             
-            if (AutoDuty.Configuration.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Variant))
+            if (AutoDuty.Configuration.Meta.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Variant))
             {
                 bool yesNo = GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) && GenericHelpers.IsAddonReady(addonSelectYesno);
                 bool dead  = PartyHelper.PartyDead();
@@ -95,34 +96,10 @@ namespace AutoDuty.Helpers
         private static int          oldIndex = 0;
         private static IGameObject? GameObject => ObjectHelper.GetObjectByDataIds(2000700, 2000789);
         private static int          findShortcutStartTime = 0;
+        private static Vector3?     shortcutUseLocation;
 
         private static int FindWaypoint()
         {
-            /*
-            if (Plugin.Indexer == 0)
-            {
-                float closestWaypointDistance = float.MaxValue;
-                int closestWaypointIndex = -1;
-
-                for (int i = 0; i < Plugin.Actions.Count; i++)
-                {
-                    string node = Plugin.Actions[i].Name;
-                    Vector3 position = Plugin.Actions[i].Position;
-
-                    float currentDistance = ObjectHelper.GetDistanceToPlayer(position);
-                    if (currentDistance < closestWaypointDistance)
-
-                    {
-                        closestWaypointDistance = node.Equals("Boss", StringComparison.InvariantCultureIgnoreCase) ?
-                                                      currentDistance :
-                                                      ObjectHelper.GetDistanceToPlayer(Plugin.Actions[Plugin.Indexer].Position);
-                        closestWaypointIndex = i;
-                    }
-                }
-                Svc.Log.Info($"Closest Waypoint was {closestWaypointIndex}");
-                return closestWaypointIndex;
-            }*/
-
             if (Plugin.indexer != -1)
             {
                 ContentPathsManager.ContentPathContainer container    = ContentPathsManager.DictionaryPaths[Plugin.currentTerritoryType];
@@ -151,12 +128,6 @@ namespace AutoDuty.Helpers
                         Svc.Log.Debug($"Revival Point: {i}");
                         return waypoint;
                     }
-                    /* Pre 7.2
-                    else
-                    {
-                        if (Plugin.Actions[i].Name.Equals("Boss", StringComparison.InvariantCultureIgnoreCase) && i != Plugin.Indexer)
-                            return i + 1;
-                    }*/
                 }
             }
 
@@ -211,28 +182,31 @@ namespace AutoDuty.Helpers
                 return ;
             }
 
-            float distanceToPlayer;
+            IGameObject? shortcutObject       = GameObject;
 
-            if (!(GameObject?.IsTargetable ?? false) || (distanceToPlayer = ObjectHelper.GetDistanceToPlayer(GameObject)) > 30)
+            if (!(shortcutObject?.IsTargetable ?? false) || (shortcutUseLocation != null && ObjectHelper.GetDistanceToPlayer(shortcutUseLocation.Value) > 5))
             {
                 Svc.Log.Debug("OnRevive: Done");
-                if(Plugin.indexer == 0) 
+                if(Plugin.indexer == 0)
                     Plugin.indexer = FindWaypoint();
                 Stop();
                 return;
             }
+
             if (oldIndex == Plugin.indexer)
                 Plugin.indexer = FindWaypoint();
-            
+
+            float distanceToPlayer = ObjectHelper.GetDistanceToPlayer(shortcutObject);
             if (distanceToPlayer > 2)
             {
-                MovementHelper.Move(GameObject, 0.25f, 2);
-                Svc.Log.Debug($"OnRevive: Moving to {GameObject.Name} at: {GameObject.Position} which is {distanceToPlayer} away");
+                MovementHelper.Move(shortcutObject, 0.25f, 2);
+                Svc.Log.Debug($"OnRevive: Moving to {shortcutObject.Name} at: {shortcutObject.Position} which is {distanceToPlayer} away");
             }
             else
             {
-                Svc.Log.Debug($"OnRevive: Interacting with {GameObject.Name} until SelectYesno Addon appears, and ClickingYes");
-                ObjectHelper.InteractWithObjectUntilAddon(GameObject, "SelectYesno");
+                shortcutUseLocation = Player.Position;
+                Svc.Log.Debug($"OnRevive: Interacting with {shortcutObject.Name} until SelectYesno Addon appears, and ClickingYes");
+                ObjectHelper.InteractWithObjectUntilAddon(shortcutObject, "SelectYesno");
                 AddonHelper.ClickSelectYesno();
             }
         }

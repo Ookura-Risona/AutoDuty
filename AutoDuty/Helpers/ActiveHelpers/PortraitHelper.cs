@@ -5,11 +5,12 @@
     using ECommons.DalamudServices;
     using ECommons.Throttlers;
     using FFXIVClientStructs.FFXIV.Component.GUI;
+    using global::AutoDuty.Configurations;
 
-    internal class PortraitHelper : ActiveHelperBase<PortraitHelper>
+    public class PortraitHelper : ActiveHelperBase<PortraitHelper, LoopActionConfigBare>
     {
-        protected override string Name        { get; } = nameof(PortraitHelper);
-        protected override string DisplayName { get; } = "Updating Portrait";
+        public override string Name        { get; } = nameof(PortraitHelper);
+        public override string DisplayName { get; } = "Updating Portrait";
         protected override int    TimeOut     { get; set; } = 10_000;
 
         internal override void Start()

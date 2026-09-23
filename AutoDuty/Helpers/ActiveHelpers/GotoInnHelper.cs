@@ -1,20 +1,21 @@
-﻿using Dalamud.Plugin.Services;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
 using System.Numerics;
-using Dalamud.Game.ClientState.Objects.Types;
 
 namespace AutoDuty.Helpers
 {
+    using ECommons.ExcelServices;
+    using global::AutoDuty.Configurations;
     using System;
     using System.Collections.Generic;
-    using ECommons.ExcelServices;
 
-    internal class GotoInnHelper : ActiveHelperBase<GotoInnHelper>
+    public class GotoInnHelper : ActiveHelperBase<GotoInnHelper, LoopActionConfigBare>
     {
 
-        protected override string Name        => nameof(GotoInnHelper);
-        protected override string DisplayName => string.Empty;
+        public override string Name        => nameof(GotoInnHelper);
+        public override string DisplayName => string.Empty;
         protected override int    TimeOut     { get; set; } = 600_000;
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno", "SelectString", "Talk"];

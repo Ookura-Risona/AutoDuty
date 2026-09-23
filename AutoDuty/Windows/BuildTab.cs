@@ -24,6 +24,7 @@ namespace AutoDuty.Windows
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using Configurations;
 
     internal static class BuildTab
     {
@@ -615,7 +616,7 @@ namespace AutoDuty.Windows
                 ImGui.InputText("##Note", ref actionNote, 200);
                 this.action.Note = actionNote;
 
-                using (ImRaii.Disabled(this.action.Tag.HasAnyFlag(ActionTag.Comment, ActionTag.Revival, ActionTag.Treasure)))
+                using (ImRaii.Disabled(this.action.Tag.HasAnyFlag(ActionTag.Comment, ActionTag.Revival) || this.action.Name == "TreasureCoffer"))
                 {
                     ImGui.AlignTextToFramePadding();
                     ImGui.Text(Loc.Get("BuildTab.Tag"));
@@ -639,6 +640,14 @@ namespace AutoDuty.Windows
 
                 if (!_comment)
                 {
+                    bool noPartyCoherency = this.action.Flags.HasFlag(PathActionFlags.NoPartyCoherency);
+                    if(ImGui.Checkbox(Loc.Get("BuildTab.NoPartyCoherency"), ref noPartyCoherency))
+                        if(noPartyCoherency)
+                            this.action.Flags = this.action.Flags |= PathActionFlags.NoPartyCoherency;
+                        else
+                            this.action.Flags = this.action.Flags &= ~PathActionFlags.NoPartyCoherency;
+
+
                     ImGui.Separator();
                     ImGui.Text(Loc.Get("BuildTab.Conditions"));
 

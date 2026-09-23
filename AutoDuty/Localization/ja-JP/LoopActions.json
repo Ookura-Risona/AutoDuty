@@ -1,0 +1,76 @@
+{
+  "LoopActions": {
+    "AutoEquip": {
+      "GearSourceHelp": "Vanilla：アーマリーチェスト内の装備のみを使用します。\nGearsetter：Gearsettarの推奨装備を使用します。古装備は設定により所持品へ移動できます。\nStylist：Stylistの設定を使用します。",
+      "MoveOldToInventory": "旧装備を所持品へ移動",
+      "MoveOldToInventoryHelp": "メインアームとサブアームを除き、旧装備を所持品へ移動します。",
+      "RequiresGearsetterOrStylist": "* アーマリーチェスト外の装備にはGearsetterまたはStylistが必要です"
+    },
+    "Repair": {
+      "Self": "自己",
+      "SelfHelp": "ダークマターで自己修理します（クラフター育成が必要）",
+      "CityNpc": "都市内NPC",
+      "CityNpcHelp": "設定した修理NPCを利用します。",
+      "TriggerAt": "発動しきい値 @",
+      "PreferredRepairNPC": "優先修理NPC: ",
+      "PreferredRepairNPCHelp": "可能なら修理NPCは呼び鈴や退退先と合わせるのがおすすめです",
+      "GrandCompanyInn": "グランドカンパニー兵舎"
+    },
+    "AutoRetainer": {
+      "PreferredSummoningBell": "優先呼び鈴位置: ",
+      "PreferredSummoningBellHelp": "どの場所を選んでも、実行時に現在地に呼び鈴があればそちらを優先します",
+      "WaitingUpTo": "最大待機時間...",
+      "Seconds": "秒"
+    },
+    "TripleTriadSell": {
+      "SlotsOccupied": "使用枠",
+      "CardCount": "カード枚数"
+    },
+    "Extract": {
+      "Equipped": "装備中",
+      "All": "すべて"
+    },
+    "GCTurnIn": {
+      "InventorySlotsLeft": "所持品の空き枠が @ 以下で",
+      "UseGCAetheryteTicket": "転送網利用券（GC）を使用"
+    },
+    "Desynth": {
+      "OnlySkillUps": "スキル上昇のみ",
+      "ItemLevelLimit": "アイテムレベル上限",
+      "ItemLevelLimitHelp": "分解スキルが「アイテムレベル + この値」に達すると、そのアイテムの分解を停止します。",
+      "NQOnly": "NQ結果を保証",
+      "ProtectGearsets": "ギアセット保護",
+      "Categories": "分解カテゴリ"
+    },
+    "Coffers": {
+      "Help": "",
+      "OpenCoffersWithGearset": "開封時のギアセット: ",
+      "CurrentGearset": "現在のギアセット",
+      "UseBlacklist": "ブラックリストを使用",
+      "UseBlacklistHelp": "自動開封しない箱を指定できます。",
+      "SelectCoffer": "装備箱を選択",
+      "CofferName": "装備箱名",
+      "CofferNameHint": "装備箱名を入力して検索",
+      "AddCoffer": "装備箱を追加"
+    },
+    "Retire": {
+    },
+    "ConsumeItems": {
+      "AutoConsumeHelp": "実行中と各ループ間で、対象ステータスがない場合にこれらのアイテムを使用します",
+      "IgnoreStatus": "ステータス無視",
+      "IgnoreStatusHelp": "実行中と各ループ間で、ステータス有無に関係なく毎回これらのアイテムを使用します",
+      "MinTimeRemaining": "残り時間の最小値",
+      "MinTimeRemainingHelp": "ステータス残り時間がこれ未満（分）の場合、これらのアイテムを使用します",
+      "ItemName": "アイテム名",
+      "ItemNameHint": "アイテム名を入力して検索",
+      "AddItem": "アイテム追加"
+    },
+    "ExecuteCommands": {
+      "ExecuteCommandsHelp": "ループ処理開始前にコマンドを実行\n例：{0}"
+    },
+    "Wait": {
+      "WaitTime": "（秒）ループ間の待機時間",
+      "WaitTimeHelp": "ループ間処理をX秒遅延させます。"
+    }
+  }
+}

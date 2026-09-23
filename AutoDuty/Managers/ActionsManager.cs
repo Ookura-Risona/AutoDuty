@@ -22,13 +22,17 @@ using static AutoDuty.Helpers.PlayerHelper;
 
 namespace AutoDuty.Managers
 {
+    using ECommons.ExcelServices;
+    using FFXIVClientStructs.FFXIV.Client.Game.Object;
+    using FFXIVClientStructs.FFXIV.Client.LayoutEngine;
+    using FFXIVClientStructs.Interop;
+    using FFXIVClientStructs.STD;
+    using Properties;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using ECommons.ExcelServices;
-    using FFXIVClientStructs.FFXIV.Client.Game.Object;
-    using Properties;
+    using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
     using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
     public class ActionsManager(AutoDuty plugin, TaskManager taskManager)
@@ -65,7 +69,8 @@ namespace AutoDuty.Managers
             ("Action", "Run any action", ["ActionType", "id"]),
             ("BLULoad", "Enables or disables a spell from the current BLU loadout", ["enable?", "which spell"]),
             ("VariantVote", "Votes for the VVD option specified (0-based index)", ["which option?"]),
-            ("DisableBMModule", "Disables the BossMod module specified by name", ["which module?", "disable?"])
+            ("DisableBMModule", "Disables the BossMod module specified by name", ["which module?", "disable?"]),
+            ("Collision", "Detects if the given collider is active", ["which collider?", "active?"]),
         ];
 
         public void InvokeAction(PathAction action)
@@ -266,10 +271,10 @@ namespace AutoDuty.Managers
         {
             if (!on)
             {
-                if (Configuration.AutoManageRotationPluginState)
+                if (Configuration.DutyConfig.AutoManageRotationPluginState)
                 {
                     this.autoManageRotationPluginState          = true;
-                    Configuration.AutoManageRotationPluginState = false;
+                    Configuration.DutyConfig.AutoManageRotationPluginState = false;
                 }
 
                 if(rotationPlugins)
@@ -278,7 +283,7 @@ namespace AutoDuty.Managers
             else
             {
                 if (this.autoManageRotationPluginState)
-                    Configuration.AutoManageRotationPluginState = true;
+                    Configuration.DutyConfig.AutoManageRotationPluginState = true;
 
                 if(rotationPlugins)
                     Plugin.SetRotationPluginSettings(true, true);
@@ -778,7 +783,7 @@ namespace AutoDuty.Managers
             taskManager.Enqueue(() => BossCheck(),                                                             "Boss-BossCheck", new TaskManagerConfiguration(int.MaxValue));
             taskManager.Enqueue(() => { Plugin.bossObject = null; },                                           "Boss-ClearBossObject");
 
-            if (Configuration.LootTreasure)
+            if (Configuration.DutyConfig.LootTreasure)
             {
                 
                 taskManager.EnqueueDelay(1000);
@@ -867,6 +872,26 @@ namespace AutoDuty.Managers
         public void DisableBMModule(PathAction action)
         {
             BossMod_IPCSubscriber.DisableModule(action.Arguments[0], bool.Parse(action.Arguments[1]));
+        }
+
+        public unsafe void Collision(PathAction action)
+        {
+            if (action.Arguments.Count == 0)
+                return;
+            if (ulong.TryParse(action.Arguments[0], out ulong key) && bool.TryParse(action.Arguments[1], out bool enabled))
+            {
+                LayoutManager*                           layout = LayoutWorld.Instance()->ActiveLayout;
+                StdMap<ulong, Pointer<ILayoutInstance>>* insts  = layout != null ? FindPtr(ref layout->InstancesByType, InstanceType.CollisionBox) : null;
+                ILayoutInstance*                         inst   = insts  != null ? FindPtr(ref *insts,                  key) : null;
+                Collider*                                coll   = inst   != null ? inst->GetCollider() : null;
+
+                Svc.Log.Warning((coll != null).ToString());
+            }
+        }
+
+        public static unsafe V* FindPtr<K, V>(ref StdMap<K, Pointer<V>> map, K key) where K : unmanaged, IComparable where V : unmanaged
+        {
+            return map.TryGetValuePointer(key, out Pointer<V>* ptr) && ptr != null ? ptr->Value : null;
         }
 
         public enum OID : uint

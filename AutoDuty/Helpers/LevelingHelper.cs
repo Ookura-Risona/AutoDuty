@@ -30,7 +30,7 @@ namespace AutoDuty.Helpers
             1330u, // 44 Dzemael Darkhold
             1331u, // 47 Aurum Vale
 
-            1142u, // 61 Sirensong Sea
+            1367u, // 63 Shisui of the Violet Tides
             1144u, // 67 Doma Castle
             1145u, // 69 Castrum Abania
             837u,  // 71 Holminster
@@ -52,7 +52,7 @@ namespace AutoDuty.Helpers
 
         public static readonly uint[] levelingListExperimental =
         [
-            1367u, // 63 Shisui of the Violet Tides
+            
         ];
 
         internal static Content[] LevelingDuties
@@ -79,11 +79,12 @@ namespace AutoDuty.Helpers
                             1065u, // 55 The Aery
                             1066u, // 57 The Vault
                             1109u, // 59 The Great Gubal Library])
+                            1142u, // 61 Sirensong Sea
                         ]);
                     }
 
 
-                    if (Configuration.LevelingListExperimentalEntries)
+                    if (Configuration.DutyConfig.LevelingListExperimentalEntries)
                         ids = ids.Concat(levelingListExperimental);
 
                     levelingDuties = [.. ids.Select(id => ContentHelper.DictionaryContent.GetValueOrDefault(id)).Where(c => c != null).Cast<Content>().OrderBy(x => x.ClassJobLevelRequired).ThenBy(x => x.ItemLevelRequired).ThenBy(x => x.ExVersion).ThenBy(x => x.DawnIndex)];

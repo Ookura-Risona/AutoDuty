@@ -1,5 +1,4 @@
 ﻿using AutoDuty.Helpers;
-using AutoDuty.Windows;
 using ECommons;
 using ECommons.DalamudServices;
 using ECommons.ExcelServices;
@@ -12,6 +11,7 @@ namespace AutoDuty.Managers
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Configurations;
     using Data;
     using Newtonsoft.Json;
     using static Data.Classes;
@@ -20,7 +20,7 @@ namespace AutoDuty.Managers
     {
         internal static Dictionary<uint, ContentPathContainer> DictionaryPaths = [];
 
-        internal class ContentPathContainer
+        public class ContentPathContainer
         {
             public ContentPathContainer(Content content)
             {
@@ -55,7 +55,7 @@ namespace AutoDuty.Managers
 
                 if (this.Paths.Count > 1)
                 {
-                    if (AutoDuty.Configuration.PathSelectionsByPath.TryGetValue(this.Content.TerritoryType, out Dictionary<string, JobWithRole>? jobConfig))
+                    if (AutoDuty.Configuration.Meta.PathSelectionsByPath.TryGetValue(this.Content.TerritoryType, out Dictionary<string, JobWithRole>? jobConfig))
                         if(jobConfig != null)
                             foreach ((string? pathName, JobWithRole pathJobs) in jobConfig)
                                 if (pathJobs.HasJob((Job)job))
@@ -73,7 +73,7 @@ namespace AutoDuty.Managers
                                 }
 
                     //temporary while w2w gets integrated
-                    if (!defaultPath.W2WFound && AutoDuty.Configuration.W2WJobs.HasJob(job.Value))
+                    if (!defaultPath.W2WFound && AutoDuty.Configuration.DutyConfig.W2WJobs.HasJob(job.Value))
                         for (int index = 0; index < this.Paths.Count; index++)
                         {
                             string curPath = this.Paths[index].Name;
@@ -93,25 +93,22 @@ namespace AutoDuty.Managers
                 this.Paths.Add(new DutyPath(name, this));
         }
 
-        internal class DutyPath
+        public class DutyPath
         {
             public DutyPath(string filePath, ContentPathContainer container)
             {
+                this.container = container;
+
                 this.FilePath  = filePath;
                 this.FileName  = Path.GetFileName(filePath);
                 this.Name      = this.FileName.Replace(".json", string.Empty);
-                this.container = container;
-
-
-                this.UpdateColoredNames();
             }
 
             public void UpdateColoredNames()
             {
                 Match pathMatch = RegexHelper.PathFileRegex().Match(this.FileName);
 
-                string pathFileColor = AutoDuty.Configuration.DoNotUpdatePathFiles.Contains(this.FileName) ? ImGuiHelper.pathFileColorNoUpdate : ImGuiHelper.pathFileColor;
-                this.id = uint.Parse(pathMatch.Groups[2].Value);
+                string pathFileColor = ConfigurationMain.Instance.DoNotUpdatePathFiles.Contains(this.FileName) ? ImGuiHelper.pathFileColorNoUpdate : ImGuiHelper.pathFileColor;
                 this.ColoredNameString = pathMatch.Success ?
                                              $"<0.8,0.8,1>{pathMatch.Groups[4]}</>{pathFileColor}{pathMatch.Groups[5]}</>" :
                                              this.FileName;
@@ -120,22 +117,37 @@ namespace AutoDuty.Managers
 
             public readonly ContentPathContainer container;
 
-            public uint id;
-
             public string Name     { get; }
             public string FileName { get; }
             public string FilePath { get; }
 
-            public  string ColoredNameString { get; private set; } = null!;
+            public string ColoredNameString
+            {
+                get
+                {
+                    if(field == null)
+                        this.UpdateColoredNames();
+                    return field;
+                }
+                private set;
+            } = null!;
 
-            public  Match ColoredNameRegex { get; private set; } = null!;
+            public Match ColoredNameRegex
+            {
+                get
+                {
+                    if (field == null)
+                        this.UpdateColoredNames();
+                    return field;
+                }
+                private set;
+            } = null!;
 
-            private PathFile? pathFile = null;
             public PathFile PathFile
             {
                 get
                 {
-                    if (this.pathFile == null)
+                    if (field == null)
                         try
                         {
                             this.RevivalFound = false;
@@ -147,34 +159,34 @@ namespace AutoDuty.Managers
                                 json = streamReader.ReadToEnd();
 
 
-                            this.pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.JsonSerializerSettings);
+                            field = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.JsonSerializerSettings);
 
                             this.RevivalFound = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
                             this.W2WFound     = this.PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
 
                             
-                            if (this.pathFile.Meta.LastUpdatedVersion < 304)
+                            if (field.Meta.LastUpdatedVersion < 304)
                             {
 
-                                pathFile.Meta.Changelog.Add(new PathFileChangelogEntry
-                                                            {
-                                                                Version = 304,
-                                                                Change  = "Version update"
-                                                            });
+                                field.Meta.Changelog.Add(new PathFileChangelogEntry
+                                                         {
+                                                             Version = 304,
+                                                             Change  = "Version update"
+                                                         });
 
-                                json = JsonConvert.SerializeObject(pathFile, ConfigurationMain.JsonSerializerSettings);
+                                json = JsonConvert.SerializeObject(field, ConfigurationMain.JsonSerializerSettings);
                                 File.WriteAllText(FilePath, json);
                             }
                         }
                         catch (Exception ex)
                         {
                             Svc.Log.Info($"{this.FilePath} is not a valid duty path: {ex}");
-                            DictionaryPaths[this.id].Paths.Remove(this);
+                            this.container.Paths.Remove(this);
                         }
 
-                    return this.pathFile!;
+                    return field!;
                 }
-            }
+            } = null;
 
             public List<PathAction> Actions      => this.PathFile.Actions;
             public bool             RevivalFound { get; private set; }

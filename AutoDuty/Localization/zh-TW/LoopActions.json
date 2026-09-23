@@ -1,0 +1,75 @@
+{
+  "LoopActions": {
+    "AutoEquip": {
+      "GearSourceHelp": "原版 - 僅使用兵装庫(Armory Chest)裝備\n裝備管理器 - 調用 Gearsetter，可將淘汰裝備移至背包\n造型師 - 使用 Stylist 插件設置",
+      "MoveOldToInventory": "將舊物品移至背包",
+      "MoveOldToInventoryHelp": "除武器外，將被替換的裝備移至背包。",
+      "RequiresGearsetterOrStylist": "* 兵裝庫外的物品需要 Gearsetter 或 Stylist 插件"
+    },
+    "Repair": {
+      "Self": "自行修理",
+      "SelfHelp": "使用暗物質自行修理 (需要對應等級的生產職業)",
+      "CityNpc": "主城 NPC",
+      "CityNpcHelp": "使用首選修理 NPC 進行修理。",
+      "TriggerAt": "觸發條件 @",
+      "PreferredRepairNPC": "首選修理 NPC：",
+      "PreferredRepairNPCHelp": "建議將修理 NPC 與傳喚鈴以及返回位置（如可能）設置在同一地點",
+      "GrandCompanyInn": "冒險者分隊軍營"
+    },
+    "AutoRetainer": {
+      "PreferredSummoningBell": "首選傳喚鈴位置：",
+      "PreferredSummoningBellHelp": "無論選擇哪個位置，如果你當前所在地有傳喚鈴，將優先前往該位置",
+      "WaitingUpTo": "最多等待...",
+      "Seconds": "秒"
+    },
+    "TripleTriadSell": {
+      "SlotsOccupied": "佔用格數",
+      "CardCount": "卡片數量"
+    },
+    "Extract": {
+      "Equipped": "已裝備",
+      "All": "全部"
+    },
+    "GCTurnIn": {
+      "InventorySlotsLeft": "剩餘背包格數 @",
+      "UseGCAetheryteTicket": "使用大國防聯軍傳送券"
+    },
+    "Desynth": {
+      "OnlySkillUps": "僅提升分解熟練度時分解",
+      "ItemLevelLimit": "物品等級限制",
+      "ItemLevelLimitHelp": "當你的分解技能達到物品等級 + 此限制時，停止分解該物品。",
+      "NQOnly": "只分解NQ物品",
+      "ProtectGearsets": "保護套裝",
+      "Categories": "分解類別"
+    },
+    "Coffers": {
+      "OpenCoffersWithGearset": "使用套裝開啟寶箱：",
+      "CurrentGearset": "當前套裝",
+      "UseBlacklist": "使用黑名單",
+      "UseBlacklistHelp": "可選擇禁止某些寶箱自動開啟。",
+      "SelectCoffer": "選擇寶箱",
+      "CofferName": "寶箱名稱",
+      "CofferNameHint": "開始輸入寶箱名稱以搜尋",
+      "AddCoffer": "新增寶箱"
+    },
+    "Retire": {
+    },
+    "ConsumeItems": {
+      "AutoConsumeHelp": "AutoDuty 將在運行時和每次循環間使用這些物品（如果狀態不存在）",
+      "IgnoreStatus": "忽略狀態",
+      "IgnoreStatusHelp": "AutoDuty 將在運行時和每次循環間始終使用這些物品（即使狀態已存在）",
+      "MinTimeRemaining": "最短剩餘時間",
+      "MinTimeRemainingHelp": "如果狀態剩餘時間少於此值（分鐘），將使用這些物品",
+      "ItemName": "物品名稱",
+      "ItemNameHint": "開始輸入物品名稱以搜尋",
+      "AddItem": "新增物品"
+    },
+    "ExecuteCommands": {
+      "ExecuteCommandsHelp": "在所有循環開始時執行命令\n例：{0}"
+    },
+    "Wait": {
+      "WaitTime": "（秒）循環間等待時間",
+      "WaitTimeHelp": "將所有 AutoDuty 循環間處理延遲 X 秒。"
+    }
+  }
+}

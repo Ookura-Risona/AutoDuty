@@ -7,12 +7,13 @@ using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
+    using Configurations;
     using ECommons.ExcelServices;
 
-    internal class GCTurninHelper : ActiveHelperBase<GCTurninHelper>
+    public class GCTurninHelper : ActiveHelperBase<GCTurninHelper, GCTurnInLoopActionConfig>
     {
-        protected override string Name        { get; } = nameof(GCTurninHelper);
-        protected override string DisplayName { get; } = "GC Turnin";
+        public override string Name        { get; } = nameof(GCTurninHelper);
+        public override string DisplayName { get; } = "GC Turnin";
 
         public override string[]? Commands { get; init; } = ["turnin", "gcturnin"];
         public override string? CommandDescription { get; init; } = "Automatically turns in items into the Grand Company Supply";
@@ -112,7 +113,7 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State != ActionState.Running && Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()))
             {
                 this.DebugLog("Moving to GC Supply");
-                if (Configuration.AutoGCTurninUseTicket && InventoryHelper.ItemCount(AetheryteTicketId) > 0)
+                if (this.ActionConfig.UseTicket && InventoryHelper.ItemCount(AetheryteTicketId) > 0)
                 {
                     if (!PlayerHelper.IsCasting)
                         InventoryHelper.UseItem(AetheryteTicketId);
@@ -144,32 +145,8 @@ namespace AutoDuty.Helpers
             }
             else if (ObjectHelper.GetDistanceToPlayer(GCSupplyLocation) <= 4 && VNavmesh_IPCSubscriber.Path_NumWaypoints == 0 && !this.turninStarted)
             {
-                /*
-                if (_personnelOfficerGameObject == null)
-                    return;
-                if (Svc.Targets.Target?.DataId != _personnelOfficerGameObject.DataId)
-                {
-                    Svc.Log.Debug($"Targeting {_personnelOfficerGameObject.Name}({_personnelOfficerGameObject.DataId}) CurrentTarget={Svc.Targets.Target}({Svc.Targets.Target?.DataId})");
-                    Svc.Targets.Target = _personnelOfficerGameObject;
-                }
-                else if (!GenericHelpers.TryGetAddonByName("GrandCompanySupplyList", out AtkUnitBase* addonGrandCompanySupplyList) || !GenericHelpers.IsAddonReady(addonGrandCompanySupplyList))
-                {
-                    if (GenericHelpers.TryGetAddonByName("SelectString", out AtkUnitBase* addonSelectString) && GenericHelpers.IsAddonReady(addonSelectString))
-                    {
-                        Svc.Log.Debug($"Clicking SelectString");
-                        AddonHelper.ClickSelectString(0);
-                    }
-                    else
-                    {
-                        Svc.Log.Debug($"Interacting with {_personnelOfficerGameObject.Name}");
-                        ObjectHelper.InteractWithObjectUntilAddon(_personnelOfficerGameObject, "SelectString");
-                    }
-                }
-                else*/
-                {
-                    this.DebugLog("Starting TurnIn proper");
-                    AutoRetainer_IPCSubscriber.EnqueueGCInitiation();
-                }
+                this.DebugLog("Starting TurnIn proper");
+                AutoRetainer_IPCSubscriber.EnqueueGCInitiation();
                 return;
             }
         }

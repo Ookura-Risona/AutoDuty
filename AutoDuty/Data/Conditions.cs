@@ -9,16 +9,25 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using AutoDuty.Data;
+
 // ReSharper disable UnusedType.Global
 
 namespace AutoDuty.Data;
 
-using System.Linq;
-using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
+using FFXIVClientStructs.FFXIV.Client.LayoutEngine;
+using FFXIVClientStructs.Interop;
+using FFXIVClientStructs.STD;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Linq;
+using System.Numerics;
 
 public abstract class PathActionCondition
 {
@@ -61,6 +70,8 @@ public abstract class PathActionCondition
                     ConditionType.ActionStatus => new PathActionConditionActionStatus(),
                     ConditionType.VariantPath => new PathActionConditionVariantPath(),
                     ConditionType.ConditionFlag => new PathActionConditionConditionFlag(),
+                    ConditionType.Collision => new PathActionConditionCollision(),
+                    ConditionType.ToDo => new PathActionConditionToDo(),
                     ConditionType.Not => new PathActionConditionNot(),
                     ConditionType.Or => new PathActionConditionOr() ,
                     ConditionType.And => new PathActionConditionAnd(),
@@ -167,6 +178,54 @@ public class PathActionConditionActionStatus : PathActionCondition
         yield return (new Vector4(1, 165 / 255f, 0, 1), $"{this.type.ToLocalizedString()} {this.id} {this.statusCode}");
     }
 }
+
+public class PathActionConditionCollision : PathActionCondition
+{
+    public new const ConditionType PARSE_KEY = ConditionType.Collision;
+    public override  ConditionType ParseKey => PARSE_KEY;
+
+    public InstanceType type = InstanceType.CollisionBox;
+    public ulong        id;
+
+    [JsonIgnore]
+    private string textInput = string.Empty;
+
+    public override bool IsFulfilled()
+    {
+        unsafe
+        {
+            static V* FindPtr<K, V>(ref StdMap<K, Pointer<V>> map, K key) where K : unmanaged, IComparable where V : unmanaged =>
+                map.TryGetValuePointer(key, out Pointer<V>* ptr) && ptr != null ? ptr->Value : null;
+
+            LayoutManager*                           layout = LayoutWorld.Instance()->ActiveLayout;
+            StdMap<ulong, Pointer<ILayoutInstance>>* insts  = layout != null ? FindPtr(ref layout->InstancesByType, this.type) : null;
+            ILayoutInstance*                         inst   = insts  != null ? FindPtr(ref *insts,                  this.id) : null;
+            return inst != null && inst->IsColliderActive();
+        }
+    }
+
+    public override void DrawConfig()
+    {
+        ImGuiEx.EnumCombo("Instance Type", ref this.type);
+        ImGui.SameLine();
+
+        if(this.textInput.Length == 0)
+            this.textInput = this.id.ToString("X");
+
+        if(ImGui.InputText("Layout Instance ID", ref this.textInput))
+            if (ulong.TryParse(this.textInput, NumberStyles.HexNumber, null, out ulong parsedId))
+                this.id = parsedId;
+            else
+                this.textInput = string.Empty;
+    }
+
+    public override IEnumerable<(Vector4 color, string text)> DrawStepEntry()
+    {
+        yield return (new Vector4(1, 165 / 255f, 0, 1), $"{PARSE_KEY.ToLocalizedString()} ");
+        yield return (new Vector4(1, 165 / 255f, 0, 1), $"{this.type.ToCustomString()} {this.id:X}");
+    }
+}
+
 
 public class PathActionConditionItemCount : PathActionCondition
 {
@@ -417,6 +476,65 @@ public class PathActionConditionVariantPath : PathActionCondition
     {
         yield return (new Vector4(1, 165 / 255f, 0, 1), $"{ConditionType.VariantPath.ToLocalizedString()} ");
         yield return (new Vector4(1, 165 / 255f, 0, 1), string.Join(", ", this.pathIndices));
+    }
+}
+
+public class PathActionConditionToDo : PathActionCondition
+{
+    public new const ConditionType PARSE_KEY = ConditionType.ToDo;
+    public override  ConditionType ParseKey => PARSE_KEY;
+
+    public byte index        = 0;
+    public int  count = 0;
+
+    public string operatorValue = operations.Keys.First();
+
+    public override unsafe bool IsFulfilled()
+    {
+        ContentDirector* cd = EventFramework.Instance()->GetContentDirector();
+        if (cd != null)
+        {
+            StdVector<DirectorTodo>* todo = cd->GetDirectorTodos();
+            if (todo != null)
+                if (this.index < todo->Count)
+                {
+                    DirectorTodo item = (*todo)[this.index];
+                    
+                    return operations.TryGetValue(this.operatorValue, out Func<object, object, bool>? operationFunc) &&
+                           operationFunc(item.CurrentCount, this.count);
+                }
+        }
+
+        return false;
+    }
+
+    public override unsafe void DrawConfig()
+    {
+        if(ImGui.BeginCombo("Objective", this.index.ToString()))
+        {
+            ContentDirector* cd = EventFramework.Instance()->GetContentDirector();
+            if (cd != null)
+            {
+                StdVector<DirectorTodo>* todo = cd->GetDirectorTodos();
+                if (todo != null)
+                    for (int i = 0; i < todo->Count; i++)
+                    {
+                        DirectorTodo item = (*todo)[i];
+                        if(ImGui.Selectable($"{i}: {item.Text} - {item.CurrentCount}/{item.NeededCount}"))
+                            this.index = (byte)i;
+                    }
+            }
+            ImGui.EndCombo();
+        }
+        ImGui.SameLine();
+        ImGuiEx.Combo("Operation", ref this.operatorValue, operations.Keys);
+        ImGui.SameLine();
+        ImGui.InputInt("Count", ref this.count);
+    }
+
+    public override IEnumerable<(Vector4 color, string text)> DrawStepEntry()
+    {
+        yield return (new Vector4(1, 165 / 255f, 0, 1), $"{ConditionType.ToDo.ToLocalizedString()} ");
     }
 }
 

@@ -14,6 +14,7 @@ namespace AutoDuty.Data
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using ECommons.DalamudServices;
 
     public class Classes
     {
@@ -115,6 +116,7 @@ namespace AutoDuty.Data
             public List<PathActionCondition> Conditions { get; set; } = [];
 
             public string Note { get; set; } = string.Empty;
+            public PathActionFlags Flags { get; set; } = PathActionFlags.None;
         }
 
         public class PathFileMetaData
@@ -221,7 +223,20 @@ namespace AutoDuty.Data
             }
         }
 
-    #endregion
+        #endregion
+
+        [JsonObject(MemberSerialization.OptOut)]
+        public class Playlist
+        {
+            public string Name { get; set; } = string.Empty;
+            public List<PlaylistEntry> Entries { get; set; } = [];
+
+            public void AdjustToCurrentChar()
+            {
+                foreach (PlaylistEntry entry in this.Entries)
+                    entry.AdjustToCurrentChar();
+            }
+        }
 
         [JsonObject(MemberSerialization.OptOut)]
         public class PlaylistEntry
@@ -235,7 +250,8 @@ namespace AutoDuty.Data
                 {
                     if (value != this.id)
                     {
-                        this.path    = ContentPathsManager.DictionaryPaths[value].SelectPath(out _)!.FileName;
+                        Svc.Log.Debug(ContentPathsManager.DictionaryPaths.Count.ToString());
+                        this.Path    = null;
                         this.content = null;
                     }
 
@@ -246,6 +262,7 @@ namespace AutoDuty.Data
             [JsonIgnore]
             private Content? content;
 
+            [JsonIgnore]
             public Content? Content =>
                 this.content ??= this.id == 0 ? null : ContentHelper.DictionaryContent[this.id];
 
@@ -262,7 +279,11 @@ namespace AutoDuty.Data
 
             public byte variantPathIndex = 0;
 
-            public string path = string.Empty;
+            public string Path
+            {
+                get => field ??= ContentPathsManager.DictionaryPaths[this.id].SelectPath(out _)!.FileName;
+                set;
+            }
 
             public int count    = 1;
             public int curCount = 0;
@@ -270,6 +291,11 @@ namespace AutoDuty.Data
             public byte? gearset;
 
             public bool unsynced;
+
+            public void AdjustToCurrentChar()
+            {
+
+            }
         }
 
         public readonly record struct DutyDataRecord(DateTime CompletionTime, TimeSpan Duration, uint TerritoryId, ulong CID, int ilvl, Job Job, int? Deaths);

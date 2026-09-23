@@ -6,12 +6,13 @@ using Dalamud.Game.ClientState.Objects.Types;
 
 namespace AutoDuty.Helpers
 {
+    using Configurations;
     using ECommons.ExcelServices;
 
-    internal class GotoBarracksHelper : ActiveHelperBase<GotoBarracksHelper>
+    public class GotoBarracksHelper : ActiveHelperBase<GotoBarracksHelper, LoopActionConfigBare>
     {
-        protected override string Name        => nameof(GotoBarracksHelper);
-        protected override string DisplayName => string.Empty;
+        public override string Name        => nameof(GotoBarracksHelper);
+        public override string DisplayName => string.Empty;
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno"];
 

@@ -4,41 +4,36 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using ECommons;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using IPC;
 using System.Collections.Generic;
 using System.Linq;
-using ECommons.ExcelServices;
-using ECommons.GameFunctions;
-using Lumina.Excel;
-using Lumina.Excel.Sheets;
+using Configurations;
+using Cabinet = Lumina.Excel.Sheets.Cabinet;
 using EventHandler = FFXIVClientStructs.FFXIV.Client.Game.Event.EventHandler;
 
-internal class GlamourChestHelper : ActiveHelperBase<GlamourChestHelper>
+public class ArmoireHelper : ActiveHelperBase<ArmoireHelper, ArmoireLoopActionConfig>
 {
-    protected override string    Name               { get; }       = nameof(GlamourChestHelper);
-    protected override string    DisplayName        { get; }       = "Glamour Chest";
-    public override    string[]? Commands           { get; init; } = ["glamour"];
-    public override    string?   CommandDescription { get; init; } = "Stores items in your inventory to the Glamour Chest.";
+    public override    string    Name               { get; }       = nameof(ArmoireHelper);
+    public override    string    DisplayName        { get; }       = "Armoire";
+    public override    string[]? Commands           { get; init; } = ["armoire"];
+    public override    string?   CommandDescription { get; init; } = "Stores items in your inventory to the Armoire.";
     protected override int       UpdateBaseThrottle { get; set; }  = 125;
 
-    private bool glogStarted;
+    protected override string[] AddonsToClose { get; } = ["SelectYesno", "Cabinet", "SelectString"];
 
-    protected override string[] AddonsToClose { get; } =
-    [
-        "SelectYesno", "MiragePrismPrismBox", "MiragePrismPrismBoxCrystallize",
-        "MiragePrismMiragePlate", "CabinetWithdraw", "SelectString"
-    ];
+    private bool glogStarted;
 
     internal override void Start()
     {
         if (!GlamourLog_IPCSubscriber.IsEnabled)
             return;
 
-        ExcelSheet<MirageStoreSetItemLookup> setLookups = Svc.Data.GetExcelSheet<MirageStoreSetItemLookup>();
-        IEnumerable<InventoryItem> items = InventoryHelper.GetInventorySelection(InventoryHelper.Bag).Where(item => setLookups.HasRow(item.ItemId)).ToList();
+        IEnumerable<InventoryItem> items = InventoryHelper.GetInventorySelection(InventoryHelper.Bag).Where(item => this.ItemToCabinetIds.ContainsKey(item.ItemId)).ToList();
 
         if (!items.Any() || items.All(item => GlamourLog_IPCSubscriber.IsStored(item.ItemId)))
             return;
@@ -55,27 +50,27 @@ internal class GlamourChestHelper : ActiveHelperBase<GlamourChestHelper>
         if (GotoInnHelper.State == ActionState.Running)
             return;
 
-        if (this.glogStarted)
+        if(this.glogStarted)
         {
             if (!GlamourLog_IPCSubscriber.Busy)
                 this.Stop();
             return;
         }
 
-        Plugin.action = "Glamour Chest";
+        Plugin.action = "Armoire";
 
-        if(Svc.Targets.Target == null || Svc.Targets.Target.Struct()->EventHandler->Info.EventId != 721347)
+        if(Svc.Targets.Target == null || Svc.Targets.Target.Struct()->EventHandler->Info.EventId != 720978)
         {
-            this.DebugLog("Target is not the glamour chest.");
-            IGameObject? glamourChest = Svc.Objects.OrderBy(ObjectHelper.GetDistanceToPlayer).FirstOrDefault(o =>
+            this.DebugLog("Target is not the armoire.");
+            IGameObject? armoire = Svc.Objects.OrderBy(ObjectHelper.GetDistanceToPlayer).FirstOrDefault(o =>
                                                                                                         {
                                                                                                             EventHandler* eventHandler = o.Struct()->EventHandler;
-                                                                                                            return eventHandler != null && eventHandler->Info.EventId == 721347;
+                                                                                                            return eventHandler != null && eventHandler->Info.EventId == 720978;
                                                                                                         });
 
-            if (glamourChest != null)
+            if (armoire != null)
             {
-                Svc.Targets.Target = glamourChest;
+                Svc.Targets.Target = armoire;
             }
             else if (!GotoInnHelper.InGCInn())
             {
@@ -87,7 +82,7 @@ internal class GlamourChestHelper : ActiveHelperBase<GlamourChestHelper>
 
         if (!ObjectHelper.BelowDistanceToPlayer(Svc.Targets.Target.Position, 3f, 2f))
         {
-            this.DebugLog("Glamour Chest is too far away.");
+            this.DebugLog("Armoire is too far away.");
             if (!VNavmesh_IPCSubscriber.Path_IsRunning)
                 VNavmesh_IPCSubscriber.SimpleMove_PathfindAndMoveTo(Svc.Targets.Target.Position, false);
             return;
@@ -103,21 +98,11 @@ internal class GlamourChestHelper : ActiveHelperBase<GlamourChestHelper>
             return;
         }
 
-        AgentMiragePrismPrismBox* agentMirage  = AgentMiragePrismPrismBox.Instance();
-        if (agentMirage->IsAddonReady() && GenericHelpers.TryGetAddonByName("MiragePrismPrismBoxCrystallize", out AtkUnitBase* addonMirage))
+        AgentCabinet* agentCabinet = AgentCabinet.Instance();
+        if (agentCabinet->IsAddonReady() && GenericHelpers.TryGetAddonByName("Cabinet", out AtkUnitBase* _) &&
+            UIState.Instance()->Cabinet.IsCabinetLoaded())
         {
-            this.DebugLog("MiragePrism addon is ready.");
-
-
-            if (addonMirage->AtkValuesCount <= 0)
-                return;
-
-            if (addonMirage->AtkValues[0].UInt <= 0) // Number of items in the current category
-            {
-                this.DebugLog("no items left.");
-                this.Stop();
-                return;
-            }
+            this.DebugLog("Cabinet addon is ready.");
 
             this.DebugLog("Activating Glamour Log");
 
@@ -126,11 +111,32 @@ internal class GlamourChestHelper : ActiveHelperBase<GlamourChestHelper>
             return;
         }
 
-        if (!agentMirage->IsAddonShown())
+        if (GenericHelpers.TryGetAddonByName("SelectString", out AtkUnitBase* addonSelectString) && GenericHelpers.IsAddonReady(addonSelectString))
         {
-            this.DebugLog("Interact with GlamourChest");
+            this.DebugLog("Selecting SelectString");
+            AddonHelper.ClickSelectString(0);
+            return;
+        }
+
+        if (!agentCabinet->IsAddonShown())
+        {
+            this.DebugLog("Interact with Cabinet");
             ObjectHelper.InteractWithObject(Svc.Targets.Target);
             return;
+        }
+    }
+
+    public Dictionary<uint, uint> ItemToCabinetIds
+    {
+        get
+        {
+            if (field == null)
+            {
+                field = [];
+                foreach (Cabinet cabinet in Svc.Data.GetExcelSheet<Cabinet>().ToList())
+                    field[cabinet.Item.RowId] = cabinet.RowId;
+            }
+            return field;
         }
     }
 }

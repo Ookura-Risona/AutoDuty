@@ -13,6 +13,7 @@ namespace AutoDuty.Windows
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Configurations;
     using Data;
 
     internal static class PathsTab
@@ -32,13 +33,13 @@ namespace AutoDuty.Windows
             }
 
             if (_checked)
-                AutoDuty.Configuration.DoNotUpdatePathFiles.Add(_selectedDutyPath.FileName);
+                ConfigurationMain.Instance.DoNotUpdatePathFiles.Add(_selectedDutyPath.FileName);
             else
-                AutoDuty.Configuration.DoNotUpdatePathFiles.Remove(_selectedDutyPath.FileName);
+                ConfigurationMain.Instance.DoNotUpdatePathFiles.Remove(_selectedDutyPath.FileName);
 
             _selectedDutyPath.UpdateColoredNames();
 
-            Configuration.Save();
+           ConfigurationProfileV2.Save();
         }
 
         internal static void Draw()
@@ -65,13 +66,13 @@ namespace AutoDuty.Windows
 
             ImGui.PopStyleColor();
             ImGui.SameLine();
-            using (ImRaii.Disabled(AutoDuty.Configuration.PathSelectionsByPath.All(kvp => kvp.Value?.Count != 0)))
+            using (ImRaii.Disabled(AutoDuty.Configuration.Meta.PathSelectionsByPath.All(kvp => kvp.Value?.Count != 0)))
             {
                 if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.ClearCachedJobs")))
                 {
                     _selectedDutyPath = null;
-                    AutoDuty.Configuration.PathSelectionsByPath.Clear();
-                    Configuration.Save();
+                    AutoDuty.Configuration.Meta.PathSelectionsByPath.Clear();
+                   ConfigurationProfileV2.Save();
                 }
             }
 
@@ -126,7 +127,7 @@ namespace AutoDuty.Windows
                             ImGui.Indent(20);
 
                             
-                            if (AutoDuty.Configuration.PathSelectionsByPath.TryGetValue(container.ID, out pathSelections))
+                            if (AutoDuty.Configuration.Meta.PathSelectionsByPath.TryGetValue(container.ID, out pathSelections))
                                 if (pathSelections != null)
                                     foreach ((string? path, JobWithRole jobs) in pathSelections)
                                         ;//pathJobs[container.Paths.FindIndex(dp => dp.FileName.Equals(jobs))].Add(new Tuple<CombatRole, Job>(path.GetCombatRole(), path));
@@ -143,7 +144,7 @@ namespace AutoDuty.Windows
                                 }
                                 else
                                 {
-                                    _checked          = AutoDuty.Configuration.DoNotUpdatePathFiles.Contains(path.FileName);
+                                    _checked          = ConfigurationMain.Instance.DoNotUpdatePathFiles.Contains(path.FileName);
                                     _selectedDutyPath = path;
                                 }
 
@@ -228,8 +229,8 @@ namespace AutoDuty.Windows
                     ImGui.EndChild();
                     ImGui.EndTable();
 
-                    AutoDuty.Configuration.PathSelectionsByPath.Remove(_selectedDutyPath.container.ID);
-                    Configuration.Save();
+                    AutoDuty.Configuration.Meta.PathSelectionsByPath.Remove(_selectedDutyPath.container.ID);
+                   ConfigurationProfileV2.Save();
 
                     _selectedDutyPath = null;
 
@@ -244,7 +245,7 @@ namespace AutoDuty.Windows
 
                 PathSelectionHelper.AddPathSelectionEntry(_selectedDutyPath.container.ID);
 
-                if (AutoDuty.Configuration.PathSelectionsByPath.TryGetValue(_selectedDutyPath.container.ID, out Dictionary<string, JobWithRole>? pathSelections))
+                if (AutoDuty.Configuration.Meta.PathSelectionsByPath.TryGetValue(_selectedDutyPath.container.ID, out Dictionary<string, JobWithRole>? pathSelections))
                     if (pathSelections!.TryGetValue(_selectedDutyPath.FileName, out JobWithRole dutyRoles)) 
                         jwr = dutyRoles;
 
@@ -254,7 +255,7 @@ namespace AutoDuty.Windows
 
                 if(jwr != jwrCheck)
                 {
-                    Dictionary<string, JobWithRole> pathJobConfigs = AutoDuty.Configuration.PathSelectionsByPath[_selectedDutyPath.container.ID]!;
+                    Dictionary<string, JobWithRole> pathJobConfigs = AutoDuty.Configuration.Meta.PathSelectionsByPath[_selectedDutyPath.container.ID]!;
 
                     foreach (string key in pathJobConfigs.Keys) 
                         pathJobConfigs[key] &= ~jwr;
@@ -263,10 +264,10 @@ namespace AutoDuty.Windows
 
                     PathSelectionHelper.RebuildDefaultPaths(_selectedDutyPath.container.ID);
 
-                    Configuration.Save();
+                   ConfigurationProfileV2.Save();
                 }
 
-                ImGui.EndChild();
+                ImGui.EndChild();   
                 ImGui.EndChild();
                 ImGui.Unindent();
             }

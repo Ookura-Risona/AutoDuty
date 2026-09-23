@@ -1,0 +1,93 @@
+{
+  "LoopActions": {
+    "Hint": "Hold CTRL to delete an entry",
+    "AutoEquip": {
+      "GearSourceHelp": "Vanilla - Uses Gear from Armory Chest Only\nGearsetter - Asks gearsetter, can move old items to inventory\nStylist - Uses your stylist settings",
+      "MoveOldToInventory": "Move old items to inventory",
+      "MoveOldToInventoryHelp": "Except for weapons, this will move the gear to be replaced to the inventory.",
+      "RequiresGearsetterOrStylist": "* Items outside the armoury chest requires Gearsetter or Stylist plugin"
+    },
+    "Repair": {
+      "Self": "Self",
+      "SelfHelp": "Will use DarkMatter to Self Repair (Requires Leveled Crafters!)",
+      "CityNpc": "CityNpc",
+      "CityNpcHelp": "Will use preferred repair npc to repair.",
+      "TriggerAt": "Trigger @",
+      "PreferredRepairNPC": "Preferred Repair NPC: ",
+      "PreferredRepairNPCHelp": "It's a good idea to match the Repair NPC with Summoning Bell and if possible Retire Location",
+      "NPCSearchHint": "Start typing NPC or zone name to search",
+      "GrandCompanyInn": "Grand Company Inn"
+    },
+    "AutoRetainer": {
+      "PreferredSummoningBell": "Preferred Summoning Bell Location: ",
+      "PreferredSummoningBellHelp": "No matter what location is chosen, if there is a summoning bell in the location you are in when this is invoked it will go there instead",
+      "WaitingUpTo": "Waiting up to...",
+      "Seconds": "seconds"
+    },
+    "PlaylistPreLoop": {
+      "Help": "If in playlist mode, changes gear set to the first entry's specified gearset"
+    },
+    "PlaylistSwitchLoop": {
+      "Help": "If in playlist mode, changes gear set to the next entry's specified gearset, and switches the active loop to the next playlist entry, if applicable"
+    },
+    "TripleTriadSell": {
+      "SlotsOccupied": "Slots occupied",
+      "CardCount": "Card count"
+    },
+    "Extract": {
+      "Equipped": "Equipped",
+      "All": "All"
+    },
+    "GCTurnIn": {
+      "InventorySlotsLeft": "Inventory Slots Left @",
+      "UseGCAetheryteTicket": "Use GC Aetheryte Ticket"
+    },
+    "Armoire": {
+      "Help": "Will entrust items to the armoire between loops"
+    },
+    "Glamour": {
+      "Help": "Will entrust items to the glamour chest between loops"
+    },
+    "Desynth": {
+      "OnlySkillUps": "Only Skill Ups",
+      "ItemLevelLimit": "Item Level Limit",
+      "ItemLevelLimitHelp": "Stops desynthesising an item once your desynthesis skill reaches the Item Level + this limit.",
+      "NQOnly": "Guarantee NQ results",
+      "ProtectGearsets": "Protect Gearsets",
+      "ProtectGearsetterUpgrades": "Protect Gearsetter upgrades from Auto Desynth",
+      "ProtectGearsetterUpgradesHelp": "Also protects items that Gearsetter recommends as an upgrade for any of your gearsets, even if they aren't equipped in one yet. Requires the Gearsetter plugin.",
+      "Categories": "Desynth Categories"
+    },
+    "Coffers": {
+      "Help": "AutoDuty will open gear coffers (like paladin arms) between each loop",
+      "OpenCoffersWithGearset": "Open Coffers with Gearset: ",
+      "CurrentGearset": "Current Gearset",
+      "UseBlacklist": "Use Blacklist",
+      "UseBlacklistHelp": "Option to disable some coffers from being opened automatically.",
+      "SelectCoffer": "Select Coffer",
+      "CofferName": "Coffer Name",
+      "CofferNameHint": "Start typing coffer name to search",
+      "AddCoffer": "Add Coffer"
+    },
+    "Retire": {
+      "LifestreamNotRegistered": ""
+    },
+    "ConsumeItems": {
+      "AutoConsumeHelp": "AutoDuty will consume these items on run and between each loop (if status does not exist)",
+      "IgnoreStatus": "Ignore Status",
+      "IgnoreStatusHelp": "AutoDuty will consume these items on run and between each loop every time (even if status does exists)",
+      "MinTimeRemaining": "Min time remaining",
+      "MinTimeRemainingHelp": "If the status has less than this amount of time remaining (in minutes), it will consume these items",
+      "ItemName": "Item Name",
+      "ItemNameHint": "Start typing item name to search",
+      "AddItem": "Add Item"
+    },
+    "ExecuteCommands": {
+      "ExecuteCommandsHelp": "Execute commands\nFor example {0}"
+    },
+    "Wait": {
+      "WaitTime": "(ms) Wait time",
+      "WaitOnPlugins": "Waits on the specified plugins to be done with their actions"
+    }
+  }
+}

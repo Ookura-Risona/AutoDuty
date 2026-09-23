@@ -1,5 +1,4 @@
-﻿using AutoDuty.Windows;
-using ECommons.DalamudServices;
+﻿using ECommons.DalamudServices;
 
 namespace AutoDuty.Updater
 {
@@ -8,6 +7,7 @@ namespace AutoDuty.Updater
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using Configurations;
 
     public class Patcher
     {
@@ -46,7 +46,7 @@ namespace AutoDuty.Updater
 
                 (Dictionary<string, string>? md5, Dictionary<string, string>? del) = await GitHubHelper.GetPathUpdateInfoAsync();
 
-                HashSet<string> doNotUpdatePathFiles = ConfigurationMain.Instance.GetCurrentConfig.DoNotUpdatePathFiles;
+                HashSet<string> doNotUpdatePathFiles = ConfigurationMain.Instance.DoNotUpdatePathFiles;
                 if (md5 != null)
                 {
                     IEnumerable<KeyValuePair<string, string>> downloadList =

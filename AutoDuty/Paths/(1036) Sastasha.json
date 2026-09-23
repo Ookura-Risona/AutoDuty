@@ -10,7 +10,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Trash Packs / 雑魚 -->"
+      "Note": "<-- Trash Packs / 雑魚 -->",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -24,7 +25,8 @@
         "IsReady"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -38,7 +40,8 @@
         "1"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -52,7 +55,8 @@
         "FALSE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -66,7 +70,8 @@
         "OFF"
       ],
       "Conditions": [],
-      "Note": "To avoid aggroing clams, which may not die and keep you in combat."
+      "Note": "To avoid aggroing clams, which may not die and keep you in combat.",
+      "Flags": "None"
     },
     {
       "Tag": "Treasure",
@@ -80,7 +85,8 @@
         ""
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -94,7 +100,8 @@
         "ON"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -108,7 +115,8 @@
         "5000"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -122,7 +130,8 @@
         "TRUE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -136,7 +145,8 @@
         "OFF"
       ],
       "Conditions": [],
-      "Note": "To avoid the small chance of attacking a clam."
+      "Note": "To avoid the small chance of attacking a clam.",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -150,7 +160,30 @@
         "2"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionToDo, AutoDuty",
+          "index": 0,
+          "count": 1,
+          "operatorValue": "<"
+        }
+      ],
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -164,7 +197,23 @@
         "3"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [],
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -178,7 +227,8 @@
         "ON"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -190,7 +240,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Boss / ボス #1 -->"
+      "Note": "<-- Boss / ボス #1 -->",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -204,7 +255,8 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Chopper"
+      "Note": "Chopper",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -216,7 +268,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Trash Packs / 雑魚 -->"
+      "Note": "<-- Trash Packs / 雑魚 -->",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -230,7 +283,45 @@
         "2000216"
       ],
       "Conditions": [],
-      "Note": "Inconspicuous Switch"
+      "Note": "Inconspicuous Switch",
+      "Flags": "None"
+    },
+    {
+      "Tag": "None",
+      "Name": "Wait",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "500"
+      ],
+      "Conditions": [],
+      "Note": "",
+      "Flags": "None"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionToDo, AutoDuty",
+          "index": 1,
+          "count": 1,
+          "operatorValue": "<"
+        }
+      ],
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -244,7 +335,8 @@
         "FALSE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -258,7 +350,8 @@
         "TRUE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -270,7 +363,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Boss / ボス #2 -->"
+      "Note": "<-- Boss / ボス #2 -->",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -284,7 +378,8 @@
         "<-30.66, 23.76, 62.21>"
       ],
       "Conditions": [],
-      "Note": "Captain Madison"
+      "Note": "Captain Madison",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -296,7 +391,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Trash Packs / 雑魚 -->"
+      "Note": "<-- Trash Packs / 雑魚 -->",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -310,7 +406,8 @@
         "FALSE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Treasure",
@@ -322,7 +419,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -336,7 +434,8 @@
         "13"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -350,7 +449,8 @@
         "TRUE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -364,7 +464,30 @@
         "2000250"
       ],
       "Conditions": [],
-      "Note": "Captain's Quarters Key"
+      "Note": "Captain's Quarters Key",
+      "Flags": "None"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2000512,
+          "quantity": 1,
+          "operatorValue": "<"
+        }
+      ],
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Treasure",
@@ -378,7 +501,30 @@
         "2000256"
       ],
       "Conditions": [],
-      "Note": "Key to the Hole"
+      "Note": "Key to the Hole",
+      "Flags": "None"
+    },
+    {
+      "Tag": "Treasure",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2000514,
+          "quantity": 1,
+          "operatorValue": "<"
+        }
+      ],
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Treasure",
@@ -392,7 +538,8 @@
         "2000232"
       ],
       "Conditions": [],
-      "Note": "The Hole"
+      "Note": "The Hole",
+      "Flags": "None"
     },
     {
       "Tag": "Treasure",
@@ -404,7 +551,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -418,7 +566,8 @@
         "2000227"
       ],
       "Conditions": [],
-      "Note": "Captain's Quarters"
+      "Note": "Captain's Quarters",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -432,7 +581,30 @@
         "2000255"
       ],
       "Conditions": [],
-      "Note": "Waverider Gate Key"
+      "Note": "Waverider Gate Key",
+      "Flags": "None"
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-1"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionItemCount, AutoDuty",
+          "itemId": 2000513,
+          "quantity": 1,
+          "operatorValue": "<"
+        }
+      ],
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -446,7 +618,8 @@
         "2000231"
       ],
       "Conditions": [],
-      "Note": "Waverider Gate"
+      "Note": "Waverider Gate",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -458,7 +631,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- The other Chest around here is skipped because it's surrounded... -->"
+      "Note": "<-- The other Chest around here is skipped because it's surrounded... -->",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -470,7 +644,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- ...by a lot of enemies which makes it dangerous for min-iLvl Tanks. -->"
+      "Note": "<-- ...by a lot of enemies which makes it dangerous for min-iLvl Tanks. -->",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -482,7 +657,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Boss / ボス #3 -->"
+      "Note": "<-- Boss / ボス #3 -->",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -496,7 +672,8 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Captain Madison"
+      "Note": "Captain Madison",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -510,7 +687,8 @@
         "FALSE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Unsynced",
@@ -524,7 +702,8 @@
         "TRUE"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "Comment",
@@ -536,7 +715,8 @@
       },
       "Arguments": [],
       "Conditions": [],
-      "Note": "<-- Boss / ボス #4 -->"
+      "Note": "<-- Boss / ボス #4 -->",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -550,7 +730,8 @@
         ""
       ],
       "Conditions": [],
-      "Note": "Denn the Orcatoothed"
+      "Note": "Denn the Orcatoothed",
+      "Flags": "None"
     }
   ],
   "Meta": {
@@ -595,6 +776,14 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 335,
+        "Change": "Safety check for keys"
+      },
+      {
+        "Version": 335,
+        "Change": "Safety check for interactions."
       }
     ],
     "Notes": []

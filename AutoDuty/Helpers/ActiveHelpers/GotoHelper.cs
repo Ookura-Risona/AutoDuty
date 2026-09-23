@@ -9,15 +9,16 @@ using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
+    using global::AutoDuty.Configurations;
+    using Lumina.Excel.Sheets;
     using System;
     using System.Collections.Generic;
-    using Lumina.Excel.Sheets;
     using GrandCompany = ECommons.ExcelServices.GrandCompany;
 
-    internal class GotoHelper : ActiveHelperBase<GotoHelper>
+    public class GotoHelper : ActiveHelperBase<GotoHelper, LoopActionConfigBare>
     {
-        protected override string Name        { get; } = nameof(GotoHelper);
-        protected override string DisplayName { get; } = string.Empty;
+        public override string Name        { get; } = nameof(GotoHelper);
+        public override string DisplayName { get; } = string.Empty;
 
         public override string[]? Commands { get; init; } = ["goto", "go"];
         public override string? CommandDescription { get; init; } = "Goes to a specific location in the game world\ttargets: inn / barracks / gc / bell / apartment / home / fc";
@@ -233,7 +234,7 @@ namespace AutoDuty.Helpers
                 case "ar":
                 case "bell":
                 case "summoningbell":
-                    SummoningBellHelper.Invoke(Configuration.PreferredSummoningBellEnum);
+                    SummoningBellHelper.Invoke(AutoRetainerHelper.Instance.ActionConfig.PreferredSummoningBellEnum);
                     break;
                 case "ap":
                 case "apartment":

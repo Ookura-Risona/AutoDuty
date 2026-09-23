@@ -7,8 +7,8 @@ namespace AutoDuty.Helpers;
 
 internal static class ConfigOverrideHelper
 {
-    private readonly record struct OverrideEntry(FieldInfo Field, object? PreviousValue);
-    private static readonly Dictionary<FieldInfo, OverrideEntry> Active = [];
+    private readonly record struct OverrideEntry((PropertyInfo? property, object? instance) config, object? PreviousValue);
+    private static readonly Dictionary<(PropertyInfo? property, object? instance), OverrideEntry> Active = [];
 
     internal static bool HasOverrides => Active.Count > 0;
 
@@ -20,33 +20,35 @@ internal static class ConfigOverrideHelper
             return false;
         }
 
-        List<FieldInfo> newlyTracked = [];
-        List<(FieldInfo Field, object? Before)> touched = [];
+        List<(PropertyInfo? property, object? instance)>                   newlyTracked = [];
+        List<((PropertyInfo? property, object? instance), object? Before)> touched      = [];
+
         foreach ((string name, string value) in overrides)
         {
-            FieldInfo? field = ConfigHelper.FindConfig(name);
-            if (field is null)
+            (PropertyInfo? property, object? instance)? config = ConfigHelper.FindConfig(name);
+
+            if (!config.HasValue || config.Value.property == null)
             {
                 Svc.Log.Error($"Unable to find config: {name}");
                 Revert(touched, newlyTracked);
                 return false;
             }
 
-            if (field.FieldType.ToString().Contains("Dalamud.Plugin", System.StringComparison.InvariantCultureIgnoreCase))
+            if (config.Value.property.PropertyType.ToString().Contains("Dalamud.Plugin", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 Svc.Log.Error($"Cannot override plugin field: {name}");
                 Revert(touched, newlyTracked);
                 return false;
             }
 
-            if (field.FieldType.IsAssignableTo(typeof(IList)))
+            if (config.Value.property.PropertyType.IsAssignableTo(typeof(IList)))
             {
                 Svc.Log.Error($"List configs are not supported: {name}");
                 Revert(touched, newlyTracked);
                 return false;
             }
 
-            object? newValue = ConfigHelper.ConvertConfigValue(field.FieldType, value, out string failReason);
+            object? newValue = ConfigHelper.ConvertConfigValue(config.Value.property.PropertyType, value, out string failReason);
             if (newValue is null)
             {
                 Svc.Log.Error($"Unable to set {name}: {failReason}");
@@ -54,15 +56,15 @@ internal static class ConfigOverrideHelper
                 return false;
             }
 
-            object? before = field.GetValue(Configuration);
-            touched.Add((field, before));
-            if (!Active.ContainsKey(field))
+            object? before = config.Value.property.GetValue(config.Value.instance);
+            touched.Add((config.Value, before));
+            if (!Active.ContainsKey(config.Value))
             {
-                Active[field] = new OverrideEntry(field, before);
-                newlyTracked.Add(field);
+                Active[config.Value] = new OverrideEntry(config.Value, before);
+                newlyTracked.Add(config.Value);
             }
 
-            field.SetValue(Configuration, newValue);
+            config.Value.property.SetValue(config.Value.instance, newValue);
         }
 
         Svc.Log.Debug($"Applied {overrides.Count} override(s); active={Active.Count}");
@@ -76,16 +78,16 @@ internal static class ConfigOverrideHelper
 
         Svc.Log.Debug($"Restoring {Active.Count} override(s)");
         foreach (OverrideEntry entry in Active.Values)
-            entry.Field.SetValue(Configuration, entry.PreviousValue);
+            entry.config.property!.SetValue(entry.config.instance, entry.PreviousValue);
         Active.Clear();
         return true;
     }
 
-    private static void Revert(List<(FieldInfo Field, object? Before)> touched, List<FieldInfo> newlyTracked)
+    private static void Revert(List<((PropertyInfo? property, object? instance) config, object? Before)> touched, List<(PropertyInfo? property, object? instance)> newlyTracked)
     {
         for (int i = touched.Count - 1; i >= 0; i--)
-            touched[i].Field.SetValue(Configuration, touched[i].Before);
-        foreach (FieldInfo field in newlyTracked)
+            touched[i].config.property!.SetValue(touched[i].config.instance, touched[i].Before);
+        foreach ((PropertyInfo? property, object? instance) field in newlyTracked)
             Active.Remove(field);
     }
 }

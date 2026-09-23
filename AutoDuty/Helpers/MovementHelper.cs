@@ -33,25 +33,28 @@ namespace AutoDuty.Helpers
             if (fly && !IsFlyingSupported)
                 fly = false;
 
-            if (!Conditions.Instance()->Mounted && IsFlyingSupported)
+            if (position == Vector3.Zero)
+                return true;
+
+            float distance = (Vector3.Distance(position, Player.Position) - (useMesh ? 0 : 1)/*fix for vnav's diff Distance calc*/);
+
+            if (!Conditions.Instance()->Mounted && IsFlyingSupported && distance > 10)
             {
                 if (!PlayerHelper.IsCasting)
                     ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9);
                 return false;
             }
 
-            if (fly && !Conditions.Instance()->InFlight)
+            if (fly && !Conditions.Instance()->InFlight && distance > 10)
             {
                 if (!PlayerHelper.IsCasting)
                     ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
                 return false;
             }
 
-            if (position == Vector3.Zero || (Vector3.Distance(position, Player.Position) - (useMesh ? 0 : 1)/*fix for vnav's diff Distance calc*/) <= lastPointTollerance)
+            if (distance <= lastPointTollerance)
             {
-                if (position != Vector3.Zero)
-                    VNavmesh_IPCSubscriber.Path_Stop();
-                
+                VNavmesh_IPCSubscriber.Path_Stop();
                 return true;
             }
 

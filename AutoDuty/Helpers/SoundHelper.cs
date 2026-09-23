@@ -4,11 +4,9 @@ namespace AutoDuty.Helpers
 {
     public static class SoundHelper
     {
-        public static unsafe bool StartSound(bool PlayEndSound, bool CustomSound, Sounds SoundEnum = Sounds.None)
+        public static unsafe bool StartSound(Sounds soundEnum = Sounds.None)
         {
-            if (!PlayEndSound)
-                return false;
-            UIGlobals.PlaySoundEffect((uint)SoundEnum);
+            UIGlobals.PlaySoundEffect((uint) soundEnum);
             return true;
         }
     }

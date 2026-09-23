@@ -13,23 +13,23 @@ namespace AutoDuty.Helpers
     using FFXIVClientStructs.FFXIV.Client.Game;
     using System;
     using System.Linq;
+    using Configurations;
 
-    internal class AutoRetainerHelper : ActiveHelperBase<AutoRetainerHelper>
+    public class AutoRetainerHelper : ActiveHelperBase<AutoRetainerHelper, AutoRetainerLoopActionConfig>
     {
-        protected override string Name        { get; } = nameof(AutoRetainerHelper);
-        protected override string DisplayName { get; } = "AutoRetainer";
+        public override string Name        { get; } = nameof(AutoRetainerHelper);
+        public override string DisplayName { get; } = "AutoRetainer";
 
         public override string[]? Commands { get; init; } = ["ar", "autoretainer"];
         public override string? CommandDescription { get; init; } = "Automatically manages retainers using the AutoRetainer plugin";
 
-
-        protected override int TimeOut => 600_000 + ((int) Configuration.AutoRetainer_RemainingTime*60);
+        protected override int TimeOut => 600_000 + ((int) this.ActionConfig.AutoRetainerRemainingTime * 60);
 
         protected override string[] AddonsToClose { get; } = ["RetainerList", "SelectYesno", "SelectString", "RetainerTaskAsk"];
 
         internal override void Start()
         {
-            if (!AutoRetainer_IPCSubscriber.RetainersAvailable())
+            if (!AutoRetainer_IPCSubscriber.RetainersAvailable(this.ActionConfig.AutoRetainerRemainingTime))
                 return;
             this.DebugLog("AutoRetainerHelper.Invoke");
             if (!AutoRetainer_IPCSubscriber.IsEnabled)
@@ -53,7 +53,7 @@ namespace AutoDuty.Helpers
 
         private        bool         _autoRetainerStarted = false;
         private        bool         _autoRetainerStopped = false;
-        private static IGameObject? SummoningBellGameObject => Svc.Objects.FirstOrDefault(x => x.BaseId == SummoningBellHelper.SummoningBellDataIds((uint)Configuration.PreferredSummoningBellEnum));
+        private IGameObject? SummoningBellGameObject => Svc.Objects.FirstOrDefault(x => x.BaseId == SummoningBellHelper.SummoningBellDataIds((uint) this.ActionConfig.PreferredSummoningBellEnum));
 
         protected override unsafe void HelperStopUpdate(IFramework framework)
         {
@@ -93,7 +93,7 @@ namespace AutoDuty.Helpers
                     this._autoRetainerStopped = false;
                     this.DebugLog("still busy");
 
-                } else if (AutoRetainer_IPCSubscriber.RetainersAvailable())
+                } else if (AutoRetainer_IPCSubscriber.RetainersAvailable(this.ActionConfig.AutoRetainerRemainingTime))
                 {
                     this._autoRetainerStopped = false;
                     this._autoRetainerStarted = false;
@@ -131,17 +131,17 @@ namespace AutoDuty.Helpers
                 EzThrottler.Throttle(this.Name, 2000, true);
             }
 
-            if (SummoningBellGameObject != null && !SummoningBellHelper.HousingZones.Contains(Player.Territory.RowId) && ObjectHelper.GetDistanceToPlayer(SummoningBellGameObject) > 4)
+            if (this.SummoningBellGameObject != null && !SummoningBellHelper.HousingZones.Contains(Player.Territory.RowId) && ObjectHelper.GetDistanceToPlayer(this.SummoningBellGameObject) > 4)
             {
                 this.DebugLog("Moving Closer to Summoning Bell");
-                MovementHelper.Move(SummoningBellGameObject, 0.25f, 4);
+                MovementHelper.Move(this.SummoningBellGameObject, 0.25f, 4);
             }
-            else if ((SummoningBellGameObject == null || SummoningBellHelper.HousingZones.Contains(Player.Territory.RowId)) && GotoHelper.State != ActionState.Running)
+            else if ((this.SummoningBellGameObject == null || SummoningBellHelper.HousingZones.Contains(Player.Territory.RowId)) && GotoHelper.State != ActionState.Running)
             {
                 this.DebugLog("Moving to Summoning Bell Location");
-                SummoningBellHelper.Invoke(Configuration.PreferredSummoningBellEnum);
+                SummoningBellHelper.Invoke(this.ActionConfig.PreferredSummoningBellEnum);
             }
-            else if (SummoningBellGameObject != null && ObjectHelper.GetDistanceToPlayer(SummoningBellGameObject) <= 4 && !this._autoRetainerStarted && !GenericHelpers.TryGetAddonByName("RetainerList", out AtkUnitBase* _) && (ObjectHelper.InteractWithObjectUntilAddon(SummoningBellGameObject, "RetainerList") == null))
+            else if (this.SummoningBellGameObject != null && ObjectHelper.GetDistanceToPlayer(this.SummoningBellGameObject) <= 4 && !this._autoRetainerStarted && !GenericHelpers.TryGetAddonByName("RetainerList", out AtkUnitBase* _) && (ObjectHelper.InteractWithObjectUntilAddon(this.SummoningBellGameObject, "RetainerList") == null))
             {
                 this.DebugLog("Interacted");
                 if (Svc.Condition[ConditionFlag.OccupiedSummoningBell])

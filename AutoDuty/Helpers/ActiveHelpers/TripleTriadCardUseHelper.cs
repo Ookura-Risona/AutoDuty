@@ -7,13 +7,14 @@ namespace AutoDuty.Helpers
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Configurations;
     using FFXIVClientStructs.FFXIV.Client.Game.UI;
     using Lumina.Excel.Sheets;
 
-    internal class TripleTriadCardUseHelper : ActiveHelperBase<TripleTriadCardUseHelper>
+    public class TripleTriadCardUseHelper : ActiveHelperBase<TripleTriadCardUseHelper, TripleTriadUseLoopActionConfig>
     {
-        protected override string Name        { get; } = nameof(TripleTriadCardUseHelper);
-        protected override string DisplayName { get; } = "Registering Cards";
+        public override string Name        { get; } = nameof(TripleTriadCardUseHelper);
+        public override string DisplayName { get; } = "Registering Cards";
 
         public override string[]? Commands { get; init; } = ["ttreg", "registercards"];
         public override string? CommandDescription { get; init; } = "Automatically registers Triple Triad cards in your inventory";

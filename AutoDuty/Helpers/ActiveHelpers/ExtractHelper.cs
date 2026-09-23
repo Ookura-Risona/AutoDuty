@@ -1,4 +1,5 @@
-﻿using Dalamud.Plugin.Services;
+﻿using AutoDuty.Configurations;
+using Dalamud.Plugin.Services;
 using ECommons;
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
@@ -8,10 +9,10 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
-    internal class ExtractHelper : ActiveHelperBase<ExtractHelper>
+    public class ExtractHelper : ActiveHelperBase<ExtractHelper, ExtractLoopActionConfig>
     {
-        protected override string Name        => nameof(ExtractHelper);
-        protected override string DisplayName => "Extracting Materia";
+        public override string Name        => nameof(ExtractHelper);
+        public override string DisplayName => "Extracting Materia";
 
         public override string[]? Commands { get; init; } = ["extract"];
         public override string? CommandDescription { get; init; } = "Extract's materia from equipment";
@@ -28,20 +29,20 @@ namespace AutoDuty.Helpers
             {
                 base.Start();
 
-                this._stoppingCategory = Configuration.AutoExtractAll ? 6 : 0;
+                this.stoppingCategory = this.ActionConfig.AutoExtractAll ? 6 : 0;
             }
         }
 
-        internal override unsafe void Stop()
+        internal override void Stop()
         {
-            this._currentCategory = 0;
-            this._switchedCategory   = false;
+            this.currentCategory  = 0;
+            this.switchedCategory = false;
             base.Stop();
         }
 
-        private int _currentCategory = 0;
-        private int _stoppingCategory;
-        private bool _switchedCategory = false;
+        private int currentCategory = 0;
+        private int stoppingCategory;
+        private bool switchedCategory = false;
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
@@ -80,7 +81,7 @@ namespace AutoDuty.Helpers
             }
             else if (GenericHelpers.IsAddonReady(addonMaterialize))
             {
-                if (this._currentCategory <= this._stoppingCategory)
+                if (this.currentCategory <= this.stoppingCategory)
                 {
                     AtkComponentList* list = addonMaterialize->GetNodeById(12)->GetAsAtkComponentList();
 
@@ -92,11 +93,11 @@ namespace AutoDuty.Helpers
                     if (spiritbondTextNode == null || categoryTextNode == null) return;
 
                     //switch to Category, if not on it
-                    if (!this._switchedCategory)
+                    if (!this.switchedCategory)
                     {
-                        Svc.Log.Debug($"AutoExtract - Switching to Category: {this._currentCategory}");
-                        AddonHelper.FireCallBack(addonMaterialize, false, 1, this._currentCategory);
-                        this._switchedCategory = true;
+                        Svc.Log.Debug($"AutoExtract - Switching to Category: {this.currentCategory}");
+                        AddonHelper.FireCallBack(addonMaterialize, false, 1, this.currentCategory);
+                        this.switchedCategory = true;
                         return;
                     }
 
@@ -108,8 +109,8 @@ namespace AutoDuty.Helpers
                     }
                     else
                     {
-                        this._currentCategory++;
-                        this._switchedCategory = false;
+                        this.currentCategory++;
+                        this.switchedCategory = false;
                     }
                 }
                 else

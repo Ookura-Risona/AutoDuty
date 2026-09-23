@@ -13,6 +13,7 @@ namespace AutoDuty.Helpers
     using ECommons.ImGuiMethods;
     using IPC;
     using System;
+    using System.Linq;
     using System.Numerics;
 
     internal static class ImGuiHelper
@@ -32,6 +33,8 @@ namespace AutoDuty.Helpers
 
         public static readonly Vector4 StateGoodColor = new(0, 1, 0, 1);
         public static readonly Vector4 StateBadColor  = new(1, 0, 0, 1);
+
+        public static Vector4 AccentRed { get; } = new(0.85f, 0.35f, 0.35f, 1f);
 
 
         public const string idColor               = "<0.5,0.5,1>";
@@ -134,15 +137,17 @@ namespace AutoDuty.Helpers
             ImGui.SameLine();
         }
 
-        internal static IDisposable RequiresPlugin(ExternalPlugin plugin, string id, string? message = null, bool inline = false, bool write = true)
+        internal static EndUnconditionally RequiresPlugin(ExternalPlugin plugins, string id, string? message = null, bool inline = false, bool write = true)
         {
-            if (plugin == ExternalPlugin.None)
-                return new EndUnconditionally();
+            if (plugins == ExternalPlugin.None)
+                return new EndUnconditionally(() => { }, true);
 
-            (string url, string name) = plugin.GetExternalPluginData();
-            bool canInstall = !string.IsNullOrWhiteSpace(url);
+            ExternalPlugin[] pluginsArray = plugins.GetFlags();
+            ExternalPlugin installablePlugins = pluginsArray
+                .Where(plugin => plugin.HasInstaller())
+                .Aggregate(ExternalPlugin.None, (current, plugin) => current | plugin);
 
-            if (IPCSubscriber_Common.IsReady(name) || (plugin == ExternalPlugin.BossMod && IPCSubscriber_Common.IsReady("BossModReborn")))
+            if (pluginsArray.All(plugin => IPCSubscriber_Common.IsReady(plugin.GetExternalPluginData().name) || (plugin == ExternalPlugin.BossMod && IPCSubscriber_Common.IsReady("BossModReborn"))))
             {
                 return new EndUnconditionally(() =>
                                               {
@@ -153,7 +158,7 @@ namespace AutoDuty.Helpers
                                                       ImGui.SameLine();
                                                   ImGui.Text($"{(inline ? "| " : "\t")}powered by ");
                                                   ImGui.SameLine(0, 1);
-                                                  ImGui.TextColored(LinkColor, plugin.GetExternalPluginName());
+                                                  ImGui.TextColored(LinkColor, string.Join(", ", pluginsArray.Select(plugin => plugin.GetExternalPluginName())));
                                               }, true);
             }
             else
@@ -173,27 +178,27 @@ namespace AutoDuty.Helpers
                                                       ImGui.SameLine();
                                                   ImGui.Text(message ?? $"{(inline ? "| " : "\t")} requires ");
                                                   ImGui.SameLine(0, 1);
-                                                  ImGui.TextColored(LinkColor, plugin.GetExternalPluginName());
+                                                  ImGui.TextColored(LinkColor, string.Join(", ", pluginsArray.Select(plugin => plugin.GetExternalPluginName())));
 
-                                                  if (canInstall)
+                                                  ImGui.SameLine(0, 5);
+                                                  if (installablePlugins != ExternalPlugin.None)
                                                   {
-                                                      ImGui.SameLine(0, 5);
-                                                      if (ImGui.Button($"Install##InstallExternalPlugin_{plugin}_{id}"))
-                                                          PluginInstaller.InstallPlugin(plugin);
+                                                      if (ImGui.Button($"Install##InstallExternalPlugin_{plugins}_{id}"))
+                                                          PluginInstaller.InstallPlugin(installablePlugins);
                                                   }
                                                   else
                                                   {
-                                                      ImGui.SameLine(0, 5);
                                                       ImGui.TextDisabled("(manual install)");
                                                   }
-                                              }, true);
+                                              }, false);
             }
         }
 
 
-        private struct EndUnconditionally(Action endAction, bool success) : IDisposable
+        public struct EndUnconditionally(Action endAction, bool success) : IDisposable
         {
-            private Action EndAction { get; } = endAction;
+            public bool    Success   => success;
+            public Action? EndAction => endAction;
 
             private bool Disposed { get; set; } = false;
 

@@ -9,7 +9,17 @@
       "Equip": "Equip",
       "Coffers": "Coffers",
       "TripleTriad": "Triple Triad",
-      "Armoire": "Armoire"
+      "Armoire": "Armoire",
+      "Glamour": "Glamour",
+      "AutoRetainer": "Retainers",
+      "AutoRetainerMulti": "AR Multi",
+      "Discard": "Discard",
+      "TripleTriadUse": "TT Use",
+      "TripleTriadSell": "TT Sell",
+      "ConsumeItems": "Consume",
+      "ExecuteCommands": "Commands",
+      "Wait": "Wait(?)",
+      "PlaySound": "Sound"
     },
     "Tooltip": {
       "TurnIn": "Click to Goto GC Turnin and Invoke AutoRetainer's GC Turnin",

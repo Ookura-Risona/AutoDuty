@@ -6,10 +6,12 @@ using ECommons.DalamudServices;
 
 namespace AutoDuty.Helpers
 {
-    internal class ExitDutyHelper : ActiveHelperBase<ExitDutyHelper>
+    using Configurations;
+
+    public class ExitDutyHelper : ActiveHelperBase<ExitDutyHelper, LoopActionConfigBare>
     {
-        protected override string Name        => nameof(ExitDutyHelper);
-        protected override string DisplayName => "Exiting Duty";
+        public override string Name        => nameof(ExitDutyHelper);
+        public override string DisplayName => "Exiting Duty";
 
         public override string[]? Commands           { get; init; } = ["exitduty"];
         public override string?   CommandDescription { get; init; } = "Exits the current duty if you are not in combat";

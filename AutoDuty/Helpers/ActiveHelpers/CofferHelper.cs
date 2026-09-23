@@ -6,10 +6,11 @@ namespace AutoDuty.Helpers
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Configurations;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
     using Lumina.Excel.Sheets;
 
-    internal class CofferHelper : ActiveHelperBase<CofferHelper>
+    public class CofferHelper : ActiveHelperBase<CofferHelper, CofferOpenLoopActionConfig>
     {
         public override string[]? Commands { get; init; } = ["coffer"];
         public override string? CommandDescription { get; init; } = "Opens coffers in your inventory";
@@ -24,8 +25,8 @@ namespace AutoDuty.Helpers
             this.doneItems.Clear();
         }
 
-        protected override string Name        { get; } = nameof(CofferHelper);
-        protected override string DisplayName { get; } = "Opening Coffers";
+        public override string Name        { get; } = nameof(CofferHelper);
+        public override string DisplayName { get; } = "Opening Coffers";
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
@@ -56,7 +57,7 @@ namespace AutoDuty.Helpers
                                                                       {
                                                                           Item? excelItem = InventoryHelper.GetExcelItem(iv.ItemId);
                                                                           this.DebugLog($"checking item: {iv.ItemId} in {iv.Container} {iv.Slot}");
-                                                                          return iv.ItemId > 0 && (!this.doneItems.ContainsKey(iv.ItemId) || this.doneItems[iv.ItemId] != iv.Quantity) && excelItem.HasValue && ValidCoffer(excelItem.Value);
+                                                                          return iv.ItemId > 0 && (!this.doneItems.ContainsKey(iv.ItemId) || this.doneItems[iv.ItemId] != iv.Quantity) && excelItem.HasValue && ValidCoffer(excelItem.Value, this.ActionConfig);
                                                                       });
 
 
@@ -65,17 +66,17 @@ namespace AutoDuty.Helpers
             if (items.Any())
             {
                 this.DebugLog("item found");
-                if (Configuration.AutoOpenCoffersGearset != null && module->CurrentGearsetIndex != Configuration.AutoOpenCoffersGearset)
+                if (this.ActionConfig.Gearset != null && module->CurrentGearsetIndex != this.ActionConfig.Gearset)
                 {
                     this.DebugLog("change gearset");
-                    if (!module->IsValidGearset((int)Configuration.AutoOpenCoffersGearset))
+                    if (!module->IsValidGearset((int)this.ActionConfig.Gearset))
                     {
                         this.DebugLog("invalid gearset");
-                        Configuration.AutoOpenCoffersGearset = null;
-                        Windows.Configuration.Save();
+                        this.ActionConfig.Gearset = null;
+                        ConfigurationProfileV2.Save();
                     } else
                     {
-                        module->EquipGearset(Configuration.AutoOpenCoffersGearset.Value);
+                        module->EquipGearset(this.ActionConfig.Gearset.Value);
                         return;
                     }
                 }
@@ -108,8 +109,8 @@ namespace AutoDuty.Helpers
             }
         }
 
-        internal static bool ValidCoffer(Item item) => // Miscellany
-            item.ItemAction.RowId is 1085 or 388 or 367 && item.ItemUICategory.RowId is 61 && (!Configuration.AutoOpenCoffersBlacklistUse || !Configuration.AutoOpenCoffersBlacklist.ContainsKey(item.RowId));
+        internal static bool ValidCoffer(Item item, CofferOpenLoopActionConfig config) => // Miscellany
+            item.ItemAction.RowId is 1085 or 388 or 367 && item.ItemUICategory.RowId is 61 && (!config.UseBlacklist || !config.Blacklist.ContainsKey(item.RowId));
         /*
          *  367 Triple Triad Card Pack
          */

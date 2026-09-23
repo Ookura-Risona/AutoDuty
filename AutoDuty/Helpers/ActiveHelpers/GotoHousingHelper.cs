@@ -1,19 +1,21 @@
-﻿using Dalamud.Plugin.Services;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons.Throttlers;
-using Dalamud.Game.ClientState.Objects.Types;
 using System.Numerics;
 
 namespace AutoDuty.Helpers
 {
+    using FFXIVClientStructs.FFXIV.Client.Game;
+    using global::AutoDuty.Configurations;
+    using IPC;
     using System;
     using System.Collections.Generic;
-    using FFXIVClientStructs.FFXIV.Client.Game;
 
-    internal class GotoHousingHelper : ActiveHelperBase<GotoHousingHelper>
+    public class GotoHousingHelper : ActiveHelperBase<GotoHousingHelper, LoopActionConfigBare>
     {
-        protected override string Name        { get; } = nameof(GotoHousingHelper);
-        protected override string DisplayName { get; } = string.Empty;
+        public override string Name        { get; } = nameof(GotoHousingHelper);
+        public override string DisplayName { get; } = string.Empty;
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno", "SelectString", "HousingWardSelection", "HousingWardSelectionDialog"];
 
@@ -33,7 +35,7 @@ namespace AutoDuty.Helpers
             GotoHelper.ForceStop();
             base.Stop();
             whichHousing = Housing.Apartment;
-            this.index      = 0;
+            this.index   = 0;
         }
 
         private static HouseId GetOwnedHouseId(Housing whichHousing)
@@ -60,9 +62,6 @@ namespace AutoDuty.Helpers
             _ => TeleportHelper.ApartmentEntranceGameObject
         };
         private static Housing whichHousing = Housing.Apartment;
-        private static List<Vector3> EntrancePath => whichHousing == Housing.Personal_Home ? 
-                                                          Configuration.PersonalHomeEntrancePath : 
-                                                          Configuration.FCEstateEntrancePath;
         private int index = 0;
 
         protected override void HelperUpdate(IFramework framework)
@@ -84,7 +83,7 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            if (GotoHelper.State == ActionState.Running)
+            if (GotoHelper.State == ActionState.Running || Lifestream_IPCSubscriber.IsBusy)
                 return;
 
             Plugin.action = $"Retiring to {whichHousing}";
@@ -101,37 +100,23 @@ namespace AutoDuty.Helpers
                 if (!PlayerHelper.IsCasting)
                 {
                     Svc.Log.Debug($"We are not in the correct housing area, teleporting there");
-                    if (whichHousing == Housing.Apartment && !TeleportHelper.TeleportApartment() && TeleportHelper.ApartmentTeleportId == 0)
+                    switch (whichHousing)
                     {
-                        this.Stop();
-                        return;
+                        case Housing.Apartment when !TeleportHelper.TeleportApartment()        && TeleportHelper.ApartmentTeleportId    == 0:
+                        case Housing.Personal_Home when !TeleportHelper.TeleportPersonalHome() && TeleportHelper.PersonalHomeTeleportId == 0:
+                        case Housing.FC_Estate when !TeleportHelper.TeleportFCEstate()         && TeleportHelper.FCEstateTeleportId     == 0:
+                            this.Stop();
+                            return;
+                        default:
+                            EzThrottler.Throttle("GotoHousing", 7500, true);
+                            break;
                     }
-                    else if (whichHousing == Housing.Personal_Home && !TeleportHelper.TeleportPersonalHome() && TeleportHelper.PersonalHomeTeleportId == 0)
-                    {
-                        this.Stop();
-                        return;
-                    }
-                    else if (whichHousing == Housing.FC_Estate && !TeleportHelper.TeleportFCEstate() && TeleportHelper.FCEstateTeleportId == 0)
-                    {
-                        this.Stop();
-                        return;
-                    }
-                    EzThrottler.Throttle("GotoHousing", 7500, true);
                 }
                 return;
             }
             else if (PlayerHelper.IsValid)
             {
-                if (this.index < EntrancePath.Count)
-                {
-                    Svc.Log.Debug($"Our entrancePath has entries, moving to index {this.index} which is {EntrancePath[this.index]}");
-                    if (((this.index + 1) != EntrancePath.Count && MovementHelper.Move(EntrancePath[this.index], 0.25f, 0.25f, false, false)) || MovementHelper.Move(EntrancePath[this.index], 0.25f, 3f, false, false))
-                    {
-                        Svc.Log.Debug($"We are at index {this.index} increasing our index");
-                        this.index++;
-                    }
-                }
-                else if (EntranceGameObject == null)
+                if (EntranceGameObject == null)
                 {
                     Svc.Log.Debug($"unable to find entrance door {TeleportHelper.FCEstateWardCenterVector3} {TeleportHelper.FCEstateEntranceGameObject}");
                 }

@@ -38,7 +38,7 @@ namespace AutoDuty.Helpers
             }
 
 
-            if (Environment.TickCount64 - LastPositionUpdate > Configuration.MinStuckTime && EzThrottler.Throttle("RequeueMoveTo", 1000))
+            if (Environment.TickCount64 - LastPositionUpdate > Configuration.DutyConfig.Stuck.MinStuckTime && EzThrottler.Throttle("RequeueMoveTo", 1000))
             {
                 LastStuckPosition       = Player.Position;
                 LastStuckPositionUpdate = Environment.TickCount64;
@@ -49,9 +49,9 @@ namespace AutoDuty.Helpers
                 return true;
             }
 
-            if (Environment.TickCount64 - LastStuckPositionUpdate > Configuration.MinStuckTime * 10)
+            if (Environment.TickCount64 - LastStuckPositionUpdate > Configuration.DutyConfig.Stuck.MinStuckTime * 10)
             {
-                if (!Configuration.StuckOnStep || Plugin.indexer != index)
+                if (!Configuration.DutyConfig.Stuck.StuckOnStep || Plugin.indexer != index)
                     ResetCounter();
             }
 

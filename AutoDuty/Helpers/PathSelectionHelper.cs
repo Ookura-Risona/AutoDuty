@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Configurations;
     using Data;
     using ECommons.ExcelServices;
 
@@ -9,10 +10,10 @@
     {
         public static void AddPathSelectionEntry(uint territoryId)
         {
-            if (!Configuration.PathSelectionsByPath.ContainsKey(territoryId))
+            if (!AutoDuty.Configuration.Meta.PathSelectionsByPath.ContainsKey(territoryId))
             {
                 Dictionary<string, JobWithRole> jobs = [];
-                Configuration.PathSelectionsByPath.Add(territoryId, jobs);
+                AutoDuty.Configuration.Meta.PathSelectionsByPath.Add(territoryId, jobs);
                 if (ContentPathsManager.DictionaryPaths.TryGetValue(territoryId, out ContentPathsManager.ContentPathContainer? container))
                     foreach (Job job in Enum.GetValues<Job>())
                     {
@@ -21,7 +22,7 @@
                         jobs[path] |= job.JobToJobWithRole();
                     }
 
-                Windows.Configuration.Save();
+                ConfigurationProfileV2.Save();
             }
         }
 
@@ -29,7 +30,7 @@
         {
             ContentPathsManager.ContentPathContainer container = ContentPathsManager.DictionaryPaths[territoryId];
 
-            Dictionary<string, JobWithRole>? pathJobConfigs = Configuration.PathSelectionsByPath[territoryId];
+            Dictionary<string, JobWithRole>? pathJobConfigs = AutoDuty.Configuration.Meta.PathSelectionsByPath[territoryId];
 
             JobWithRole jwr = JobWithRole.All;
 
@@ -46,7 +47,7 @@
                 }
             }
 
-            Windows.Configuration.Save();
+            ConfigurationProfileV2.Save();
         }
     }
 }

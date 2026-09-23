@@ -11,7 +11,7 @@ namespace AutoDuty.Managers
     using static Data.Classes;
     using Action = System.Action;
 
-    internal class VariantManager(TaskManager _taskManager)
+    public class VariantManager(TaskManager _taskManager)
     {
         internal unsafe void RegisterVariantDuty(Content content)
         {

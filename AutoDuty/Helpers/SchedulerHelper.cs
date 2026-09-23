@@ -9,7 +9,7 @@ namespace AutoDuty.Helpers
 
     internal static class SchedulerHelper
     {
-        internal class Schedule
+        public class Schedule
         {
             internal List<Action> Action { get; set; } = [() => { }];
 

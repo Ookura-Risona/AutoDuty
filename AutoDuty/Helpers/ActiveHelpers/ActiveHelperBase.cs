@@ -10,14 +10,16 @@ namespace AutoDuty.Helpers
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Configurations;
+    using ECommons.Automation.NeoTaskManager;
 
     public static class ActiveHelper
     {
-        internal static HashSet<IActiveHelper> activeHelpers = [];
+        internal static readonly HashSet<IActiveHelper> activeHelpers = [];
 
         public static void InvokeAllHelpers()
         {
-            Type baseType = typeof(ActiveHelperBase<>);
+            Type baseType = typeof(ActiveHelperBase<,>);
             Assembly assembly = typeof(ActiveHelper).Assembly;
 
             foreach (Type type in assembly.GetTypes())
@@ -42,9 +44,29 @@ namespace AutoDuty.Helpers
 
         public static bool AnyHelperRunning() => 
             activeHelpers.Any(h => h.CurState == ActionState.Running);
+
+        public static ActiveHelperBase<T,C> GetHelper<T,C>() where T : ActiveHelperBase<T,C>, new() 
+                                                             where C : LoopActionConfig<C>, new() => 
+            activeHelpers.OfType<T>().FirstOrDefault() ?? new T();
+
+        public static void EnqueueActiveHelper<T, C>(LoopActionConfig<C>? config = null) where T : ActiveHelperBase<T,C>, new()
+                                                                                      where C : LoopActionConfig<C>, new()
+        {
+            Plugin.taskManager.Enqueue(() => Svc.Log.Debug($"Enqueueing {typeof(T).Name}"), "ActiveHelper");
+            Plugin.taskManager.Enqueue(() =>
+                                       {
+                                           if (config != null)
+                                               ActiveHelperBase<T, C>.Invoke(config);
+                                           else
+                                               ActiveHelperBase<T, C>.Invoke();
+                                       }, $"{typeof(T).Name}");
+            Plugin.taskManager.EnqueueDelay(50);
+            Plugin.taskManager.Enqueue(() => ActiveHelperBase<T, C>.State != ActionState.Running, $"Wait-{typeof(T).Name}-Complete", new TaskManagerConfiguration(int.MaxValue));
+            Plugin.taskManager.Enqueue(() => PlayerHelper.IsReadyFull,                            "WaitIsReadyFull");
+        }
     }
 
-    internal interface IActiveHelper
+    public interface IActiveHelper
     {
         internal void        StopIfRunning();
         public   string[]?   Commands           { get; init; }
@@ -53,10 +75,11 @@ namespace AutoDuty.Helpers
         public   ActionState CurState { get; set; }
     }
 
-    internal abstract class ActiveHelperBase<T> : IActiveHelper where T : ActiveHelperBase<T>, new()
+    public abstract class ActiveHelperBase<T,C> : IActiveHelper where T : ActiveHelperBase<T,C>, new() 
+                                                                where C : LoopActionConfig<C>, new()
     {
-        protected abstract string   Name          { get; }
-        protected abstract string   DisplayName   { get; }
+        public abstract string Name        { get; }
+        public abstract string DisplayName { get; }
 
         public virtual string[]? Commands           { get; init; }
         public virtual string?   CommandDescription { get; init; }
@@ -64,6 +87,12 @@ namespace AutoDuty.Helpers
         protected virtual string[] AddonsToClose { get; } = [];
 
         protected virtual int TimeOut { get; set; } = 300_000;
+
+        public C ActionConfig
+        {
+            get => field ??= new C();
+            private set;
+        }
 
         private static T? instance;
         public static T Instance
@@ -89,6 +118,12 @@ namespace AutoDuty.Helpers
 
         internal static void Invoke() => 
             Instance.Start();
+
+        internal static void Invoke(LoopActionConfig<C> config)
+        {
+            Instance.ActionConfig = (C) config;
+            Instance.Start();
+        }
 
         internal virtual void Start()
         {

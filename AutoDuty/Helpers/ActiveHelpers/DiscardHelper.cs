@@ -1,13 +1,14 @@
 ﻿namespace AutoDuty.Helpers
 {
+    using Configurations;
     using Dalamud.Plugin.Services;
     using ECommons.Automation;
     using IPC;
 
-    internal class DiscardHelper : ActiveHelperBase<DiscardHelper>
+    public class DiscardHelper : ActiveHelperBase<DiscardHelper, DiscardItemsLoopActionConfig>
     {
-        protected override string Name        { get; } = nameof(DiscardHelper);
-        protected override string DisplayName { get; } = "Discarding Items";
+        public override string Name        { get; } = nameof(DiscardHelper);
+        public override string DisplayName { get; } = "Discarding Items";
 
         private bool started = false;
 
@@ -17,7 +18,7 @@
             this.started = false;
         }
 
-        protected override unsafe void   HelperUpdate(IFramework framework)
+        protected override unsafe void HelperUpdate(IFramework framework)
         {
             if (!this.UpdateBase() || !PlayerHelper.IsReadyFull)
                 return;
@@ -27,7 +28,8 @@
                 this.started = true;
                 return;
             }
-            if(!AutoRetainer_IPCSubscriber.IsBusy())
+
+            if (!AutoRetainer_IPCSubscriber.IsBusy())
                 this.Stop();
         }
     }

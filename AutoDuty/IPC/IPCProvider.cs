@@ -11,7 +11,7 @@ namespace AutoDuty.IPC
     using ECommons.DalamudServices;
     using Newtonsoft.Json.Linq;
 
-    internal class IPCProvider
+    public class IPCProvider
     {
         internal IPCProvider() => 
             EzIPC.Init(this);
@@ -62,7 +62,7 @@ namespace AutoDuty.IPC
 
         [EzIPC] public void Run(uint   territoryType, int loops = 0, bool bareMode = false)
         {
-            Configuration.AutoDutyModeEnum = AutoDutyMode.Looping;
+            Configuration.Meta.AutoDutyModeEnum = AutoDutyMode.Looping;
             Plugin.Run(territoryType, loops, startFromZero: true, bareMode: bareMode);
         }
 

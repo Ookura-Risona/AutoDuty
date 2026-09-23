@@ -12,13 +12,14 @@ namespace AutoDuty.Helpers
     using System.Linq;
     using Dalamud.Game.ClientState.Objects.Types;
     using System.Numerics;
+    using Configurations;
     using ECommons.UIHelpers.AtkReaderImplementations;
     using Lumina.Excel.Sheets;
 
-    internal class TripleTriadCardSellHelper : ActiveHelperBase<TripleTriadCardSellHelper>
+    public class TripleTriadCardSellHelper : ActiveHelperBase<TripleTriadCardSellHelper, TripleTriadSellLoopActionConfig>
     {
-        protected override string Name        { get; } = nameof(TripleTriadCardSellHelper);
-        protected override string DisplayName { get; } = "Selling TTT Cards";
+        public override string Name        { get; } = nameof(TripleTriadCardSellHelper);
+        public override string DisplayName { get; } = "Selling TTT Cards";
 
         public override string[]? Commands           { get; init; } = ["ttsell", "sellcards"];
         public override string?   CommandDescription { get; init; } = "Sells Triple Triad cards to the vendor in Gold Saucer";
@@ -29,7 +30,7 @@ namespace AutoDuty.Helpers
         {
             if (!QuestManager.IsQuestComplete(65970))
                 Svc.Log.Info("Gold Saucer requires having completed quest: It Could Happen To You");
-            else if(!EnoughCardsInInventory())
+            else if(!CardsInInventory(this.ActionConfig))
                 Svc.Log.Info("Not enough TTT cards in inventory");
             else if (State != ActionState.Running) base.Start();
         }
@@ -121,24 +122,24 @@ namespace AutoDuty.Helpers
             }
         }
 
-        private static bool EnoughCardsInInventory()
+        public static bool CardsInInventory(TripleTriadSellLoopActionConfig config)
         {
-            IEnumerable<InventoryItem> items      = InventoryHelper.GetInventorySelection(InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4);
+            IEnumerable<InventoryItem> items = InventoryHelper.GetInventorySelection(InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4);
 
             int cardCount = 0;
 
             int slotCount = items.Count(iv =>
-                                    {
-                                        Item? excelItem = InventoryHelper.GetExcelItem(iv.ItemId);
-                                        bool  isCard    = excelItem is { ItemUICategory.RowId: 86 };
+                                        {
+                                            Item? excelItem = InventoryHelper.GetExcelItem(iv.ItemId);
+                                            bool  isCard    = excelItem is { ItemUICategory.RowId: 86 };
 
-                                        if (isCard)
-                                            cardCount += iv.Quantity;
+                                            if (isCard)
+                                                cardCount += iv.Quantity;
 
-                                        return isCard;
-                                    });
-            
-            return cardCount >= Configuration.TripleTriadSellMinItemCount && slotCount >= Configuration.TripleTriadSellMinSlotCount;
+                                            return isCard;
+                                        });
+
+            return cardCount >= config.TripleTriadSellMinItemCount && slotCount >= config.TripleTriadSellMinSlotCount;
         }
     }
 }

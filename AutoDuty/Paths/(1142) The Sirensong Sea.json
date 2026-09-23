@@ -2,28 +2,14 @@
   "Actions": [
     {
       "Tag": "None",
-      "Name": "StopForCombat",
+      "Name": "KillInRange",
       "Position": {
-        "X": 6.98,
-        "Y": 16.35,
-        "Z": -456.29
+        "X": 0.022390865,
+        "Y": 16.347252,
+        "Z": -417.18097
       },
       "Arguments": [
-        "False"
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "StopForCombat",
-      "Position": {
-        "X": 2.27,
-        "Y": 16.35,
-        "Z": -421.01
-      },
-      "Arguments": [
-        "True"
+        "25"
       ],
       "Conditions": [],
       "Note": ""
@@ -37,9 +23,29 @@
         "Z": 0.0
       },
       "Arguments": [
-        "10000"
+        "500"
       ],
       "Conditions": [],
+      "Note": ""
+    },
+    {
+      "Tag": "None",
+      "Name": "ModifyIndex",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "Arguments": [
+        "-2"
+      ],
+      "Conditions": [
+        {
+          "$type": "AutoDuty.Data.PathActionConditionCollision, AutoDuty",
+          "type": "CollisionBox",
+          "id": 28057479636058112
+        }
+      ],
       "Note": ""
     },
     {
@@ -52,20 +58,6 @@
       },
       "Arguments": [
         ""
-      ],
-      "Conditions": [],
-      "Note": ""
-    },
-    {
-      "Tag": "None",
-      "Name": "Wait",
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Arguments": [
-        "8000"
       ],
       "Conditions": [],
       "Note": ""
@@ -293,6 +285,10 @@
       {
         "Version": 319,
         "Change": "Improved transition off the broken section in arm 2"
+      },
+      {
+        "Version": 325,
+        "Change": "Revamped boat opening"
       }
     ],
     "Notes": []

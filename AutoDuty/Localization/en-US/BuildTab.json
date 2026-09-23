@@ -42,6 +42,7 @@
     "XDiff": "X-Diff: ",
     "YDiff": "Y-Diff: ",
     "ZDiff": "Z-Diff: ",
-    "Diff": "Diff: "
+    "Diff": "Diff: ",
+    "NoPartyCoherency": "Disable Party Coherency"
   }
 }

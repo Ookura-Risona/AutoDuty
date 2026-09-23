@@ -57,13 +57,60 @@
       "Trial": "Trial",
       "Raid": "Raid",
       "Variant": "Variant",
-      "NoviceHall": "Hall of the Novice"
+      "NoviceHall": "Hall of the Novice",
+      "Crucible": "Crucible"
+    },
+    "Crucible": {
+      "Team": "Crucible Team",
+      "Familiars": "Familiars {0}/{1}",
+      "Familiar": "Familiar",
+      "Rank": "Rank",
+      "CustomFull": "Team is full ({0} max)\nUntick one to pick another",
+      "ClearRanks": "Clear saved ranks",
+      "ClearRanksHelp": "Forget saved ranks\nHold Ctrl and click",
+      "NoFamiliars": "No familiars known yet. Open the team or bestiary at Lauda so AutoDuty can read them.",
+      "Menus": "Board Menus",
+      "TableLegend": "Shaded: the team this mode takes · Hover a name for stats",
+      "TableLegendCustom": "Ticked: the team you take · Hover a name for stats",
+      "NotSeen": "Rank not read yet\nRead from the bestiary at the next team setup",
+      "Modes": {
+        "Recommended": "Recommended",
+        "Leveling": "Leveling",
+        "Custom": "Custom"
+      },
+      "ModesHelp": {
+        "Recommended": "Takes your highest rank familiars\nTies go to the best stats",
+        "Leveling": "Takes your lowest rank familiars, least EXP first\nThe same order picks who fights each battle",
+        "Custom": "Takes the familiars you tick below\nUp to 10"
+      },
+      "Toggles": {
+        "FightPicks": "Fight picks",
+        "Loot": "Loot & results",
+        "Treasure": "Treasure",
+        "Shop": "Shop",
+        "Rest": "Rest at camps",
+        "Items": "Heal items",
+        "MenusWithoutRun": "Run menus without AutoDuty (testing)"
+      },
+      "TogglesHelp": {
+        "FightPicks": "Picks up to 3 familiars for each battle and commences it\nKnocked out familiars are skipped",
+        "Loot": "Takes all loot after a battle\nPresses Continue on the result screen",
+        "Treasure": "Takes one treasure: healing first, then defense, then damage",
+        "Shop": "Spends coins on healing items, then Beast Gear, then one feed\nLeaves the shop when done",
+        "Rest": "Rests with up to 2 familiars under 60% HP\nWith none picked you get the 90% self heal instead",
+        "Items": "Uses healing items when your HP is low\nIn battle: under 40%  ·  On the board: under 60%",
+        "MenusWithoutRun": "For testing without paths\nTalking to Lauda sets up the team, challenges the board and commences\nOn a board, the menus above run while you walk it yourself"
+      }
     },
     "LevelingModes": {
       "None": "None",
       "Support": "Auto",
       "Trust_Group": "Trust Group",
       "Trust_Solo": "Trust Solo"
+    },
+    "Playlist": {
+      "DeleteHelp": "Deletes the saved Playlist\nHold ctrl to enable",
+      "SaveHelp": "Saves the current Playlist with the name written\nHold ctrl to enable"
     }
   }
 }

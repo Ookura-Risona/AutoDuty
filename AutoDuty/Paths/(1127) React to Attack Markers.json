@@ -12,7 +12,8 @@
         "200"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -26,7 +27,8 @@
         "ObjectData;1051510;NamePlateIconId;61721&ModifyIndex;+2"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -40,7 +42,8 @@
         "-2"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -54,7 +57,8 @@
         "1051510"
       ],
       "Conditions": [],
-      "Note": "Master of Trials"
+      "Note": "Master of Trials",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -68,7 +72,8 @@
         "No"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -82,7 +87,8 @@
         "0"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -96,7 +102,8 @@
         "Yes"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -110,7 +117,8 @@
         "/vnav stop"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -124,7 +132,8 @@
         "5000"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -138,7 +147,8 @@
         "1000"
       ],
       "Conditions": [],
-      "Note": "!TankClose"
+      "Note": "",
+      "Flags": "NoPartyCoherency"
     },
     {
       "Tag": "None",
@@ -152,7 +162,8 @@
         "ObjectData;1051510;NamePlateIconId;71325&ModifyIndex;+2"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -166,7 +177,8 @@
         "-2"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -180,7 +192,8 @@
         "100"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -194,7 +207,8 @@
         "1051510"
       ],
       "Conditions": [],
-      "Note": "Master of Trials"
+      "Note": "Master of Trials",
+      "Flags": "None"
     },
     {
       "Tag": "None",
@@ -208,7 +222,8 @@
         "true"
       ],
       "Conditions": [],
-      "Note": ""
+      "Note": "",
+      "Flags": "None"
     }
   ],
   "Meta": {
@@ -221,6 +236,10 @@
       {
         "Version": 304,
         "Change": "Version update"
+      },
+      {
+        "Version": 325,
+        "Change": "Updated Party Coherency flag"
       }
     ],
     "Notes": []

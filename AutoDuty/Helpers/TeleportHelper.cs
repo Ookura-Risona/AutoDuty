@@ -16,12 +16,32 @@ namespace AutoDuty.Helpers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using ECommons.IPC.Subscribers.LifestreamIPC;
+    using IPC;
 
     internal static unsafe class TeleportHelper
     {
-        internal static bool TeleportFCEstate() => TeleportHousing(FCEstateTeleportId, 0);
+        internal static bool TeleportFCEstate()
+        {
+            if (Lifestream_IPCSubscriber.IsEnabled && Lifestream_IPCSubscriber.IsEstateRegistered(true))
+            {
+                Lifestream_IPCSubscriber.Teleport(PropertyType.FC);
+                return true;
+            }
 
-        internal static bool TeleportPersonalHome() => TeleportHousing(PersonalHomeTeleportId, 0);
+            return TeleportHousing(FCEstateTeleportId, 0);
+        }
+
+        internal static bool TeleportPersonalHome()
+        {
+            if (Lifestream_IPCSubscriber.IsEnabled && Lifestream_IPCSubscriber.IsEstateRegistered(false))
+            {
+                Lifestream_IPCSubscriber.Teleport(PropertyType.Home);
+                return true;
+            }
+
+            return TeleportHousing(PersonalHomeTeleportId, 0);
+        }
 
         internal static bool TeleportApartment() => TeleportHousing(ApartmentTeleportId, 128);
 

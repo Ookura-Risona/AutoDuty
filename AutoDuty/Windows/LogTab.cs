@@ -15,6 +15,7 @@ namespace AutoDuty.Windows
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Configurations;
     using ECommons.DalamudServices;
 
     internal static class LogTab
@@ -52,8 +53,14 @@ namespace AutoDuty.Windows
                 _whatHappenedInput = string.Empty;
             }
             ImGuiEx.Spacing();
-            if (ImGui.Checkbox(Loc.Get("LogTab.AutoScroll"), ref AutoDuty.Configuration.AutoScroll))
-                Configuration.Save();
+            bool logAutoScroll = AutoDuty.Configuration.Log.AutoScroll;
+            if (ImGui.Checkbox(Loc.Get("LogTab.AutoScroll"), ref logAutoScroll))
+
+            {
+                AutoDuty.Configuration.Log.AutoScroll = logAutoScroll;
+                ConfigurationProfileV2.Save();
+            }
+
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Trash))
                 Plugin.dalamudLogEntries.Clear();
@@ -104,17 +111,17 @@ namespace AutoDuty.Windows
                 ImGui.SetTooltip(Loc.Get("LogTab.CreateIssueTooltip"));
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-            var currentLevel = AutoDuty.Configuration.LogEventLevel;
+            var currentLevel = AutoDuty.Configuration.Log.LogEventLevel;
             if (ImGui.BeginCombo("##LogEventLevel", Loc.Get($"LogTab.LogLevels.{currentLevel}")))
             {
                 foreach (var level in Enum.GetValues<LogEventLevel>())
                 {
                     if (ImGui.Selectable(Loc.Get($"LogTab.LogLevels.{level}"), level == currentLevel))
                     {
-                        AutoDuty.Configuration.LogEventLevel = level;
-                        if (Svc.Log.MinimumLogLevel > AutoDuty.Configuration.LogEventLevel)
-                            Svc.Log.MinimumLogLevel = AutoDuty.Configuration.LogEventLevel;
-                        Configuration.Save();
+                        AutoDuty.Configuration.Log.LogEventLevel = level;
+                        if (Svc.Log.MinimumLogLevel > AutoDuty.Configuration.Log.LogEventLevel)
+                            Svc.Log.MinimumLogLevel = AutoDuty.Configuration.Log.LogEventLevel;
+                        ConfigurationProfileV2.Save();
                     }
                 }
                 ImGui.EndCombo();
@@ -124,12 +131,12 @@ namespace AutoDuty.Windows
                 ImGui.SetTooltip(Loc.Get("LogTab.FilterLogLevel"));
             ImGuiEx.Spacing();
 
-            if (AutoDuty.Configuration.LogEventLevel < LogEventLevel.Information) ImGui.TextWrapped(Loc.Get("LogTab.DebugLevelWarning"));
+            if (AutoDuty.Configuration.Log.LogEventLevel < LogEventLevel.Information) ImGui.TextWrapped(Loc.Get("LogTab.DebugLevelWarning"));
 
             ImGuiEx.Spacing();
             ImGui.BeginChild("scrolling", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y), true, ImGuiWindowFlags.HorizontalScrollbar);
 
-            Plugin.dalamudLogEntries.Each(e => { if (e.LogEventLevel >= AutoDuty.Configuration.LogEventLevel) ImGui.TextColored(GetLogEntryColor(e.LogEventLevel), e.Message); });
+            Plugin.dalamudLogEntries.Each(e => { if (e.LogEventLevel >= AutoDuty.Configuration.Log.LogEventLevel) ImGui.TextColored(GetLogEntryColor(e.LogEventLevel), e.Message); });
 
             if (EzThrottler.Throttle("AddLogEntries", 25))
                 while (_logEntriesToAdd.Count != 0)
@@ -140,7 +147,7 @@ namespace AutoDuty.Windows
                     Plugin.dalamudLogEntries.Add(logEntry);
                 }
 
-            if (AutoDuty.Configuration.AutoScroll && ImGui.GetScrollY() >= ImGui.GetScrollMaxY())
+            if (AutoDuty.Configuration.Log.AutoScroll && ImGui.GetScrollY() >= ImGui.GetScrollMaxY())
                 ImGui.SetScrollHereY(1.0f);
 
             ImGui.EndChild();

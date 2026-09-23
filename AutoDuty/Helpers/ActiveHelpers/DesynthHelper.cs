@@ -9,16 +9,18 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Helpers
 {
-    using System;
-    using System.Collections.Generic;
-    using Lumina.Excel.Sheets;
     using ECommons.MathHelpers;
     using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+    using global::AutoDuty.Configurations;
+    using global::AutoDuty.IPC;
+    using Lumina.Excel.Sheets;
+    using System;
+    using System.Collections.Generic;
 
-    internal class DesynthHelper : ActiveHelperBase<DesynthHelper>
+    public class DesynthHelper : ActiveHelperBase<DesynthHelper, DesynthLoopActionConfig>
     {
-        protected override string Name        => nameof(DesynthHelper);
-        protected override string DisplayName => "Desynthing";
+        public override string Name        => nameof(DesynthHelper);
+        public override string DisplayName => "Desynthing";
 
         public override string[]? Commands { get; init; } = ["desynth"];
         public override string? CommandDescription { get; init; } = "Desynth's items in your inventory";
@@ -27,12 +29,56 @@ namespace AutoDuty.Helpers
 
         internal override void Start()
         {
-            this._maxDesynthLevel = PlayerHelper.GetMaxDesynthLevel();
-            if(this.NextCategory(true))
+            this.maxDesynthLevel          = PlayerHelper.GetMaxDesynthLevel();
+            this.gearsetterProtectedSlots = this.BuildGearsetterProtectedSlots();
+            if (this.NextCategory(true))
                 base.Start();
         }
 
-        private float _maxDesynthLevel = 1;
+        private float maxDesynthLevel = 1;
+
+        private HashSet<(InventoryType InventoryType, int Slot)> gearsetterProtectedSlots = [];
+
+        private unsafe HashSet<(InventoryType, int)> BuildGearsetterProtectedSlots()
+        {
+            HashSet<(InventoryType, int)> protectedSlots = [];
+
+            if (!this.ActionConfig.ProtectGearsetterUpgrades || !Gearsetter_IPCSubscriber.IsEnabled)
+                return protectedSlots;
+            
+            try
+            {
+                RaptureGearsetModule* gearsetModule = RaptureGearsetModule.Instance();
+
+                foreach (RaptureGearsetModule.GearsetEntry gearsetEntry in gearsetModule->Entries)
+                {
+                    if (!gearsetModule->IsValidGearset(gearsetEntry.Id))
+                        continue;
+
+                    List<(uint ItemId, InventoryType? SourceInventory, byte? SourceInventorySlot, RaptureGearsetModule.GearsetItemIndex TargetSlot)>? recommendations = 
+                        Gearsetter_IPCSubscriber.GetRecommendationsForGearset(gearsetEntry.Id);
+
+                    if (recommendations == null)
+                        continue;
+
+                    foreach ((uint recItemId, InventoryType? sourceInventory, byte? sourceInventorySlot, _) in recommendations)
+                    {
+                        if (sourceInventory == null || sourceInventorySlot == null)
+                            continue;
+
+                        if (protectedSlots.Add((sourceInventory.Value, sourceInventorySlot.Value)))
+                            this.DebugLog($"Gearsetter protects item {recItemId} in {sourceInventory} slot {sourceInventorySlot} (recommended for gearset {gearsetEntry.Id}) from Auto Desynth");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Svc.Log.Warning($"[AutoDesynth] Gearsetter IPC call failed while collecting upgrade protection, falling back to gearset-only protection for this run: {ex.Message}");
+                protectedSlots.Clear();
+            }
+
+            return protectedSlots;
+        }
 
         private AgentSalvage.SalvageItemCategory curCategory;
 
@@ -69,8 +115,8 @@ namespace AutoDuty.Helpers
             else if (GenericHelpers.TryGetAddonByName("SalvageDialog", out AtkUnitBase* addonSalvageDialog) && GenericHelpers.IsAddonReady(addonSalvageDialog))
             {
                 this.DebugLog("Confirming SalvageDialog");
-                AddonHelper.FireCallBack(addonSalvageDialog, true, 15, Configuration.AutoDesynthNQOnly);
-                AddonHelper.FireCallBack(addonSalvageDialog, true, 0, false);
+                AddonHelper.FireCallBack(addonSalvageDialog, true, 15, this.ActionConfig.NQOnly);
+                AddonHelper.FireCallBack(addonSalvageDialog, true, 0,  false);
                 return;
             }
 
@@ -110,30 +156,37 @@ namespace AutoDuty.Helpers
                         if (itemLevel == null || itemSheetRow == null || desynthLevel <= 0) 
                             continue;
 
-                        if (!Configuration.AutoDesynthSkillUp || (desynthLevel < itemLevel + Configuration.AutoDesynthSkillUpLimit && desynthLevel < this._maxDesynthLevel))
+                        if (!this.ActionConfig.SkillUp || (desynthLevel < itemLevel + this.ActionConfig.SkillUpLimit && desynthLevel < this.maxDesynthLevel))
                         {
-                            if (Configuration.AutoDesynthNoGearset)
+                            if (this.ActionConfig.NoGearset)
                             {
                                 if (gearsetItemIds == null)
                                 {
                                     gearsetItemIds = [];
 
                                     RaptureGearsetModule* gearsetModule = RaptureGearsetModule.Instance();
-                                    byte                  num           = gearsetModule->NumGearsets;
-                                    for (byte j = 0; j < num; j++)
+                                    foreach (RaptureGearsetModule.GearsetEntry entry in gearsetModule->Entries)
                                     {
-                                        foreach (RaptureGearsetModule.GearsetEntry entry in gearsetModule->Entries)
-                                            foreach (RaptureGearsetModule.GearsetItem gearsetItem in entry.Items)
-                                            {
-                                                uint gearsetItemItemId = gearsetItem.ItemId;
-                                                if(gearsetItemItemId > 0) 
-                                                    gearsetItemIds.Add(gearsetItemItemId);
-                                            }
+                                        if (!gearsetModule->IsValidGearset(entry.Id))
+                                            continue;
+
+                                        foreach (RaptureGearsetModule.GearsetItem gearsetItem in entry.Items)
+                                        {
+                                            uint gearsetItemItemId = gearsetItem.ItemId;
+                                            if (gearsetItemItemId > 0)
+                                                gearsetItemIds.Add(gearsetItemItemId);
+                                        }
                                     }
                                 }
 
                                 if (gearsetItemIds.Contains(inventoryItem->GetItemId()))
                                     continue;
+                            }
+
+                            if (this.gearsetterProtectedSlots.Contains((item.InventoryType, (int)item.InventorySlot)))
+                            {
+                                this.DebugLog($"Skipping Item({i}): {itemSheetRow.Value.Name} - protected by Gearsetter as an upgrade for another gearset");
+                                continue;
                             }
 
                             this.DebugLog($"Salvaging Item({i}): {itemSheetRow.Value.Name} {inventoryItem->ItemId} {inventoryItem->GetItemId()} {inventoryItem->GetBaseItemId()} with iLvl {itemLevel} because our desynth level is {desynthLevel}");
@@ -163,12 +216,12 @@ namespace AutoDuty.Helpers
             }
         }
 
-        public bool NextCategory(bool reset = false)
+        private bool NextCategory(bool reset = false)
         {
             AgentSalvage.SalvageItemCategory[]? categories = Enum.GetValues<AgentSalvage.SalvageItemCategory>();
             for (int i = reset ? 0 : (int) this.curCategory + 1; i < categories.Length; i++)
             {
-                if(Bitmask.IsBitSet(Configuration.AutoDesynthCategories, i))
+                if(Bitmask.IsBitSet(this.ActionConfig.Categories, i))
                 {
                     this.curCategory = categories[i];
                     return true;

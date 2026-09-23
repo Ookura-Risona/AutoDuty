@@ -1,8 +1,9 @@
-﻿using System.Reflection;
-using ECommons.DalamudServices;
+﻿using ECommons.DalamudServices;
+using System.Reflection;
 
 namespace AutoDuty.Helpers
 {
+    using Configurations;
     using System;
     using System.Collections;
     using System.Globalization;
@@ -11,24 +12,20 @@ namespace AutoDuty.Helpers
     internal static class ConfigHelper
     {
         private const BindingFlags All = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
-        private static string ConfigType(FieldInfo field) => field.FieldType.ToString();
 
         internal static string GetConfig(string configName)
         {
-            FieldInfo? field;
-            if ((field = FindConfig(configName)) == null)
+            (PropertyInfo? property, object? instance)? config;
+            if (!(config = FindConfig(configName)).HasValue || config?.property == null)
             {
                 Svc.Log.Error($"Unable to find config: {configName}, please type /autoduty cfg list to see all available configs");
                 return string.Empty;
             }
-            else if (field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase))
-            {
+
+            if (config.Value.property.ToString()!.Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase))
                 return string.Empty;
-            }
-            else
-            {
-                return field.GetValue(Configuration)?.ToString() ?? string.Empty;
-            }
+
+            return config.Value.property.GetValue(config.Value.instance)!.ToString() ?? string.Empty;
         }
 
         internal static object? ConvertConfigValue(Type configType, string configValue, out string failReason)
@@ -51,7 +48,6 @@ namespace AutoDuty.Helpers
             {
                 return Convert.ChangeType(configValue, configType, CultureInfo.InvariantCulture);
             }
-
 
             return null;
         }
@@ -77,11 +73,11 @@ namespace AutoDuty.Helpers
                     switch (levelingMode)
                     {
                         case LevelingMode.Support:
-                            Configuration.DutyModeEnum = DutyMode.Support;
+                            AutoDuty.Configuration.Meta.DutyModeEnum = DutyMode.Support;
                             break;
                         case LevelingMode.Trust_Group:
                         case LevelingMode.Trust_Solo:
-                            Configuration.DutyModeEnum = DutyMode.Trust;
+                            AutoDuty.Configuration.Meta.DutyModeEnum = DutyMode.Trust;
                             break;
                         case LevelingMode.None:
                         default:
@@ -93,13 +89,13 @@ namespace AutoDuty.Helpers
                 }
             }
 
-            FieldInfo? field;
-            if ((field = FindConfig(configName)) == null)
+            (PropertyInfo? property, object? instance)? config;
+            if (!(config = FindConfig(configName)).HasValue || config?.property == null)
             {
                 Svc.Log.Error($"Unable to find config: {configName}, please type /autoduty cfg list to see all available configs");
                 return false;
             }
-            else if (field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase))
+            else if (config.Value.property.PropertyType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
@@ -107,14 +103,14 @@ namespace AutoDuty.Helpers
             {
                 void PrintError(string failReason)
                 {
-                    Svc.Log.Error($"Unable to set config setting: {field.Name.Replace(" > k__BackingField", "").Replace(" < ", "")}: {failReason}");
+                    Svc.Log.Error($"Unable to set config setting: {config.Value.property.Name}: {failReason}");
                 }
 
-                Type? configType = field.FieldType;// ConfigType(field);
+                Type configType = config.Value.property.PropertyType;// ConfigType(field);
 
                 if (configType.IsAssignableTo(typeof(IList)))
                 {
-                    IList valueList      = (IList)field.GetValue(Configuration)!;
+                    IList valueList      = (IList) config.Value.property.GetValue(config.Value.instance)!;
                     Type  enumerableType = configType.GetElementType() ?? configType.GenericTypeArguments.First();
 
                     switch (configValues[0])
@@ -207,36 +203,113 @@ namespace AutoDuty.Helpers
                     object? newValue = ModifyConfig(configType, configValues[0], out string failReason);
 
                     if (newValue != null)
-                        field.SetValue(Configuration, newValue);
+                        config.Value.property.SetValue(config.Value.instance, newValue);
                     else
                         PrintError(failReason);
                 }
 
-                Windows.Configuration.Save();
+                ConfigurationProfileV2.Save();
             }
             return false;
         }
 
-        internal static void ListConfig()
+        internal static void ListConfig(object? instance = null, string? prefix = null)
         {
-            FieldInfo[]? i = Assembly.GetExecutingAssembly().GetType("AutoDuty.Windows.Configuration")?.GetFields(All);
-            if (i == null) return;
-            foreach (FieldInfo? field in i)
-                if (!field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase) && !field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version",StringComparison.InvariantCultureIgnoreCase))
-                    Svc.Log.Info($"{field.Name.Replace(">k__BackingField", "").Replace("<", "")} = {field.GetValue(Configuration)} ({field.FieldType.ToString().Replace("System.", "")})");
+            instance ??= ConfigurationMain.Instance.GetCurrentConfig;
+
+            PropertyInfo[] properties = instance.GetType().GetProperties(All | BindingFlags.DeclaredOnly);
+            if (properties.Length == 0)
+                return;
+
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.SetMethod != null && property.PropertyType.IsAssignableTo(typeof(string)))
+                    Svc.Log.Info($"{prefix}{property.Name} = {property.GetValue(instance)} ({property.PropertyType.Name}");
+
+                if (property.PropertyType.IsAssignableTo(typeof(IList)) && !property.PropertyType.IsAssignableTo(typeof(string))) 
+                {
+                    IList valueList      = (IList)property.GetValue(instance)!;
+
+                    Type? enumerableType = property.PropertyType.GetElementType() ?? property.PropertyType.GenericTypeArguments.FirstOrDefault() ?? property.PropertyType.BaseType?.GetElementType() ?? property.PropertyType.BaseType?.GenericTypeArguments.FirstOrDefault();
+
+                    if (enumerableType != null)
+                    {
+
+                        if (enumerableType.IsGenericType && enumerableType.GetGenericTypeDefinition().IsAssignableTo(typeof(Nullable<>)))
+                            enumerableType = enumerableType.GetGenericArguments().First();
+
+                        if (enumerableType.IsAssignableTo(typeof(Enum)) || enumerableType.IsAssignableTo(typeof(string)) || enumerableType.IsAssignableTo(typeof(uint)) && property.SetMethod != null)
+                        {
+                            Svc.Log.Info($"{prefix}{property.Name} = {property.GetValue(instance)} ({property.PropertyType.Name}{(enumerableType.IsEnum ? $" {string.Join(", ", Enum.GetNames(enumerableType))}" : "")})");
+                            return;
+                        }
+                    }
+
+                    for (int index = 0; index < valueList.Count; index++)
+                    {
+                        object? value = valueList[index];
+                        if(value != null)
+                            ListConfig(value, $"{prefix}{property.Name}.[{index}/{value?.GetType().Name}].");
+                    }
+                } 
+                else if ((property.PropertyType.FullName?.Contains(nameof(ConfigurationProfileV2)) ?? false) || (property.PropertyType.FullName?.Contains(nameof(LoopActionConfig)) ?? false))
+                {
+                    object? value = property.GetValue(instance);
+                    if(value != null)
+                        ListConfig(value, $"{prefix}{property.Name}.");
+                }
+                else if(property.SetMethod != null)
+                {
+                    Svc.Log.Info($"{prefix}{property.Name} = {property.GetValue(instance)} ({property.PropertyType.Name}{(property.PropertyType.IsEnum ? $" {string.Join(", ", Enum.GetNames(property.PropertyType))}" : "")})");
+                }
+            }
         }
 
-        internal static FieldInfo? FindConfig(string configName)
+        internal static (PropertyInfo? property, object? instance)? FindConfig(string configName, Type? type = null, object? instance = null)
         {
-            FieldInfo[]? i = Assembly.GetExecutingAssembly().GetType("AutoDuty.Windows.Configuration")?.GetFields(All);
-            foreach (FieldInfo? field in i!)
+            instance ??= ConfigurationMain.Instance.GetCurrentConfig;
+            type     ??= instance.GetType() ?? typeof(ConfigurationProfileV2);
+
+            Svc.Log.Debug($"Config find : {configName} in {type.Name}");
+
+            int dotIndex = configName.IndexOf('.');
+            if (dotIndex > 0)
             {
-                if (field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version", StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-                if (field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals(configName, StringComparison.InvariantCultureIgnoreCase))
-                    return field;
-                
+                string subConfig = configName[..dotIndex];
+                Svc.Log.Debug("Subconfig found: " + subConfig);
+
+
+                if (subConfig[0] == '[')
+                    if (type.IsAssignableTo(typeof(IList)))
+                    {
+                        IList  valueList   = (IList)instance;
+                        string indexString = subConfig[1..^1];
+
+                        if (int.TryParse(indexString, out int index))
+                            if (valueList.Count <= index)
+                            {
+                                object? value = valueList[index];
+                                if (value != null)
+                                    return FindConfig(configName[(dotIndex + 1)..], value.GetType(), value);
+                            }
+
+                        foreach (object o in valueList)
+                            if (o.GetType().Name.Equals(indexString))
+                                return FindConfig(configName[(dotIndex + 1)..], o.GetType(), o);
+                    }
+
+
+                PropertyInfo[] p = type.GetProperties(All);
+                foreach (PropertyInfo property in p)
+                    if (property.Name.Equals(subConfig, StringComparison.InvariantCultureIgnoreCase))
+                        return FindConfig(configName[(dotIndex+1)..], property.PropertyType, property.GetValue(instance));
             }
+
+            PropertyInfo[] i = type.GetProperties(All);
+            foreach (PropertyInfo property in i)
+                if (property.Name.Equals(configName, StringComparison.InvariantCultureIgnoreCase))
+                    return (property, instance);
+
             return null;
         }
     }

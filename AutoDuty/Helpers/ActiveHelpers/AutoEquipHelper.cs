@@ -8,16 +8,17 @@ namespace AutoDuty.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using Configurations;
     using Lumina.Excel.Sheets;
 
-    internal unsafe class AutoEquipHelper : ActiveHelperBase<AutoEquipHelper>
+    public unsafe class AutoEquipHelper : ActiveHelperBase<AutoEquipHelper, AutoEquipLoopActionConfig>
     {
         public override string[]? Commands { get; init; } = ["autoequip", "equiprec"];
         public override string? CommandDescription { get; init; } = "Equips recommended gear";
 
         internal override void Start()
         {
-            switch (Configuration.AutoEquipRecommendedGearSource)
+            switch (this.ActionConfig.RecommendedGearSource)
             {
                 case GearsetUpdateSource.Gearsetter when Gearsetter_IPCSubscriber.IsEnabled:
                     this.TimeOut = 10_000;
@@ -27,6 +28,7 @@ namespace AutoDuty.Helpers
                     this.TimeOut = 10_000;
                     this.source  = GearsetUpdateSource.Stylist;
                     break;
+                case GearsetUpdateSource.Vanilla:
                 default:
                     this.TimeOut = 5_000;
                     this.source  = GearsetUpdateSource.Vanilla;
@@ -37,8 +39,8 @@ namespace AutoDuty.Helpers
 
         private GearsetUpdateSource source;
 
-        protected override string Name        => nameof(AutoEquipHelper);
-        protected override string DisplayName => "Auto Equip";
+        public override string Name        => nameof(AutoEquipHelper);
+        public override string DisplayName => "Equip Recommended Gear";
 
         protected override int TimeOut { get; set; }
 
@@ -154,7 +156,7 @@ namespace AutoDuty.Helpers
                         return;
                     }
 
-                    if (Configuration.AutoEquipRecommendedGearGearsetterOldToInventory && equipSlotIndex is not RaptureGearsetModule.GearsetItemIndex.MainHand and not RaptureGearsetModule.GearsetItemIndex.OffHand &&
+                    if (this.ActionConfig.GearsetterOldToInventory && equipSlotIndex is not RaptureGearsetModule.GearsetItemIndex.MainHand and not RaptureGearsetModule.GearsetItemIndex.OffHand &&
                         !InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->Items[(int)equipSlotIndex].IsEmpty())
                     {
                         if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)

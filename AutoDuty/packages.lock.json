@@ -30,8 +30,8 @@
       "WrathCombo.API": {
         "type": "Direct",
         "requested": "[0.5.*, )",
-        "resolved": "0.5.6",
-        "contentHash": "wSVdsjRG4BeaZkRGpG3SuTTKMjUrVi+k/YpUEnqH+DnXb6XLXlRFc4P2bExVad0Wv+hOpI/VFZ5QBEJ5yzjMEg=="
+        "resolved": "0.5.8",
+        "contentHash": "AudBr8hlqPitv2hRs7i1Nh8ahUIZ1b9KmPjgPfiUMhjFjsRguH5XZlWdzKKM0wmOFvabgR8mLfXDrqBmzBgGSQ=="
       },
       "KamiToolKit": {
         "type": "Transitive",
@@ -126,7 +126,7 @@
       "nightmareui": {
         "type": "Project",
         "dependencies": {
-          "ECommons": "[3.2.1.17, )"
+          "ECommons": "[3.2.1.18, )"
         }
       }
     }

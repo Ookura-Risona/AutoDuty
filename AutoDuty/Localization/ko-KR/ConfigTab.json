@@ -11,6 +11,7 @@
       "Delete": "설정 삭제",
       "DeleteHelp": "설정 삭제\nCtrl 길게 누르면 활성화",
       "BareProfileNote": "Bare 프로필은 임무 실행 전용입니다. 필요하면 복제하여 편집하세요.",
+      "ConfigOverridesActiveNote": "IPC 설정 오버라이드가 활성화된 동안에는 설정이 잠깁니다. 다시 편집하려면 AutoDuty를 정지하세요.",
       "NewProfileName": "새 프로필 이름",
       "ChangeProfileName": "프로필 이름 변경"
     },
@@ -99,87 +100,6 @@
         "UsingAltBossHelp": "BossMod 이외의 플러그인을 사용합니다."
       }
     },
-    "PreLoop": {
-      "Header": "반복 작업 전 초기화 설정",
-      "Enable": "활성화",
-      "ExecuteCommands": "모든 반복 작업 시작 시 명령어 실행",
-      "ExecuteCommandsHelp": "모든 반복 작업이 시작될 때 명령어를 실행합니다.\n예: {0}",
-      "BetweenLoopNote": "다음은 Between Loop 활성화 시 반복 작업 간에도 실행됩니다 (현재 {0})",
-      "RetireTo": "귀환 위치 ",
-      "AddCurrentPosition": "현재 위치 추가",
-      "HomePathHelp": "대부분의 집은 텔레포 위치에서 문까지 직진할 수 있어 불필요합니다. 드물게 문까지 경로가 필요한 경우 여기서 생성할 수 있습니다. 문이 다른 것보다 멀리 있는 경우 문 앞에서 '현재 위치 추가'를 누르세요",
-      "AutoEquipGear": "추천 장비 자동 장착",
-      "GearSourceHelp": "Vanilla - 무기고 내부만 사용\nGearsetter - gearsetter에 문의하여 오래된 장비를 소지품으로 이동 가능\nStylist - stylist 설정 사용",
-      "MoveOldToInventory": "오래된 장비를 소지품으로 이동",
-      "MoveOldToInventoryHelp": "무기 이외의 교체 대상 장비를 소지품으로 이동합니다.",
-      "RequiresGearsetterOrStylist": "* 무기고 외부 장비는 Gearsetter 또는 Stylist가 필요합니다",
-      "AutoRepair": "자동 수리",
-      "Self": "자가수리",
-      "SelfHelp": "다크 매터로 자가 수리합니다 (제작 숙련도 필요)",
-      "CityNpc": "도시 NPC",
-      "CityNpcHelp": "설정한 수리 NPC를 이용합니다.",
-      "TriggerAt": "발동 임계값 @",
-      "PreferredRepairNPC": "선호 수리 NPC: ",
-      "PreferredRepairNPCHelp": "가능하면 수리 NPC를 소환 벨이나 귀환 위치와 맞추는 것을 권장합니다",
-      "GrandCompanyInn": "그랜드 컴퍼니 막사",
-      "AutoConsume": "소비 아이템 자동 사용",
-      "AutoConsumeHelp": "실행 중 및 각 반복 작업 간에 대상 상태가 없는 경우 이 아이템들을 사용합니다",
-      "IgnoreStatus": "상태 무시",
-      "IgnoreStatusHelp": "실행 중 및 각 반복 작업 간에 상태 유무와 관계없이 매번 이 아이템들을 사용합니다",
-      "MinTimeRemaining": "남은 시간 최소값",
-      "MinTimeRemainingHelp": "상태 남은 시간이 이 값(분) 미만인 경우 이 아이템들을 사용합니다",
-      "ItemName": "아이템 이름",
-      "ItemNameHint": "아이템 이름을 입력하여 검색",
-      "AddItem": "아이템 추가"
-    },
-    "BetweenLoop": {
-      "Header": "반복 작업 간 설정",
-      "Enable": "활성화",
-      "RunOnLastLoop": "최종 반복 작업에서도 실행",
-      "WaitTime": "(초) 반복 작업 간 대기 시간",
-      "WaitTimeHelp": "반복 작업 간 처리를 X초 지연시킵니다.",
-      "ExecuteCommands": "모든 반복 작업 간 명령어 실행",
-      "ExecuteCommandsHelp": "모든 반복 작업 사이에 명령어를 실행합니다.\n예: {0}",
-      "AutoExtract": "자동 정제",
-      "Equipped": "장착 중",
-      "All": "모두",
-      "AutoOpenCoffers": "장비 상자 자동 개봉",
-      "AutoOpenCoffersHelp": "각 반복 작업 간에 장비 상자(예: 나이트 장비)를 자동으로 개봉합니다",
-      "OpenCoffersWithGearset": "개봉 시 기어셋: ",
-      "CurrentGearset": "현재 기어셋",
-      "UseBlacklist": "블랙리스트 사용",
-      "UseBlacklistHelp": "자동 개봉하지 않을 상자를 지정할 수 있습니다.",
-      "SelectCoffer": "상자 선택",
-      "CofferName": "상자 이름",
-      "CofferNameHint": "상자 이름을 입력하여 검색",
-      "AddCoffer": "상자 추가",
-      "DiscardItems": "아이템 폐기",
-      "Desynth": {
-        "NQOnly": "NQ 결과 보장"
-      },
-      "AutoDesynth": "자동 분해",
-      "OnlySkillUps": "스킬 상승만",
-      "ItemLevelLimit": "아이템 레벨 상한",
-      "ItemLevelLimitHelp": "분해 스킬이 '아이템 레벨 + 이 값'에 도달하면 해당 아이템의 분해를 중단합니다.",
-      "ProtectGearsets": "장비세트 보호",
-      "DesynthCategories": "분해 카테고리",
-      "AutoGCTurnin": "총사령부 납품 자동화",
-      "InventorySlotsLeft": "소지품 빈 칸이 @ 이하일 때",
-      "UseGCAetheryteTicket": "텔레포 이용권(총사령부) 사용",
-      "ArmoireEntrust": "추억의 보관함에 보관",
-      "ArmoireEntrustHelp": "반복 작업 사이에 소지품에 있는 아이템을 추억의 보관함에 보관합니다.",
-      "GlamourEntrust": "환상의 옷장에 보관",
-      "GlamourEntrustHelp": "반복 작업 사이에 아이템을 환상의 옷장에 보관합니다.",
-      "RegisterTripleTriadCards": "트리플 트라이어드 카드 등록",
-      "SellTripleTriadCards": "트리플 트라이어드 카드 판매",
-      "SlotsOccupied": "사용 슬롯",
-      "CardCount": "카드 수",
-      "EnableAutoRetainer": "AutoRetainer 연동 활성화",
-      "PreferredSummoningBell": "선호 집사 초인종 위치: ",
-      "PreferredSummoningBellHelp": "어떤 위치를 선택하든 실행 시 현재 위치에 집사 초인종이 있으면 그쪽을 우선합니다",
-      "WaitingUpTo": "최대 대기 시간...",
-      "Seconds": "초"
-    },
     "Termination": {
       "Header": "반복 작업 종료 설정",
       "Enable": "활성화",
@@ -203,7 +123,6 @@
       "StopOnlyWhenAllSpells": "모든 마법 습득 시에만 정지",
       "StopWhenInventoryFull": "소지품이 가득 차면 정지",
       "StopWhenInventoryFullSlots": "남은 빈 슬롯: ",
-
       "ExecuteCommandsOnTermination": "모든 반복 작업 종료 시 명령어 실행",
       "ExecuteCommandsOnTerminationHelp": "모든 반복 작업이 종료될 때 명령어를 실행합니다.\n예: {0}",
       "PlaySoundOnCompletion": "모든 반복 작업 완료 시 소리 재생: ",
@@ -254,7 +173,7 @@
         "Flank": "측면",
         "Rear": "후면",
         "Front": "정면"
-        },
+      },
       "RetireLocation": {
         "Inn": "여관",
         "Apartment": "아파트",
@@ -334,6 +253,11 @@
         "Pictomancer": "픽토맨서",
         "Blue_Mage": "청마도사"
       },
+      "MultiModeType": {
+        "Retainers": "집사",
+        "Submersibles": "잠수함",
+        "Everything": "전부"
+      },
       "ConditionType": {
         "VariantPath": "변형던전 경로",
         "Distance": "거리",
@@ -341,13 +265,18 @@
         "ItemCount": "아이템",
         "Job": "직업",
         "ActionStatus": "행동 상태",
-        "ConditionFlag": "조건 플래그"
+        "ConditionFlag": "조건 플래그",
+        "Collision": "충돌",
+        "ToDo": "ToDo",
+        "Not": "아님",
+        "Or": "또는",
+        "And": "그리고"
       },
       "ObjectDataProperty": {
         "EventState": "이벤트 상태",
         "IsTargetable": "대상 지정 가능"
       },
-       "DistanceLocationTypes": {
+      "DistanceLocationTypes": {
         "Player": "플레이어",
         "Object": "오브젝트",
         "Location": "위치"

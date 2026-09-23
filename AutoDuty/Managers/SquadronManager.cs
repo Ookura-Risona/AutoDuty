@@ -13,7 +13,7 @@ namespace AutoDuty.Managers
     using ECommons.GameFunctions;
     using static Data.Classes;
     //on Rewrite need to check for sufficient seals
-    internal class SquadronManager(TaskManager _taskManager)
+    public class SquadronManager(TaskManager _taskManager)
     {
 
         internal bool InteractedWithSergeant = false;
@@ -64,7 +64,7 @@ namespace AutoDuty.Managers
             ReaderGCArmyMemberList armyMemberList = null!;
             _taskManager.Enqueue(() => armyMemberList = new ReaderGCArmyMemberList(memberListAddon), "RegisterSquadron-GetReader");
 
-            if (Configuration.SquadronAssignLowestMembers)
+            if (Configuration.Meta.SquadronAssignLowestMembers)
             {
                 // disable active members
                 _taskManager.Enqueue(() =>

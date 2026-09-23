@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows;
+using Configurations;
 using ECommons;
 using ECommons.Automation;
 using ECommons.DalamudServices;
@@ -123,7 +124,7 @@ public static class MultiboxUtility
     public static void Set(bool on)
     {
         if(on)
-            ConfigurationMain.Instance.GetCurrentConfig.DutyModeEnum = DutyMode.Regular;
+            AutoDuty.Configuration.Meta.DutyModeEnum = DutyMode.Regular;
 
         if (Config.Host)
             Server.Set(on);

@@ -14,13 +14,13 @@ namespace AutoDuty.Helpers
     {
         internal static bool SeenAddon = false;
 
-        internal static unsafe void FireCallBack(AtkUnitBase* addon, bool boolValue, params object[] args)
+        internal static unsafe void FireCallBack(AtkUnitBase* addon, bool updateState, params object[] args)
         {
             AtkUnitBase* addonPtr = addon;
             if (addon == null || addonPtr is null) return;
             try
             {
-                Callback.Fire(addonPtr, boolValue, args);
+                Callback.Fire(addonPtr, updateState, args);
             }
             catch (Exception ex) 
             { 

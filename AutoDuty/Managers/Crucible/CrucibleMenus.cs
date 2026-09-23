@@ -5,10 +5,10 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace AutoDuty.Managers
 {
+    using ECommons.UIHelpers.AtkReaderImplementations;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using ECommons.UIHelpers.AtkReaderImplementations;
     using Screens = CrucibleUi.Screens;
 
     internal sealed unsafe class CrucibleMenus
@@ -176,14 +176,20 @@ namespace AutoDuty.Managers
         {
             this.next = now + Retry;
 
-            List<ReaderXBMContentsTreasure.TreasureChoice> choices = CrucibleUi.Choices(treasure, Screens.Treasure.FirstItemParam);
+            ReaderXBMContentsTreasure xbmTreasure = new(treasure);
+
+            HashSet<uint> items = xbmTreasure.ItemEntriesValid.Select(ie => ie.Id).ToHashSet();
+            HashSet<uint> gear  = xbmTreasure.OwnedEntriesOwned.Select(ie => ie.Id).ToHashSet();
+
+            List<ReaderXBMContentsTreasure.TreasureChoice> choices = xbmTreasure.TreasureChoices.Where(tc => !tc.Bought                                                                                             && 
+                                                                                                             (!CrucibleItemData.ShopGear.Contains(tc.Item)    || (gear.Count < GearCap && !gear.Contains(tc.Item))) &&
+                                                                                                             (!CrucibleItemData.ShopHealing.Contains(tc.Item) || (items.Count < ItemCap && !items.Contains(tc.Item)))).ToList();
             if (choices.Count == 0)
                 return;
 
-            List<ReaderXBMContentsTreasure.TreasureChoice> available = choices.Where(tc => !tc.Bought).ToList();
-            ReaderXBMContentsTreasure.TreasureChoice       best      = available.OrderBy(x => CrucibleItemData.TreasureRank(x.Item)).ThenBy(x => x.treasureIndex).First();
+            ReaderXBMContentsTreasure.TreasureChoice best = choices.OrderBy(x => CrucibleItemData.TreasureRank(x.Item)).ThenBy(x => x.treasureIndex).First();
 
-            Svc.Log.Info($"[Crucible] Treasure: taking {Describe(best)} from {string.Join(" / ", available.Select(Describe))}");
+            Svc.Log.Info($"[Crucible] Treasure: taking {Describe(best)} from {string.Join(" / ", choices.Select(Describe))}");
 
             Screens.Treasure.Take(treasure, (uint)best.treasureIndex);
 

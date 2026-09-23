@@ -122,9 +122,6 @@ namespace AutoDuty.Managers
             return null;
         }
 
-        public static List<ReaderXBMContentsTreasure.TreasureChoice> Choices(AtkUnitBase* addon, uint minParam) => 
-            new ReaderXBMContentsTreasure(addon).TreasureChoices;
-
         public static int ContextMenuOptionCount(AtkUnitBase* menu)
         {
             int count = 0;
